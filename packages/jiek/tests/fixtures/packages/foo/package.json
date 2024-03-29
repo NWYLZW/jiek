@@ -1,0 +1,7 @@
+{
+  "name": "@jiek/test-foo",
+  "version": "0.1.2",
+  "dependencies": {
+    "@jiek/test-bar": "workspace:^*"
+  }
+}

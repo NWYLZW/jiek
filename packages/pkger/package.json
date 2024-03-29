@@ -1,0 +1,9 @@
+{
+  "name": "@jiek/pkger",
+  "version": "0.1.0-alpha.0",
+  "scripts": {
+  },
+  "dependencies": {
+    "fast-glob": "^3.3.2"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "jiek-workspace",
+  "scripts": {},
+  "engines": {
+    "node": ">= 18.0.0"
+  },
+  "devDependencies": {
+    "@types/mock-fs": "^4.13.4",
+    "@types/node": "^18.19.26",
+    "mock-fs": "^5.2.0",
+    "typescript": "^5.4.3",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^1.4.0"
+  }
+}
