@@ -20,11 +20,13 @@ function resolveWorkspacePath(p: string) {
   return resolve(workspaceRoot, p)
 }
 
+const inputs = process.env.INPUTS?.split(',')
+
 const dir = process.cwd()
 const pkgJson = JSON.parse(fs.readFileSync(resolve(dir, 'package.json'), 'utf-8'))
 const mergedPkgJson = {
   ...pkgJson,
-  ...pkger({ cwd: dir })
+  ...pkger({ cwd: dir, inputs })
 } as {
   name: string
   exports?: Record<string, {

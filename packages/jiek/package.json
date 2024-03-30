@@ -6,7 +6,7 @@
     "jiek": "bin/jiek.js"
   },
   "scripts": {
-    "build": "jiek build"
+    "build": "crrc rollup -c"
   },
   "dependencies": {
     "@jiek/pkger": "workspace:^*",

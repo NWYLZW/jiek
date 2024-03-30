@@ -1,9 +1,6 @@
 {
-  "name": "@jiek/builder-rollup",
+  "name": "builder-rollup",
   "version": "0.1.0",
-  "scripts": {
-    "build": "crrc rollup -c"
-  },
   "dependencies": {
     "@rollup/plugin-json": "^6.0.1",
     "@rollup/plugin-terser": "^0.4.4",

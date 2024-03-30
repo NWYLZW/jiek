@@ -2,13 +2,13 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import { pkger } from '@jiek/pkger'
+import { bump, type BumperType } from '@jiek/utils/bumper'
+import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import type { PackageJson } from '@npm/types'
 import { filterPackagesFromDir } from '@pnpm/filter-workspace-packages'
 import * as childProcess from 'child_process'
 import { program } from 'commander'
 
-import { bump, type BumperType } from '../../../src/utils/bumper'
-import { getWorkspaceDir } from '../../../src/utils/getWorkspaceDir'
 import { actionDone, actionRestore } from '../inner'
 
 program
