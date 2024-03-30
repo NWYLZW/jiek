@@ -18,7 +18,7 @@ beforeAll(() => {
   })
 })
 afterAll(() => {
-  fs.unlinkSync(path.resolve(ROOT, 'package.json'))
+  fs.unlinkSync(path.resolve(ROOT, 'node_modules'))
 })
 
 const prefixes = ['node', 'jiek', 'publish', '--root', ROOT]
