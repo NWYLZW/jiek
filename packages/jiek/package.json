@@ -2,7 +2,12 @@
   "name": "jiek",
   "version": "0.1.0",
   "description": "YiJie's personal kits.",
-  "scripts": {},
+  "bin": {
+    "jiek": "bin/jiek.js"
+  },
+  "scripts": {
+    "build": "jiek build"
+  },
   "dependencies": {
     "@jiek/pkger": "workspace:^*",
     "@pnpm/filter-workspace-packages": "^7.2.13",

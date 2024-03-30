@@ -90,6 +90,7 @@ interface Output {
     import: string
     default: string
     require: string
+    'inner-src': string
   }>
 }
 
@@ -160,7 +161,8 @@ export function pkger(options: Options): Output {
       types: re(`${index}${suffixes.dts()}`),
       import: indexESM,
       default: indexESM,
-      require: re(`${index}${suffix.umd}${suffixes.end()}`)
+      require: re(`${index}${suffix.umd}${suffixes.end()}`),
+      'inner-src': `${source}/${input}`
     }
   }
   return {

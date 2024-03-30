@@ -1,8 +1,9 @@
 import fs from 'node:fs'
 import { resolve } from 'node:path'
 
+import { pkger } from '@jiek/pkger'
+import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import autoprefixer from 'autoprefixer'
-import { getWorkspaceDir } from 'pnpm-helper/getWorkspaceDir'
 import type { InputPluginOption, RollupOptions } from 'rollup'
 import { dts } from 'rollup-plugin-dts'
 import esbuild from 'rollup-plugin-esbuild'
@@ -19,18 +20,23 @@ function resolveWorkspacePath(p: string) {
   return resolve(workspaceRoot, p)
 }
 
-const pkgJson = JSON.parse(fs.readFileSync(resolve(process.cwd(), 'package.json'), 'utf-8')) as {
+const dir = process.cwd()
+const pkgJson = JSON.parse(fs.readFileSync(resolve(dir, 'package.json'), 'utf-8'))
+const mergedPkgJson = {
+  ...pkgJson,
+  ...pkger({ cwd: dir })
+} as {
   name: string
   exports?: Record<string, {
     import: string
     'inner-src': string
   }>
 }
-const namePrefix = pkgJson
+const namePrefix = mergedPkgJson
   .name
   .replace(/[@|/-](\w)/g, (_, $1) => $1.toUpperCase())
 const exportsEntriesFromPkgJSON = Object.fromEntries(
-  Object.entries(pkgJson.exports ?? {})
+  Object.entries(mergedPkgJson.exports ?? {})
     // filter static files
     .filter(([key]) => !/\.(json|css|scss)$/.test(key))
     // filter no `inner-src` or `import` field entries
@@ -148,7 +154,7 @@ export default (
 
               file.code = file.code.replace(
                 /declare module ['|"]\..*['|"]/g,
-                `declare module '${pkgJson.name}'`
+                `declare module '${mergedPkgJson.name}'`
               )
             }
           }

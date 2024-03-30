@@ -1,5 +1,6 @@
 import '../src/commands/publish'
 
+import fs from 'node:fs'
 import path from 'node:path'
 
 import * as childProcess from 'child_process'
@@ -17,10 +18,7 @@ beforeAll(() => {
   })
 })
 afterAll(() => {
-  childProcess.execSync('pnpm i', {
-    cwd: ROOT,
-    stdio: 'inherit'
-  })
+  fs.unlinkSync(path.resolve(ROOT, 'package.json'))
 })
 
 const prefixes = ['node', 'jiek', 'publish', '--root', ROOT]

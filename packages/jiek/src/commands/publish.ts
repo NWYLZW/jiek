@@ -7,9 +7,9 @@ import { filterPackagesFromDir } from '@pnpm/filter-workspace-packages'
 import * as childProcess from 'child_process'
 import { program } from 'commander'
 
+import { bump, type BumperType } from '../../../src/utils/bumper'
+import { getWorkspaceDir } from '../../../src/utils/getWorkspaceDir'
 import { actionDone, actionRestore } from '../inner'
-import { bump, type BumperType } from '../utils/bumper'
-import { getWorkspaceDir } from '../utils/getWorkspaceDir'
 
 program
   .command('publish')

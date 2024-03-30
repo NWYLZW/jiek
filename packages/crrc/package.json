@@ -2,6 +2,7 @@
   "name": "crrc",
   "bin": "crrc.js",
   "dependencies": {
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "@jiek/utils": "workspace:^*"
   }
 }

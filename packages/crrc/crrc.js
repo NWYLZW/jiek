@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires,no-undef */
 const { spawn } = require('node:child_process')
 const path = require('node:path')
-const { getWorkspaceDir } = require('pnpm-helper/getWorkspaceDir')
+const { getWorkspaceDir } = require('@jiek/utils/getWorkspaceDir')
 
 const args = process.argv.slice(2)
 

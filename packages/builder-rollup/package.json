@@ -1,8 +1,13 @@
 {
-  "name": "rollup-helper",
+  "name": "@jiek/builder-rollup",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "crrc rollup -c"
+  },
   "dependencies": {
     "@rollup/plugin-json": "^6.0.1",
     "@rollup/plugin-terser": "^0.4.4",
+    "@jiek/utils": "workspace:^*",
     "rollup": "^4.1.5",
     "autoprefixer": "^10.4.16",
     "rollup-plugin-copy": "^3.5.0",
