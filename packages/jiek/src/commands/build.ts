@@ -2,13 +2,13 @@ import * as childProcess from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { pkger } from '@jiek/pkger'
 import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import { filterPackagesFromDir } from '@pnpm/filter-workspace-packages'
 import { program } from 'commander'
 import { load } from 'js-yaml'
 
 import { actionDone, actionRestore } from '../inner'
+import { mergePackageJson } from '../merge-package-json'
 
 const FILE_TEMPLATE = (manifest: unknown) => `
 module.exports = require('${
@@ -68,22 +68,21 @@ program
       .replace(/dist\/rollup.js$/, 'dist/bin/rollup')
     let i = 0
     for (const [dir, { package: { manifest } }] of Object.entries(selectedProjectsGraph)) {
-      const newManifest = {
-        ...manifest,
-        ...pkger({ cwd: dir })
-      }
+      const newManifest = mergePackageJson(manifest, dir)
       // TODO support auto build child packages in workspaces
       const escapeManifestName = manifest.name?.replace(/^@/g, '').replace(/\//g, '+')
       const configFile = jiekTempDir(
         `${escapeManifestName ?? `anonymous-${i++}`}.rollup.config.js`
       )
       fs.writeFileSync(configFile, FILE_TEMPLATE(newManifest))
+      let prefix = ''
+      if (process.env.NODE_ENV === 'test') {
+        const registerPath = require.resolve('esbuild-register')
+        const loaderPath = require.resolve('esbuild-register/loader')
+        prefix = `node --import ${registerPath} -r ${loaderPath} `
+      }
       // TODO replace with `spawn` to support watch mode
-      childProcess.execSync(`${
-        process.env.NODE_ENV === 'test'
-          ? 'node --import esbuild-register/loader -r esbuild-register '
-          : ''
-      }${rollupBinaryPath} -c ${configFile}`, {
+      childProcess.execSync(`${prefix}${rollupBinaryPath} -c ${configFile}`, {
         cwd: dir, stdio: 'inherit'
       })
     }

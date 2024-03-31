@@ -5,7 +5,7 @@ import { globSync } from 'fast-glob'
 type NameTransform = (name: string) => string
 type Input = string
 
-interface Options {
+export interface Options {
   /**
    * @default 'dist'
    */

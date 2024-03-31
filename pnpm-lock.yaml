@@ -114,6 +114,9 @@ importers:
       '@npm/types':
         specifier: ^1.0.2
         version: 1.0.2
+      '@pnpm/workspace.pkgs-graph':
+        specifier: ^2.0.15
+        version: 2.0.15(@pnpm/logger@5.0.0)
       '@types/js-yaml':
         specifier: ^4.0.9
         version: 4.0.9

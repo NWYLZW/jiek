@@ -1,7 +1,18 @@
 {
   "name": "@jiek/utils",
-  "version": "0.1.0",
-  "exports": {
-    "./getWorkspaceDir": "./dist/getWorkspaceDir.js"
-  }
+  "version": "0.1.3",
+  "license": "MIT",
+  "scripts": {
+    "build": "jiek-dev build"
+  },
+  "jiek": {
+    "inputs": [
+      "*.ts"
+    ],
+    "noIndex": true
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ]
 }

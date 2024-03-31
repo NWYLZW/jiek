@@ -1,7 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { pkger } from '@jiek/pkger'
 import { bump, type BumperType } from '@jiek/utils/bumper'
 import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import type { PackageJson } from '@npm/types'
@@ -10,6 +9,7 @@ import * as childProcess from 'child_process'
 import { program } from 'commander'
 
 import { actionDone, actionRestore } from '../inner'
+import { mergePackageJson } from '../merge-package-json'
 
 program
   .command('publish')
@@ -42,12 +42,7 @@ program
       .entries(selectedProjectsGraph)
       .forEach(([, { package: { dir, manifest } }]) => {
         mainfests.push([
-          dir, {
-            ...manifest,
-            ...pkger({
-              cwd: dir
-            })
-          } as PackageJson
+          dir, mergePackageJson(manifest, dir)
         ])
       })
     const passArgs = Object

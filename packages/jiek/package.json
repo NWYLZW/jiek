@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@npm/types": "^1.0.2",
+    "@pnpm/workspace.pkgs-graph": "^2.0.15",
     "@types/js-yaml": "^4.0.9",
     "esbuild-register": "^3.5.0"
   }
