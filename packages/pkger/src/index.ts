@@ -157,7 +157,8 @@ export function pkger(options: Options): Output {
   for (const [name, input] of Object.entries(inputsResolved)) {
     const index = input.replace(/\.[m|c]?[t|j]s$/, '')
     const indexESM = re(`${index}${suffix.esm}${suffixes.end()}`)
-    exports[name] = {
+    const exportsName = name === '.' ? '.' : `./${name}`
+    exports[exportsName] = {
       types: re(`${index}${suffixes.dts()}`),
       import: indexESM,
       default: indexESM,
