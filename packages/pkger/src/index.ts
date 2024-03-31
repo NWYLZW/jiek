@@ -112,6 +112,7 @@ export function pkger(options: Options): Output {
     throw new Error('outdir should not end with path separator')
   }
   const re = (...p: string[]) => `./${outdir}/${path.join(...p)}`
+  const sourceRe = (...p: string[]) => `./${source}/${path.join(...p)}`
 
   const suffix = Object.assign(SUFFIX, inputSuffix)
 
@@ -161,7 +162,7 @@ export function pkger(options: Options): Output {
       types: re(`${index}${suffixes.dts()}`),
       import: indexESM,
       require: re(`${index}${suffix.umd}${suffixes.end()}`),
-      'inner-src': `${source}/${input}`
+      'inner-src': sourceRe(input)
     }
   }
   return {
