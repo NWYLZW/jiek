@@ -9,7 +9,12 @@ module.exports = {
         const { devDependencies } = packageJson
         for (const [name, version] of Object.entries(devDependencies)) {
           if (version.startsWith('workspace:')) {
-            const manifest = JSON.parse(await fs.readFile(`./packages/${name}/package.json`, 'utf-8'))
+            const path = `./packages/${name}/package.json`
+            if (!await fs.access(path).then(() => true).catch(() => false)) {
+              console.warn(`Package ${name} not found in workspace`)
+              continue
+            }
+            const manifest = JSON.parse(await fs.readFile(path, 'utf-8'))
             Object.assign(packageJson.devDependencies, manifest.dependencies ?? {})
             console.log(`Added ${name} dependencies to workspace`)
           }

@@ -1,4 +1,8 @@
 {
   "name": "@jiek/test-publish-workspace",
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "devDependencies": {
+    "jiek": "ln:../../../../",
+    "esbuild-register": "^3.5.0"
+  }
 }

@@ -1,4 +1,5 @@
 import './commands/publish'
+import './commands/build'
 
 import { program } from 'commander'
 

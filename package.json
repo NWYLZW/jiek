@@ -8,9 +8,6 @@
   "devDependencies": {
     "@types/mock-fs": "^4.13.4",
     "@types/node": "^18.19.26",
-    "crrc": "workspace:^*",
-    "builder-rollup": "workspace:^*",
-    "esbuild-register": "^3.5.0",
     "jiek": "workspace:^*",
     "mock-fs": "^5.2.0",
     "typescript": "^5.4.3",

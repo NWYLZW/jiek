@@ -14,6 +14,9 @@ export default defineConfig({
     include: ['**/tests/**/*.spec.ts'],
     typecheck: {
       include: ['**/tests/**/*.spec.ts']
+    },
+    env: {
+      NODE_ENV: 'test'
     }
   },
   plugins: [

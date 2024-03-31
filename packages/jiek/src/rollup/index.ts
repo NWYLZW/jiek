@@ -1,7 +1,5 @@
-import fs from 'node:fs'
 import { resolve } from 'node:path'
 
-import { pkger } from '@jiek/pkger'
 import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import autoprefixer from 'autoprefixer'
 import type { InputPluginOption, RollupOptions } from 'rollup'
@@ -20,38 +18,7 @@ function resolveWorkspacePath(p: string) {
   return resolve(workspaceRoot, p)
 }
 
-const inputs = process.env.INPUTS?.split(',')
-
-const dir = process.cwd()
-const pkgJson = JSON.parse(fs.readFileSync(resolve(dir, 'package.json'), 'utf-8'))
-const mergedPkgJson = {
-  ...pkgJson,
-  ...pkger({ cwd: dir, inputs })
-} as {
-  name: string
-  exports?: Record<string, {
-    import: string
-    'inner-src': string
-  }>
-}
-const namePrefix = mergedPkgJson
-  .name
-  .replace(/[@|/-](\w)/g, (_, $1) => $1.toUpperCase())
-const exportsEntriesFromPkgJSON = Object.fromEntries(
-  Object.entries(mergedPkgJson.exports ?? {})
-    // filter static files
-    .filter(([key]) => !/\.(json|css|scss)$/.test(key))
-    // filter no `inner-src` or `import` field entries
-    .filter(([, value]) => value['inner-src'] && value['import'])
-    .map(([key, value]) => [
-      key
-        .replace(/^\.$/, 'index')
-        .replace(/^\.\//, ''),
-      value['inner-src']
-    ])
-)
-
-export default (
+export const template = (
   {
     styled = false,
     plugins: {
@@ -70,8 +37,34 @@ export default (
       dts?: InputPluginOption
     }
   } = {},
-  exportsEntries: Record<string, string> = exportsEntriesFromPkgJSON
+  pkg: {
+    name?: string
+    exports?: Record<string, string | {
+      import: string
+      'inner-src': string
+    }>
+  }
 ) => {
+  if (!pkg.name) {
+    throw new Error('pkg.name is required')
+  }
+  const namePrefix = pkg
+    .name
+    .replace(/[@|/-](\w)/g, (_, $1) => $1.toUpperCase())
+  const exportsEntries = Object.fromEntries(
+    Object.entries(pkg.exports ?? {})
+      // filter static files
+      .filter(([key]) => !/\.(json|css|scss)$/.test(key))
+      // filter no `inner-src` or `import` field entries
+      .filter(([, value]) => typeof value === 'object' && value['inner-src'] && value['import'])
+      .map(([key, value]) => [
+        key
+          .replace(/^\.$/, 'index')
+          .replace(/^\.\//, ''),
+        typeof value === 'string' ? value : value['inner-src']
+      ])
+  )
+
   const [globalsRegister, globalsOutput] = createGlobalsLinkage()
   const external = externalResolver()
 
@@ -156,7 +149,7 @@ export default (
 
               file.code = file.code.replace(
                 /declare module ['|"]\..*['|"]/g,
-                `declare module '${mergedPkgJson.name}'`
+                `declare module '${pkg.name}'`
               )
             }
           }
