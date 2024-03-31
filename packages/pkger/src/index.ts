@@ -112,7 +112,7 @@ export function pkger(options: Options): Output {
   if (outdir.endsWith(path.sep)) {
     throw new Error('outdir should not end with path separator')
   }
-  const re = (...p: string[]) => `${outdir}/${path.join(...p)}`
+  const re = (...p: string[]) => `./${outdir}/${path.join(...p)}`
 
   const suffix = Object.assign(SUFFIX, inputSuffix)
 
