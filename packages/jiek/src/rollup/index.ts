@@ -90,7 +90,7 @@ export const template = (
     ...Object.entries(exportsEntries).map(([name, input]) => {
       const outputName = namePrefix + (
         name === 'index' ? '' : (
-          name[0].toUpperCase() + name.slice(1)
+          name.replace(/[@|/-](\w)/g, (_, $1) => $1.toUpperCase())
         )
       )
       return {
