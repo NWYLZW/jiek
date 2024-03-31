@@ -152,7 +152,7 @@ export function pkger(options: Options): Output {
     }
   }
   const exports: Output['exports'] = {
-    'package.json': 'package.json'
+    './package.json': './package.json'
   }
   for (const [name, input] of Object.entries(inputsResolved)) {
     const index = input.replace(/\.[m|c]?[t|j]s$/, '')
