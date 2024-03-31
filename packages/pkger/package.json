@@ -1,9 +1,13 @@
 {
   "name": "@jiek/pkger",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.2",
   "scripts": {
+    "build": "jiek-dev build"
   },
   "dependencies": {
     "fast-glob": "^3.3.2"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
