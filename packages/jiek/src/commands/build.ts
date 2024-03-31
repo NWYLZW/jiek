@@ -42,6 +42,17 @@ program
       throw new Error('root path is workspace root, please provide a filter')
       // TODO inquirer prompt support user select packages
     }
+    if (root !== wd && !filter) {
+      const packageJSONIsExist = fs.existsSync(path.resolve(root, 'package.json'))
+      if (!packageJSONIsExist) {
+        throw new Error('root path is not workspace root, please provide a filter')
+      }
+      const packageJSON = JSON.parse(fs.readFileSync(path.resolve(root, 'package.json'), 'utf-8'))
+      if (!packageJSON.name) {
+        throw new Error('root path is not workspace root, please provide a filter')
+      }
+      filter = packageJSON.name
+    }
     const { selectedProjectsGraph } = await filterPackagesFromDir(wd, [{
       filter: filter ?? '',
       followProdDepsOnly: true
