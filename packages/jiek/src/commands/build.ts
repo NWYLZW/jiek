@@ -40,7 +40,6 @@ program
       workspaceDir: wd,
       patterns: ['packages/*']
     })
-    console.log(selectedProjectsGraph)
     const jiekTempDir = (...paths: string[]) => path.resolve(wd, 'node_modules/.jiek', ...paths)
     // generate node_modules/.jiek directory
     if (!fs.existsSync(jiekTempDir())) {
