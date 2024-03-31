@@ -84,7 +84,7 @@ interface Output {
   unpkg?: string
   jsdelivr?: string
   browser?: string
-  typesVersions: Record<string, string[]>
+  typesVersions: Record<string, Record<string, string[]>>
   exports: Record<string, string | {
     types: string
     import: string
@@ -168,7 +168,7 @@ export function pkger(options: Options): Output {
   return {
     ...indexRest,
     typesVersions: {
-      '<5.0': ['*', re('*'), re(`*/index${suffix.esm}${suffixes.dts()}`)]
+      '<5.0': { '*': ['*', re('*'), re(`*/index${suffix.esm}${suffixes.dts()}`)] }
     },
     exports
   }
