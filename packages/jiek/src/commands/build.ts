@@ -72,11 +72,13 @@ program
         ...manifest,
         ...pkger({ cwd: dir })
       }
+      // TODO support auto build child packages in workspaces
       const escapeManifestName = manifest.name?.replace(/^@/g, '').replace(/\//g, '+')
       const configFile = jiekTempDir(
         `${escapeManifestName ?? `anonymous-${i++}`}.rollup.config.js`
       )
       fs.writeFileSync(configFile, FILE_TEMPLATE(newManifest))
+      // TODO replace with `spawn` to support watch mode
       childProcess.execSync(`${
         process.env.NODE_ENV === 'test'
           ? 'node --import esbuild-register/loader -r esbuild-register '
