@@ -38,6 +38,10 @@ program
     const pnpmWorkspace = load(pnpmWorkspaceFileContent) as {
       packages: string[]
     }
+    if (root === wd && !filter) {
+      throw new Error('root path is workspace root, please provide a filter')
+      // TODO inquirer prompt support user select packages
+    }
     const { selectedProjectsGraph } = await filterPackagesFromDir(wd, [{
       filter: filter ?? '',
       followProdDepsOnly: true
