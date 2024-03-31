@@ -4,8 +4,9 @@ import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import autoprefixer from 'autoprefixer'
 import type { InputPluginOption, RollupOptions } from 'rollup'
 import { dts } from 'rollup-plugin-dts'
-import esbuild from 'rollup-plugin-esbuild'
+import esbuildModule = require('rollup-plugin-esbuild')
 import postcss from 'rollup-plugin-postcss'
+const esbuild = esbuildModule.default
 
 import { createGlobalsLinkage } from './plugins/globals'
 import skip from './plugins/skip'
