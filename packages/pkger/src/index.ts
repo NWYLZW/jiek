@@ -155,7 +155,7 @@ export function pkger(options: Options): Output {
     './package.json': './package.json'
   }
   for (const [name, input] of Object.entries(inputsResolved)) {
-    const index = input.replace(/\.[m|c]?[t|j]s$/, '')
+    const index = input.replace(/(index)?\.[m|c]?[t|j]s$/, '')
     const indexESM = re(`${index}${suffix.esm}${suffixes.end()}`)
     const exportsName = name === '.' ? '.' : `./${name}`
     exports[exportsName] = {
