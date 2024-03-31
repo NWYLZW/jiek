@@ -11,11 +11,18 @@ import { actionDone, actionRestore } from '../inner'
 import { mergePackageJson } from '../merge-package-json'
 
 const FILE_TEMPLATE = (manifest: unknown) => `
+const pkg = ${JSON.stringify(manifest, null, 2)}
+const { jiek = {} } = pkg
+const templateArg = jiek.templateArgFilePath
+  ? require.resolve(jiek.templateArgFilePath)
+  : {
+    styled: jiek.styled
+  }
 module.exports = require('${
   process.env.NODE_ENV === 'test'
     ? 'jiek/src/rollup/index.ts'
     : 'jiek/rollup'
-}').template({ }, ${JSON.stringify(manifest, null, 2)})
+}').template(templateArg, pkg)
 `.trimStart()
 
 program
