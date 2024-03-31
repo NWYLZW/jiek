@@ -6,6 +6,9 @@
     "jiek": "bin/jiek.js",
     "jiek-dev": "bin/jiek-dev.js"
   },
+  "jiek": {
+    "inputs": ["index.ts", "rollup/index.ts"]
+  },
   "scripts": {
     "build": "jiek-dev build"
   },
