@@ -38,6 +38,9 @@ importers:
       jiek:
         specifier: workspace:^*
         version: link:packages/jiek
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.1.0
       mock-fs:
         specifier: ^5.2.0
         version: 5.2.0
@@ -89,6 +92,9 @@ importers:
       commander:
         specifier: ^12.0.0
         version: 12.0.0
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.1.0
       rollup:
         specifier: ^4.1.5
         version: 4.13.0
@@ -108,6 +114,9 @@ importers:
       '@npm/types':
         specifier: ^1.0.2
         version: 1.0.2
+      '@types/js-yaml':
+        specifier: ^4.0.9
+        version: 4.0.9
       esbuild-register:
         specifier: ^3.5.0
         version: 3.5.0(esbuild@0.20.2)
@@ -1049,6 +1058,10 @@ packages:
     dependencies:
       '@types/minimatch': 5.1.2
       '@types/node': 18.19.26
+
+  /@types/js-yaml@4.0.9:
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
+    dev: true
 
   /@types/json-schema@7.0.15:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}

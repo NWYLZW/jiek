@@ -11,13 +11,14 @@
   },
   "dependencies": {
     "@jiek/pkger": "workspace:^*",
+    "@jiek/utils": "workspace:^*",
     "@pnpm/filter-workspace-packages": "^7.2.13",
-    "commander": "^12.0.0",
     "@rollup/plugin-json": "^6.0.1",
     "@rollup/plugin-terser": "^0.4.4",
-    "@jiek/utils": "workspace:^*",
-    "rollup": "^4.1.5",
     "autoprefixer": "^10.4.16",
+    "commander": "^12.0.0",
+    "js-yaml": "^4.1.0",
+    "rollup": "^4.1.5",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-esbuild": "^6.1.0",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@npm/types": "^1.0.2",
+    "@types/js-yaml": "^4.0.9",
     "esbuild-register": "^3.5.0"
   }
 }

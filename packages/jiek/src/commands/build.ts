@@ -6,6 +6,7 @@ import { pkger } from '@jiek/pkger'
 import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import { filterPackagesFromDir } from '@pnpm/filter-workspace-packages'
 import { program } from 'commander'
+import { load } from 'js-yaml'
 
 import { actionDone, actionRestore } from '../inner'
 
@@ -32,19 +33,22 @@ program
         : path.resolve(process.cwd(), rootOption)
       : process.cwd()
     const wd = getWorkspaceDir(root)
+    const pnpmWorkspaceFilePath = path.resolve(wd, 'pnpm-workspace.yaml')
+    const pnpmWorkspaceFileContent = fs.readFileSync(pnpmWorkspaceFilePath, 'utf-8')
+    const pnpmWorkspace = load(pnpmWorkspaceFileContent) as {
+      packages: string[]
+    }
     const { selectedProjectsGraph } = await filterPackagesFromDir(wd, [{
       filter: filter ?? '',
       followProdDepsOnly: true
     }], {
       prefix: root,
       workspaceDir: wd,
-      patterns: ['packages/*']
+      patterns: pnpmWorkspace.packages
     })
     const jiekTempDir = (...paths: string[]) => path.resolve(wd, 'node_modules/.jiek', ...paths)
-    // generate node_modules/.jiek directory
-    if (!fs.existsSync(jiekTempDir())) {
-      fs.mkdirSync(jiekTempDir())
-    }
+    if (!fs.existsSync(jiekTempDir())) fs.mkdirSync(jiekTempDir())
+
     const rollupBinaryPath = require.resolve('rollup')
       .replace(/dist\/rollup.js$/, 'dist/bin/rollup')
     let i = 0
