@@ -113,7 +113,6 @@ export default (options: ReexportOptions = {}): Plugin[] => {
             .join('\n')
           newCode = newCode.slice(0, start) + newImports + newCode.slice(end)
         }
-        console.log(newCode)
         return newCode
       }
     }
