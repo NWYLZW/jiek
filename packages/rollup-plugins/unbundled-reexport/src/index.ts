@@ -1,77 +1,120 @@
+import fs from 'node:fs'
 import path from 'node:path'
 
-import type { ImportDeclaration } from 'estree'
+import type { ExportDefaultDeclaration, ExportNamedDeclaration, ImportDeclaration, Program } from 'estree'
 import type { Plugin } from 'rollup'
 
-export default (matches: (string | RegExp)[] = []): Plugin[] => {
-  const reexportImports = new Map<string, string[]>()
-  const reexportImportDecls = new Map<string, [ImportDeclaration, idStartWithString: string][]>()
-  const reexportImportIdStartWithStringFromMap = new Map<string, string[]>()
-  const reexportedModules = new Map<string, undefined | {
-    exportedBindings: Record<string, string[]> | null
-  }>()
+function exportBindingsFromModule(body: Program['body']) {
+  const exportDecls = body.filter(node => [
+    'ExportNamedDeclaration',
+    'ExportDefaultDeclaration'
+  ].includes(node.type)) as (ExportNamedDeclaration | ExportDefaultDeclaration)[]
+  return exportDecls.reduce<Record<string, string[]>>((acc, node) => {
+    if (node.type === 'ExportNamedDeclaration') {
+      const { specifiers, source } = node
+      if (!source || typeof source.value !== 'string') return acc
+
+      return { ...acc, [source.value]: specifiers.map(s => s.exported.name) }
+    } else if (node.type === 'ExportDefaultDeclaration') {
+      const { declaration } = node
+      if (!declaration) return acc
+
+      return { ...acc, default: [declaration.type === 'Identifier' ? declaration.name : 'default'] }
+    }
+    return acc
+  }, {})
+}
+
+interface ReexportOptions {
+  matches?: (string | RegExp)[]
+  /**
+   * @default [/node_modules/]
+   */
+  exclude?: (string | RegExp)[]
+}
+
+export default (options: ReexportOptions = {}): Plugin[] => {
+  const {
+    matches = [],
+    exclude = [/node_modules/]
+  } = options
   return [
     {
       name: 'unbundled-reexport',
-      resolveId(id, importer) {
-        const match = matches.some(m => {
-          if (typeof m === 'string') {
-            return id === m
+      async transform(code, id) {
+        if (exclude.some(e => typeof e === 'string'
+          ? id.includes(e)
+          : e.test(id))) return
+        if (!['.ts', '.tsx', '.js', '.jsx'].some(ext => id.endsWith(ext))) return
+
+        const { body } = this.parse(code)
+        console.log(id, body)
+        const importDecls = body.filter(node => node.type === 'ImportDeclaration') as (
+          & ImportDeclaration
+          & { start: number, end: number }
+        )[]
+        const reexportImports = importDecls
+          .filter(node => matches.some(m => {
+            const { value } = node.source ?? {}
+            if (!value || typeof value !== 'string') return false
+
+            return typeof m === 'string'
+              ? m === value
+              : m.test(value)
+          }))
+        if (reexportImports.length === 0) return
+
+        const reexportModules = await Promise.all(reexportImports.map(node => {
+          const { value } = node.source ?? {}
+          if (!value || typeof value !== 'string') return
+
+          return this.resolve(value, id, { skipSelf: true })
+        }))
+        const reexportExportBindingsList = reexportModules.map(module => {
+          const { id: moduleId } = module ?? {}
+          if (!moduleId) {
+            throw new Error(`Failed to resolve module for reexport: ${moduleId}`)
           }
-          return m.test(id)
+          const code = this.getModuleInfo(moduleId)?.code
+            ?? fs.readFileSync(moduleId, 'utf-8')
+          return exportBindingsFromModule(this.parse(code).body)
         })
-        if (!match || !importer) return
-        if (!reexportImports.has(importer)) {
-          reexportImports.set(importer, [])
-        }
-        reexportImports.get(importer)?.push(id)
-      },
-      moduleParsed(info) {
-        console.log('moduleParsed', info.id)
-        const infoDir = path.dirname(info.id)
-        const reexportMap = reexportImportIdStartWithStringFromMap
-        if (reexportImports.has(info.id)) {
-          if (!info.ast) {
-            console.error('no ast', info.id)
-            return
-          }
-          const reexports = reexportImports.get(info.id)
-          info.ast.body.forEach(node => {
-            if (node.type !== 'ImportDeclaration') return
 
-            const reexport = reexports?.find(r => node.source?.value === r)
-            if (!reexport) return
+        let newCode = code
+        for (const [index, { specifiers, source, start, end }] of reexportImports.entries()) {
+          const reexportExportBindings = reexportExportBindingsList[index]
+          if (!reexportExportBindings) continue
 
-            if (!reexportImportDecls.has(info.id)) {
-              reexportImportDecls.set(info.id, [])
+          const reexportExportBindingsEntries = Object.entries(reexportExportBindings)
+          const pathNameMap = new Map<string, string[]>()
+          specifiers.forEach(specifier => {
+            const [reexportExportBinding] = reexportExportBindingsEntries
+              .find(([, exports]) => exports.includes(specifier.local.name))
+              ?? []
+            if (!reexportExportBinding) return
+
+            if (typeof source.value !== 'string') return
+            let relativePath = path.join(source.value, reexportExportBinding)
+            if (!relativePath.startsWith('.')) {
+              relativePath = './' + relativePath
             }
-            const idStartWithString = path.resolve(infoDir, reexport)
-            reexportImportDecls.get(info.id)?.push([node, idStartWithString])
-
-            if (!reexportMap.has(idStartWithString)) {
-              reexportMap.set(idStartWithString, [])
+            if (!pathNameMap.has(relativePath)) {
+              pathNameMap.set(relativePath, [])
             }
-            reexportMap.get(idStartWithString)?.push(info.id)
+            pathNameMap
+              .get(relativePath)!
+              .push(specifier.local.name)
           })
+          const newImports = Array.from(pathNameMap.entries())
+            .map(([relativePath, names]) => {
+              const importNames = names.join(', ')
+              return `import { ${importNames} } from '${relativePath}'`
+            })
+            .join('\n')
+          newCode = newCode.slice(0, start) + newImports + newCode.slice(end)
         }
-        const reexportImportIdStartWithString = [
-          ...reexportMap.keys()
-        ].find(s => info.id.startsWith(`${s}.`) || info.id.startsWith(`${s}/index.`))
-        if (reexportImportIdStartWithString) {
-          const fromImports = reexportMap.get(reexportImportIdStartWithString)
-          fromImports?.forEach(fromImport => {
-            const moduleInfo = this.getModuleInfo(fromImport)
-            if (!moduleInfo) return
-            // this.cache.delete(fromImport)
-            // this.cache.set(reexportImportIdStartWithString, moduleInfo)
-          })
-          reexportedModules.set(reexportImportIdStartWithString, {
-            exportedBindings: info.exportedBindings
-          })
-        }
-      },
-      transform(code, id) {
-        if (!reexportImportDecls.has(id)) return
+        console.log(newCode)
+        return newCode
       }
     }
   ]

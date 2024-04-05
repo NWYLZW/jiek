@@ -1,10 +1,17 @@
 {
   "name": "rollup-plugin-unbundled-reexport",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.1.1-alpha.2",
+  "description": "A Rollup plugin that reexports unbundled modules.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/NWYLZW/jiek.git"
+    "url": "https://github.com/NWYLZW/jiek.git",
+    "directory": "packages/rollup-plugins/unbundled-reexport"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "jiek-dev build"
   },
   "devDependencies": {
     "@types/estree": "^1.0.5",
