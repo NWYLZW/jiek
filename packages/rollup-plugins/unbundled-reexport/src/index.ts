@@ -1,8 +1,13 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import type { ExportDefaultDeclaration, ExportNamedDeclaration, ImportDeclaration, Program } from 'estree'
+import type { ExportDefaultDeclaration, ExportNamedDeclaration, ImportDeclaration, Literal, Program } from 'estree'
 import type { Plugin } from 'rollup'
+
+interface RollupImportAttributes {
+  key: Literal
+  value: Literal
+}
 
 function exportBindingsFromModule(body: Program['body']) {
   const exportDecls = body.filter(node => [
@@ -23,6 +28,13 @@ function exportBindingsFromModule(body: Program['body']) {
     }
     return acc
   }, {})
+}
+
+function isIncludeUnbundledReexportImportAttr(attrs: RollupImportAttributes[]) {
+  return attrs.some(attr => (
+    attr.key.value === 'unbundled-reexport'
+    && attr.value.value === 'on'
+  ))
 }
 
 interface ReexportOptions {
@@ -50,17 +62,25 @@ export default (options: ReexportOptions = {}): Plugin[] => {
         const { body } = this.parse(code)
         const importDecls = body.filter(node => node.type === 'ImportDeclaration') as (
           & ImportDeclaration
-          & { start: number, end: number }
+          & {
+            start: number, end: number
+            attributes: RollupImportAttributes[]
+          }
         )[]
         const reexportImports = importDecls
-          .filter(node => matches.some(m => {
-            const { value } = node.source ?? {}
-            if (!value || typeof value !== 'string') return false
+          .filter(node => {
+            if (isIncludeUnbundledReexportImportAttr(node.attributes)) return true
 
-            return typeof m === 'string'
-              ? m === value
-              : m.test(value)
-          }))
+            if (matches.length === 0) return false
+            return matches.some(m => {
+              const { value } = node.source ?? {}
+              if (!value || typeof value !== 'string') return false
+
+              return typeof m === 'string'
+                ? m === value
+                : m.test(value)
+            })
+          })
         if (reexportImports.length === 0) return
 
         const reexportModules = await Promise.all(reexportImports.map(node => {
