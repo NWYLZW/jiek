@@ -2,19 +2,40 @@ import path from 'node:path'
 
 import { rollup } from 'rollup'
 import esbuild from 'rollup-plugin-esbuild'
-import { test } from 'vitest'
+import { swc } from 'rollup-plugin-swc3'
+import { describe, expect, test } from 'vitest'
 
 import unbundledReexport from '../src'
 
 const fixtures = (...p: string[]) => path.resolve(__dirname, 'fixtures', ...p)
 
-test('base', async () => {
-  const { generate } = await rollup({
-    input: fixtures('index.ts'),
-    plugins: [
-      unbundledReexport(['./utils']),
-      esbuild()
-    ]
+describe('with attributes', () => {
+  test('swc', async () => {
+    const { generate } = await rollup({
+      input: fixtures('index.ts'),
+      plugins: [
+        unbundledReexport(),
+        swc()
+      ]
+    })
+    const { output: [index] } = await generate({
+      format: 'esm',
+      preserveModules: true
+    })
+    expect(index.code).toBe('import { foo } from \'./utils/foo.js\';\n\nconsole.log(foo());\n')
   })
-  const { output } = await generate({ format: 'esm' })
+  test('esbuild', async () => {
+    const { generate } = await rollup({
+      input: fixtures('index.ts'),
+      plugins: [
+        unbundledReexport(),
+        esbuild()
+      ]
+    })
+    const { output: [index] } = await generate({
+      format: 'esm',
+      preserveModules: true
+    })
+    expect(index.code).toBe('import { foo } from \'./utils/foo.js\';\n\nconsole.log(foo());\n')
+  })
 })
