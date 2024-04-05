@@ -1,0 +1,13 @@
+{
+  "name": "rollup-plugin-unbundled-reexport",
+  "version": "0.1.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NWYLZW/jiek.git"
+  },
+  "devDependencies": {
+    "@types/estree": "^1.0.5",
+    "rollup": "^4.14.0"
+  }
+}

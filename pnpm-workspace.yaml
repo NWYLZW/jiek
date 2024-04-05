@@ -1,2 +1,3 @@
 packages:
+  - packages/rollup-plugins/*
   - packages/*
