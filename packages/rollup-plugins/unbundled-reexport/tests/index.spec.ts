@@ -10,9 +10,10 @@ import unbundledReexport from '../src'
 const fixtures = (...p: string[]) => path.resolve(__dirname, 'fixtures', ...p)
 
 describe('with attributes', () => {
+  const root = (...p: string[]) => fixtures('with-attributes', ...p)
   test('swc', async () => {
     const { generate } = await rollup({
-      input: fixtures('index.ts'),
+      input: root('index.ts'),
       plugins: [
         unbundledReexport(),
         swc()
@@ -26,7 +27,7 @@ describe('with attributes', () => {
   })
   test('esbuild', async () => {
     const { generate } = await rollup({
-      input: fixtures('index.ts'),
+      input: root('index.ts'),
       plugins: [
         unbundledReexport(),
         esbuild()
