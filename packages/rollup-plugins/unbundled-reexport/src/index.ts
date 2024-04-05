@@ -53,6 +53,7 @@ const MULTIPLE_COMMENT_REG = /\/\*[\s\S]*?\*\//
 export const IMPORT_REG = new RegExp(`(?<=^|\\n|;|(?:${
   MULTIPLE_COMMENT_REG.source
 }))\\s*import\\s+(.*?)\\s*from\\s+['"](.+?)['"]\\s*(?:${
+  // TODO support pass parameters to control whether must conatin with and set speical attribute
   'with\\s+\\{(.*?)\\}'
 })?(?=;|\\n|$)`, 'gs')
 
