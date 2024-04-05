@@ -48,7 +48,6 @@ export default (options: ReexportOptions = {}): Plugin[] => {
         if (!['.ts', '.tsx', '.js', '.jsx'].some(ext => id.endsWith(ext))) return
 
         const { body } = this.parse(code)
-        console.log(id, body)
         const importDecls = body.filter(node => node.type === 'ImportDeclaration') as (
           & ImportDeclaration
           & { start: number, end: number }
