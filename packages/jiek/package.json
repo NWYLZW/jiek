@@ -1,6 +1,6 @@
 {
   "name": "jiek",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "YiJie's personal kits.",
   "bin": {
     "jiek": "bin/jiek.js",
