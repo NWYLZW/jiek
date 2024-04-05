@@ -45,6 +45,17 @@ interface ReexportOptions {
   exclude?: (string | RegExp)[]
 }
 
+const MULTIPLE_COMMENT_REG = /\/\*[\s\S]*?\*\//
+
+/**
+ * @internal
+ */
+export const IMPORT_REG = new RegExp(`(?<=^|\\n|;|(?:${
+  MULTIPLE_COMMENT_REG.source
+}))\\s*import\\s+(.*?)\\s*from\\s+['"](.+?)['"]\\s*(?:${
+  'with\\s+\\{(.*?)\\}'
+})?(?=;|\\n|$)`, 'gs')
+
 export default (options: ReexportOptions = {}): Plugin[] => {
   const {
     matches = [],
@@ -59,6 +70,7 @@ export default (options: ReexportOptions = {}): Plugin[] => {
           : e.test(id))) return
         if (!['.ts', '.tsx', '.js', '.jsx'].some(ext => id.endsWith(ext))) return
 
+        if (!IMPORT_REG.test(code) && matches.length === 0) return
         const { body } = this.parse(code)
         const importDecls = body.filter(node => node.type === 'ImportDeclaration') as (
           & ImportDeclaration
