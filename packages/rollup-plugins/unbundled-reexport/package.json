@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-unbundled-reexport",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "A Rollup plugin that reexports unbundled modules.",
   "repository": {
     "type": "git",
