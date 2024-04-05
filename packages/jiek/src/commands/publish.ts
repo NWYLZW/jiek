@@ -7,6 +7,7 @@ import type { PackageJson } from '@npm/types'
 import { filterPackagesFromDir } from '@pnpm/filter-workspace-packages'
 import * as childProcess from 'child_process'
 import { program } from 'commander'
+import { load } from 'js-yaml'
 
 import { actionDone, actionRestore } from '../inner'
 import { mergePackageJson } from '../merge-package-json'
@@ -29,17 +30,25 @@ program
         : path.resolve(process.cwd(), rootOption)
       : process.cwd()
     const wd = getWorkspaceDir(root)
+    const pnpmWorkspaceFilePath = path.resolve(wd, 'pnpm-workspace.yaml')
+    const pnpmWorkspaceFileContent = fs.readFileSync(pnpmWorkspaceFilePath, 'utf-8')
+    const pnpmWorkspace = load(pnpmWorkspaceFileContent) as {
+      packages: string[]
+    }
     const { selectedProjectsGraph } = await filterPackagesFromDir(wd, [{
       filter: filter ?? '',
       followProdDepsOnly: true
     }], {
       prefix: root,
       workspaceDir: wd,
-      patterns: ['packages/*']
+      patterns: pnpmWorkspace.packages
     })
+    const selectedProjectsGraphEntries = Object.entries(selectedProjectsGraph)
+    if (selectedProjectsGraphEntries.length === 0) {
+      throw new Error('no packages selected')
+    }
     const mainfests: [dir: string, PackageJson][] = []
-    Object
-      .entries(selectedProjectsGraph)
+    selectedProjectsGraphEntries
       .forEach(([, { package: { dir, manifest } }]) => {
         mainfests.push([
           dir, mergePackageJson(manifest, dir)
