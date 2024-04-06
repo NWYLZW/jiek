@@ -116,3 +116,10 @@ MIT
 ## Finally
 
 Have fun playing around with it!
+
+## TODOs
+
+* [ ] sourcemap
+* [ ] cache
+* [ ] performance optimization: import expression match logic
+* [ ] recursive get module exports for `export * from './foo'`
