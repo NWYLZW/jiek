@@ -14,9 +14,7 @@ Still writing like this? Forget it, try this plugin instead!
 import { a, b, c, d, e, f, g } from './utils' with { 'unbundled-reexport': 'on' }
 ```
 
-
 ## Why Use This Plugin
-
 
 In the context of using HMR (Hot Module Replacement), when we merge the contents of several files together and re-export them, Rollup may not correctly recognize the dependencies of that file, resulting in HMR not working properly.
 
@@ -52,7 +50,6 @@ Now, let's imagine what would happen if we made changes to utils/foo.js? Clearly
 
 ## Installation
 
-
 ```bash
 npm install --save-dev rollup-plugin-unbundled-reexport
 # pnpm
@@ -61,19 +58,15 @@ pnpm add -D rollup-plugin-unbundled-reexport
 yarn add -D rollup-plugin-unbundled-reexport
 ```
 
-
 ## Usage
-
 
 Usually, only Vite might make use of this plugin, but if any of your systems support HMR, you can give it a try as well.
 
 ### Loading the Plugin
 
-
 * Vite
 ```js
 import unbundledReexport from 'rollup-plugin-unbundled-reexport';
-
 
 export default {
   plugins: [
@@ -84,7 +77,6 @@ export default {
 * Rollup
 ```js
 import unbundledReexport from 'rollup-plugin-unbundled-reexport';
-
 
 export default {
   input: 'src/index.js',
@@ -98,11 +90,7 @@ export default {
 };
 ```
 
-
-
-
 ### Performing Splitting
-
 
 Here, we can use [Import Attributes](https://github.com/tc39/proposal-import-attributes) to trigger the plugin's functionality.
 
@@ -123,11 +111,8 @@ You can also use configuration instead of the \`with\` syntax. The specific synt
 
 ## License
 
-
 MIT
 
-
 ## Finally
-
 
 Have fun playing around with it!
