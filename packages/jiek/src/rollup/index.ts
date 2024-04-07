@@ -1,6 +1,7 @@
 import { resolve } from 'node:path'
 
 import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
+import json from '@rollup/plugin-json'
 import autoprefixer from 'autoprefixer'
 import type { InputPluginOption, RollupOptions } from 'rollup'
 import { dts } from 'rollup-plugin-dts'
@@ -68,6 +69,9 @@ export const template = (
   const [globalsRegister, globalsOutput] = createGlobalsLinkage()
   const external = externalResolver()
 
+  const commonPlugins = [
+    json()
+  ]
   return [
     {
       input: exportsEntries,
@@ -80,6 +84,7 @@ export const template = (
         })
       ],
       plugins: [
+        commonPlugins,
         globalsRegister({ external }),
         styled && skip({ patterns: [/\.s?css$/] }),
         esbuild(),
@@ -109,6 +114,7 @@ export const template = (
           })
         ],
         plugins: [
+          commonPlugins,
           globalsOutput,
           styled && postcss({
             plugins: [autoprefixer],
@@ -135,6 +141,7 @@ export const template = (
         }
       ],
       plugins: [
+        commonPlugins,
         styled && skip({ patterns: [/\.s?css$/] }),
         dts({ tsconfig: resolveWorkspacePath('tsconfig.dts.json') }),
         {
