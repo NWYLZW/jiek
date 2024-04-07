@@ -2,9 +2,10 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import { bump, type BumperType } from '@jiek/utils/bumper'
-import type { PackageJson } from '@npm/types'
 import * as childProcess from 'child_process'
 import { program } from 'commander'
+import detectIndent from 'detect-indent'
+import { applyEdits, modify } from 'jsonc-parser'
 
 import { actionDone, actionRestore } from '../inner'
 import { mergePackageJson } from '../merge-package-json'
@@ -26,13 +27,10 @@ program
     if (selectedProjectsGraphEntries.length === 0) {
       throw new Error('no packages selected')
     }
-    const mainfests: [dir: string, PackageJson][] = []
-    selectedProjectsGraphEntries
-      .forEach(([dir, manifest]) => {
-        mainfests.push([
-          dir, mergePackageJson(manifest, dir)
-        ])
-      })
+    const mainfests = selectedProjectsGraphEntries
+      .map(([dir, manifest]) => [
+        dir, mergePackageJson(manifest, dir)
+      ] as const)
     const passArgs = Object
       .entries(options)
       .reduce((acc, [key, value]) => {
@@ -41,16 +39,31 @@ program
         }
         return acc
       }, [] as string[])
-    for (const [dir, m] of mainfests) {
-      const newVersion = bump(m.version, bumper)
-      const newManifest = {
-        ...m,
-        version: newVersion
+    for (const [dir, manifest] of mainfests) {
+      const oldJSONString = fs.readFileSync(path.join(dir, 'package.json'), 'utf-8')
+      const oldJSON = JSON.parse(oldJSONString) ?? '0.0.0'
+      const newVersion = bump(oldJSON.version, bumper)
+      // TODO detectIndent by editorconfig
+      const { indent = '    ' } = detectIndent(oldJSONString)
+      const formattingOptions = {
+        tabSize: indent.length,
+        insertSpaces: true
       }
-      fs.renameSync(path.join(dir, 'package.json'), path.join(dir, 'package.json.bak'))
-      fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(newManifest, null, 2))
-      console.log(newManifest)
+      let newJSONString = oldJSONString
+      newJSONString = applyEdits(newJSONString, modify(
+        newJSONString, ['version'], newVersion, { formattingOptions }
+      ))
+      for (const [key, value] of Object.entries(manifest)) {
+        if (JSON.stringify(value) === JSON.stringify(oldJSON[key])) continue
+
+        newJSONString = applyEdits(newJSONString, modify(
+          newJSONString, ['publishConfig', key], value, { formattingOptions }
+        ))
+      }
       try {
+        fs.renameSync(path.join(dir, 'package.json'), path.join(dir, 'package.json.bak'))
+        fs.writeFileSync(path.join(dir, 'package.json'), newJSONString)
+        console.log(newJSONString)
         if (preview) {
           console.warn('preview mode')
           continue
@@ -59,9 +72,8 @@ program
           cwd: dir,
           stdio: 'inherit'
         })
-        const oldPackageJson = JSON.parse(fs.readFileSync(path.join(dir, 'package.json.bak'), 'utf-8'))
-        oldPackageJson.version = newVersion
-        fs.writeFileSync(path.join(dir, 'package.json.bak'), JSON.stringify(oldPackageJson, null, 2))
+        const modifyVersionPackageJSON = applyEdits(oldJSONString, modify(oldJSONString, ['version'], newVersion, {}))
+        fs.writeFileSync(path.join(dir, 'package.json.bak'), modifyVersionPackageJSON)
       } finally {
         fs.unlinkSync(path.join(dir, 'package.json'))
         fs.renameSync(path.join(dir, 'package.json.bak'), path.join(dir, 'package.json'))

@@ -41,6 +41,9 @@ importers:
       js-yaml:
         specifier: ^4.1.0
         version: 4.1.0
+      jsonc-parser:
+        specifier: ^3.2.1
+        version: 3.2.1
       mock-fs:
         specifier: ^5.2.0
         version: 5.2.0
@@ -89,9 +92,15 @@ importers:
       commander:
         specifier: ^12.0.0
         version: 12.0.0
+      detect-indent:
+        specifier: ^7.0.1
+        version: 7.0.1
       js-yaml:
         specifier: ^4.1.0
         version: 4.1.0
+      jsonc-parser:
+        specifier: ^3.2.1
+        version: 3.2.1
       rollup:
         specifier: ^4.1.5
         version: 4.13.0
@@ -2266,6 +2275,11 @@ packages:
       object-keys: 1.1.1
     dev: false
 
+  /detect-indent@7.0.1:
+    resolution: {integrity: sha512-Mc7QhQ8s+cLrnUfU/Ji94vG/r8M26m8f++vyres4ZoojaRDpZ1eSIh/EpzLNwlWuvzSZ3UbDFspjFvTDXe6e/g==}
+    engines: {node: '>=12.20'}
+    dev: false
+
   /detect-libc@2.0.3:
     resolution: {integrity: sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==}
     engines: {node: '>=8'}
@@ -3373,7 +3387,6 @@ packages:
 
   /jsonc-parser@3.2.1:
     resolution: {integrity: sha512-AilxAyFOAcK5wA1+LeaySVBrHsGQvUFCDWXKpZjzaL0PqW+xfBOttn8GNtWKFWqneyMZj41MWF9Kl6iPWLwgOA==}
-    dev: true
 
   /jsonfile@4.0.0:
     resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}
