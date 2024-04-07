@@ -11,5 +11,8 @@ export function mergePackageJson(manifest: Manifest & {
   const inputs = jiekInputs ?? (
     Array.isArray(exports) ? exports : undefined
   )
-  return pkger({ inputs, cwd, ...jiek })
+  return {
+    ...manifest,
+    ...pkger({ inputs, cwd, ...jiek })
+  }
 }
