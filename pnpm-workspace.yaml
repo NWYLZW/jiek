@@ -1,3 +1,4 @@
 packages:
   - packages/rollup-plugins/*
+  - packages/vite-plugins/*
   - packages/*

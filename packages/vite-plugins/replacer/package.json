@@ -1,0 +1,21 @@
+{
+  "name": "vite-plugin-replacer",
+  "version": "1.0.0",
+  "description": "A vite plugin to replace string in files",
+  "license": "MIT",
+  "author": "YiJie<yijie4188y@gmail.com>",
+  "homepage": "https://github.com/nwylzw/jiek/tree/main/packages/vite-plugins/replacer",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://github.com/nwylzw/jiek.git",
+    "directory": "packages/vite-plugins/replacer",
+    "branch": "main"
+  },
+  "files": ["dist", "LICENSE"],
+  "dependencies": {
+    "vite": "^5.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.2"
+  }
+}
