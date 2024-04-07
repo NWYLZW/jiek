@@ -2,13 +2,11 @@ import * as childProcess from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
-import { filterPackagesFromDir } from '@pnpm/filter-workspace-packages'
 import { program } from 'commander'
-import { load } from 'js-yaml'
 
 import { actionDone, actionRestore } from '../inner'
 import { mergePackageJson } from '../merge-package-json'
+import { getSelectedProjectsGraph } from '../utils/filterSupport'
 
 const FILE_TEMPLATE = (manifest: unknown) => `
 const pkg = ${JSON.stringify(manifest, null, 2)}
@@ -27,54 +25,22 @@ module.exports = require('${
 
 program
   .command('build')
-  .option('--filter <filter>', 'filter packages')
-  .option('--root <root>', 'root path')
-  .action(async ({ root: rootOption, filter, ...options }: {
-    root?: string
-    filter?: string
-  }) => {
+  .action(async () => {
     actionRestore()
-    const root = rootOption
-      ? path.isAbsolute(rootOption)
-        ? rootOption
-        : path.resolve(process.cwd(), rootOption)
-      : process.cwd()
-    const wd = getWorkspaceDir(root)
-    const pnpmWorkspaceFilePath = path.resolve(wd, 'pnpm-workspace.yaml')
-    const pnpmWorkspaceFileContent = fs.readFileSync(pnpmWorkspaceFilePath, 'utf-8')
-    const pnpmWorkspace = load(pnpmWorkspaceFileContent) as {
-      packages: string[]
+    const {
+      wd, value = {}
+    } = await getSelectedProjectsGraph() ?? {}
+
+    if (Object.keys(value).length === 0) {
+      throw new Error('no package found')
     }
-    if (root === wd && !filter) {
-      throw new Error('root path is workspace root, please provide a filter')
-      // TODO inquirer prompt support user select packages
-    }
-    if (root !== wd && !filter) {
-      const packageJSONIsExist = fs.existsSync(path.resolve(root, 'package.json'))
-      if (!packageJSONIsExist) {
-        throw new Error('root path is not workspace root, please provide a filter')
-      }
-      const packageJSON = JSON.parse(fs.readFileSync(path.resolve(root, 'package.json'), 'utf-8'))
-      if (!packageJSON.name) {
-        throw new Error('root path is not workspace root, please provide a filter')
-      }
-      filter = packageJSON.name
-    }
-    const { selectedProjectsGraph } = await filterPackagesFromDir(wd, [{
-      filter: filter ?? '',
-      followProdDepsOnly: true
-    }], {
-      prefix: root,
-      workspaceDir: wd,
-      patterns: pnpmWorkspace.packages
-    })
     const jiekTempDir = (...paths: string[]) => path.resolve(wd, 'node_modules/.jiek', ...paths)
     if (!fs.existsSync(jiekTempDir())) fs.mkdirSync(jiekTempDir())
 
     const rollupBinaryPath = require.resolve('rollup')
       .replace(/dist\/rollup.js$/, 'dist/bin/rollup')
     let i = 0
-    for (const [dir, { package: { manifest } }] of Object.entries(selectedProjectsGraph)) {
+    for (const [dir, manifest] of Object.entries(value)) {
       const newManifest = mergePackageJson(manifest, dir)
       // TODO support auto build child packages in workspaces
       const escapeManifestName = manifest.name?.replace(/^@/g, '').replace(/\//g, '+')

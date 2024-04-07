@@ -2,54 +2,33 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import { bump, type BumperType } from '@jiek/utils/bumper'
-import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import type { PackageJson } from '@npm/types'
-import { filterPackagesFromDir } from '@pnpm/filter-workspace-packages'
 import * as childProcess from 'child_process'
 import { program } from 'commander'
-import { load } from 'js-yaml'
 
 import { actionDone, actionRestore } from '../inner'
 import { mergePackageJson } from '../merge-package-json'
+import { getSelectedProjectsGraph } from '../utils/filterSupport'
 
 program
   .command('publish')
   .aliases(['pub', 'p'])
-  .option('--filter <filter>', 'filter packages')
-  .option('--root <root>', 'root path')
   .option('--bumper <bumper>', 'bump version', 'patch')
-  .action(async ({ root: rootOption, filter, bumper, ...options }: {
+  .action(async ({ bumper, ...options }: {
     root?: string
     filter?: string
     bumper: BumperType
   }) => {
     actionRestore()
-    const root = rootOption
-      ? path.isAbsolute(rootOption)
-        ? rootOption
-        : path.resolve(process.cwd(), rootOption)
-      : process.cwd()
-    const wd = getWorkspaceDir(root)
-    const pnpmWorkspaceFilePath = path.resolve(wd, 'pnpm-workspace.yaml')
-    const pnpmWorkspaceFileContent = fs.readFileSync(pnpmWorkspaceFilePath, 'utf-8')
-    const pnpmWorkspace = load(pnpmWorkspaceFileContent) as {
-      packages: string[]
-    }
-    const { selectedProjectsGraph } = await filterPackagesFromDir(wd, [{
-      filter: filter ?? '',
-      followProdDepsOnly: true
-    }], {
-      prefix: root,
-      workspaceDir: wd,
-      patterns: pnpmWorkspace.packages
-    })
-    const selectedProjectsGraphEntries = Object.entries(selectedProjectsGraph)
+
+    const { value = {} } = await getSelectedProjectsGraph() ?? {}
+    const selectedProjectsGraphEntries = Object.entries(value)
     if (selectedProjectsGraphEntries.length === 0) {
       throw new Error('no packages selected')
     }
     const mainfests: [dir: string, PackageJson][] = []
     selectedProjectsGraphEntries
-      .forEach(([, { package: { dir, manifest } }]) => {
+      .forEach(([dir, manifest]) => {
         mainfests.push([
           dir, mergePackageJson(manifest, dir)
         ])
