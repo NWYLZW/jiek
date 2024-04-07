@@ -1,4 +1,4 @@
-const { resolve } = require('node:path')
+const { resolve, dirname } = require('node:path')
 const fs = require('node:fs')
 const { filterPackagesFromDir } = require('@pnpm/filter-workspace-packages')
 /**
@@ -11,7 +11,23 @@ try {
   load = undefined
 }
 
-const wd = process.cwd()
+function getWorkspaceDir() {
+  let root = process.cwd()
+  while (
+    root !== '/'
+    // windows
+    || /^[a-zA-Z]:\\$/.test(root)
+    ) {
+    const children = fs.readdirSync(root)
+    if (children.includes('pnpm-workspace.yaml')) {
+      return root
+    }
+    root = dirname(root)
+  }
+  throw new Error('workspace root not found')
+}
+
+const wd = getWorkspaceDir()
 
 const pnpmWorkspaceFilePath = resolve(wd, 'pnpm-workspace.yaml')
 const pnpmWorkspaceFileContent = fs.readFileSync(pnpmWorkspaceFilePath, 'utf-8')
