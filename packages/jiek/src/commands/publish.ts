@@ -50,11 +50,11 @@ program
       fs.renameSync(path.join(dir, 'package.json'), path.join(dir, 'package.json.bak'))
       fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(newManifest, null, 2))
       console.log(newManifest)
-      if (preview) {
-        console.warn('preview mode')
-        continue
-      }
       try {
+        if (preview) {
+          console.warn('preview mode')
+          continue
+        }
         childProcess.execSync(['pnpm', 'publish', '--access', 'public', '--no-git-checks', ...passArgs].join(' '), {
           cwd: dir,
           stdio: 'inherit'
