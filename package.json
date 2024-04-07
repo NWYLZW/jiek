@@ -8,7 +8,9 @@
   "devDependencies": {
     "@types/mock-fs": "^4.13.4",
     "@types/node": "^18.19.26",
+    "@pnpm/filter-workspace-packages": "^7.2.13",
     "jiek": "workspace:^*",
+    "js-yaml": "^4.1.0",
     "mock-fs": "^5.2.0",
     "typescript": "^5.4.3",
     "vite-tsconfig-paths": "^4.3.2",
