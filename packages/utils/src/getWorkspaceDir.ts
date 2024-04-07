@@ -1,7 +1,10 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-export function getWorkspaceDir(root = process.cwd()) {
+export function getWorkspaceDir(root = process.cwd(), type = 'pnpm') {
+  if (type !== 'pnpm') {
+    throw new Error('TODO, support lerna or yarn workspace')
+  }
   while (
     root !== '/'
     // windows
