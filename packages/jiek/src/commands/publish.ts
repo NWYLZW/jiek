@@ -13,10 +13,10 @@ import { getSelectedProjectsGraph } from '../utils/filterSupport'
 program
   .command('publish')
   .aliases(['pub', 'p'])
-  .option('--bumper <bumper>', 'bump version', 'patch')
-  .action(async ({ bumper, ...options }: {
-    root?: string
-    filter?: string
+  .option('-b, --bumper <bumper>', 'bump version', 'patch')
+  .option('-p, --preview', 'preview publish')
+  .action(async ({ preview, bumper, ...options }: {
+    preview?: boolean
     bumper: BumperType
   }) => {
     actionRestore()
@@ -50,6 +50,10 @@ program
       fs.renameSync(path.join(dir, 'package.json'), path.join(dir, 'package.json.bak'))
       fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(newManifest, null, 2))
       console.log(newManifest)
+      if (preview) {
+        console.warn('preview mode')
+        continue
+      }
       try {
         childProcess.execSync(['pnpm', 'publish', '--access', 'public', '--no-git-checks', ...passArgs].join(' '), {
           cwd: dir,
