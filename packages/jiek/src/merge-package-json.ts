@@ -12,11 +12,14 @@ export function mergePackageJson(manifest: Manifest & {
   const {
     jiek: { cwd: _, ...jiek } = {}
   } = manifest
-  let { exports = {} } = manifest
+  let { exports } = manifest
   let includeIndex = false
   if (typeof exports === 'string') {
     includeIndex = true
     exports = { '.': exports }
+  }
+  if (exports === undefined) {
+    exports = { '.': './src/index.ts' }
   }
   if (typeof exports === 'object') {
     if (Array.isArray(exports) && exports.length > 0) {
@@ -36,11 +39,17 @@ export function mergePackageJson(manifest: Manifest & {
 
         throw new TypeError(`Unexpected value type for key "${key}" in exports, expected string, got ${typeof value}`)
       }, [] as string[])
+  if (inputs.length === 0)
+    throw new Error('No inputs found')
+
   const absoluteInputs = inputs.map(input => path.isAbsolute(input)
     ? input
     : path.resolve(cwd, input)
   )
-  const cDir = commondir(absoluteInputs, cwd)
+  let cDir = path.dirname(absoluteInputs[0])
+  if (absoluteInputs.length > 1) {
+    cDir = commondir(absoluteInputs, cwd)
+  }
   const resolvedInputs = absoluteInputs.map(input => {
     return path.relative(cDir, input)
   })
