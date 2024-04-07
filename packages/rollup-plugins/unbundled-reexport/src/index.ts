@@ -113,7 +113,8 @@ export default (options: ReexportOptions = {}): Plugin[] => {
         })
 
         let newCode = code
-        for (const [index, { specifiers, source, start, end }] of reexportImports.entries()) {
+        for (const [index, node] of reexportImports.entries()) {
+          const { specifiers, source, start, end } = node
           const reexportExportBindings = reexportExportBindingsList[index]
           if (!reexportExportBindings) continue
 
