@@ -16,11 +16,7 @@ const templateArg = jiek.templateArgFilePath
   : {
     styled: jiek.styled
   }
-module.exports = require('${
-  process.env.NODE_ENV === 'test'
-    ? 'jiek/src/rollup/index.ts'
-    : 'jiek/rollup'
-}').template(templateArg, pkg)
+module.exports = require('jiek/rollup').template(templateArg, pkg)
 `.trimStart()
 
 program

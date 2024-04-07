@@ -35,6 +35,9 @@ importers:
       commander:
         specifier: ^12.0.0
         version: 12.0.0
+      detect-indent:
+        specifier: ^6.1.0
+        version: 6.1.0
       jiek:
         specifier: workspace:^*
         version: link:packages/jiek
@@ -93,8 +96,8 @@ importers:
         specifier: ^12.0.0
         version: 12.0.0
       detect-indent:
-        specifier: ^7.0.1
-        version: 7.0.1
+        specifier: ^6.1.0
+        version: 6.1.0
       js-yaml:
         specifier: ^4.1.0
         version: 4.1.0
@@ -2275,10 +2278,9 @@ packages:
       object-keys: 1.1.1
     dev: false
 
-  /detect-indent@7.0.1:
-    resolution: {integrity: sha512-Mc7QhQ8s+cLrnUfU/Ji94vG/r8M26m8f++vyres4ZoojaRDpZ1eSIh/EpzLNwlWuvzSZ3UbDFspjFvTDXe6e/g==}
-    engines: {node: '>=12.20'}
-    dev: false
+  /detect-indent@6.1.0:
+    resolution: {integrity: sha512-reYkTUJAZb9gUuZ2RvVCNhVHdg62RHnJ7WJl8ftMi4diZ6NWlciOzQN88pUhSELEwflJht4oQDv0F0BMlwaYtA==}
+    engines: {node: '>=8'}
 
   /detect-libc@2.0.3:
     resolution: {integrity: sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==}
