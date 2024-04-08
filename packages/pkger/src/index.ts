@@ -22,7 +22,6 @@ export interface Options {
    * @default false
    */
   noIndex?: boolean
-  noCDN?: boolean
   noBrowser?: boolean
   cwd?: string
   nameTransform?: NameTransform | NameTransform[]
@@ -100,7 +99,6 @@ export function pkger(options: Options): Output {
     inputs = ['index.ts'],
     suffix: inputSuffix = {},
     noIndex,
-    noCDN = false,
     noBrowser = false,
     cwd = process.cwd(),
     onlyESM = false
@@ -136,10 +134,6 @@ export function pkger(options: Options): Output {
   if (indexPath) {
     const index = indexPath.replace(/\.[m|c]?[t|j]s$/, '')
     const indexUMDMin = re(`${index}${suffixes.umdMin()}${suffixes.end()}`)
-    const cdnIndex = noCDN ? {} : {
-      unpkg: indexUMDMin,
-      jsdelivr: indexUMDMin
-    }
     const browserIndex = noBrowser ? {} : {
       browser: indexUMDMin
     }
@@ -147,7 +141,6 @@ export function pkger(options: Options): Output {
       types: re(`${index}${suffixes.dts()}`),
       main: re(`${index}${suffix.cjs}${suffixes.end()}`),
       module: re(`${index}${suffix.esm}${suffixes.end()}`),
-      ...cdnIndex,
       ...browserIndex
     }
   }
