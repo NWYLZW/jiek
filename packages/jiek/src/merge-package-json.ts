@@ -29,7 +29,7 @@ export function mergePackageJson(manifest: Manifest & {
     }
   }
   const inputs = Array.isArray(exports)
-    ? exports
+    ? exports as string[]
     : Object
       .entries(<Record<string, unknown>>exports)
       .reduce((acc, [key, value]) => {
