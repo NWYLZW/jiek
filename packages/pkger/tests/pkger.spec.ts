@@ -1,5 +1,6 @@
 import mock from 'mock-fs'
 import { beforeAll, describe, expect, test } from 'vitest'
+
 import { pkger } from '../src'
 
 beforeAll(() => mock.restore())
@@ -23,7 +24,7 @@ describe('pkger', () => {
       unpkg: 'dist/index.umd.js',
       jsdelivr: 'dist/index.umd.js',
       browser: 'dist/index.umd.js',
-      typesVersions: { '<5.0': [ '*', 'dist/*', 'dist/*/index.esm.d.ts' ] },
+      typesVersions: { '<5.0': ['*', 'dist/*', 'dist/*/index.esm.d.ts'] },
       exports: {
         '.': {
           types: 'dist/index.d.ts',
@@ -40,7 +41,7 @@ describe('pkger', () => {
       unpkg: 'dist/named.umd.js',
       jsdelivr: 'dist/named.umd.js',
       browser: 'dist/named.umd.js',
-      typesVersions: { '<5.0': [ '*', 'dist/*', 'dist/*/index.esm.d.ts' ] },
+      typesVersions: { '<5.0': ['*', 'dist/*', 'dist/*/index.esm.d.ts'] },
       exports: {
         '.': {
           types: 'dist/named.d.ts',
@@ -51,7 +52,7 @@ describe('pkger', () => {
       }
     })
     expect(pkger({ inputs: ['named.ts'], noIndex: true })).toStrictEqual({
-      typesVersions: { '<5.0': [ '*', 'dist/*', 'dist/*/index.esm.d.ts' ] },
+      typesVersions: { '<5.0': ['*', 'dist/*', 'dist/*/index.esm.d.ts'] },
       exports: {
         named: {
           types: 'dist/named.d.ts',
@@ -68,7 +69,7 @@ describe('pkger', () => {
       unpkg: 'dist/index.umd.js',
       jsdelivr: 'dist/index.umd.js',
       browser: 'dist/index.umd.js',
-      typesVersions: { '<5.0': [ '*', 'dist/*', 'dist/*/index.esm.d.ts' ] },
+      typesVersions: { '<5.0': ['*', 'dist/*', 'dist/*/index.esm.d.ts'] },
       exports: {
         '.': {
           types: 'dist/index.d.ts',
@@ -91,7 +92,7 @@ describe('pkger', () => {
       unpkg: 'dist/index.umd.js',
       jsdelivr: 'dist/index.umd.js',
       browser: 'dist/index.umd.js',
-      typesVersions: { '<5.0': [ '*', 'dist/*', 'dist/*/index.esm.d.ts' ] },
+      typesVersions: { '<5.0': ['*', 'dist/*', 'dist/*/index.esm.d.ts'] },
       exports: {
         '.': {
           types: 'dist/index.d.ts',
