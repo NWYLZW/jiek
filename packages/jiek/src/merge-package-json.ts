@@ -36,6 +36,7 @@ export function mergePackageJson(manifest: Manifest & {
         if (typeof value === 'string') return key === '.'
           ? [value, ...acc]
           : acc.concat(value)
+        if (Array.isArray(value)) return acc.concat(value)
 
         throw new TypeError(`Unexpected value type for key "${key}" in exports, expected string, got ${typeof value}`)
       }, [] as string[])
