@@ -2,17 +2,8 @@
   "name": "@jiek/utils",
   "version": "0.1.6",
   "license": "MIT",
-  "scripts": {
-    "build": "jiek-dev build"
+  "exports": {
+    "./*": ["./src/*.ts", "./src/*/index.ts"]
   },
-  "jiek": {
-    "inputs": [
-      "*.ts"
-    ],
-    "noIndex": true
-  },
-  "files": [
-    "dist",
-    "README.md"
-  ]
+  "files": ["dist"]
 }
