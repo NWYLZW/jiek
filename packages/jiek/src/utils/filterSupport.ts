@@ -6,6 +6,8 @@ import { filterPackagesFromDir } from '@pnpm/filter-workspace-packages'
 import { program } from 'commander'
 import { load } from 'js-yaml'
 
+import { getRoot } from './getRoot'
+
 export let type = ''
 
 try {
@@ -27,12 +29,7 @@ interface ProjectsGraph {
 
 export async function getSelectedProjectsGraph(): Promise<ProjectsGraph> {
   let filter = program.getOptionValue('filter')
-  const rootOption = program.getOptionValue('root')
-  const root = rootOption
-    ? path.isAbsolute(rootOption)
-      ? rootOption
-      : path.resolve(process.cwd(), rootOption)
-    : process.cwd()
+  const root = getRoot()
   let notWorkspace = false
   let wd: string
   try {
