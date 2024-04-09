@@ -7,6 +7,7 @@ import { program } from 'commander'
 import { load } from 'js-yaml'
 
 import { getRoot } from './getRoot'
+import { getWD } from './getWD'
 
 export let type = ''
 
@@ -30,19 +31,7 @@ interface ProjectsGraph {
 export async function getSelectedProjectsGraph(): Promise<ProjectsGraph> {
   let filter = program.getOptionValue('filter')
   const root = getRoot()
-  let notWorkspace = false
-  let wd: string
-  try {
-    wd = getWorkspaceDir(root, type)
-  } catch (e) {
-    // @ts-ignore
-    if ('message' in e && e.message === 'workspace root not found') {
-      wd = root
-      notWorkspace = true
-    } else {
-      throw e
-    }
-  }
+  const { wd, notWorkspace } = getWD()
   if (!notWorkspace && type === 'pnpm') {
     const pnpmWorkspaceFilePath = path.resolve(wd, 'pnpm-workspace.yaml')
     const pnpmWorkspaceFileContent = fs.readFileSync(pnpmWorkspaceFilePath, 'utf-8')
