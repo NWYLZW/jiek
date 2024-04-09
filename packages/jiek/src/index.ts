@@ -1,6 +1,7 @@
 import './utils/filterSupport'
-import './commands/publish'
 import './commands/build'
+import './commands/init'
+import './commands/publish'
 
 import { program } from 'commander'
 
@@ -11,5 +12,6 @@ program
   .version(pkg.version)
   .description(pkg.description)
   .option('--root <root>', 'root path')
+  .option('-c, --config-path <configPath>', 'config path')
 
 program.parse(process.argv)
