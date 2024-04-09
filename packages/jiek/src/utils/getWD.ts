@@ -3,10 +3,13 @@ import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import { type } from './filterSupport'
 import { getRoot } from './getRoot'
 
+let wd: string
+let notWorkspace = false
+
 export function getWD() {
+  if (wd) return { wd, notWorkspace }
+
   const root = getRoot()
-  let notWorkspace = false
-  let wd: string
   try {
     wd = getWorkspaceDir(root, type)
   } catch (e) {
