@@ -1,6 +1,12 @@
 {
   "private": true,
   "name": "jiek-workspace",
+  "license": "MIT",
+  "repository": "https://github.com/NWYLZW/jiek",
+  "author": {
+    "name": "Yijie",
+    "email": "yijie4188@gmail.com"
+  },
   "scripts": {},
   "engines": {
     "node": ">= 18.0.0"
