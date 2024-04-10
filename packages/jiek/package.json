@@ -3,7 +3,8 @@
   "version": "0.2.3",
   "description": "YiJie's personal kits.",
   "bin": {
-    "jiek": "bin/jiek.js"
+    "jiek": "bin/jiek.js",
+    "jk": "bin/jiek.js"
   },
   "scripts": {
     "build": "jiek-dev build"
