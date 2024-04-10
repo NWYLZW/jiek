@@ -6,6 +6,9 @@
     "jiek": "bin/jiek.js",
     "jk": "bin/jiek.js"
   },
+  "jiek": {
+    "browser": false
+  },
   "scripts": {
     "build": "jiek-dev build"
   },
