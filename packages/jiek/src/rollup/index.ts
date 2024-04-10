@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
 
+import type { Options } from '@jiek/pkger'
 import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import json from '@rollup/plugin-json'
 import autoprefixer from 'autoprefixer'
@@ -40,9 +41,7 @@ export const template = (
   } = {},
   pkg: {
     name?: string
-    jiek?: {
-      browser?: boolean
-    }
+    jiek?: Options
     exports?: Record<string, string | {
       import: string
       'inner-src': string
@@ -50,7 +49,7 @@ export const template = (
   }
 ) => {
   const { jiek: {
-    browser = false
+    noBrowser = false
   } = {} } = pkg
   if (!pkg.name) {
     throw new Error('pkg.name is required')
@@ -105,7 +104,14 @@ export const template = (
       )
       return {
         input: input,
-        output: browser ? [
+        output: noBrowser ? [
+          ...withMinify({
+            ...commonOutputOptions,
+            name: outputName,
+            format: 'cjs',
+            entryFileNames: `${name}.cjs`
+          })
+        ] : [
           ...withMinify({
             ...commonOutputOptions,
             name: outputName,
@@ -117,13 +123,6 @@ export const template = (
             name: outputName,
             format: 'umd',
             entryFileNames: `${name}.umd.js`
-          })
-        ] : [
-          ...withMinify({
-            ...commonOutputOptions,
-            name: outputName,
-            format: 'cjs',
-            entryFileNames: `${name}.cjs`
           })
         ],
         plugins: [
