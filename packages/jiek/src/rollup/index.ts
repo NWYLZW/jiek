@@ -40,12 +40,18 @@ export const template = (
   } = {},
   pkg: {
     name?: string
+    jiek?: {
+      browser?: boolean
+    }
     exports?: Record<string, string | {
       import: string
       'inner-src': string
     }>
   }
 ) => {
+  const { jiek: {
+    browser = false
+  } = {} } = pkg
   if (!pkg.name) {
     throw new Error('pkg.name is required')
   }
@@ -99,7 +105,7 @@ export const template = (
       )
       return {
         input: input,
-        output: [
+        output: browser ? [
           ...withMinify({
             ...commonOutputOptions,
             name: outputName,
@@ -111,6 +117,13 @@ export const template = (
             name: outputName,
             format: 'umd',
             entryFileNames: `${name}.umd.js`
+          })
+        ] : [
+          ...withMinify({
+            ...commonOutputOptions,
+            name: outputName,
+            format: 'cjs',
+            entryFileNames: `${name}.cjs.js`
           })
         ],
         plugins: [
