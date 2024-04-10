@@ -3,7 +3,6 @@ function packageIsExist(name: string) {
     require.resolve(name)
     return true
   } catch (e) {
-    console.log(e)
     return false
   }
 }
@@ -11,7 +10,9 @@ function packageIsExist(name: string) {
 export let tsRegisterName: string | undefined
 const registers = [
   process.env.JIEK_TS_REGISTER,
-  'esbuild-register'
+  'esbuild-register',
+  '@swc-node/register',
+  'ts-node/register'
 ].filter(Boolean) as string[]
 for (const register of registers) {
   if (packageIsExist(register)) {
