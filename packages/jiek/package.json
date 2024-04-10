@@ -3,8 +3,7 @@
   "version": "0.2.2",
   "description": "YiJie's personal kits.",
   "bin": {
-    "jiek": "bin/jiek.js",
-    "jiek-dev": "bin/jiek-dev.js"
+    "jiek": "bin/jiek.js"
   },
   "scripts": {
     "build": "jiek-dev build"
@@ -12,6 +11,7 @@
   "files": ["dist"],
   "exports": {
     ".": "./src/index.ts",
+    "./cli": "./src/cli.ts",
     "./rollup": "./src/rollup/index.ts"
   },
   "dependencies": {
