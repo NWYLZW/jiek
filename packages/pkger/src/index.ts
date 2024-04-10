@@ -112,11 +112,18 @@ export function pkger(options: Options): Output {
   const re = (...p: string[]) => `./${outdir}/${path.join(...p)}`
   const sourceRe = (...p: string[]) => `./${source}/${path.join(...p)}`
 
-  const suffix = Object.assign(SUFFIX, inputSuffix)
+  const suffix = Object.assign(
+    SUFFIX,
+    noBrowser ? { cjs: '' } : {},
+    inputSuffix
+  )
 
   const suffixes = {
-    end() {
-      return '.js'
+    end(mode?: 'require') {
+      return {
+        require: noBrowser ? '.cjs' : '.js',
+        default: '.js'
+      }[mode ?? 'default']
     },
     umdMin() {
       return `${suffix.umd}${suffix.min}`
@@ -139,7 +146,7 @@ export function pkger(options: Options): Output {
     }
     indexRest = {
       types: re(`${index}${suffixes.dts()}`),
-      main: re(`${index}${suffix.cjs}${suffixes.end()}`),
+      main: re(`${index}${suffix.cjs}${suffixes.end('require')}`),
       module: re(`${index}${suffix.esm}${suffixes.end()}`),
       ...browserIndex
     }
@@ -157,7 +164,7 @@ export function pkger(options: Options): Output {
     exports[exportsName] = {
       types: re(`${index}${suffixes.dts()}`),
       import: indexESM,
-      require: re(`${index}${suffix.umd}${suffixes.end()}`),
+      require: re(`${index}${suffix.cjs}${suffixes.end('require')}`),
       'inner-src': sourceRe(input)
     }
   }
