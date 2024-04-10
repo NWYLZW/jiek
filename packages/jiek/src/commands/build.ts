@@ -7,6 +7,7 @@ import { program } from 'commander'
 import { actionDone, actionRestore } from '../inner'
 import { mergePackageJson } from '../merge-package-json'
 import { getSelectedProjectsGraph } from '../utils/filterSupport'
+import { tsRegisterName } from '../utils/tsRegister'
 
 const FILE_TEMPLATE = (manifest: unknown) => `
 const pkg = ${JSON.stringify(manifest, null, 2)}
@@ -45,10 +46,8 @@ program
       )
       fs.writeFileSync(configFile, FILE_TEMPLATE(newManifest))
       let prefix = ''
-      if (process.env.NODE_ENV === 'test') {
-        const registerPath = require.resolve('esbuild-register')
-        const loaderPath = require.resolve('esbuild-register/loader')
-        prefix = `node --import ${registerPath} -r ${loaderPath} `
+      if (tsRegisterName) {
+        prefix = `node -r ${tsRegisterName} `
       }
       // TODO replace with `spawn` to support watch mode
       childProcess.execSync(`${prefix}${rollupBinaryPath} -c ${configFile}`, {
