@@ -123,7 +123,7 @@ export const template = (
             ...commonOutputOptions,
             name: outputName,
             format: 'cjs',
-            entryFileNames: `${name}.cjs.js`
+            entryFileNames: `${name}.cjs`
           })
         ],
         plugins: [
