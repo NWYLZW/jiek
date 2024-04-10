@@ -1,8 +1,8 @@
+import * as childProcess from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 
 import { bump, type BumperType } from '@jiek/utils/bumper'
-import * as childProcess from 'child_process'
 import { program } from 'commander'
 import detectIndent from 'detect-indent'
 import { applyEdits, modify } from 'jsonc-parser'
