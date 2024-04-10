@@ -1,13 +1,13 @@
 {
   "name": "jiek",
-  "version": "0.2.5",
+  "version": "0.2.10",
   "description": "YiJie's personal kits.",
   "bin": {
     "jiek": "bin/jiek.js",
     "jk": "bin/jiek.js"
   },
   "jiek": {
-    "browser": false
+    "noBrowser": true
   },
   "scripts": {
     "build": "jiek-dev build"
