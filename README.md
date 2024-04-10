@@ -1,7 +1,5 @@
 <p align="center">
-  <a href="https://vuepress.vuejs.org/" target="_blank">
-    <img src="./jk.svg" width='256' alt='Jiek Logo'>
-  </a>
+  <img src="./jk.svg" width='256' alt='Jiek Logo'>
 </p>
 
 # Jiek (YiJie Kit)
