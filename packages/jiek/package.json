@@ -9,9 +9,6 @@
   "jiek": {
     "noBrowser": true
   },
-  "scripts": {
-    "build": "jiek-dev build"
-  },
   "files": ["dist"],
   "exports": {
     ".": "./src/index.ts",

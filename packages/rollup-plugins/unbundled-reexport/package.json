@@ -10,9 +10,6 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "jiek-dev build"
-  },
   "devDependencies": {
     "@swc/core": "^1.4.12",
     "@types/estree": "^1.0.5",
