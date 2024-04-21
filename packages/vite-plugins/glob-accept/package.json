@@ -21,7 +21,8 @@
     "hmr"
   ],
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./client": "./src/client.ts"
   },
   "scripts": {},
   "homepage": "https://github.com/NWYLZW/jiek/blob/master/packages/vite-plugins/glob-accept/README.md",
