@@ -209,7 +209,7 @@ export async function parseImportGlobAccept(
 
     const arg = args[0]
     if (arg.type !== 'ArrayExpression')
-      throw err(arg.start, 'Expected ArrayExpression')
+      return
     for (const el of arg.elements) {
       if (el === null) throw err(arg.start, 'Unexpected empty element')
       let value: string | undefined
