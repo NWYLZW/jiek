@@ -1,0 +1,41 @@
+{
+  "name": "vite-plugin-glob-accept",
+  "version": "0.0.1",
+  "description": "",
+  "license": "MIT",
+  "author": {
+    "name": "Yijie",
+    "email": "yijie4188@gmail.com"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {},
+  "homepage": "https://github.com/NWYLZW/jiek/blob/master/packages/vite-plugins/glob-accept/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NWYLZW/jiek",
+    "directory": "packages/vite-plugins/glob-accept"
+  },
+  "bugs": "https://github.com/NWYLZW/jiek/issues/new?template=bug_report.yml&labels=bug,scope:vite-plugin-glob-accept",
+  "dependencies": {
+    "acorn": "^8.11.3",
+    "acorn-walk": "^8.3.2",
+    "fast-glob": "^3.3.2",
+    "magic-string": "^0.30.10",
+    "micromatch": "^4.0.5",
+    "rollup": "^4.16.0",
+    "strip-literal": "^2.1.0",
+    "vite": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/micromatch": "^4.0.6",
+    "esbuild": "^0.20.2"
+  },
+  "imports": {
+    "#~": "./src/index.ts"
+  }
+}
