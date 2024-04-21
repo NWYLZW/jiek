@@ -242,8 +242,7 @@ export async function parseImportGlobAccept(
     Array
       .from(cleanCode.matchAll(importGlobRE))
       .map(resolveMatchedItem)
-      .filter(<T>(v: Promise<T | undefined>): v is Promise<T> => v !== undefined)
-  )
+  ).then(<T>(x: (T | undefined)[]) => x.filter(Boolean) as T[])
 }
 
 export async function transformImportGlobAccept(

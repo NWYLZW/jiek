@@ -12,7 +12,7 @@ const paths = {
 }
 
 describe('transformImportGlobAccept', () => {
-  test('transformImportGlobAccept', async () => {
+  test('base', async () => {
     const importer = path.resolve(paths.simpleRoot, 'src/index.ts')
     const simpleCode = fs.readFileSync(importer, 'utf-8')
     const { files } = await transformImportGlobAccept(
@@ -25,6 +25,15 @@ describe('transformImportGlobAccept', () => {
       path.resolve(paths.simpleRoot, 'src/a.ts'),
       path.resolve(paths.simpleRoot, 'src/b.ts')
     ])
+  })
+  test('not transform', async () => {
+    const importer = path.resolve(paths.simpleRoot, 'src/index.ts')
+    expect(await transformImportGlobAccept(
+      'import.meta.hot.accept(\'./a.ts\')',
+      importer,
+      paths.simpleRoot,
+      id => id
+    )).toBeNull()
   })
 })
 
