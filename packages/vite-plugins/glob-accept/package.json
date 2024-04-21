@@ -10,6 +10,16 @@
   "files": [
     "dist"
   ],
+  "jiek": {
+    "noBrowser": true
+  },
+  "keywords": [
+    "vite",
+    "vite-plugin",
+    "hot reload",
+    "hot module replacement",
+    "hmr"
+  ],
   "exports": {
     ".": "./src/index.ts"
   },
