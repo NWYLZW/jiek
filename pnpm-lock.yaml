@@ -235,6 +235,9 @@ importers:
       esbuild:
         specifier: ^0.20.2
         version: 0.20.2
+      vite-plugin-glob-accept:
+        specifier: workspace:*
+        version: 'link:'
 
   packages/vite-plugins/replacer:
     dependencies:
