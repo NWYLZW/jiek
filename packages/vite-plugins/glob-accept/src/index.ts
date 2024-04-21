@@ -235,7 +235,8 @@ export async function parseImportGlobAccept(
       globs,
       globsResolved,
       start: arg.start,
-      end: arg.end
+      end: args[1].end,
+      callbackRange: args[1].range!
     }
   }
   return Promise.all(
@@ -266,7 +267,7 @@ export async function transformImportGlobAccept(
   if (!matches.length) return null
 
   const s = new MagicString(code)
-  await Promise.all(matches.map(async ({ globsResolved, start, end }) => {
+  await Promise.all(matches.map(async ({ globsResolved, start, end, callbackRange }) => {
     const cwd = getCommonBase(globsResolved) ?? root
     const files = (
       await fg(globsResolved, {
@@ -293,7 +294,11 @@ export async function transformImportGlobAccept(
         ? '\n'.repeat(originalLineBreakCount)
         : ''
 
-    const replacement = `/* #__PURE__ */ [${paths.join(', ')}${lineBreaks}]`
+    const importers = `[${paths.join(', ')}${lineBreaks}]`
+    const replacement = `/* #__PURE__ */ ${importers}, (...args) => ${code.slice(
+      callbackRange[0],
+      callbackRange[1]
+    )}.call(this, ...args, ${importers})`
     s.overwrite(start, end, replacement)
 
     return staticImports
