@@ -5,7 +5,7 @@ import type { ViteDevServer } from 'vite'
 import { createServer } from 'vite'
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 
-import { globAccept, transformImportGlobAccept } from '#~'
+import globAccept, { transformImportGlobAccept } from '#~'
 
 const paths = {
   simpleRoot: path.resolve(__dirname, 'fixtures/simple')

@@ -306,7 +306,7 @@ export async function transformImportGlobAccept(
   }
 }
 
-export function globAccept(): PluginOption {
+export default function globAccept(): PluginOption {
   let config: ResolvedConfig | null = null
   return {
     name: 'replacer',
