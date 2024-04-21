@@ -283,7 +283,7 @@ export async function transformImportGlobAccept(
     const staticImports: string[] = []
 
     files.forEach(file => {
-      paths.push(`"${file}"`)
+      paths.push(`"/@fs/${file}"`)
       matchedFiles.add(file)
     })
 
