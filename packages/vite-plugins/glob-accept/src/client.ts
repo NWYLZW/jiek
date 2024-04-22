@@ -9,4 +9,4 @@ declare module 'vite/types/hot.d.ts' {
   }
 }
 
-export {}
+export default {}
