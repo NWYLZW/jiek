@@ -202,7 +202,7 @@ export async function parseImportGlobAccept(
   async function resolveMatchedItem(match: RegExpExecArray) {
     const start = match.index!
 
-    const { arguments: args } = analyzeImportAst(code, start)
+    const { arguments: args, end } = analyzeImportAst(code, start)
 
     if (args.length < 1 || args.length > 2)
       throw err(start, `Expected 1-2 arguments, but got ${args.length}`)
@@ -234,8 +234,8 @@ export async function parseImportGlobAccept(
     return {
       globs,
       globsResolved,
-      start: arg.start,
-      end: args[1].end,
+      start,
+      end,
       callbackRange: args[1].range!
     }
   }
@@ -283,7 +283,7 @@ export async function transformImportGlobAccept(
     const staticImports: string[] = []
 
     files.forEach(file => {
-      paths.push(`"/@fs/${file}"`)
+      paths.push(`"/@fs${file}"`)
       matchedFiles.add(file)
     })
 
@@ -295,10 +295,11 @@ export async function transformImportGlobAccept(
         : ''
 
     const importers = `[${paths.join(', ')}${lineBreaks}]`
-    const replacement = `/* #__PURE__ */ ${importers}, (...args) => ${code.slice(
-      callbackRange[0],
-      callbackRange[1]
-    )}.call(this, ...args, ${importers})`
+    const replacement = `void 0;(() => {
+      const oldListener = ${code.slice(...callbackRange)}
+      const newListener = (...args) => oldListener.call(this, ...args, ${importers})
+      import.meta.hot.accept(/* #__PURE__ */ ${importers}, newListener)
+    })()`
     s.overwrite(start, end, replacement)
 
     return staticImports
