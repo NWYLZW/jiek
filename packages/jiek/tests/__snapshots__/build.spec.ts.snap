@@ -1,0 +1,120 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`base > common 1`] = `
+"index.d.ts:
+declare function export_default(a: number, b: string): string;
+
+export { export_default as default };
+"
+`;
+
+exports[`base > common 2`] = `
+"index.esm.d.ts:
+declare function export_default(a: number, b: string): string;
+
+export { export_default as default };
+"
+`;
+
+exports[`base > common 3`] = `
+"index.esm.js:
+function index(a, b) {
+  return a + b;
+}
+
+export { index as default };
+//# sourceMappingURL=index.esm.js.map
+"
+`;
+
+exports[`base > common 4`] = `
+"index.esm.js.map:
+{"version":3,"file":"index.esm.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":[],"mappings":"AAAA,cAAA,CAAyB,GAAW,CAAW,EAAA;AAC7C,EAAA,OAAO,CAAI,GAAA,CAAA,CAAA;AACb;;;;"}"
+`;
+
+exports[`base > common 5`] = `
+"index.esm.min.js:
+function t(t,e){return t+e}export{t as default};
+//# sourceMappingURL=index.esm.min.js.map
+"
+`;
+
+exports[`base > common 6`] = `
+"index.esm.min.js.map:
+{"version":3,"file":"index.esm.min.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":["index","a","b"],"mappings":"AAAA,SAAAA,EAAyBC,EAAWC,GAClC,OAAOD,EAAIC,CACb"}"
+`;
+
+exports[`base > common 7`] = `
+"index.iife.js:
+var JiekTestFoo = (function (exports) {
+  'use strict';
+
+  function index(a, b) {
+    return a + b;
+  }
+
+  exports.default = index;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+  return exports;
+
+})({});
+//# sourceMappingURL=index.iife.js.map
+"
+`;
+
+exports[`base > common 8`] = `
+"index.iife.js.map:
+{"version":3,"file":"index.iife.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":[],"mappings":";;;EAAA,cAAA,CAAyB,GAAW,CAAW,EAAA;EAC7C,EAAA,OAAO,CAAI,GAAA,CAAA,CAAA;EACb;;;;;;;;;;;;"}"
+`;
+
+exports[`base > common 9`] = `
+"index.iife.min.js:
+var JiekTestFoo=function(e){"use strict";return e.default=function(e,t){return e+t},Object.defineProperty(e,"__esModule",{value:!0}),e}({});
+//# sourceMappingURL=index.iife.min.js.map
+"
+`;
+
+exports[`base > common 10`] = `
+"index.iife.min.js.map:
+{"version":3,"file":"index.iife.min.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":["a","b"],"mappings":"0DAAA,SAAyBA,EAAWC,GAClC,OAAOD,EAAIC,CACb"}"
+`;
+
+exports[`base > common 11`] = `
+"index.umd.js:
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.JiekTestFoo = {}));
+})(this, (function (exports) { 'use strict';
+
+  function index(a, b) {
+    return a + b;
+  }
+
+  exports.default = index;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+}));
+//# sourceMappingURL=index.umd.js.map
+"
+`;
+
+exports[`base > common 12`] = `
+"index.umd.js.map:
+{"version":3,"file":"index.umd.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":[],"mappings":";;;;;;EAAA,cAAA,CAAyB,GAAW,CAAW,EAAA;EAC7C,EAAA,OAAO,CAAI,GAAA,CAAA,CAAA;EACb;;;;;;;;;;"}"
+`;
+
+exports[`base > common 13`] = `
+"index.umd.min.js:
+!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t((e="undefined"!=typeof globalThis?globalThis:e||self).JiekTestFoo={})}(this,(function(e){"use strict";e.default=function(e,t){return e+t},Object.defineProperty(e,"__esModule",{value:!0})}));
+//# sourceMappingURL=index.umd.min.js.map
+"
+`;
+
+exports[`base > common 14`] = `
+"index.umd.min.js.map:
+{"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":["a","b"],"mappings":"6PAAA,SAAyBA,EAAWC,GAClC,OAAOD,EAAIC,CACb"}"
+`;
