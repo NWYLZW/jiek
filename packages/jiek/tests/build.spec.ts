@@ -1,10 +1,11 @@
 import '../src/commands/build'
 
+import fs from 'node:fs'
 import path from 'node:path'
 
 import * as childProcess from 'child_process'
 import { program } from 'commander'
-import { beforeAll, describe, test } from 'vitest'
+import { afterAll, beforeAll, describe, test } from 'vitest'
 
 import { actionFuture } from '../src/inner'
 
@@ -15,6 +16,9 @@ beforeAll(() => {
     cwd: ROOT,
     stdio: 'inherit'
   })
+})
+afterAll(() => {
+  fs.unlinkSync(path.resolve(ROOT, 'node_modules'))
 })
 
 const prefixes = ['node', 'jiek', 'build', '--root', ROOT]
