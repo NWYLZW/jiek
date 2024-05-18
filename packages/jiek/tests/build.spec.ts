@@ -10,12 +10,12 @@ import { afterAll, beforeAll, describe, test } from 'vitest'
 
 import { actionFuture } from '../src/inner'
 
+const commonPrefixes = ['node', 'jiek', 'build']
+
 const getROOT = (paths: string[]) => path.resolve(__dirname, 'fixtures', ...paths)
 
-const commonPrefixes = ['node', 'jiek', 'build']
-describe('base', () => {
-  const ROOT = getROOT(['base'])
-  const prefixes = [...commonPrefixes, '--root', ROOT]
+function prepareROOT(paths: string[]) {
+  const ROOT = getROOT(paths)
   beforeAll(() => {
     childProcess.execSync('pnpm i', {
       cwd: ROOT,
@@ -25,6 +25,11 @@ describe('base', () => {
   afterAll(() => {
     fs.rmSync(path.resolve(ROOT, 'node_modules'), { recursive: true })
   })
+  return [ROOT, [...commonPrefixes, '--root', ROOT]]
+}
+
+describe('base', () => {
+  const [, prefixes] = prepareROOT(['base'])
   test('common', () => {
     process.argv = [...prefixes, '--filter', 'test-foo']
     program.parse(process.argv)
