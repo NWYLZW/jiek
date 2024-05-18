@@ -19,7 +19,7 @@ beforeAll(() => {
   })
 })
 afterAll(() => {
-  fs.unlinkSync(path.resolve(ROOT, 'node_modules'))
+  fs.rmSync(path.resolve(ROOT, 'node_modules'), { recursive: true })
 })
 
 const prefixes = ['node', 'jiek', '--root', ROOT, 'publish']
