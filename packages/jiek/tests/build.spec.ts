@@ -24,7 +24,6 @@ afterAll(() => {
 const prefixes = ['node', 'jiek', 'build', '--root', ROOT]
 describe('build', () => {
   test('base', () => {
-    process.env.WORKSPACE_DIR = ROOT
     process.argv = [...prefixes, '--filter', 'test-foo']
     program.parse(process.argv)
     return actionFuture
