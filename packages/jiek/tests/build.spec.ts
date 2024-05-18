@@ -25,7 +25,7 @@ function prepareROOT(paths: string[]) {
   afterAll(() => {
     fs.rmSync(path.resolve(ROOT, 'node_modules'), { recursive: true })
   })
-  return [ROOT, [...commonPrefixes, '--root', ROOT]]
+  return [ROOT, [...commonPrefixes, '--root', ROOT]] as const
 }
 
 describe('base', () => {
