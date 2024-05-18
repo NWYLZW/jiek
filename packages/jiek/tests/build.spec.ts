@@ -1,3 +1,4 @@
+import '../src/commands/base'
 import '../src/commands/build'
 
 import fs from 'node:fs'
@@ -9,7 +10,7 @@ import { afterAll, beforeAll, describe, test } from 'vitest'
 
 import { actionFuture } from '../src/inner'
 
-const ROOT = path.resolve(__dirname, 'fixtures')
+const ROOT = path.resolve(__dirname, 'fixtures/base')
 
 beforeAll(() => {
   childProcess.execSync('pnpm i', {
@@ -18,10 +19,10 @@ beforeAll(() => {
   })
 })
 afterAll(() => {
-  fs.unlinkSync(path.resolve(ROOT, 'node_modules'))
+  fs.rmSync(path.resolve(ROOT, 'node_modules'), { recursive: true })
 })
 
-const prefixes = ['node', 'jiek', 'build', '--root', ROOT]
+const prefixes = ['node', 'jiek', '--root', ROOT, 'build']
 describe('build', () => {
   test('base', () => {
     process.argv = [...prefixes, '--filter', 'test-foo']
