@@ -11,6 +11,6 @@ export function getRoot() {
     ? path.isAbsolute(rootOption)
       ? rootOption
       : path.resolve(process.cwd(), rootOption)
-    : process.cwd()
+    : undefined
   return root
 }
