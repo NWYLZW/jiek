@@ -1,4 +1,4 @@
-import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
+import { getWorkspaceDir, isWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 
 import { type } from './filterSupport'
 import { getRoot } from './getRoot'
@@ -10,8 +10,14 @@ export function getWD() {
   if (wd) return { wd, notWorkspace }
 
   const root = getRoot()
+  if (root !== undefined) {
+    const isWorkspace = isWorkspaceDir(root, type)
+    notWorkspace = !isWorkspace
+    wd = root
+    return { wd, notWorkspace }
+  }
   try {
-    wd = getWorkspaceDir(root, type)
+    wd = getWorkspaceDir(type)
   } catch (e) {
     // @ts-ignore
     if ('message' in e && e.message === 'workspace root not found') {
