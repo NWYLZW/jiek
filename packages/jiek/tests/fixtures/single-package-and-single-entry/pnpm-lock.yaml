@@ -4,16 +4,13 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-importers:
-
-  .:
-    devDependencies:
-      esbuild-register:
-        specifier: ^3.5.0
-        version: 3.5.0(esbuild@0.21.3)
-      jiek:
-        specifier: ln:../../../../
-        version: link:../..
+devDependencies:
+  esbuild-register:
+    specifier: ^3.5.0
+    version: 3.5.0(esbuild@0.21.3)
+  jiek:
+    specifier: ln:../../../../
+    version: link:../..
 
 packages:
 

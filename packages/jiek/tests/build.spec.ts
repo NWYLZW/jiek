@@ -14,10 +14,20 @@ const commonPrefixes = ['node', 'jiek', 'build']
 
 const getROOT = (paths: string[]) => path.resolve(__dirname, 'fixtures', ...paths)
 
-function prepareROOT(paths: string[]) {
+function prepareROOT(
+  paths: string[], {
+    notWorkspace = false
+  }: {
+    notWorkspace?: boolean
+  } = {}
+) {
   const ROOT = getROOT(paths)
   beforeAll(() => {
-    childProcess.execSync('pnpm i --no-lock', {
+    const args = [
+      'pnpm i',
+      notWorkspace ? '--ignore-workspace' : null
+    ].filter(Boolean).join(' ')
+    childProcess.execSync(args, {
       cwd: ROOT,
       stdio: 'inherit'
     })
@@ -46,5 +56,15 @@ describe('base', () => {
       }`).toMatchSnapshot()
     })
     fs.rmSync(distDir, { recursive: true })
+  })
+})
+describe('single package and single entry', () => {
+  const [root, prefixes] = prepareROOT(['single-package-and-single-entry'], {
+    notWorkspace: true
+  })
+  test('common', async () => {
+    process.argv = prefixes
+    program.parse(process.argv)
+    await actionFuture
   })
 })
