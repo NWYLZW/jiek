@@ -81,8 +81,8 @@ describe('single package and multiple entries', () => {
     snapshotDistFiles(path.resolve(root, 'dist'))
   })
 })
-describe('single package and multiple exports', () => {
-  const [root, prefixes] = prepareROOT(['single-package-and-multiple-exports'], {
+describe('with no resolve exports', () => {
+  const [root, prefixes] = prepareROOT(['with-no-resolve-export'], {
     notWorkspace: true
   })
   test('common', async () => {

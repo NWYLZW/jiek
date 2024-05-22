@@ -401,6 +401,140 @@ exports[`single package and multiple entries > common 29`] = `
 {"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"6QAAO,WACE,MAAA,KACT"}"
 `;
 
+exports[`single package and multiple exports > common 1`] = `
+[
+  "index.d.ts",
+  "index.esm.d.ts",
+  "index.esm.js",
+  "index.esm.js.map",
+  "index.esm.min.js",
+  "index.esm.min.js.map",
+  "index.iife.js",
+  "index.iife.js.map",
+  "index.iife.min.js",
+  "index.iife.min.js.map",
+  "index.umd.js",
+  "index.umd.js.map",
+  "index.umd.min.js",
+  "index.umd.min.js.map",
+]
+`;
+
+exports[`single package and multiple exports > common 2`] = `
+"index.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`single package and multiple exports > common 3`] = `
+"index.esm.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`single package and multiple exports > common 4`] = `
+"index.esm.js:
+function foo() {
+  return "foo";
+}
+
+export { foo };
+//# sourceMappingURL=index.esm.js.map
+"
+`;
+
+exports[`single package and multiple exports > common 5`] = `
+"index.esm.js.map:
+{"version":3,"file":"index.esm.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"AAAO,SAAS,GAAM,GAAA;AACpB,EAAO,OAAA,KAAA,CAAA;AACT;;;;"}"
+`;
+
+exports[`single package and multiple exports > common 6`] = `
+"index.esm.min.js:
+function o(){return"foo"}export{o as foo};
+//# sourceMappingURL=index.esm.min.js.map
+"
+`;
+
+exports[`single package and multiple exports > common 7`] = `
+"index.esm.min.js.map:
+{"version":3,"file":"index.esm.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":["foo"],"mappings":"AAAO,SAASA,IACP,MAAA,KACT"}"
+`;
+
+exports[`single package and multiple exports > common 8`] = `
+"index.iife.js:
+var singlePackageAndSingleEntryWithOtherExports = (function (exports) {
+  'use strict';
+
+  function foo() {
+    return "foo";
+  }
+
+  exports.foo = foo;
+
+  return exports;
+
+})({});
+//# sourceMappingURL=index.iife.js.map
+"
+`;
+
+exports[`single package and multiple exports > common 9`] = `
+"index.iife.js.map:
+{"version":3,"file":"index.iife.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":";;;EAAO,SAAS,GAAM,GAAA;EACpB,EAAO,OAAA,KAAA,CAAA;EACT;;;;;;;;;;"}"
+`;
+
+exports[`single package and multiple exports > common 10`] = `
+"index.iife.min.js:
+var singlePackageAndSingleEntryWithOtherExports=function(n){"use strict";return n.foo=function(){return"foo"},n}({});
+//# sourceMappingURL=index.iife.min.js.map
+"
+`;
+
+exports[`single package and multiple exports > common 11`] = `
+"index.iife.min.js.map:
+{"version":3,"file":"index.iife.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"sFAAO,WACE,MAAA,KACT"}"
+`;
+
+exports[`single package and multiple exports > common 12`] = `
+"index.umd.js:
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.singlePackageAndSingleEntryWithOtherExports = {}));
+})(this, (function (exports) { 'use strict';
+
+  function foo() {
+    return "foo";
+  }
+
+  exports.foo = foo;
+
+}));
+//# sourceMappingURL=index.umd.js.map
+"
+`;
+
+exports[`single package and multiple exports > common 13`] = `
+"index.umd.js.map:
+{"version":3,"file":"index.umd.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":";;;;;;EAAO,SAAS,GAAM,GAAA;EACpB,EAAO,OAAA,KAAA,CAAA;EACT;;;;;;;;"}"
+`;
+
+exports[`single package and multiple exports > common 14`] = `
+"index.umd.min.js:
+!function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n(exports):"function"==typeof define&&define.amd?define(["exports"],n):n((e="undefined"!=typeof globalThis?globalThis:e||self).singlePackageAndSingleEntryWithOtherExports={})}(this,(function(e){"use strict";e.foo=function(){return"foo"}}));
+//# sourceMappingURL=index.umd.min.js.map
+"
+`;
+
+exports[`single package and multiple exports > common 15`] = `
+"index.umd.min.js.map:
+{"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"yRAAO,WACE,MAAA,KACT"}"
+`;
+
 exports[`single package and single entry > common 1`] = `
 [
   "index.d.ts",
@@ -533,4 +667,138 @@ exports[`single package and single entry > common 14`] = `
 exports[`single package and single entry > common 15`] = `
 "index.umd.min.js.map:
 {"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"yQAAO,WACE,MAAA,KACT"}"
+`;
+
+exports[`with no resolve exports > common 1`] = `
+[
+  "index.d.ts",
+  "index.esm.d.ts",
+  "index.esm.js",
+  "index.esm.js.map",
+  "index.esm.min.js",
+  "index.esm.min.js.map",
+  "index.iife.js",
+  "index.iife.js.map",
+  "index.iife.min.js",
+  "index.iife.min.js.map",
+  "index.umd.js",
+  "index.umd.js.map",
+  "index.umd.min.js",
+  "index.umd.min.js.map",
+]
+`;
+
+exports[`with no resolve exports > common 2`] = `
+"index.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`with no resolve exports > common 3`] = `
+"index.esm.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`with no resolve exports > common 4`] = `
+"index.esm.js:
+function foo() {
+  return "foo";
+}
+
+export { foo };
+//# sourceMappingURL=index.esm.js.map
+"
+`;
+
+exports[`with no resolve exports > common 5`] = `
+"index.esm.js.map:
+{"version":3,"file":"index.esm.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"AAAO,SAAS,GAAM,GAAA;AACpB,EAAO,OAAA,KAAA,CAAA;AACT;;;;"}"
+`;
+
+exports[`with no resolve exports > common 6`] = `
+"index.esm.min.js:
+function o(){return"foo"}export{o as foo};
+//# sourceMappingURL=index.esm.min.js.map
+"
+`;
+
+exports[`with no resolve exports > common 7`] = `
+"index.esm.min.js.map:
+{"version":3,"file":"index.esm.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":["foo"],"mappings":"AAAO,SAASA,IACP,MAAA,KACT"}"
+`;
+
+exports[`with no resolve exports > common 8`] = `
+"index.iife.js:
+var withNoResolveExport = (function (exports) {
+  'use strict';
+
+  function foo() {
+    return "foo";
+  }
+
+  exports.foo = foo;
+
+  return exports;
+
+})({});
+//# sourceMappingURL=index.iife.js.map
+"
+`;
+
+exports[`with no resolve exports > common 9`] = `
+"index.iife.js.map:
+{"version":3,"file":"index.iife.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":";;;EAAO,SAAS,GAAM,GAAA;EACpB,EAAO,OAAA,KAAA,CAAA;EACT;;;;;;;;;;"}"
+`;
+
+exports[`with no resolve exports > common 10`] = `
+"index.iife.min.js:
+var withNoResolveExport=function(o){"use strict";return o.foo=function(){return"foo"},o}({});
+//# sourceMappingURL=index.iife.min.js.map
+"
+`;
+
+exports[`with no resolve exports > common 11`] = `
+"index.iife.min.js.map:
+{"version":3,"file":"index.iife.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"8DAAO,WACE,MAAA,KACT"}"
+`;
+
+exports[`with no resolve exports > common 12`] = `
+"index.umd.js:
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.withNoResolveExport = {}));
+})(this, (function (exports) { 'use strict';
+
+  function foo() {
+    return "foo";
+  }
+
+  exports.foo = foo;
+
+}));
+//# sourceMappingURL=index.umd.js.map
+"
+`;
+
+exports[`with no resolve exports > common 13`] = `
+"index.umd.js.map:
+{"version":3,"file":"index.umd.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":";;;;;;EAAO,SAAS,GAAM,GAAA;EACpB,EAAO,OAAA,KAAA,CAAA;EACT;;;;;;;;"}"
+`;
+
+exports[`with no resolve exports > common 14`] = `
+"index.umd.min.js:
+!function(e,o){"object"==typeof exports&&"undefined"!=typeof module?o(exports):"function"==typeof define&&define.amd?define(["exports"],o):o((e="undefined"!=typeof globalThis?globalThis:e||self).withNoResolveExport={})}(this,(function(e){"use strict";e.foo=function(){return"foo"}}));
+//# sourceMappingURL=index.umd.min.js.map
+"
+`;
+
+exports[`with no resolve exports > common 15`] = `
+"index.umd.min.js.map:
+{"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"iQAAO,WACE,MAAA,KACT"}"
 `;
