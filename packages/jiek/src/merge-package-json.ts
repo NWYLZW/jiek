@@ -8,10 +8,16 @@ import { commondir } from './utils/commondir'
 export function mergePackageJson(manifest: Manifest & {
   jiek?: Options
   exports?: unknown | unknown[]
-}, cwd: string) {
+}, cwd: string, options: {
+  excludeDistInExports?: boolean
+} = {}) {
+  const {
+    excludeDistInExports = false
+  } = options
   const {
     jiek: { cwd: _, ...jiek } = {}
   } = manifest
+  const { outdir = 'dist' } = jiek
   let { exports } = manifest
   let includeIndex = false
   if (typeof exports === 'string') {
@@ -28,7 +34,7 @@ export function mergePackageJson(manifest: Manifest & {
       includeIndex = !!(<Record<string, unknown>>exports)['.']
     }
   }
-  const inputs = Array.isArray(exports)
+  let inputs = Array.isArray(exports)
     ? exports as string[]
     : Object
       .entries(<Record<string, unknown>>exports)
@@ -40,6 +46,9 @@ export function mergePackageJson(manifest: Manifest & {
 
         throw new TypeError(`Unexpected value type for key "${key}" in exports, expected string, got ${typeof value}`)
       }, [] as string[])
+  if (excludeDistInExports) {
+    inputs = inputs.filter(input => !input.startsWith(`./${outdir}`) && !input.startsWith(outdir))
+  }
   if (inputs.length === 0)
     throw new Error('No inputs found')
 

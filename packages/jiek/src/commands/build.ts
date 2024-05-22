@@ -38,7 +38,7 @@ program
       .replace(/dist\/rollup.js$/, 'dist/bin/rollup')
     let i = 0
     for (const [dir, manifest] of Object.entries(value)) {
-      const newManifest = mergePackageJson(manifest, dir)
+      const newManifest = mergePackageJson(manifest, dir, { excludeDistInExports: true })
       // TODO support auto build child packages in workspaces
       const escapeManifestName = manifest.name?.replace(/^@/g, '').replace(/\//g, '+')
       const configFile = jiekTempDir(

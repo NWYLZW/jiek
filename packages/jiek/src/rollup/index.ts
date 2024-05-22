@@ -49,8 +49,13 @@ export const template = (
   }
 ) => {
   const { jiek: {
-    noBrowser = false
+    noBrowser = false,
+    outdir = 'dist'
   } = {} } = pkg
+  const outputOptions = {
+    ...commonOutputOptions,
+    dir: outdir
+  }
   if (!pkg.name) {
     throw new Error('pkg.name is required')
   }
@@ -59,6 +64,8 @@ export const template = (
     .replace(/[@|/-](\w)/g, (_, $1) => $1.toUpperCase())
   const exportsEntries = Object.fromEntries(
     Object.entries(pkg.exports ?? {})
+      // filter outdir entries
+      .filter(([key]) => !key.startsWith(`./${outdir}`) && !key.startsWith(outdir))
       // filter static files
       .filter(([key]) => !/\.(json|css|scss)$/.test(key))
       // filter no `inner-src` or `import` field entries
@@ -82,7 +89,7 @@ export const template = (
       input: exportsEntries,
       output: [
         ...withMinify({
-          ...commonOutputOptions,
+          ...outputOptions,
           format: 'esm',
           entryFileNames: '[name].esm.js',
           preserveModules: true
@@ -106,20 +113,20 @@ export const template = (
         input: input,
         output: noBrowser ? [
           ...withMinify({
-            ...commonOutputOptions,
+            ...outputOptions,
             name: outputName,
             format: 'cjs',
             entryFileNames: `${name}.cjs`
           })
         ] : [
           ...withMinify({
-            ...commonOutputOptions,
+            ...outputOptions,
             name: outputName,
             format: 'iife',
             entryFileNames: `${name}.iife.js`
           }),
           ...withMinify({
-            ...commonOutputOptions,
+            ...outputOptions,
             name: outputName,
             format: 'umd',
             entryFileNames: `${name}.umd.js`
