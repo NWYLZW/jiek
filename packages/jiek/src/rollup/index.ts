@@ -282,7 +282,9 @@ export const template = (
               resolved[entry] = true
             }
             if (Object.values(resolved).every(Boolean)) {
-              multiBars.stop()
+              setTimeout(() => {
+                multiBars.stop()
+              }, 100)
             }
           }
         ),
