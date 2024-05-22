@@ -50,7 +50,7 @@ program
         prefix = `node -r ${tsRegisterName} `
       }
       // TODO replace with `spawn` to support watch mode
-      childProcess.execSync(`${prefix}${rollupBinaryPath} -c ${configFile}`, {
+      childProcess.execSync(`${prefix}${rollupBinaryPath} --silent -c ${configFile}`, {
         cwd: dir, stdio: 'inherit'
       })
     }
