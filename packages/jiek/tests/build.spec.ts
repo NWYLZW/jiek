@@ -40,6 +40,7 @@ function prepareROOT(
 
 function snapshotDistFiles(distDir: string) {
   const files = fs.readdirSync(distDir, { recursive: true })
+  expect(files).toMatchSnapshot()
   files.forEach((file) => {
     if (typeof file !== 'string') return
     expect(`${file}:\n${
