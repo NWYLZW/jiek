@@ -80,3 +80,14 @@ describe('single package and multiple entries', () => {
     snapshotDistFiles(path.resolve(root, 'dist'))
   })
 })
+describe('single package and single entry with other exports', () => {
+  const [root, prefixes] = prepareROOT(['single-package-and-multiple-entries'], {
+    notWorkspace: true
+  })
+  test('common', async () => {
+    process.argv = prefixes
+    program.parse(process.argv)
+    await actionFuture
+    snapshotDistFiles(path.resolve(root, 'dist'))
+  })
+})
