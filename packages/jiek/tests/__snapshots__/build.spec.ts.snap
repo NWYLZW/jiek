@@ -119,6 +119,236 @@ exports[`base > common 14`] = `
 {"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":["a","b"],"mappings":"6PAAA,SAAyBA,EAAWC,GAClC,OAAOD,EAAIC,CACb"}"
 `;
 
+exports[`single package and multiple entries > common 1`] = `
+"bar.d.ts:
+declare function bar(): string;
+
+export { bar };
+"
+`;
+
+exports[`single package and multiple entries > common 2`] = `
+"bar.esm.d.ts:
+declare function bar(): string;
+
+export { bar };
+"
+`;
+
+exports[`single package and multiple entries > common 3`] = `
+"bar.esm.js:
+function bar() {
+  return "bar";
+}
+
+export { bar };
+//# sourceMappingURL=bar.esm.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 4`] = `
+"bar.esm.js.map:
+{"version":3,"file":"bar.esm.js","sources":["../src/bar.ts"],"sourcesContent":["export function bar() {\\n  return 'bar'\\n}\\n"],"names":[],"mappings":"AAAO,SAAS,GAAM,GAAA;AACpB,EAAO,OAAA,KAAA,CAAA;AACT;;;;"}"
+`;
+
+exports[`single package and multiple entries > common 5`] = `
+"bar.esm.min.js:
+function r(){return"bar"}export{r as bar};
+//# sourceMappingURL=bar.esm.min.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 6`] = `
+"bar.esm.min.js.map:
+{"version":3,"file":"bar.esm.min.js","sources":["../src/bar.ts"],"sourcesContent":["export function bar() {\\n  return 'bar'\\n}\\n"],"names":["bar"],"mappings":"AAAO,SAASA,IACP,MAAA,KACT"}"
+`;
+
+exports[`single package and multiple entries > common 7`] = `
+"bar.iife.js:
+var singlePackageAndSingleEntrybar = (function (exports) {
+  'use strict';
+
+  function bar() {
+    return "bar";
+  }
+
+  exports.bar = bar;
+
+  return exports;
+
+})({});
+//# sourceMappingURL=bar.iife.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 8`] = `
+"bar.iife.js.map:
+{"version":3,"file":"bar.iife.js","sources":["../src/bar.ts"],"sourcesContent":["export function bar() {\\n  return 'bar'\\n}\\n"],"names":[],"mappings":";;;EAAO,SAAS,GAAM,GAAA;EACpB,EAAO,OAAA,KAAA,CAAA;EACT;;;;;;;;;;"}"
+`;
+
+exports[`single package and multiple entries > common 9`] = `
+"bar.iife.min.js:
+var singlePackageAndSingleEntrybar=function(n){"use strict";return n.bar=function(){return"bar"},n}({});
+//# sourceMappingURL=bar.iife.min.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 10`] = `
+"bar.iife.min.js.map:
+{"version":3,"file":"bar.iife.min.js","sources":["../src/bar.ts"],"sourcesContent":["export function bar() {\\n  return 'bar'\\n}\\n"],"names":[],"mappings":"yEAAO,WACE,MAAA,KACT"}"
+`;
+
+exports[`single package and multiple entries > common 11`] = `
+"bar.umd.js:
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.singlePackageAndSingleEntrybar = {}));
+})(this, (function (exports) { 'use strict';
+
+  function bar() {
+    return "bar";
+  }
+
+  exports.bar = bar;
+
+}));
+//# sourceMappingURL=bar.umd.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 12`] = `
+"bar.umd.js.map:
+{"version":3,"file":"bar.umd.js","sources":["../src/bar.ts"],"sourcesContent":["export function bar() {\\n  return 'bar'\\n}\\n"],"names":[],"mappings":";;;;;;EAAO,SAAS,GAAM,GAAA;EACpB,EAAO,OAAA,KAAA,CAAA;EACT;;;;;;;;"}"
+`;
+
+exports[`single package and multiple entries > common 13`] = `
+"bar.umd.min.js:
+!function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n(exports):"function"==typeof define&&define.amd?define(["exports"],n):n((e="undefined"!=typeof globalThis?globalThis:e||self).singlePackageAndSingleEntrybar={})}(this,(function(e){"use strict";e.bar=function(){return"bar"}}));
+//# sourceMappingURL=bar.umd.min.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 14`] = `
+"bar.umd.min.js.map:
+{"version":3,"file":"bar.umd.min.js","sources":["../src/bar.ts"],"sourcesContent":["export function bar() {\\n  return 'bar'\\n}\\n"],"names":[],"mappings":"4QAAO,WACE,MAAA,KACT"}"
+`;
+
+exports[`single package and multiple entries > common 15`] = `
+"index.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`single package and multiple entries > common 16`] = `
+"index.esm.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`single package and multiple entries > common 17`] = `
+"index.esm.js:
+function foo() {
+  return "foo";
+}
+
+export { foo };
+//# sourceMappingURL=index.esm.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 18`] = `
+"index.esm.js.map:
+{"version":3,"file":"index.esm.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"AAAO,SAAS,GAAM,GAAA;AACpB,EAAO,OAAA,KAAA,CAAA;AACT;;;;"}"
+`;
+
+exports[`single package and multiple entries > common 19`] = `
+"index.esm.min.js:
+function o(){return"foo"}export{o as foo};
+//# sourceMappingURL=index.esm.min.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 20`] = `
+"index.esm.min.js.map:
+{"version":3,"file":"index.esm.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":["foo"],"mappings":"AAAO,SAASA,IACP,MAAA,KACT"}"
+`;
+
+exports[`single package and multiple entries > common 21`] = `
+"index.iife.js:
+var singlePackageAndSingleEntry = (function (exports) {
+  'use strict';
+
+  function foo() {
+    return "foo";
+  }
+
+  exports.foo = foo;
+
+  return exports;
+
+})({});
+//# sourceMappingURL=index.iife.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 22`] = `
+"index.iife.js.map:
+{"version":3,"file":"index.iife.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":";;;EAAO,SAAS,GAAM,GAAA;EACpB,EAAO,OAAA,KAAA,CAAA;EACT;;;;;;;;;;"}"
+`;
+
+exports[`single package and multiple entries > common 23`] = `
+"index.iife.min.js:
+var singlePackageAndSingleEntry=function(n){"use strict";return n.foo=function(){return"foo"},n}({});
+//# sourceMappingURL=index.iife.min.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 24`] = `
+"index.iife.min.js.map:
+{"version":3,"file":"index.iife.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"sEAAO,WACE,MAAA,KACT"}"
+`;
+
+exports[`single package and multiple entries > common 25`] = `
+"index.umd.js:
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.singlePackageAndSingleEntry = {}));
+})(this, (function (exports) { 'use strict';
+
+  function foo() {
+    return "foo";
+  }
+
+  exports.foo = foo;
+
+}));
+//# sourceMappingURL=index.umd.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 26`] = `
+"index.umd.js.map:
+{"version":3,"file":"index.umd.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":";;;;;;EAAO,SAAS,GAAM,GAAA;EACpB,EAAO,OAAA,KAAA,CAAA;EACT;;;;;;;;"}"
+`;
+
+exports[`single package and multiple entries > common 27`] = `
+"index.umd.min.js:
+!function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n(exports):"function"==typeof define&&define.amd?define(["exports"],n):n((e="undefined"!=typeof globalThis?globalThis:e||self).singlePackageAndSingleEntry={})}(this,(function(e){"use strict";e.foo=function(){return"foo"}}));
+//# sourceMappingURL=index.umd.min.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 28`] = `
+"index.umd.min.js.map:
+{"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"yQAAO,WACE,MAAA,KACT"}"
+`;
+
 exports[`single package and single entry > common 1`] = `
 "index.d.ts:
 declare function foo(): string;
