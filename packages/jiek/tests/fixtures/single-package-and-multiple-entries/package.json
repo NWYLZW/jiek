@@ -6,7 +6,6 @@
     "./bar": "./src/bar.ts"
   },
   "devDependencies": {
-    "jiek": "ln:../../../../",
-    "esbuild-register": "^3.5.0"
+    "jiek": "ln:../../../../"
   }
 }
