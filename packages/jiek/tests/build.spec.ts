@@ -38,24 +38,24 @@ function prepareROOT(
   return [ROOT, [...commonPrefixes, '--root', ROOT]] as [string, string[]]
 }
 
+function snapshotDistFiles(distDir: string) {
+  const files = fs.readdirSync(distDir, { recursive: true })
+  files.forEach((file) => {
+    if (typeof file !== 'string') return
+    expect(`${file}:\n${
+      fs.readFileSync(path.resolve(distDir, file), 'utf-8')
+    }`).toMatchSnapshot()
+  })
+  fs.rmSync(distDir, { recursive: true })
+}
+
 describe('base', () => {
   const [root, prefixes] = prepareROOT(['base'])
   test('common', async () => {
     process.argv = [...prefixes, '--filter', 'test-foo']
     program.parse(process.argv)
     await actionFuture
-    const distDir = path.resolve(root, 'packages/foo/dist')
-    // expect the root/foo/dist to be created
-    expect(fs.existsSync(distDir)).toBeTruthy()
-    // snapshot the root/foo/dist files content
-    const files = fs.readdirSync(distDir, { recursive: true })
-    files.forEach((file) => {
-      if (typeof file !== 'string') return
-      expect(`${file}:\n${
-        fs.readFileSync(path.resolve(distDir, file), 'utf-8')
-      }`).toMatchSnapshot()
-    })
-    fs.rmSync(distDir, { recursive: true })
+    snapshotDistFiles(path.resolve(root, 'packages/foo/dist'))
   })
 })
 describe('single package and single entry', () => {
