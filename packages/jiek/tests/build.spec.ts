@@ -66,5 +66,6 @@ describe('single package and single entry', () => {
     process.argv = prefixes
     program.parse(process.argv)
     await actionFuture
+    snapshotDistFiles(path.resolve(root, 'dist'))
   })
 })
