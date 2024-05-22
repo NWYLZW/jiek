@@ -2,6 +2,6 @@
   "name": "single-package-and-single-entry",
   "version": "0.1.0",
   "devDependencies": {
-    "jiek": "ln:../../../../"
+    "jiek": "ln:../../../../../"
   }
 }

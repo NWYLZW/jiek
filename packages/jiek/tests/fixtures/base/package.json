@@ -2,6 +2,6 @@
   "name": "@jiek/test-publish-workspace",
   "version": "0.1.0",
   "devDependencies": {
-    "jiek": "ln:../../../../"
+    "jiek": "ln:../../../../../"
   }
 }

@@ -6,6 +6,6 @@
     "./bar": "./src/bar.ts"
   },
   "devDependencies": {
-    "jiek": "ln:../../../../"
+    "jiek": "ln:../../../../../"
   }
 }
