@@ -1,6 +1,6 @@
 {
   "name": "jiek",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "YiJie's personal kits.",
   "bin": {
     "jiek": "bin/jiek.js",
@@ -49,5 +49,40 @@
     "@types/js-yaml": "^4.0.9",
     "@types/micromatch": "^4.0.6",
     "esbuild-register": "^3.5.0"
+  },
+  "publishConfig": {
+    "exports": {
+      "./package.json": "./package.json",
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.esm.js",
+        "require": "./dist/index.cjs",
+        "inner-src": "./src/index.ts"
+      },
+      "./cli": {
+        "types": "./dist/cli.d.ts",
+        "import": "./dist/cli.esm.js",
+        "require": "./dist/cli.cjs",
+        "inner-src": "./src/cli.ts"
+      },
+      "./rollup": {
+        "types": "./dist/rollup.d.ts",
+        "import": "./dist/rollup.esm.js",
+        "require": "./dist/rollup.cjs",
+        "inner-src": "./src/rollup/index.ts"
+      }
+    },
+    "types": "./dist/index.d.ts",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.esm.js",
+    "typesVersions": {
+      "<5.0": {
+        "*": [
+          "*",
+          "./dist/*",
+          "./dist/*/index.esm.d.ts"
+        ]
+      }
+    }
   }
 }
