@@ -1,1 +1,1 @@
-export const pkg = require('../package.json')
+export default require('../package.json')
