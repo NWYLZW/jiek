@@ -5,7 +5,6 @@ export default function (output: OutputOptions & {
   entryFileNames?: string
   plugins?: OutputPlugin[]
 }): OutputOptions[] {
-  console.log(output.entryFileNames, output.entryFileNames?.replace(/(\.c?js)$/, '.min$1'))
   return [
     output,
     {
