@@ -266,7 +266,10 @@ export const template = (
       watchingProgress('dts', isLast),
       commonPlugins,
       styled && skip({ patterns: [/\.s?css$/] }),
-      dts({ tsconfig: resolveWorkspacePath('tsconfig.dts.json') }),
+      dts({
+        tsconfig: resolveWorkspacePath('tsconfig.dts.json'),
+        compilerOptions: { outDir: outdir }
+      }),
       {
         name: 'rollup-plugin-declare-module-replacer',
         /**
