@@ -22,7 +22,9 @@ module.exports = require('jiek/rollup').template(templateArg, pkg)
 
 program
   .command('build')
-  .action(async () => {
+  .option('-t, --target <type>', 'target flow: esm|umd|dts, default esm,umd,dts')
+  .option('-s, --silent', 'silent mode')
+  .action(async ({ target, silent }) => {
     actionRestore()
     const {
       wd, value = {}
@@ -53,6 +55,8 @@ program
       childProcess.execSync(`${prefix}${rollupBinaryPath} --silent -c ${configFile}`, {
         cwd: dir, stdio: 'inherit',
         env: {
+          JIEK_TARGET: target ?? process.env.JIEK_TARGET ?? 'esm,umd,dts',
+          JIEK_SILENT: `${silent}` ?? process.env.JIEK_SILENT,
           JIEK_ROOT: wd
         }
       })
