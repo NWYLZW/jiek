@@ -6,5 +6,5 @@ settings:
 
 devDependencies:
   jiek:
-    specifier: ln:../../../../
-    version: link:../..
+    specifier: ln:../../../../../
+    version: link:../../..

@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "exports": {
     ".": "./src/index.ts",
-    "./bar": "./src/bar.ts",
     "./a": "./src/a.ts",
     "./b": "./src/b.ts",
     "./c": "./src/c.ts"
+  },
+  "dependencies": {
+    "single-package-and-multiple-entries": "file:."
   },
   "devDependencies": {
     "jiek": "ln:../../../../../"
