@@ -52,7 +52,8 @@ program
         prefix = `node -r ${tsRegisterName} `
       }
       // TODO replace with `spawn` to support watch mode
-      childProcess.execSync(`${prefix}${rollupBinaryPath} --silent -c ${configFile}`, {
+      const command = `${prefix}${rollupBinaryPath} --silent -c ${configFile}`
+      childProcess.execSync(command, {
         cwd: dir, stdio: 'inherit',
         env: {
           JIEK_TARGET: target ?? process.env.JIEK_TARGET ?? 'esm,umd,dts',
