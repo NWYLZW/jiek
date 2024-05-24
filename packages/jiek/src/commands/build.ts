@@ -51,7 +51,10 @@ program
       }
       // TODO replace with `spawn` to support watch mode
       childProcess.execSync(`${prefix}${rollupBinaryPath} --silent -c ${configFile}`, {
-        cwd: dir, stdio: 'inherit'
+        cwd: dir, stdio: 'inherit',
+        env: {
+          JIEK_ROOT: wd
+        }
       })
     }
 

@@ -16,7 +16,10 @@ import { commonOutputOptions } from './utils/commonOptions'
 import externalResolver from './utils/externalResolver'
 import withMinify from './utils/withMinify'
 
-const workspaceRoot = getWorkspaceDir()
+const {
+  JIEK_ROOT
+} = process.env
+const workspaceRoot = JIEK_ROOT ?? getWorkspaceDir()
 function resolveWorkspacePath(p: string) {
   return resolve(workspaceRoot, p)
 }
