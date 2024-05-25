@@ -1,0 +1,15 @@
+{
+  "name": "unordered-exports_input",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./src/index.ts",
+    "./b": "./src/b.ts",
+    "./a": "./src/a.ts"
+  },
+  "dependencies": {
+    "unordered-exports_input": "file:."
+  },
+  "devDependencies": {
+    "jiek": "ln:../../../../../"
+  }
+}
