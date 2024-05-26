@@ -196,6 +196,20 @@ exports[`single package and multiple entries > common 1`] = `
   "index.umd.js.map",
   "index.umd.min.js",
   "index.umd.min.js.map",
+  "jsx.d.ts",
+  "jsx.esm.d.ts",
+  "jsx.esm.js",
+  "jsx.esm.js.map",
+  "jsx.esm.min.js",
+  "jsx.esm.min.js.map",
+  "jsx.iife.js",
+  "jsx.iife.js.map",
+  "jsx.iife.min.js",
+  "jsx.iife.min.js.map",
+  "jsx.umd.js",
+  "jsx.umd.js.map",
+  "jsx.umd.min.js",
+  "jsx.umd.min.js.map",
 ]
 `;
 
@@ -647,6 +661,115 @@ exports[`single package and multiple entries > common 56`] = `
 exports[`single package and multiple entries > common 57`] = `
 "index.umd.min.js.map:
 {"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"6QAAO,WACE,MAAA,KACT"}"
+`;
+
+exports[`single package and multiple entries > common 58`] = `
+"jsx.d.ts:
+declare const Jsx = "PascalCaseEntry";
+
+export { Jsx };
+"
+`;
+
+exports[`single package and multiple entries > common 59`] = `
+"jsx.esm.d.ts:
+declare const Jsx = "PascalCaseEntry";
+
+export { Jsx };
+"
+`;
+
+exports[`single package and multiple entries > common 60`] = `
+"jsx.esm.js:
+const Jsx = "PascalCaseEntry";
+
+export { Jsx };
+//# sourceMappingURL=jsx.esm.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 61`] = `
+"jsx.esm.js.map:
+{"version":3,"file":"jsx.esm.js","sources":["../src/jsx.tsx"],"sourcesContent":["export const Jsx = 'PascalCaseEntry'\\n"],"names":[],"mappings":"AAAO,MAAM,GAAM,GAAA;;;;"}"
+`;
+
+exports[`single package and multiple entries > common 62`] = `
+"jsx.esm.min.js:
+const a="PascalCaseEntry";export{a as Jsx};
+//# sourceMappingURL=jsx.esm.min.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 63`] = `
+"jsx.esm.min.js.map:
+{"version":3,"file":"jsx.esm.min.js","sources":["../src/jsx.tsx"],"sourcesContent":["export const Jsx = 'PascalCaseEntry'\\n"],"names":["Jsx"],"mappings":"AAAO,MAAMA,EAAM"}"
+`;
+
+exports[`single package and multiple entries > common 64`] = `
+"jsx.iife.js:
+var singlePackageAndMultipleEntriesjsx = (function (exports) {
+	'use strict';
+
+	const Jsx = "PascalCaseEntry";
+
+	exports.Jsx = Jsx;
+
+	return exports;
+
+})({});
+//# sourceMappingURL=jsx.iife.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 65`] = `
+"jsx.iife.js.map:
+{"version":3,"file":"jsx.iife.js","sources":["../src/jsx.tsx"],"sourcesContent":["export const Jsx = 'PascalCaseEntry'\\n"],"names":[],"mappings":";;;AAAO,OAAM,GAAM,GAAA;;;;;;;;;;"}"
+`;
+
+exports[`single package and multiple entries > common 66`] = `
+"jsx.iife.min.js:
+var singlePackageAndMultipleEntriesjsx=function(s){"use strict";return s.Jsx="PascalCaseEntry",s}({});
+//# sourceMappingURL=jsx.iife.min.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 67`] = `
+"jsx.iife.min.js.map:
+{"version":3,"file":"jsx.iife.min.js","sources":["../src/jsx.tsx"],"sourcesContent":["export const Jsx = 'PascalCaseEntry'\\n"],"names":[],"mappings":"6EAAmB"}"
+`;
+
+exports[`single package and multiple entries > common 68`] = `
+"jsx.umd.js:
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.singlePackageAndMultipleEntriesjsx = {}));
+})(this, (function (exports) { 'use strict';
+
+	const Jsx = "PascalCaseEntry";
+
+	exports.Jsx = Jsx;
+
+}));
+//# sourceMappingURL=jsx.umd.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 69`] = `
+"jsx.umd.js.map:
+{"version":3,"file":"jsx.umd.js","sources":["../src/jsx.tsx"],"sourcesContent":["export const Jsx = 'PascalCaseEntry'\\n"],"names":[],"mappings":";;;;;;AAAO,OAAM,GAAM,GAAA;;;;;;;;"}"
+`;
+
+exports[`single package and multiple entries > common 70`] = `
+"jsx.umd.min.js:
+!function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n(exports):"function"==typeof define&&define.amd?define(["exports"],n):n((e="undefined"!=typeof globalThis?globalThis:e||self).singlePackageAndMultipleEntriesjsx={})}(this,(function(e){"use strict";e.Jsx="PascalCaseEntry"}));
+//# sourceMappingURL=jsx.umd.min.js.map
+"
+`;
+
+exports[`single package and multiple entries > common 71`] = `
+"jsx.umd.min.js.map:
+{"version":3,"file":"jsx.umd.min.js","sources":["../src/jsx.tsx"],"sourcesContent":["export const Jsx = 'PascalCaseEntry'\\n"],"names":[],"mappings":"gRAAmB"}"
 `;
 
 exports[`single package and single entry > common 1`] = `

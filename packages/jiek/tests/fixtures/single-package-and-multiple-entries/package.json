@@ -5,7 +5,8 @@
     ".": "./src/index.ts",
     "./a": "./src/a.ts",
     "./b": "./src/b.ts",
-    "./c": "./src/c.ts"
+    "./c": "./src/c.ts",
+    "./jsx": "./src/jsx.tsx"
   },
   "dependencies": {
     "single-package-and-multiple-entries": "file:."
