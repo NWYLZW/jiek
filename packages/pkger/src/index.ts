@@ -70,7 +70,7 @@ export function inputsResolve(waitResolvingInputs: Input[], options: {
     if (input.startsWith('regexp:')) {
       throw new Error('regexp is not supported yet')
     }
-    const [, name] = /(.+?)(\/index)?\.ts$/.exec(input) ?? []
+    const [, name] = /(.+?)(\/index)?\.tsx?$/.exec(input) ?? []
     resolvedInputs[name] = input
   }
   return resolvedInputs
