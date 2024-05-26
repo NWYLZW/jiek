@@ -783,6 +783,275 @@ exports[`single package and single entry > common 15`] = `
 {"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"yQAAO,WACE,MAAA,KACT"}"
 `;
 
+exports[`unordered exports inputs > common 1`] = `
+[
+  "a.d.ts",
+  "a.esm.d.ts",
+  "a.esm.js",
+  "a.esm.js.map",
+  "a.esm.min.js",
+  "a.esm.min.js.map",
+  "a.iife.js",
+  "a.iife.js.map",
+  "a.iife.min.js",
+  "a.iife.min.js.map",
+  "a.umd.js",
+  "a.umd.js.map",
+  "a.umd.min.js",
+  "a.umd.min.js.map",
+  "b-dep-dep.esm.d.ts",
+  "b-dep.esm.d.ts",
+  "b.d.ts",
+  "b.esm.d.ts",
+  "b.esm.js",
+  "b.esm.js.map",
+  "b.esm.min.js",
+  "b.esm.min.js.map",
+  "b.iife.js",
+  "b.iife.js.map",
+  "b.iife.min.js",
+  "b.iife.min.js.map",
+  "b.umd.js",
+  "b.umd.js.map",
+  "b.umd.min.js",
+  "b.umd.min.js.map",
+]
+`;
+
+exports[`unordered exports inputs > common 2`] = `
+"a.d.ts:
+type A = 'a';
+
+export type { A };
+"
+`;
+
+exports[`unordered exports inputs > common 3`] = `
+"a.esm.d.ts:
+type A = 'a';
+
+export type { A };
+"
+`;
+
+exports[`unordered exports inputs > common 4`] = `
+"a.esm.js:
+
+//# sourceMappingURL=a.esm.js.map
+"
+`;
+
+exports[`unordered exports inputs > common 5`] = `
+"a.esm.js.map:
+{"version":3,"file":"a.esm.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
+`;
+
+exports[`unordered exports inputs > common 6`] = `
+"a.esm.min.js:
+
+//# sourceMappingURL=a.esm.min.js.map
+"
+`;
+
+exports[`unordered exports inputs > common 7`] = `
+"a.esm.min.js.map:
+{"version":3,"file":"a.esm.min.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
+`;
+
+exports[`unordered exports inputs > common 8`] = `
+"a.iife.js:
+(function () {
+	'use strict';
+
+
+
+})();
+//# sourceMappingURL=a.iife.js.map
+"
+`;
+
+exports[`unordered exports inputs > common 9`] = `
+"a.iife.js.map:
+{"version":3,"file":"a.iife.js","sources":[],"sourcesContent":[],"names":[],"mappings":";;;;;;;"}"
+`;
+
+exports[`unordered exports inputs > common 10`] = `
+"a.iife.min.js:
+(function () {
+	'use strict';
+
+
+
+})();
+//# sourceMappingURL=a.iife.min.js.map
+"
+`;
+
+exports[`unordered exports inputs > common 11`] = `
+"a.iife.min.js.map:
+{"version":3,"file":"a.iife.min.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
+`;
+
+exports[`unordered exports inputs > common 12`] = `
+"a.umd.js:
+(function (factory) {
+	typeof define === 'function' && define.amd ? define(factory) :
+	factory();
+})((function () { 'use strict';
+
+
+
+}));
+//# sourceMappingURL=a.umd.js.map
+"
+`;
+
+exports[`unordered exports inputs > common 13`] = `
+"a.umd.js.map:
+{"version":3,"file":"a.umd.js","sources":[],"sourcesContent":[],"names":[],"mappings":";;;;;;;;;"}"
+`;
+
+exports[`unordered exports inputs > common 14`] = `
+"a.umd.min.js:
+!function(n){"function"==typeof define&&define.amd?define(n):n()}((function(){}));
+//# sourceMappingURL=a.umd.min.js.map
+"
+`;
+
+exports[`unordered exports inputs > common 15`] = `
+"a.umd.min.js.map:
+{"version":3,"file":"a.umd.min.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
+`;
+
+exports[`unordered exports inputs > common 16`] = `
+"b-dep-dep.esm.d.ts:
+type BDepDep = 1;
+
+export type { BDepDep };
+"
+`;
+
+exports[`unordered exports inputs > common 17`] = `
+"b-dep.esm.d.ts:
+import { BDepDep } from './b-dep-dep.esm.js';
+
+type BDep = BDepDep;
+
+export type { BDep };
+"
+`;
+
+exports[`unordered exports inputs > common 18`] = `
+"b.d.ts:
+type BDepDep = 1;
+
+type BDep = BDepDep;
+
+type B = BDep;
+
+export type { B };
+"
+`;
+
+exports[`unordered exports inputs > common 19`] = `
+"b.esm.d.ts:
+import { BDep } from './b-dep.esm.js';
+
+type B = BDep;
+
+export type { B };
+"
+`;
+
+exports[`unordered exports inputs > common 20`] = `
+"b.esm.js:
+
+//# sourceMappingURL=b.esm.js.map
+"
+`;
+
+exports[`unordered exports inputs > common 21`] = `
+"b.esm.js.map:
+{"version":3,"file":"b.esm.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
+`;
+
+exports[`unordered exports inputs > common 22`] = `
+"b.esm.min.js:
+
+//# sourceMappingURL=b.esm.min.js.map
+"
+`;
+
+exports[`unordered exports inputs > common 23`] = `
+"b.esm.min.js.map:
+{"version":3,"file":"b.esm.min.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
+`;
+
+exports[`unordered exports inputs > common 24`] = `
+"b.iife.js:
+(function () {
+	'use strict';
+
+
+
+})();
+//# sourceMappingURL=b.iife.js.map
+"
+`;
+
+exports[`unordered exports inputs > common 25`] = `
+"b.iife.js.map:
+{"version":3,"file":"b.iife.js","sources":[],"sourcesContent":[],"names":[],"mappings":";;;;;;;"}"
+`;
+
+exports[`unordered exports inputs > common 26`] = `
+"b.iife.min.js:
+(function () {
+	'use strict';
+
+
+
+})();
+//# sourceMappingURL=b.iife.min.js.map
+"
+`;
+
+exports[`unordered exports inputs > common 27`] = `
+"b.iife.min.js.map:
+{"version":3,"file":"b.iife.min.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
+`;
+
+exports[`unordered exports inputs > common 28`] = `
+"b.umd.js:
+(function (factory) {
+	typeof define === 'function' && define.amd ? define(factory) :
+	factory();
+})((function () { 'use strict';
+
+
+
+}));
+//# sourceMappingURL=b.umd.js.map
+"
+`;
+
+exports[`unordered exports inputs > common 29`] = `
+"b.umd.js.map:
+{"version":3,"file":"b.umd.js","sources":[],"sourcesContent":[],"names":[],"mappings":";;;;;;;;;"}"
+`;
+
+exports[`unordered exports inputs > common 30`] = `
+"b.umd.min.js:
+!function(n){"function"==typeof define&&define.amd?define(n):n()}((function(){}));
+//# sourceMappingURL=b.umd.min.js.map
+"
+`;
+
+exports[`unordered exports inputs > common 31`] = `
+"b.umd.min.js.map:
+{"version":3,"file":"b.umd.min.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
+`;
+
 exports[`with no resolve exports > common 1`] = `
 [
   "index.d.ts",

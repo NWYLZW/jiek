@@ -1,3 +1,5 @@
 import type { } from 'unordered-exports_input/a'
 
-export type B = 'b'
+import type { BDep } from './b-dep'
+
+export type B = BDep

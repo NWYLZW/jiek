@@ -70,6 +70,17 @@ describe('single package and single entry', () => {
     snapshotDistFiles(path.resolve(root, 'dist'))
   })
 })
+describe('unordered exports inputs', () => {
+  const [root, prefixes] = prepareROOT(['unordered-exports_input'], {
+    notWorkspace: true
+  })
+  test('common', async () => {
+    process.argv = prefixes
+    program.parse(process.argv)
+    await actionFuture
+    snapshotDistFiles(path.resolve(root, 'dist'))
+  })
+})
 describe('single package and multiple entries', () => {
   const [root, prefixes] = prepareROOT(['single-package-and-multiple-entries'], {
     notWorkspace: true
