@@ -15,6 +15,7 @@
     "@types/mock-fs": "^4.13.4",
     "@types/node": "^18.19.26",
     "@pnpm/filter-workspace-packages": "^7.2.13",
+    "esbuild-register": "^3.5.0",
     "jiek": "workspace:^*",
     "standard": "workspace:^*",
     "js-yaml": "^4.1.0",

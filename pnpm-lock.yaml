@@ -44,6 +44,9 @@ importers:
       detect-indent:
         specifier: ^6.1.0
         version: 6.1.0
+      esbuild-register:
+        specifier: ^3.5.0
+        version: 3.5.0(esbuild@0.20.2)
       inquirer:
         specifier: ^8.2.6
         version: 8.2.6
@@ -2851,8 +2854,6 @@ packages:
       esbuild: 0.20.2
     transitivePeerDependencies:
       - supports-color
-    dev: false
-    optional: true
 
   /esbuild@0.20.2:
     resolution: {integrity: sha512-WdOOppmUNU+IbZ0PaDiTst80zjnrOkyJNHoKupIcVyU8Lvla3Ugx94VzkQ32Ijqd7UhHJy75gNWDMUekcrSJ6g==}
