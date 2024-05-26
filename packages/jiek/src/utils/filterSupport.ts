@@ -1,7 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import { filterPackagesFromDir } from '@pnpm/filter-workspace-packages'
 import { program } from 'commander'
 import { load } from 'js-yaml'
