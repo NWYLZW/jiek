@@ -1,6 +1,6 @@
 {
   "name": "jiek",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "YiJie's personal kits.",
   "bin": {
     "jiek": "bin/jiek.js",
@@ -32,7 +32,7 @@
     "micromatch": "^4.0.5",
     "rollup": "^4.1.5",
     "rollup-plugin-copy": "^3.5.0",
-    "rollup-plugin-dts": "^6.1.0",
+    "@jiek/rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-esbuild": "^6.1.0",
     "rollup-plugin-postcss": "^4.0.2"
   },
