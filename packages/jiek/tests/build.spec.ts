@@ -10,6 +10,8 @@ import { describe, expect, test } from 'vitest'
 import { actionFuture } from '../src/inner'
 import { prepareROOT } from './prepareROOT'
 
+const prepareRootWithSubCmd = prepareROOT.bind(null, 'build')
+
 function snapshotDistFiles(distDir: string) {
   const files = fs.readdirSync(distDir, { recursive: true })
   expect(files).toMatchSnapshot()
@@ -23,7 +25,7 @@ function snapshotDistFiles(distDir: string) {
 }
 
 describe('base', () => {
-  const [root, prefixes] = prepareROOT(['base'])
+  const [root, prefixes] = prepareRootWithSubCmd(['base'])
   test('common', async () => {
     process.argv = [...prefixes, '--filter', 'test-foo']
     program.parse(process.argv)
@@ -32,7 +34,7 @@ describe('base', () => {
   })
 })
 describe('single package and single entry', () => {
-  const [root, prefixes] = prepareROOT(['single-package-and-single-entry'], {
+  const [root, prefixes] = prepareRootWithSubCmd(['single-package-and-single-entry'], {
     notWorkspace: true
   })
   test('common', async () => {
@@ -43,7 +45,7 @@ describe('single package and single entry', () => {
   })
 })
 describe('unordered exports inputs', () => {
-  const [root, prefixes] = prepareROOT(['unordered-exports_input'], {
+  const [root, prefixes] = prepareRootWithSubCmd(['unordered-exports_input'], {
     notWorkspace: true
   })
   test('common', async () => {
@@ -54,7 +56,7 @@ describe('unordered exports inputs', () => {
   })
 })
 describe('single package and multiple entries', () => {
-  const [root, prefixes] = prepareROOT(['single-package-and-multiple-entries'], {
+  const [root, prefixes] = prepareRootWithSubCmd(['single-package-and-multiple-entries'], {
     notWorkspace: true
   })
   test('common', async () => {
@@ -65,7 +67,7 @@ describe('single package and multiple entries', () => {
   })
 })
 describe('with no resolve exports', () => {
-  const [root, prefixes] = prepareROOT(['with-no-resolve-export'], {
+  const [root, prefixes] = prepareRootWithSubCmd(['with-no-resolve-export'], {
     notWorkspace: true
   })
   test('common', async () => {
