@@ -4,39 +4,11 @@ import '../src/commands/build'
 import fs from 'node:fs'
 import path from 'node:path'
 
-import * as childProcess from 'child_process'
 import { program } from 'commander'
-import { afterAll, beforeAll, describe, expect, test } from 'vitest'
+import { describe, expect, test } from 'vitest'
 
 import { actionFuture } from '../src/inner'
-
-const commonPrefixes = ['node', 'jiek', 'build']
-
-const getROOT = (paths: string[]) => path.resolve(__dirname, 'fixtures', ...paths)
-
-function prepareROOT(
-  paths: string[], {
-    notWorkspace = false
-  }: {
-    notWorkspace?: boolean
-  } = {}
-) {
-  const ROOT = getROOT(paths)
-  beforeAll(() => {
-    const args = [
-      'pnpm i',
-      notWorkspace ? '--ignore-workspace' : null
-    ].filter(Boolean).join(' ')
-    childProcess.execSync(args, {
-      cwd: ROOT,
-      stdio: 'inherit'
-    })
-  })
-  afterAll(() => {
-    fs.rmSync(path.resolve(ROOT, 'node_modules'), { recursive: true })
-  })
-  return [ROOT, [...commonPrefixes, '--root', ROOT]] as [string, string[]]
-}
+import { prepareROOT } from './prepareROOT'
 
 function snapshotDistFiles(distDir: string) {
   const files = fs.readdirSync(distDir, { recursive: true })
