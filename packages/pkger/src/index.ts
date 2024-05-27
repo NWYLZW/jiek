@@ -139,7 +139,7 @@ export function pkger(options: Options): Output {
   const { ['.']: indexPath } = inputsResolved
   let indexRest = {}
   if (indexPath) {
-    const index = indexPath.replace(/\.[m|c]?[t|j]s$/, '')
+    const index = indexPath.replace(/\.[m|c]?[t|j]sx?$/, '')
     const indexUMDMin = re(`${index}${suffixes.umdMin()}${suffixes.end()}`)
     const browserIndex = noBrowser ? {} : {
       browser: indexUMDMin
@@ -155,7 +155,7 @@ export function pkger(options: Options): Output {
     './package.json': './package.json'
   }
   for (const [name, input] of Object.entries(inputsResolved)) {
-    let index = input.replace(/\.[m|c]?[t|j]s$/, '')
+    let index = input.replace(/\.[m|c]?[t|j]sx?$/, '')
     if (name !== 'index') {
       index = index.replace(/\/index$/, '')
     }
