@@ -56,9 +56,17 @@ program
       for (const [key, value] of Object.entries(manifest)) {
         if (JSON.stringify(value) === JSON.stringify(oldJSON[key])) continue
 
-        newJSONString = applyEdits(newJSONString, modify(
-          newJSONString, ['publishConfig', key], value, { formattingOptions }
-        ))
+        if (key !== 'exports') {
+          newJSONString = applyEdits(newJSONString, modify(
+            newJSONString, ['publishConfig', key], value, { formattingOptions }
+          ))
+        } else {
+          for (const [k, v] of Object.entries(value)) {
+            newJSONString = applyEdits(newJSONString, modify(
+              newJSONString, ['publishConfig', 'exports', k], v, { formattingOptions }
+            ))
+          }
+        }
       }
       try {
         fs.renameSync(path.join(dir, 'package.json'), path.join(dir, 'package.json.bak'))
