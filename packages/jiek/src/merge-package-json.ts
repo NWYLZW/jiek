@@ -1,9 +1,8 @@
 import path from 'node:path'
 
 import { type Options, pkger } from '@jiek/pkger'
+import { commondir } from '@jiek/utils/commondir'
 import type { Manifest } from '@pnpm/workspace.pkgs-graph'
-
-import { commondir } from './utils/commondir'
 
 export function mergePackageJson(manifest: Manifest & {
   jiek?: Options
