@@ -18,8 +18,8 @@
     "./rollup": "./src/rollup/index.ts"
   },
   "dependencies": {
-    "@jiek/pkger": "workspace:^*",
-    "@jiek/utils": "workspace:^*",
+    "@jiek/pkger": "workspace:^",
+    "@jiek/utils": "workspace:^",
     "@rollup/plugin-json": "^6.0.1",
     "@rollup/plugin-terser": "^0.4.4",
     "autoprefixer": "^10.4.16",
