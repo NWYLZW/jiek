@@ -28,11 +28,6 @@ describe('entrypoints2Exports', () => {
       '.': 'dist/index.js'
     })
     expect(entrypoints2Exports({
-      '.': 'src/index.ts'
-    })).toStrictEqual({
-      '.': 'dist/index.js'
-    })
-    expect(entrypoints2Exports({
       './foo': 'src/foo.ts'
     })).toStrictEqual({
       './foo': 'dist/foo.js'
