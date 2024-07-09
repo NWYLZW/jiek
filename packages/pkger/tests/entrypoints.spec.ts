@@ -9,7 +9,8 @@ describe('entrypoints2Exports', () => {
   })
   test('multiple files array', () => {
     expect(entrypoints2Exports([
-      'src/index.ts'])).toStrictEqual({
+      'src/index.ts'
+    ])).toStrictEqual({
       '.': 'dist/index.js'
     })
     expect(entrypoints2Exports([
