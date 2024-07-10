@@ -44,4 +44,12 @@ describe('entrypoints2Exports', () => {
       './foo': 'dist/foo.js'
     })
   })
+  test('special common or module entry', () => {
+    expect(entrypoints2Exports('src/index.cts')).toStrictEqual({
+      '.': { require: 'dist/index.cjs' }
+    })
+    expect(entrypoints2Exports('src/index.mts')).toStrictEqual({
+      '.': { import: 'dist/index.mjs' }
+    })
+  })
 })

@@ -57,10 +57,12 @@ export function entrypoints2Exports(
       if (isIndex) {
         entrypointMapping['.'] = point
       } else {
-        entrypointMapping[`./${
-          trimmedCommonDirPath
-            .replace(/\.([c|m])?[t|j]sx?$/, '')
-        }`] = point
+        entrypointMapping[
+          `./${
+            trimmedCommonDirPath
+              .replace(/\.([c|m])?[t|j]sx?$/, '')
+          }`
+        ] = point
       }
     })
   } else {
@@ -79,9 +81,15 @@ export function entrypoints2Exports(
     .forEach(([key, value]) => {
       let newValue = value
       if (typeof value === 'string') {
-        newValue = value
+        const outfile = value
           .replace(dir!, outdir)
           .replace(/\.([c|m])?[t|j]sx?$/, '.$1js')
+        if (outfile.endsWith('.cjs')) {
+          newValue = { require: outfile }
+        }
+        if (outfile.endsWith('.mjs')) {
+          newValue = { import: outfile }
+        }
       }
       entrypointMapping[key] = newValue
     })
