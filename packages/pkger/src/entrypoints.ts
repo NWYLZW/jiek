@@ -84,6 +84,7 @@ export function entrypoints2Exports(
         const outfile = value
           .replace(dir!, outdir)
           .replace(/\.([c|m])?[t|j]sx?$/, '.$1js')
+        newValue = outfile
         if (outfile.endsWith('.cjs')) {
           newValue = { require: outfile }
         }
