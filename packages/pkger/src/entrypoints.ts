@@ -68,7 +68,7 @@ export function entrypoints2Exports(
   } else {
     if (typeof entrypoints === 'object') {
       entrypointMapping = entrypoints
-      const leafs = getAllLeafs(entrypoints as RecursiveRecord<string>)
+      const leafs = [...new Set(getAllLeafs(entrypoints as RecursiveRecord<string>))]
       dir = leafs.length > 1
         ? commondir(leafs, cwd)
           .replace(`${cwd}/`, '')
