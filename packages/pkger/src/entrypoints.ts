@@ -76,21 +76,42 @@ export function entrypoints2Exports(
         : path.dirname(leafs[0])
     }
   }
+  function resolvePath(value: string) {
+    let newValue = value as unknown
+    if (typeof value === 'string') {
+      const outfile = value
+        .replace(dir!, outdir)
+        .replace(/\.([c|m])?[t|j]sx?$/, '.$1js')
+      newValue = outfile
+      if (outfile.endsWith('.cjs')) {
+        newValue = { require: outfile }
+      }
+      if (outfile.endsWith('.mjs')) {
+        newValue = { import: outfile }
+      }
+    }
+    return newValue
+  }
   Object
     .entries(entrypointMapping)
     .forEach(([key, value]) => {
       let newValue = value
-      if (typeof value === 'string') {
-        const outfile = value
-          .replace(dir!, outdir)
-          .replace(/\.([c|m])?[t|j]sx?$/, '.$1js')
-        newValue = outfile
-        if (outfile.endsWith('.cjs')) {
-          newValue = { require: outfile }
-        }
-        if (outfile.endsWith('.mjs')) {
-          newValue = { import: outfile }
-        }
+      switch (typeof value) {
+        case 'string':
+          newValue = resolvePath(value)
+          break
+        case 'object':
+          if (value === null) break
+          if (!Array.isArray(value)) {
+            newValue = Object
+              .entries(value)
+              .reduce<Record<string, unknown>>((acc, [k, v]) => {
+                acc[k] = resolvePath(v as string)
+                return acc
+              }, {})
+          } else {
+          }
+          break
       }
       entrypointMapping[key] = newValue
     })

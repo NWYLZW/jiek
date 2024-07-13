@@ -44,6 +44,21 @@ describe('entrypoints2Exports', () => {
       './foo': 'dist/foo.js'
     })
   })
+  test('nested conditional', () => {
+    expect(entrypoints2Exports({
+      '.': {
+        styless: 'src/index.ts',
+        browser: 'src/index.ts',
+        default: 'src/index.ts'
+      }
+    })).toStrictEqual({
+      '.': {
+        styless: 'dist/index.js',
+        browser: 'dist/index.js',
+        default: 'dist/index.js'
+      }
+    })
+  })
   test('special common or module entry', () => {
     expect(entrypoints2Exports('src/index.cts')).toStrictEqual({
       '.': { require: 'dist/index.cjs' }
