@@ -110,6 +110,10 @@ export function entrypoints2Exports(
                 return acc
               }, {})
           } else {
+            /**
+             * TODO Handle nested array
+             * '.': ['src/index.ts', 'src/index.styless.ts']
+             */
           }
           break
       }
