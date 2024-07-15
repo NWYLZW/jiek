@@ -66,5 +66,21 @@ describe('entrypoints2Exports', () => {
     expect(entrypoints2Exports('src/index.mts')).toStrictEqual({
       '.': { import: 'dist/index.mjs' }
     })
+    expect(entrypoints2Exports(['src/index.cts'])).toStrictEqual({
+      '.': { require: 'dist/index.cjs' }
+    })
+    expect(entrypoints2Exports(['src/index.mts'])).toStrictEqual({
+      '.': { import: 'dist/index.mjs' }
+    })
+    expect(entrypoints2Exports({
+      '.': 'src/index.cts'
+    })).toStrictEqual({
+      '.': { require: 'dist/index.cjs' }
+    })
+    expect(entrypoints2Exports({
+      '.': 'src/index.mts'
+    })).toStrictEqual({
+      '.': { import: 'dist/index.mjs' }
+    })
   })
 })
