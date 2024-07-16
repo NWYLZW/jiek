@@ -11,6 +11,10 @@ export interface Entrypoints2ExportsOptions {
    * @default `process.cwd()`
    */
   cwd?: string
+  /**
+   * @default false
+   */
+  withSource?: boolean
 }
 
 type RecursiveRecord<T> = {
@@ -36,7 +40,8 @@ export function entrypoints2Exports(
 ): Record<string, unknown> {
   const {
     outdir = 'dist',
-    cwd = process.cwd()
+    cwd = process.cwd(),
+    withSource = false
   } = options
   let entrypointMapping: Record<string, unknown> = {}
   let dir: string | undefined
@@ -117,7 +122,17 @@ export function entrypoints2Exports(
           }
           break
       }
-      entrypointMapping[key] = newValue
+      entrypointMapping[key] = !withSource
+        ? newValue
+        : (
+          typeof newValue === 'string'
+            ? { default: newValue, source: value }
+            : {
+              // @ts-ignore
+              ...newValue,
+              source: value
+            }
+        )
     })
   return entrypointMapping
 }
