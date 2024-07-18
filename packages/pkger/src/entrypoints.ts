@@ -34,6 +34,8 @@ function getAllLeafs(obj: RecursiveRecord<string>): string[] {
     }, [])
 }
 
+// https://www.typescriptlang.org/docs/handbook/modules/theory.html#the-role-of-declaration-files
+
 export function entrypoints2Exports(
   entrypoints: string | string[] | Record<string, unknown>,
   options: Entrypoints2ExportsOptions = {}
