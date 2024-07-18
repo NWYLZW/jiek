@@ -96,5 +96,25 @@ describe('entrypoints2Exports', () => {
         source: 'src/index.ts'
       }
     })
+    expect(entrypoints2Exports({
+      '.': 'src/index.ts'
+    }, {
+      withSource: true
+    })).toStrictEqual({
+      '.': {
+        default: 'dist/index.js',
+        source: 'src/index.ts'
+      }
+    })
+    expect(entrypoints2Exports({
+      '.': 'src/index.cts'
+    }, {
+      withSource: true
+    })).toStrictEqual({
+      '.': {
+        require: 'dist/index.cjs',
+        source: 'src/index.cts'
+      }
+    })
   })
 })
