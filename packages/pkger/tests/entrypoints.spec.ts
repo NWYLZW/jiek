@@ -91,6 +91,7 @@ describe('entrypoints2Exports', () => {
         default: 'dist/index.js'
       }
     })
+    // custom conditional must before default
     expect(Object.keys(exports0['.'] as Record<string, unknown>))
       .toStrictEqual(['source', 'default'])
     expect(entrypoints2Exports(['src/index.ts'], { withSource: true })).toStrictEqual({
