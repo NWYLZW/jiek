@@ -128,11 +128,11 @@ export function entrypoints2Exports(
         ? newValue
         : (
           typeof newValue === 'string'
-            ? { default: newValue, source: value }
+            ? { source: value, default: newValue }
             : {
+              source: value,
               // @ts-ignore
-              ...newValue,
-              source: value
+              ...newValue
             }
         )
     })
