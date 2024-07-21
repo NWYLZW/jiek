@@ -116,28 +116,32 @@ describe('entrypoints2Exports', () => {
       withSource: true
     })).toStrictEqual({
       '.': {
-        source: 'src/index.cts',
-        require: 'dist/index.cjs'
+        require: {
+          source: 'src/index.cts',
+          default: 'dist/index.cjs'
+        }
       }
     })
-    // expect(entrypoints2Exports({
-    //   '.': {
-    //     styless: 'src/index.ts',
-    //     foo: 'src/index.foo.cts'
-    //   }
-    // }, {
-    //   withSource: true
-    // })).toStrictEqual({
-    //   '.': {
-    //     styless: {
-    //       source: 'src/index.ts',
-    //       default: 'dist/index.js'
-    //     },
-    //     foo: {
-    //       source: 'src/index.foo.cts',
-    //       require: 'dist/index.foo.cjs'
-    //     }
-    //   }
-    // })
+    expect(entrypoints2Exports({
+      '.': {
+        styless: 'src/index.ts',
+        foo: 'src/index.foo.cts'
+      }
+    }, {
+      withSource: true
+    })).toStrictEqual({
+      '.': {
+        styless: {
+          source: 'src/index.ts',
+          default: 'dist/index.js'
+        },
+        foo: {
+          require: {
+            source: 'src/index.foo.cts',
+            default: 'dist/index.foo.cjs'
+          }
+        }
+      }
+    })
   })
 })

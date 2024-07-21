@@ -91,10 +91,14 @@ export function entrypoints2Exports(
         .replace(/\.([c|m])?[t|j]sx?$/, '.$1js')
       newValue = outfile
       if (outfile.endsWith('.cjs')) {
-        newValue = { require: outfile }
+        newValue = withSource
+          ? { require: { source: value, default: outfile } }
+          : { require: outfile }
       }
       if (outfile.endsWith('.mjs')) {
-        newValue = { import: outfile }
+        newValue = withSource
+          ? { import: { source: value, default: outfile } }
+          : { import: outfile }
       }
     }
     return newValue
@@ -114,6 +118,12 @@ export function entrypoints2Exports(
               .entries(value)
               .reduce<Record<string, unknown>>((acc, [k, v]) => {
                 acc[k] = resolvePath(v as string)
+                if (withSource && typeof acc[k] === 'string') {
+                  acc[k] = {
+                    source: v,
+                    default: acc[k]
+                  }
+                }
                 return acc
               }, {})
           } else {
@@ -129,11 +139,7 @@ export function entrypoints2Exports(
         : (
           typeof newValue === 'string'
             ? { source: value, default: newValue }
-            : {
-              source: value,
-              // @ts-ignore
-              ...newValue
-            }
+            : newValue
         )
     })
   return entrypointMapping
