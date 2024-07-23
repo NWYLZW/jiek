@@ -113,25 +113,25 @@ export function entrypoints2Exports(
           break
         case 'object':
           if (value === null) break
-          if (!Array.isArray(value)) {
-            newValue = Object
-              .entries(value)
-              .reduce<Record<string, unknown>>((acc, [k, v]) => {
-                acc[k] = resolvePath(v as string)
-                if (withSource && typeof acc[k] === 'string') {
-                  acc[k] = {
-                    source: v,
-                    default: acc[k]
-                  }
-                }
-                return acc
-              }, {})
-          } else {
+          if (Array.isArray(value)) {
             /**
              * TODO Handle nested array
              * '.': ['src/index.ts', 'src/index.styless.ts']
              */
+            break
           }
+          newValue = Object
+            .entries(value)
+            .reduce<Record<string, unknown>>((acc, [k, v]) => {
+              acc[k] = resolvePath(v as string)
+              if (withSource && typeof acc[k] === 'string') {
+                acc[k] = {
+                  source: v,
+                  default: acc[k]
+                }
+              }
+              return acc
+            }, {})
           break
       }
       entrypointMapping[key] = !withSource
