@@ -94,6 +94,14 @@ describe('entrypoints2Exports', () => {
     // custom conditional must before default
     expect(Object.keys(exports0['.'] as Record<string, unknown>))
       .toStrictEqual(['source', 'default'])
+    expect(entrypoints2Exports('src/index.cts', { withSource: true })).toStrictEqual({
+      '.': {
+        require: {
+          source: 'src/index.cts',
+          default: 'dist/index.cjs'
+        }
+      }
+    })
     expect(entrypoints2Exports(['src/index.ts'], { withSource: true })).toStrictEqual({
       '.': {
         source: 'src/index.ts',
