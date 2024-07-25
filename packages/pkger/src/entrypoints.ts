@@ -4,7 +4,7 @@ import { commondir } from '@jiek/utils/commondir'
 
 export interface Entrypoints2ExportsOptions {
   /**
-   * @default 'dist'
+   * @default './dist'
    */
   outdir?: string
   /**
@@ -41,7 +41,7 @@ export function entrypoints2Exports(
   options: Entrypoints2ExportsOptions = {}
 ): Record<string, unknown> {
   const {
-    outdir = 'dist',
+    outdir = './dist',
     cwd = process.cwd(),
     withSource = false
   } = options

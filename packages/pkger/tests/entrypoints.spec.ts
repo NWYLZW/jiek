@@ -5,43 +5,43 @@ import { entrypoints2Exports } from '../src/entrypoints'
 describe('entrypoints2Exports', () => {
   test('single file', () => {
     expect(entrypoints2Exports('src/index.ts')).toStrictEqual({
-      '.': 'dist/index.js'
+      '.': './dist/index.js'
     })
     expect(entrypoints2Exports('src/foo.ts')).toStrictEqual({
-      '.': 'dist/foo.js'
+      '.': './dist/foo.js'
     })
   })
   test('multiple files array', () => {
     expect(entrypoints2Exports([
       'src/index.ts'
     ])).toStrictEqual({
-      '.': 'dist/index.js'
+      '.': './dist/index.js'
     })
     expect(entrypoints2Exports([
       'src/index.ts',
       'src/foo.ts'
     ])).toStrictEqual({
-      '.': 'dist/index.js',
-      './foo': 'dist/foo.js'
+      '.': './dist/index.js',
+      './foo': './dist/foo.js'
     })
   })
   test('multiple files object', () => {
     expect(entrypoints2Exports({
       '.': 'src/index.ts'
     })).toStrictEqual({
-      '.': 'dist/index.js'
+      '.': './dist/index.js'
     })
     expect(entrypoints2Exports({
       './foo': 'src/foo.ts'
     })).toStrictEqual({
-      './foo': 'dist/foo.js'
+      './foo': './dist/foo.js'
     })
     expect(entrypoints2Exports({
       '.': 'src/index.ts',
       './foo': 'src/foo.ts'
     })).toStrictEqual({
-      '.': 'dist/index.js',
-      './foo': 'dist/foo.js'
+      '.': './dist/index.js',
+      './foo': './dist/foo.js'
     })
   })
   test('nested conditional', () => {
@@ -53,34 +53,34 @@ describe('entrypoints2Exports', () => {
       }
     })).toStrictEqual({
       '.': {
-        styless: 'dist/index.js',
-        browser: 'dist/index.js',
-        default: 'dist/index.js'
+        styless: './dist/index.js',
+        browser: './dist/index.js',
+        default: './dist/index.js'
       }
     })
   })
   test('special common or module entry', () => {
     expect(entrypoints2Exports('src/index.cts')).toStrictEqual({
-      '.': { require: 'dist/index.cjs' }
+      '.': { require: './dist/index.cjs' }
     })
     expect(entrypoints2Exports('src/index.mts')).toStrictEqual({
-      '.': { import: 'dist/index.mjs' }
+      '.': { import: './dist/index.mjs' }
     })
     expect(entrypoints2Exports(['src/index.cts'])).toStrictEqual({
-      '.': { require: 'dist/index.cjs' }
+      '.': { require: './dist/index.cjs' }
     })
     expect(entrypoints2Exports(['src/index.mts'])).toStrictEqual({
-      '.': { import: 'dist/index.mjs' }
+      '.': { import: './dist/index.mjs' }
     })
     expect(entrypoints2Exports({
       '.': 'src/index.cts'
     })).toStrictEqual({
-      '.': { require: 'dist/index.cjs' }
+      '.': { require: './dist/index.cjs' }
     })
     expect(entrypoints2Exports({
       '.': 'src/index.mts'
     })).toStrictEqual({
-      '.': { import: 'dist/index.mjs' }
+      '.': { import: './dist/index.mjs' }
     })
   })
   test('with source', () => {
@@ -88,7 +88,7 @@ describe('entrypoints2Exports', () => {
     expect(exports0).toStrictEqual({
       '.': {
         source: 'src/index.ts',
-        default: 'dist/index.js'
+        default: './dist/index.js'
       }
     })
     // custom conditional must before default
@@ -98,14 +98,14 @@ describe('entrypoints2Exports', () => {
       '.': {
         require: {
           source: 'src/index.cts',
-          default: 'dist/index.cjs'
+          default: './dist/index.cjs'
         }
       }
     })
     expect(entrypoints2Exports(['src/index.ts'], { withSource: true })).toStrictEqual({
       '.': {
         source: 'src/index.ts',
-        default: 'dist/index.js'
+        default: './dist/index.js'
       }
     })
     expect(entrypoints2Exports([
@@ -114,12 +114,12 @@ describe('entrypoints2Exports', () => {
     ], { withSource: true })).toStrictEqual({
       '.': {
         source: 'src/index.ts',
-        default: 'dist/index.js'
+        default: './dist/index.js'
       },
       './foo': {
         import: {
           source: 'src/foo.mts',
-          default: 'dist/foo.mjs'
+          default: './dist/foo.mjs'
         }
       }
     })
@@ -130,7 +130,7 @@ describe('entrypoints2Exports', () => {
     })).toStrictEqual({
       '.': {
         source: 'src/index.ts',
-        default: 'dist/index.js'
+        default: './dist/index.js'
       }
     })
     expect(entrypoints2Exports({
@@ -141,7 +141,7 @@ describe('entrypoints2Exports', () => {
       '.': {
         require: {
           source: 'src/index.cts',
-          default: 'dist/index.cjs'
+          default: './dist/index.cjs'
         }
       }
     })
@@ -156,12 +156,12 @@ describe('entrypoints2Exports', () => {
       '.': {
         styless: {
           source: 'src/index.ts',
-          default: 'dist/index.js'
+          default: './dist/index.js'
         },
         foo: {
           require: {
             source: 'src/index.foo.cts',
-            default: 'dist/index.foo.cjs'
+            default: './dist/index.foo.cjs'
           }
         }
       }
