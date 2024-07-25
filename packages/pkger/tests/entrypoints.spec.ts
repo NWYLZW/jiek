@@ -108,6 +108,21 @@ describe('entrypoints2Exports', () => {
         default: 'dist/index.js'
       }
     })
+    expect(entrypoints2Exports([
+      'src/index.ts',
+      'src/foo.mts'
+    ], { withSource: true })).toStrictEqual({
+      '.': {
+        source: 'src/index.ts',
+        default: 'dist/index.js'
+      },
+      './foo': {
+        import: {
+          source: 'src/foo.mts',
+          default: 'dist/foo.mjs'
+        }
+      }
+    })
     expect(entrypoints2Exports({
       '.': 'src/index.ts'
     }, {
