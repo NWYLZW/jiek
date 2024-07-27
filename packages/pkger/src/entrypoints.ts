@@ -60,14 +60,14 @@ export function entrypoints2Exports(
     entrypoints.forEach((point, i) => {
       const trimmedCommonDirPath = point
         .replace(`${dir!}/`, '')
-      const isIndex = i === 0 && trimmedCommonDirPath.match(/index\.[c|m]?[t|j]sx?$/)?.length
+      const isIndex = i === 0 && trimmedCommonDirPath.match(/index\.[cm]?[tj]sx?$/)?.length
       if (isIndex) {
         entrypointMapping['.'] = point
       } else {
         entrypointMapping[
           `./${
             trimmedCommonDirPath
-              .replace(/\.([c|m])?[t|j]sx?$/, '')
+              .replace(/\.([cm])?[tj]sx?$/, '')
           }`
         ] = point
       }
@@ -88,7 +88,7 @@ export function entrypoints2Exports(
     if (typeof value === 'string') {
       const outfile = value
         .replace(dir!, outdir)
-        .replace(/\.([c|m])?[t|j]sx?$/, '.$1js')
+        .replace(/\.([cm])?[tj]sx?$/, '.$1js')
       newValue = outfile
       if (outfile.endsWith('.cjs')) {
         newValue = withSource
