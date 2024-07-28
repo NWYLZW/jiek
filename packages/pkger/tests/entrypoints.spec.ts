@@ -167,4 +167,24 @@ describe('entrypoints2Exports', () => {
       }
     })
   })
+  test('with suffix', () => {
+    expect(entrypoints2Exports('src/index.ts', { withSuffix: true })).toStrictEqual({
+      '.': './dist/index.js'
+    })
+    expect(entrypoints2Exports({
+      '.': 'src/index.ts'
+    }, {
+      withSuffix: true
+    })).toStrictEqual({
+      '.': './dist/index.js'
+    })
+    expect(entrypoints2Exports({
+      './foo': 'src/foo.ts'
+    }, {
+      withSuffix: true
+    })).toStrictEqual({
+      './foo': './dist/foo.js',
+      './foo.js': './dist/foo.js'
+    })
+  })
 })
