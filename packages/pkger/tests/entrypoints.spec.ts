@@ -186,5 +186,22 @@ describe('entrypoints2Exports', () => {
       './foo': './dist/foo.js',
       './foo.js': './dist/foo.js'
     })
+    expect(entrypoints2Exports({
+      './foo.js': 'src/foo.ts',
+      './bar.cjs': 'src/bar.cts',
+      './baz.mjs': 'src/baz.mts',
+      './qux.jsx': 'src/qux.tsx'
+    }, {
+      withSuffix: true
+    })).toStrictEqual({
+      './foo.js': './dist/foo.js',
+      './bar.cjs': {
+        'require': './dist/bar.cjs'
+      },
+      './baz.mjs': {
+        'import': './dist/baz.mjs'
+      },
+      './qux.jsx': './dist/qux.js'
+    })
   })
 })

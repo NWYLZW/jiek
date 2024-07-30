@@ -146,7 +146,7 @@ export function entrypoints2Exports(
             ? { source: value, default: newValue }
             : newValue
         )
-      if (withSuffix && key !== '.') {
+      if (withSuffix && key !== '.' && !key.match(/\.[cm]?jsx?$/)) {
         entrypointMapping[`${key}.js`] = entrypointMapping[key]
       }
     })
