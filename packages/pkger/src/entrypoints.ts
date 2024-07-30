@@ -64,7 +64,7 @@ export function entrypoints2Exports(
       : path.dirname(entrypoints[0])
     entrypoints.forEach((point, i) => {
       const trimmedCommonDirPath = point
-        .replace(`${dir!}/`, '')
+        .replace(`${dir}/`, '')
       const isIndex = i === 0 && trimmedCommonDirPath.match(/index\.[cm]?[tj]sx?$/)?.length
       if (isIndex) {
         entrypointMapping['.'] = point
