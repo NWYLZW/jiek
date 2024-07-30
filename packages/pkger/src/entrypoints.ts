@@ -59,7 +59,7 @@ export function entrypoints2Exports(
   if (Array.isArray(entrypoints)) {
     dir = entrypoints.length > 1
       ? commondir(entrypoints, cwd)
-        .replace(`${cwd}/`, '')
+        .replace(`${cwd}/`, './')
         .replace(/\/$/, '')
       : path.dirname(entrypoints[0])
     entrypoints.forEach((point, i) => {
@@ -83,7 +83,7 @@ export function entrypoints2Exports(
       const leafs = [...new Set(getAllLeafs(entrypoints as RecursiveRecord<string>))]
       dir = leafs.length > 1
         ? commondir(leafs, cwd)
-          .replace(`${cwd}/`, '')
+          .replace(`${cwd}/`, './')
           .replace(/\/$/, '')
         : path.dirname(leafs[0])
     }
