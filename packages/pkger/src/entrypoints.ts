@@ -2,6 +2,13 @@ import path from 'node:path'
 
 import { commondir } from '@jiek/utils/commondir'
 
+export const DEFAULT_SKIP_KEYS = [
+  /\.json$/,
+  /\.[cm]js$/,
+  /\.d(\..*)?\.ts$/,
+  /\.css$/
+]
+
 export interface Entrypoints2ExportsOptions {
   /**
    * @default './dist'
@@ -19,20 +26,35 @@ export interface Entrypoints2ExportsOptions {
    * @default false
    */
   withSuffix?: boolean
+  /**
+   * @default DEFAULT_SKIP_KEYS
+   */
+  skipKey?: false | (string | RegExp)[]
+  /**
+   * @todo
+   */
+  skipConditional?: false | (string | RegExp)[]
+  /**
+   * @default DEFAULT_SKIP_KEYS
+   */
+  skipValue?: false | (string | RegExp)[]
 }
 
 type RecursiveRecord<T> = {
   [K in string]: T | RecursiveRecord<T>
 }
 
-function getAllLeafs(obj: RecursiveRecord<string>): string[] {
+type GetAllLeafsShouldSkip = ({ key, value, level }: { key: string; value: unknown; level: number }) => boolean
+
+function getAllLeafs(obj: RecursiveRecord<string>, shouldSkip?: GetAllLeafsShouldSkip, level = 1): string[] {
   return Object
     .entries(obj)
-    .reduce<string[]>((acc, [, value]) => {
+    .reduce<string[]>((acc, [key, value]) => {
+      if (shouldSkip && shouldSkip({ key, value, level })) return acc
       if (typeof value === 'string') {
         acc.push(value)
       } else {
-        acc.push(...getAllLeafs(value))
+        acc.push(...getAllLeafs(value, shouldSkip, level + 1))
       }
       return acc
     }, [])
@@ -48,7 +70,9 @@ export function entrypoints2Exports(
     outdir = './dist',
     cwd = process.cwd(),
     withSource = false,
-    withSuffix = false
+    withSuffix = false,
+    skipKey = DEFAULT_SKIP_KEYS,
+    skipValue = DEFAULT_SKIP_KEYS
   } = options
   let entrypointMapping: Record<string, unknown> = {}
   let dir: string | undefined
@@ -57,6 +81,9 @@ export function entrypoints2Exports(
     dir = path.dirname(entrypoints)
   }
   if (Array.isArray(entrypoints)) {
+    entrypoints = skipValue
+      ? entrypoints.filter(entry => !skipValue.some(k => entry.match(k)))
+      : entrypoints
     dir = entrypoints.length > 1
       ? commondir(entrypoints, cwd)
         .replace(`${cwd}/`, './')
@@ -80,7 +107,21 @@ export function entrypoints2Exports(
   } else {
     if (typeof entrypoints === 'object') {
       entrypointMapping = entrypoints
-      const leafs = [...new Set(getAllLeafs(entrypoints as RecursiveRecord<string>))]
+      const leafs = [
+        ...new Set(getAllLeafs(
+          entrypoints as RecursiveRecord<string>,
+          ({ key, value, level }) => {
+            let is = false
+            if (level === 1) {
+              is ||= skipKey && skipKey.some(k => key.match(k))
+            }
+            if (typeof value === 'string') {
+              is ||= skipValue && skipValue.some(v => value.match(v))
+            }
+            return is
+          }
+        ))
+      ]
       dir = leafs.length > 1
         ? commondir(leafs, cwd)
           .replace(`${cwd}/`, './')
@@ -111,7 +152,9 @@ export function entrypoints2Exports(
   Object
     .entries(entrypointMapping)
     .forEach(([key, value]) => {
+      if (skipKey && skipKey.some(k => key.match(k))) return
       let newValue = value
+      if (typeof value === 'string' && skipValue && skipValue.some(v => value.match(v))) return
       switch (typeof value) {
         case 'string':
           newValue = resolvePath(value)

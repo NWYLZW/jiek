@@ -203,5 +203,17 @@ describe('entrypoints2Exports', () => {
       },
       './qux.jsx': './dist/qux.js'
     })
+    expect(entrypoints2Exports('./package.json', { withSuffix: true }))
+  })
+  test('skipKey', () => {
+    expect(entrypoints2Exports({
+      '.': './src/index.ts',
+      './package.json': './package.json',
+      './foo.d.ts': './dist/foo.d.ts'
+    })).toStrictEqual({
+      '.': './dist/index.js',
+      './package.json': './package.json',
+      './foo.d.ts': './dist/foo.d.ts'
+    })
   })
 })
