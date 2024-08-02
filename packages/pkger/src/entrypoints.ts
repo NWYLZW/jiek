@@ -88,7 +88,11 @@ export function entrypoints2Exports(
       ? commondir(entrypoints, cwd)
         .replace(`${cwd}/`, './')
         .replace(/\/$/, '')
-      : path.dirname(entrypoints[0])
+      : (
+        entrypoints.length === 0
+          ? ''
+          : path.dirname(entrypoints[0])
+      )
     entrypoints.forEach((point, i) => {
       const trimmedCommonDirPath = point
         .replace(`${dir}/`, '')
@@ -126,7 +130,11 @@ export function entrypoints2Exports(
         ? commondir(leafs, cwd)
           .replace(`${cwd}/`, './')
           .replace(/\/$/, '')
-        : path.dirname(leafs[0])
+        : (
+          leafs.length === 0
+            ? ''
+            : path.dirname(leafs[0])
+        )
     }
   }
   function resolvePath(value: string) {

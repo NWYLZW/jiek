@@ -44,6 +44,10 @@ describe('entrypoints2Exports', () => {
       './foo': './dist/foo.js'
     })
   })
+  test('empty', () => {
+    expect(entrypoints2Exports([])).toStrictEqual({})
+    expect(entrypoints2Exports({})).toStrictEqual({})
+  })
   test('nested conditional', () => {
     expect(entrypoints2Exports({
       '.': {
