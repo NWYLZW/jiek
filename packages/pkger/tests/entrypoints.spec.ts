@@ -211,13 +211,20 @@ describe('entrypoints2Exports', () => {
   })
   test('skipKey', () => {
     expect(entrypoints2Exports({
-      '.': './src/index.ts',
       './package.json': './package.json',
       './foo.d.ts': './dist/foo.d.ts'
     })).toStrictEqual({
-      '.': './dist/index.js',
       './package.json': './package.json',
       './foo.d.ts': './dist/foo.d.ts'
+    })
+  })
+  test('skipValue', () => {
+    expect(entrypoints2Exports({
+      './package': './package.json',
+      './foo': './dist/foo.d.ts'
+    })).toStrictEqual({
+      './package': './package.json',
+      './foo': './dist/foo.d.ts'
     })
   })
 })
