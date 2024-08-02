@@ -226,5 +226,14 @@ describe('entrypoints2Exports', () => {
       './package': './package.json',
       './foo': './dist/foo.d.ts'
     })
+    expect(entrypoints2Exports({
+      './package': {
+        a: './package.json'
+      }
+    })).toStrictEqual({
+      './package': {
+        a: './package.json'
+      }
+    })
   })
 })

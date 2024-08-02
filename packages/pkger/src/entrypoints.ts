@@ -179,6 +179,11 @@ export function entrypoints2Exports(
           newValue = Object
             .entries(value)
             .reduce<Record<string, unknown>>((acc, [k, v]) => {
+              // TODO skip by conditional
+              if (skipValue && skipValue.some(item => v.match(item))) {
+                acc[k] = v
+                return acc
+              }
               acc[k] = resolvePath(v as string)
               if (withSource && typeof acc[k] === 'string') {
                 acc[k] = {
