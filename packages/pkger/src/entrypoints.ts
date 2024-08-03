@@ -4,9 +4,13 @@ import { commondir } from '@jiek/utils/commondir'
 
 export const DEFAULT_SKIP_KEYS = [
   /\.json$/,
-  /\.[cm]js$/,
   /\.d(\..*)?\.ts$/,
   /\.css$/
+]
+
+export const DEFAULT_SKIP_VALUES = [
+  /\.[cm]js$/,
+  ...DEFAULT_SKIP_KEYS
 ]
 
 export interface Entrypoints2ExportsOptions {
@@ -72,7 +76,7 @@ export function entrypoints2Exports(
     withSource = false,
     withSuffix = false,
     skipKey = DEFAULT_SKIP_KEYS,
-    skipValue = DEFAULT_SKIP_KEYS
+    skipValue = DEFAULT_SKIP_VALUES
   } = options
   let entrypointMapping: Record<string, unknown> = {}
   let dir: string | undefined
@@ -162,9 +166,9 @@ export function entrypoints2Exports(
     .forEach(([key, value]) => {
       if (skipKey && skipKey.some(k => key.match(k))) return
       let newValue = value
-      if (typeof value === 'string' && skipValue && skipValue.some(v => value.match(v))) return
       switch (typeof value) {
         case 'string':
+          if (skipValue && skipValue.some(v => value.match(v))) return
           newValue = resolvePath(value)
           break
         case 'object':
