@@ -199,13 +199,9 @@ export function entrypoints2Exports(
             }, {})
           break
       }
-      entrypointMapping[key] = !withSource
-        ? newValue
-        : (
-          typeof newValue === 'string'
-            ? { source: value, default: newValue }
-            : newValue
-        )
+      entrypointMapping[key] = withSource && typeof newValue === 'string'
+        ? { source: value, default: newValue }
+        : newValue
       if (withSuffix && key !== '.' && !key.match(/\.[cm]?jsx?$/)) {
         entrypointMapping[`${key}.js`] = entrypointMapping[key]
       }
