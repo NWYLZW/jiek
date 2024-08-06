@@ -22,6 +22,15 @@ export interface Entrypoints2ExportsOptions {
    * @default `process.cwd()`
    */
   cwd?: string
+  withConditional?: Partial<
+    Record<
+      | 'bundled'
+      | (string & {}),
+      | boolean
+      | ((opts: { src: string; dist: string }) => string)
+      | undefined
+    >
+  >
   /**
    * @default false
    */
@@ -73,6 +82,7 @@ export function entrypoints2Exports(
   const {
     outdir = './dist',
     cwd = process.cwd(),
+    withConditional = {},
     withSource = false,
     withSuffix = false,
     skipKey = DEFAULT_SKIP_KEYS,
@@ -199,9 +209,30 @@ export function entrypoints2Exports(
             }, {})
           break
       }
-      entrypointMapping[key] = withSource && typeof newValue === 'string'
-        ? { source: value, default: newValue }
-        : newValue
+      entrypointMapping[key] = newValue
+      if (typeof newValue === 'string') {
+        const conditionalKeys = Object.keys(withConditional)
+        const shouldNested = withSource || conditionalKeys.length
+        if (shouldNested) {
+          const v = {} as Record<string, unknown>
+          if (withSource) {
+            v.source = value
+          }
+          conditionalKeys.forEach(k => {
+            const conditional = withConditional[k]
+            switch (typeof conditional) {
+              case 'function':
+                v[k] = conditional({ src: value as string, dist: newValue })
+                break
+              case 'boolean':
+                v[k] = value
+                break
+            }
+          })
+          v.default = newValue
+          entrypointMapping[key] = v
+        }
+      }
       if (withSuffix && key !== '.' && !key.match(/\.[cm]?jsx?$/)) {
         entrypointMapping[`${key}.js`] = entrypointMapping[key]
       }

@@ -240,4 +240,22 @@ describe('entrypoints2Exports', () => {
       }
     })
   })
+  test('conditional suffixes', () => {
+    expect(entrypoints2Exports({
+      '.': './src/index.ts'
+    }, {
+      withConditional: {
+        source: true,
+        styless: ({ dist }) => dist.replace(/(\.[cm]?js)$/, '.styless$1'),
+        bundled: ({ dist }) => dist.replace(/(\.[cm]?js)$/, '.bundled$1')
+      }
+    })).toStrictEqual({
+      '.': {
+        source: './src/index.ts',
+        styless: './dist/index.styless.js',
+        bundled: './dist/index.bundled.js',
+        default: './dist/index.js'
+      }
+    })
+  })
 })
