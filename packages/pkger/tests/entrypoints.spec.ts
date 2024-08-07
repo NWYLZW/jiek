@@ -207,7 +207,12 @@ describe('entrypoints2Exports', () => {
       },
       './qux.jsx': './dist/qux.js'
     })
-    expect(entrypoints2Exports('./package.json', { withSuffix: true }))
+    expect(entrypoints2Exports({
+      './package.json': './package.json'
+    }, { withSuffix: true }))
+      .toStrictEqual({
+        './package.json': './package.json'
+      })
   })
   test('skipKey', () => {
     expect(entrypoints2Exports({
