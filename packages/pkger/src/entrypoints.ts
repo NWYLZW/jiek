@@ -88,6 +88,7 @@ export function entrypoints2Exports(
     skipKey = DEFAULT_SKIP_KEYS,
     skipValue = DEFAULT_SKIP_VALUES
   } = options
+  const conditionalKeys = Object.keys(withConditional)
   let entrypointMapping: Record<string, unknown> = {}
   let dir: string | undefined
   if (typeof entrypoints === 'string') {
@@ -158,15 +159,34 @@ export function entrypoints2Exports(
         .replace(dir!, outdir)
         .replace(/\.([cm])?[tj]sx?$/, '.$1js')
       newValue = outfile
-      if (outfile.endsWith('.cjs')) {
-        newValue = withSource
-          ? { require: { source: value, default: outfile } }
-          : { require: outfile }
+      const isCjs = outfile.endsWith('.cjs')
+      const isMjs = outfile.endsWith('.mjs')
+      let v = outfile as unknown
+      if (withSource || conditionalKeys.length) {
+        const record = {} as Record<string, unknown>
+        if (withSource) {
+          record.source = value
+        }
+        conditionalKeys.forEach(k => {
+          const conditional = withConditional[k]
+          switch (typeof conditional) {
+            case 'function':
+              record[k] = conditional({ src: value, dist: outfile })
+              break
+            case 'boolean':
+              record[k] = value
+              break
+          }
+        })
+        record.default = outfile
+        v = record
       }
-      if (outfile.endsWith('.mjs')) {
-        newValue = withSource
-          ? { import: { source: value, default: outfile } }
-          : { import: outfile }
+      if (isCjs || isMjs) {
+        newValue = {
+          [isCjs ? 'require' : 'import']: v
+        }
+      } else {
+        newValue = v
       }
     }
     return newValue
@@ -211,7 +231,6 @@ export function entrypoints2Exports(
       }
       entrypointMapping[key] = newValue
       if (typeof newValue === 'string') {
-        const conditionalKeys = Object.keys(withConditional)
         const shouldNested = withSource || conditionalKeys.length
         if (shouldNested) {
           const v = {} as Record<string, unknown>

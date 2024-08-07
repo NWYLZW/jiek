@@ -257,5 +257,45 @@ describe('entrypoints2Exports', () => {
         default: './dist/index.js'
       }
     })
+    expect(entrypoints2Exports({
+      '.': './src/index.cts'
+    }, {
+      withConditional: {
+        source: true,
+        bundled: ({ dist }) => dist.replace(/(\.[cm]?js)$/, '.bundled$1')
+      }
+    })).toStrictEqual({
+      '.': {
+        require: {
+          source: './src/index.cts',
+          bundled: './dist/index.bundled.cjs',
+          default: './dist/index.cjs'
+        }
+      }
+    })
+    expect(entrypoints2Exports({
+      '.': {
+        foo: './src/index.ts',
+        bar: './src/index.bar.ts'
+      }
+    }, {
+      withConditional: {
+        source: true,
+        bundled: ({ dist }) => dist.replace(/(\.[cm]?js)$/, '.bundled$1')
+      }
+    })).toStrictEqual({
+      '.': {
+        foo: {
+          source: './src/index.ts',
+          bundled: './dist/index.bundled.js',
+          default: './dist/index.js'
+        },
+        bar: {
+          source: './src/index.bar.ts',
+          bundled: './dist/index.bar.bundled.js',
+          default: './dist/index.bar.js'
+        }
+      }
+    })
   })
 })
