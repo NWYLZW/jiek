@@ -1,12 +1,12 @@
 import { resolve } from 'node:path'
 
 import type { Options } from '@jiek/pkger'
+import { dts } from '@jiek/rollup-plugin-dts'
 import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import json from '@rollup/plugin-json'
 import autoprefixer from 'autoprefixer'
 import { MultiBar, Presets } from 'cli-progress'
 import type { InputPluginOption, Plugin, RollupOptions } from 'rollup'
-import { dts } from '@jiek/rollup-plugin-dts'
 import esbuild from 'rollup-plugin-esbuild'
 import postcss from 'rollup-plugin-postcss'
 
@@ -43,8 +43,9 @@ function watchProgress(
   return {
     name: 'progress',
     resolveId(source, importer) {
-      if (entries.includes(source) || importer === undefined)
+      if (entries.includes(source) || importer === undefined) {
         onProcessing(source)
+      }
     },
     writeBundle(options, bundle) {
       Object.entries(bundle).forEach(([key, value]) => {
@@ -77,19 +78,25 @@ export const template = (
   pkg: {
     name?: string
     jiek?: Options
-    exports?: Record<string, string | {
-      import: string
-      'inner-src': string
-    }>
+    exports?: Record<
+      string,
+      string | {
+        import: string
+        'inner-src': string
+      }
+    >
   }
 ) => {
-  if (targets.length === 0)
+  if (targets.length === 0) {
     throw new Error('no target specified')
+  }
 
-  const { jiek: {
-    noBrowser = false,
-    outdir = 'dist'
-  } = {} } = pkg
+  const {
+    jiek: {
+      noBrowser = false,
+      outdir = 'dist'
+    } = {}
+  } = pkg
   const outputOptions = {
     ...commonOutputOptions,
     dir: outdir
@@ -123,8 +130,7 @@ export const template = (
   const [globalsRegister, globalsOutput] = createGlobalsLinkage()
   const external = externalResolver()
 
-  const commonOptions = {
-  } satisfies RollupOptions
+  const commonOptions = {} satisfies RollupOptions
   const commonPlugins = [
     json()
   ]
@@ -134,12 +140,13 @@ export const template = (
     format: '- {bar} | {type} | {entry} | {message}'
   }, Presets.shades_classic)
   const entries = Object.values(exportsEntries)
-  const addBarsByEntries = (type: 'esm' | 'umd' | 'dts') => entries
-    .reduce((add, entry) => {
-      const bar = multiBars.create(100, 0)
-      bar.update(0, { type, entry: paddingEntry(entry), message: 'waiting' })
-      return { ...add, [entry]: bar }
-    }, {} as Record<string, ReturnType<typeof multiBars.create>>)
+  const addBarsByEntries = (type: 'esm' | 'umd' | 'dts') =>
+    entries
+      .reduce((add, entry) => {
+        const bar = multiBars.create(100, 0)
+        bar.update(0, { type, entry: paddingEntry(entry), message: 'waiting' })
+        return { ...add, [entry]: bar }
+      }, {} as Record<string, ReturnType<typeof multiBars.create>>)
   const progressState: Partial<Record<'esm' | 'umd' | 'dts', ReturnType<typeof addBarsByEntries>>> = {}
   targets.forEach(target => {
     progressState[target] = addBarsByEntries(target)
@@ -203,52 +210,55 @@ export const template = (
       indexPlugins
     ]
   })
-  const umdOpts: (isLast: boolean) => RollupOptions[] = isLast => Object.entries(exportsEntries).map(([name, input]) => {
-    const outputName = namePrefix + (
-      name === 'index' ? '' : (
-        name.replace(/[@|/-](\w)/g, (_, $1) => $1.toUpperCase())
+  const umdOpts: (isLast: boolean) => RollupOptions[] = isLast =>
+    Object.entries(exportsEntries).map(([name, input]) => {
+      const outputName = namePrefix + (
+        name === 'index' ? '' : (
+          name.replace(/[@|/-](\w)/g, (_, $1) => $1.toUpperCase())
+        )
       )
-    )
-    return {
-      ...commonOptions,
-      input: input,
-      output: noBrowser ? [
-        ...withMinify({
-          ...outputOptions,
-          name: outputName,
-          format: 'cjs',
-          entryFileNames: `${name}.cjs`
-        })
-      ] : [
-        ...withMinify({
-          ...outputOptions,
-          name: outputName,
-          format: 'iife',
-          entryFileNames: `${name}.iife.js`
-        }),
-        ...withMinify({
-          ...outputOptions,
-          name: outputName,
-          format: 'umd',
-          entryFileNames: `${name}.umd.js`
-        })
-      ],
-      plugins: [
-        watchingProgress('umd', isLast, input),
-        commonPlugins,
-        globalsOutput,
-        styled && postcss({
-          plugins: [autoprefixer],
-          minimize: true,
-          sourceMap: true,
-          extract: `${name}.css`
-        }),
-        esbuild(),
-        entryPlugins
-      ],
-      external
-    }
-  })
+      return {
+        ...commonOptions,
+        input: input,
+        output: noBrowser
+          ? [
+            ...withMinify({
+              ...outputOptions,
+              name: outputName,
+              format: 'cjs',
+              entryFileNames: `${name}.cjs`
+            })
+          ]
+          : [
+            ...withMinify({
+              ...outputOptions,
+              name: outputName,
+              format: 'iife',
+              entryFileNames: `${name}.iife.js`
+            }),
+            ...withMinify({
+              ...outputOptions,
+              name: outputName,
+              format: 'umd',
+              entryFileNames: `${name}.umd.js`
+            })
+          ],
+        plugins: [
+          watchingProgress('umd', isLast, input),
+          commonPlugins,
+          globalsOutput,
+          styled && postcss({
+            plugins: [autoprefixer],
+            minimize: true,
+            sourceMap: true,
+            extract: `${name}.css`
+          }),
+          esbuild(),
+          entryPlugins
+        ],
+        external
+      }
+    })
   const dtsOpts: (isLast: boolean) => RollupOptions = isLast => ({
     ...commonOptions,
     input: exportsEntries,
@@ -291,8 +301,9 @@ export const template = (
   const optionsMap = { esm: esmOpts, umd: umdOpts, dts: dtsOpts }
   return targets.flatMap(target => {
     const optsGen = optionsMap[target as 'esm' | 'umd' | 'dts']
-    if (optsGen === undefined)
+    if (optsGen === undefined) {
       throw new Error(`target ${target} is not supported`)
+    }
     const opts = optsGen(target === targets[targets.length - 1])
     if (Array.isArray(opts)) return opts
     return [opts]
