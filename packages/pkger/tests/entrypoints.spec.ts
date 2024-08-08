@@ -214,7 +214,7 @@ describe('entrypoints2Exports', () => {
         './package.json': './package.json'
       })
   })
-  test('skipKey', () => {
+  test('skip key', () => {
     expect(entrypoints2Exports({
       './package.json': './package.json',
       './foo.d.ts': './dist/foo.d.ts'
@@ -223,7 +223,7 @@ describe('entrypoints2Exports', () => {
       './foo.d.ts': './dist/foo.d.ts'
     })
   })
-  test('skipValue', () => {
+  test('skip value', () => {
     expect(entrypoints2Exports({
       '.': './src/index.ts',
       './package': './package.json',
