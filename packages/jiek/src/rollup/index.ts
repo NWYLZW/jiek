@@ -212,11 +212,14 @@ export const template = (
   })
   const umdOpts: (isLast: boolean) => RollupOptions[] = isLast =>
     Object.entries(exportsEntries).map(([name, input]) => {
-      const outputName = namePrefix + (
-        name === 'index' ? '' : (
-          name.replace(/[@|/-](\w)/g, (_, $1) => $1.toUpperCase())
-        )
-      )
+      let pascalName = name.replace(/[@/-](\w)/g, (_, $1) => $1.toUpperCase())
+      if (pascalName === 'index') {
+        pascalName = ''
+      }
+      if (pascalName) {
+        pascalName = pascalName[0].toUpperCase() + pascalName.slice(1)
+      }
+      const outputName = namePrefix + pascalName
       return {
         ...commonOptions,
         input: input,
