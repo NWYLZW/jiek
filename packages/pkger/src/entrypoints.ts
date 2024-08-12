@@ -213,6 +213,9 @@ export function entrypoints2Exports(
           newValue = Object
             .entries(value)
             .reduce<Record<string, unknown>>((acc, [conditional, v]) => {
+              if (typeof v !== 'string') {
+                throw new Error(`Not support nested conditional value: ${v}`)
+              }
               // TODO skip by conditional
               if (skipValue && skipValue.some(item => v.match(item))) {
                 acc[conditional] = v
