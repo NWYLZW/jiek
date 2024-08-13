@@ -302,5 +302,37 @@ describe('entrypoints2Exports', () => {
         }
       }
     })
+    expect(entrypoints2Exports({
+      '.': './src/index.ts',
+      './foo': {
+        browser: './src/index.browser.ts',
+        default: './src/index.ts'
+      }
+    }, {
+      withConditional: {
+        source: true,
+        bundled: ({ dist, conditionals }) =>
+          conditionals.includes('browser')
+            ? false
+            : dist.replace(/(\.[cm]?js)$/, '.bundled$1')
+      }
+    })).toStrictEqual({
+      '.': {
+        source: './src/index.ts',
+        bundled: './dist/index.bundled.js',
+        default: './dist/index.js'
+      },
+      './foo': {
+        browser: {
+          source: './src/index.browser.ts',
+          default: './dist/index.browser.js'
+        },
+        default: {
+          source: './src/index.ts',
+          bundled: './dist/index.bundled.js',
+          default: './dist/index.js'
+        }
+      }
+    })
   })
 })

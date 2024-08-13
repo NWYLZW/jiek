@@ -27,7 +27,7 @@ export interface Entrypoints2ExportsOptions {
       | 'bundled'
       | (string & {}),
       | boolean
-      | ((opts: { src: string; dist: string }) => string)
+      | ((opts: { src: string; dist: string; path: string; conditionals: string[] }) => boolean | string)
       | undefined
     >
   >
@@ -88,7 +88,7 @@ export function entrypoints2Exports(
     skipKey = DEFAULT_SKIP_KEYS,
     skipValue = DEFAULT_SKIP_VALUES
   } = options
-  const conditionalKeys = Object.keys(withConditional)
+  const withConditionalKeys = Object.keys(withConditional)
   let entrypointMapping: Record<string, unknown> = {}
   let dir: string | undefined
   if (typeof entrypoints === 'string') {
@@ -152,7 +152,7 @@ export function entrypoints2Exports(
         )
     }
   }
-  function resolvePath(value: string) {
+  function resolvePath(value: string, path: string, conditionalKeys: string[]) {
     let newValue = value as unknown
     if (typeof value === 'string') {
       const outfile = value
@@ -162,17 +162,26 @@ export function entrypoints2Exports(
       const isCjs = outfile.endsWith('.cjs')
       const isMjs = outfile.endsWith('.mjs')
       let v = outfile as unknown
-      if (withSource || conditionalKeys.length) {
+      if (withSource || withConditionalKeys.length) {
         const record = {} as Record<string, unknown>
         if (withSource) {
           record.source = value
         }
-        conditionalKeys.forEach(k => {
+        withConditionalKeys.forEach(k => {
           const conditional = withConditional[k]
           switch (typeof conditional) {
-            case 'function':
-              record[k] = conditional({ src: value, dist: outfile })
+            case 'function': {
+              const result = conditional({
+                src: value,
+                dist: outfile,
+                path,
+                conditionals: [...conditionalKeys, k]
+              })
+              if (result === false) break
+
+              record[k] = result === true ? value : result
               break
+            }
             case 'boolean':
               record[k] = value
               break
@@ -199,7 +208,7 @@ export function entrypoints2Exports(
       switch (typeof value) {
         case 'string':
           if (skipValue && skipValue.some(v => value.match(v))) return
-          newValue = resolvePath(value)
+          newValue = resolvePath(value, key, [])
           break
         case 'object':
           if (value === null) break
@@ -221,7 +230,7 @@ export function entrypoints2Exports(
                 acc[conditional] = v
                 return acc
               }
-              acc[conditional] = resolvePath(v as string)
+              acc[conditional] = resolvePath(v as string, key, [conditional])
               if (withSource && typeof acc[conditional] === 'string') {
                 acc[conditional] = {
                   source: v,
@@ -234,18 +243,26 @@ export function entrypoints2Exports(
       }
       entrypointMapping[key] = newValue
       if (typeof newValue === 'string') {
-        const shouldNested = withSource || conditionalKeys.length
+        const shouldNested = withSource || withConditionalKeys.length
         if (shouldNested) {
           const v = {} as Record<string, unknown>
           if (withSource) {
             v.source = value
           }
-          conditionalKeys.forEach(k => {
+          withConditionalKeys.forEach(k => {
             const conditional = withConditional[k]
             switch (typeof conditional) {
-              case 'function':
-                v[k] = conditional({ src: value as string, dist: newValue })
+              case 'function': {
+                const result = conditional({
+                  src: value as string,
+                  dist: newValue,
+                  path: key,
+                  conditionals: [k]
+                })
+                if (result === false) break
+                v[k] = result === true ? value : result
                 break
+              }
               case 'boolean':
                 v[k] = value
                 break
