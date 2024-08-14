@@ -305,8 +305,8 @@ describe('entrypoints2Exports', () => {
     expect(entrypoints2Exports({
       '.': './src/index.ts',
       './foo': {
-        browser: './src/index.browser.ts',
-        default: './src/index.ts'
+        browser: './src/foo.browser.ts',
+        default: './src/foo.ts'
       }
     }, {
       withConditional: {
@@ -324,13 +324,13 @@ describe('entrypoints2Exports', () => {
       },
       './foo': {
         browser: {
-          source: './src/index.browser.ts',
-          default: './dist/index.browser.js'
+          source: './src/foo.browser.ts',
+          default: './dist/foo.browser.js'
         },
         default: {
-          source: './src/index.ts',
-          bundled: './dist/index.bundled.js',
-          default: './dist/index.js'
+          source: './src/foo.ts',
+          bundled: './dist/foo.bundled.js',
+          default: './dist/foo.js'
         }
       }
     })
