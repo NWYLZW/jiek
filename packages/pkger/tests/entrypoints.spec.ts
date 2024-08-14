@@ -307,12 +307,16 @@ describe('entrypoints2Exports', () => {
       './foo': {
         browser: './src/foo.browser.ts',
         default: './src/foo.ts'
+      },
+      './bar': {
+        require: './src/bar.cts',
+        default: './src/bar.ts'
       }
     }, {
       withConditional: {
         source: true,
-        bundled: ({ dist, conditionals }) =>
-          conditionals.includes('browser')
+        bundled: ({ src, dist, conditionals }) =>
+          conditionals.includes('browser') || src.endsWith('.cts')
             ? false
             : dist.replace(/(\.[cm]?js)$/, '.bundled$1')
       }
@@ -331,6 +335,20 @@ describe('entrypoints2Exports', () => {
           source: './src/foo.ts',
           bundled: './dist/foo.bundled.js',
           default: './dist/foo.js'
+        }
+      },
+      './bar': {
+        require: {
+          // TODO special case, maybe should remove when conditional keys is exist `require` conditional key
+          require: {
+            source: './src/bar.cts',
+            default: './dist/bar.cjs'
+          }
+        },
+        default: {
+          source: './src/bar.ts',
+          bundled: './dist/bar.bundled.js',
+          default: './dist/bar.js'
         }
       }
     })
