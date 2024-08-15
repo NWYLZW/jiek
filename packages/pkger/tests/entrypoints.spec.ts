@@ -311,12 +311,13 @@ describe('entrypoints2Exports', () => {
       './bar': {
         require: './src/bar.cts',
         default: './src/bar.ts'
-      }
+      },
+      './no-bundled': './src/no-bundled.ts'
     }, {
       withConditional: {
         source: true,
-        bundled: ({ src, dist, conditionals }) =>
-          conditionals.includes('browser') || src.endsWith('.cts')
+        bundled: ({ path, src, dist, conditionals }) =>
+          conditionals.includes('browser') || src.endsWith('.cts') || path.startsWith('./no-bundled')
             ? false
             : dist.replace(/(\.[cm]?js)$/, '.bundled$1')
       }
@@ -350,6 +351,10 @@ describe('entrypoints2Exports', () => {
           bundled: './dist/bar.bundled.js',
           default: './dist/bar.js'
         }
+      },
+      './no-bundled': {
+        source: './src/no-bundled.ts',
+        default: './dist/no-bundled.js'
       }
     })
   })
