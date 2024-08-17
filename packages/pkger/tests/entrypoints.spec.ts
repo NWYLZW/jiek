@@ -308,10 +308,7 @@ describe('entrypoints2Exports', () => {
         browser: './src/foo.browser.ts',
         default: './src/foo.ts'
       },
-      './bar': {
-        require: './src/bar.cts',
-        default: './src/bar.ts'
-      },
+      './bar': './src/bar.cts',
       './no-bundled': './src/no-bundled.ts'
     }, {
       withConditional: {
@@ -340,16 +337,8 @@ describe('entrypoints2Exports', () => {
       },
       './bar': {
         require: {
-          // TODO special case, maybe should remove when conditional keys is exist `require` conditional key
-          require: {
-            source: './src/bar.cts',
-            default: './dist/bar.cjs'
-          }
-        },
-        default: {
-          source: './src/bar.ts',
-          bundled: './dist/bar.bundled.js',
-          default: './dist/bar.js'
+          source: './src/bar.cts',
+          default: './dist/bar.cjs'
         }
       },
       './no-bundled': {
