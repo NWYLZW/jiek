@@ -148,7 +148,7 @@ export function resolveEntrypoints(
         )
     }
   }
-  return [dir, entrypointMapping] as const
+  return [dir!, entrypointMapping] as const
 }
 
 // https://www.typescriptlang.org/docs/handbook/modules/theory.html#the-role-of-declaration-files
