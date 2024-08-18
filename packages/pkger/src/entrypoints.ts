@@ -73,22 +73,18 @@ export function getAllLeafs(obj: RecursiveRecord<string>, shouldSkip?: GetAllLea
     }, [])
 }
 
-// https://www.typescriptlang.org/docs/handbook/modules/theory.html#the-role-of-declaration-files
-
-export function entrypoints2Exports(
+export function resolveEntrypoints(
   entrypoints: string | string[] | Record<string, unknown>,
-  options: Entrypoints2ExportsOptions = {}
-): Record<string, unknown> {
+  options: Pick<
+    Entrypoints2ExportsOptions,
+    'cwd' | 'skipKey' | 'skipValue'
+  > = {}
+) {
   const {
-    outdir = './dist',
     cwd = process.cwd(),
-    withConditional = {},
-    withSource = false,
-    withSuffix = false,
     skipKey = DEFAULT_SKIP_KEYS,
     skipValue = DEFAULT_SKIP_VALUES
   } = options
-  const withConditionalKeys = Object.keys(withConditional)
   let entrypointMapping: Record<string, unknown> = {}
   let dir: string | undefined
   if (typeof entrypoints === 'string') {
@@ -152,6 +148,25 @@ export function entrypoints2Exports(
         )
     }
   }
+  return [dir, entrypointMapping] as const
+}
+
+// https://www.typescriptlang.org/docs/handbook/modules/theory.html#the-role-of-declaration-files
+
+export function entrypoints2Exports(
+  entrypoints: string | string[] | Record<string, unknown>,
+  options: Entrypoints2ExportsOptions = {}
+): Record<string, unknown> {
+  const {
+    outdir = './dist',
+    withConditional = {},
+    withSource = false,
+    withSuffix = false,
+    skipKey = DEFAULT_SKIP_KEYS,
+    skipValue = DEFAULT_SKIP_VALUES
+  } = options
+  const [dir, entrypointMapping] = resolveEntrypoints(entrypoints, options)
+  const withConditionalKeys = Object.keys(withConditional)
   function resolvePath(value: string, path: string, conditionalKeys: string[]) {
     let newValue = value as unknown
     if (typeof value === 'string') {
