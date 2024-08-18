@@ -59,7 +59,7 @@ type RecursiveRecord<T> = {
 
 type GetAllLeafsShouldSkip = ({ key, value, level }: { key: string; value: unknown; level: number }) => boolean
 
-function getAllLeafs(obj: RecursiveRecord<string>, shouldSkip?: GetAllLeafsShouldSkip, level = 1): string[] {
+export function getAllLeafs(obj: RecursiveRecord<string>, shouldSkip?: GetAllLeafsShouldSkip, level = 1): string[] {
   return Object
     .entries(obj)
     .reduce<string[]>((acc, [key, value]) => {
