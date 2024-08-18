@@ -53,11 +53,11 @@ export interface Entrypoints2ExportsOptions {
   skipValue?: false | (string | RegExp)[]
 }
 
-type RecursiveRecord<T> = {
+export type RecursiveRecord<T> = {
   [K in string]: T | RecursiveRecord<T>
 }
 
-type GetAllLeafsShouldSkip = ({ key, value, level }: { key: string; value: unknown; level: number }) => boolean
+type GetAllLeafsShouldSkip = (context: { key: string; value: unknown; level: number }) => boolean
 
 export function getAllLeafs(obj: RecursiveRecord<string>, shouldSkip?: GetAllLeafsShouldSkip, level = 1): string[] {
   return Object
