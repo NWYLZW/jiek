@@ -15,7 +15,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./cli": "./src/cli.ts",
-    "./rollup": "./src/rollup/index.ts"
+    "./rollup": "./src/rollup/index.ts",
+    "./rollup.v2": "./src/rollup/v2.ts"
   },
   "dependencies": {
     "@jiek/pkger": "workspace:^",
