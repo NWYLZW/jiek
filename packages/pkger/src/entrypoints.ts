@@ -176,7 +176,7 @@ export function entrypoints2Exports(
     skipKey = DEFAULT_SKIP_KEYS,
     skipValue = DEFAULT_SKIP_VALUES
   } = options
-  const [dir, entrypointMapping] = resolveEntrypoints(entrypoints, options)
+  const [dir, entrypointMapping] = resolveEntrypoints(JSON.parse(JSON.stringify(entrypoints)), options)
   const withConditionalKeys = Object.keys(withConditional)
   function resolvePath(value: string, path: string, conditionalKeys: string[]) {
     let newValue = value as unknown
