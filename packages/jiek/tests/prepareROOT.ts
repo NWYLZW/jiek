@@ -1,5 +1,4 @@
 import * as childProcess from 'node:child_process'
-import fs from 'node:fs'
 import path from 'node:path'
 
 import { afterAll, beforeAll } from 'vitest'
