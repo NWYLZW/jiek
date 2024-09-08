@@ -57,17 +57,28 @@ export type RecursiveRecord<T> = {
   [K in string]: T | RecursiveRecord<T>
 }
 
-type GetAllLeafsShouldSkip = (context: { key: string; value: unknown; level: number }) => boolean
+type GetAllLeafsShouldSkip = (context: {
+  key: string
+  keys: string[]
+  value: unknown
+  level: number
+}) => boolean
 
-export function getAllLeafs(obj: RecursiveRecord<string>, shouldSkip?: GetAllLeafsShouldSkip, level = 1): string[] {
+export function getAllLeafs(
+  obj: RecursiveRecord<string>,
+  shouldSkip?: GetAllLeafsShouldSkip,
+  keys: string[] = [],
+  level = 1
+): string[] {
   return Object
     .entries(obj)
     .reduce<string[]>((acc, [key, value]) => {
-      if (shouldSkip && shouldSkip({ key, value, level })) return acc
+      const newKeys = [...keys, key]
+      if (shouldSkip && shouldSkip({ key, keys: newKeys, value, level })) return acc
       if (typeof value === 'string') {
         acc.push(value)
       } else {
-        acc.push(...getAllLeafs(value, shouldSkip, level + 1))
+        acc.push(...getAllLeafs(value, shouldSkip, newKeys, level + 1))
       }
       return acc
     }, [])
