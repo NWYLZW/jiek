@@ -1,4 +1,5 @@
 import * as childProcess from 'node:child_process'
+import fs from 'node:fs'
 import path from 'node:path'
 
 import { afterAll, beforeAll } from 'vitest'
@@ -9,7 +10,8 @@ const getROOT = (paths: string[]) => path.resolve(__dirname, 'fixtures', ...path
 
 export function prepareROOT(
   command: string,
-  paths: string[], {
+  paths: string[],
+  {
     notWorkspace = false
   }: {
     notWorkspace?: boolean
