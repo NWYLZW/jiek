@@ -9,7 +9,7 @@ export const DEFAULT_SKIP_KEYS = [
 ]
 
 export const DEFAULT_SKIP_VALUES = [
-  /\.[cm]js$/,
+  /\.[cm]?js$/,
   ...DEFAULT_SKIP_KEYS
 ]
 
