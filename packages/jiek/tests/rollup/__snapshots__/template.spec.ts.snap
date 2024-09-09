@@ -1,0 +1,369 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`rollup - template > base 1`] = `
+[
+  {
+    "input": "./src/index.ts",
+    "output": [
+      {
+        "file": "./dist/index.js",
+        "format": "cjs",
+        "name": "Foo",
+      },
+      {
+        "file": "./dist/index.min.js",
+        "format": "cjs",
+        "name": "Foo",
+        "plugins": [
+          {
+            "name": "terser",
+            "numOfWorkersUsed": 0,
+            "renderChunk": [Function],
+          },
+        ],
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "buildStart": [Function],
+        "name": "esbuild",
+        "options": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+  {
+    "input": "./src/index.ts",
+    "output": [
+      {
+        "dir": "dist",
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "name": "dts",
+        "options": [Function],
+        "outputOptions": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+]
+`;
+
+exports[`rollup - template > base 2`] = `
+[
+  {
+    "input": "./src/index.ts",
+    "output": [
+      {
+        "file": "./dist/index.js",
+        "format": "esm",
+        "name": "Foo",
+      },
+      {
+        "file": "./dist/index.min.js",
+        "format": "esm",
+        "name": "Foo",
+        "plugins": [
+          {
+            "name": "terser",
+            "numOfWorkersUsed": 0,
+            "renderChunk": [Function],
+          },
+        ],
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "buildStart": [Function],
+        "name": "esbuild",
+        "options": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+  {
+    "input": "./src/index.ts",
+    "output": [
+      {
+        "dir": "dist",
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "name": "dts",
+        "options": [Function],
+        "outputOptions": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+]
+`;
+
+exports[`rollup - template > with import or require conditional 1`] = `
+[
+  {
+    "input": "./src/index.mts",
+    "output": [
+      {
+        "file": "./dist/index.mjs",
+        "format": "esm",
+        "name": "Foo",
+      },
+      {
+        "file": "./dist/index.min.mjs",
+        "format": "esm",
+        "name": "Foo",
+        "plugins": [
+          {
+            "name": "terser",
+            "numOfWorkersUsed": 0,
+            "renderChunk": [Function],
+          },
+        ],
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "buildStart": [Function],
+        "name": "esbuild",
+        "options": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+  {
+    "input": "./src/index.mts",
+    "output": [
+      {
+        "dir": "dist",
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "name": "dts",
+        "options": [Function],
+        "outputOptions": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+  {
+    "input": "./src/index.ts",
+    "output": [
+      {
+        "file": "./dist/index.js",
+        "format": "cjs",
+        "name": "Foo",
+      },
+      {
+        "file": "./dist/index.min.js",
+        "format": "cjs",
+        "name": "Foo",
+        "plugins": [
+          {
+            "name": "terser",
+            "numOfWorkersUsed": 0,
+            "renderChunk": [Function],
+          },
+        ],
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "buildStart": [Function],
+        "name": "esbuild",
+        "options": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+  {
+    "input": "./src/index.ts",
+    "output": [
+      {
+        "dir": "dist",
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "name": "dts",
+        "options": [Function],
+        "outputOptions": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+]
+`;
+
+exports[`rollup - template > with import or require conditional 2`] = `
+[
+  {
+    "input": "./src/index.cts",
+    "output": [
+      {
+        "file": "./dist/index.cjs",
+        "format": "cjs",
+        "name": "Foo",
+      },
+      {
+        "file": "./dist/index.min.cjs",
+        "format": "cjs",
+        "name": "Foo",
+        "plugins": [
+          {
+            "name": "terser",
+            "numOfWorkersUsed": 0,
+            "renderChunk": [Function],
+          },
+        ],
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "buildStart": [Function],
+        "name": "esbuild",
+        "options": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+  {
+    "input": "./src/index.cts",
+    "output": [
+      {
+        "dir": "dist",
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "name": "dts",
+        "options": [Function],
+        "outputOptions": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+  {
+    "input": "./src/index.ts",
+    "output": [
+      {
+        "file": "./dist/index.js",
+        "format": "esm",
+        "name": "Foo",
+      },
+      {
+        "file": "./dist/index.min.js",
+        "format": "esm",
+        "name": "Foo",
+        "plugins": [
+          {
+            "name": "terser",
+            "numOfWorkersUsed": 0,
+            "renderChunk": [Function],
+          },
+        ],
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "buildStart": [Function],
+        "name": "esbuild",
+        "options": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+  {
+    "input": "./src/index.ts",
+    "output": [
+      {
+        "dir": "dist",
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "name": "dts",
+        "options": [Function],
+        "outputOptions": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+]
+`;

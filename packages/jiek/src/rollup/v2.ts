@@ -148,6 +148,23 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
           }))
           break
         }
+        case 'object': {
+          getAllLeafs(keyExports as RecursiveRecord<string>, ({ keys: nextKeys, value }) => {
+            const allConditionals = [...new Set([...conditionals, ...nextKeys])]
+            if (typeof value === 'string') {
+              configs.push(...generateConfigs({
+                name,
+                input,
+                output: value,
+                outdir,
+                pkgIsModule,
+                conditionals: allConditionals
+              }))
+            }
+            return false
+          })
+          break
+        }
       }
     })
   )
