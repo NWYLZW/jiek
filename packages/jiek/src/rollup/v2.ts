@@ -57,15 +57,66 @@ const withMinify = (
   }
 ]
 
-export function template(packageJSON: PackageJSON, options: TemplateOptions) {
+const generateConfigs = ({
+  name,
+  input,
+  output,
+  outdir,
+  pkgIsModule,
+  conditionals
+}: {
+  name: string
+  input: string
+  output: string
+  outdir: string
+  pkgIsModule: boolean
+  conditionals: string[]
+}) => {
+  const isModule = conditionals.includes('import')
+  const isCommonJS = conditionals.includes('require')
+  const isBrowser = conditionals.includes('browser')
+  return [
+    {
+      input,
+      output: [
+        ...withMinify({
+          file: output,
+          name,
+          format: isModule ? 'esm' : (
+            isCommonJS ? 'cjs' : (
+              isBrowser ? 'umd' : (
+                pkgIsModule ? 'esm' : 'cjs'
+              )
+            )
+          )
+        })
+      ],
+      plugins: [
+        esbuild()
+      ]
+    },
+    {
+      input,
+      output: [
+        { dir: outdir }
+      ],
+      plugins: [
+        dts({ tsconfig: resolveWorkspacePath('tsconfig.dts.json') })
+      ]
+    }
+  ]
+}
+
+export function template(packageJSON: PackageJSON, options: TemplateOptions = {}) {
   const { name, type, exports: entrypoints } = packageJSON
+  const pkgIsModule = type === 'module'
   const outdir = 'dist'
   if (!name) throw new Error('package.json name is required')
   if (!entrypoints) throw new Error('package.json exports is required')
 
   const packageName = pascalCase(name)
   const [, resolvedEntrypoints] = resolveEntrypoints(entrypoints)
-  const exports = entrypoints2Exports(entrypoints, {})
+  const exports = entrypoints2Exports(resolvedEntrypoints, {})
   const leafMap = new Map<string, string[][]>()
   getAllLeafs(resolvedEntrypoints as RecursiveRecord<string>, ({ keys, value }) => {
     if (typeof value === 'string') {
@@ -87,27 +138,14 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions) {
 
       switch (typeof keyExports) {
         case 'string': {
-          configs.push({
+          configs.push(...generateConfigs({
+            name,
             input,
-            output: [
-              ...withMinify({
-                file: keyExports,
-                name,
-                format: type === 'module' ? 'esm' : 'cjs'
-              })
-            ],
-            plugins: [
-              esbuild()
-            ]
-          }, {
-            input,
-            output: [
-              { dir: outdir }
-            ],
-            plugins: [
-              dts({ tsconfig: resolveWorkspacePath('tsconfig.dts.json') })
-            ]
-          })
+            output: keyExports,
+            outdir,
+            pkgIsModule,
+            conditionals
+          }))
           break
         }
       }
