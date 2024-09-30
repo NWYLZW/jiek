@@ -17,9 +17,7 @@ function snapshotDistFiles(distDir: string) {
   expect(files).toMatchSnapshot()
   files.forEach((file) => {
     if (typeof file !== 'string') return
-    expect(`${file}:\n${
-      fs.readFileSync(path.resolve(distDir, file), 'utf-8')
-    }`).toMatchSnapshot()
+    expect(`${file}:\n${fs.readFileSync(path.resolve(distDir, file), 'utf-8')}`).toMatchSnapshot()
   })
   fs.rmSync(distDir, { recursive: true })
 }
