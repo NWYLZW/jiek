@@ -7,7 +7,9 @@
     "name": "Yijie",
     "email": "yijie4188@gmail.com"
   },
-  "scripts": {},
+  "scripts": {
+    "postinstall": "dprint editor-info"
+  },
   "engines": {
     "node": ">= 18.0.0"
   },
