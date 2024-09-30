@@ -1,3 +1,9 @@
+* [ ] source map for ts
+* [ ] source exports
+* [ ] cts -> only cjs, mts -> only mjs, ts -> cjs and mjs
+* conditional exports
+  * [ ] styless exports
+  * [ ] browser exports
 * [ ] 作业调度
   * [ ] 工作空间下的时候，递归按照依赖关系进行指令调度
 * [ ] 更好的 cli 交互界面
