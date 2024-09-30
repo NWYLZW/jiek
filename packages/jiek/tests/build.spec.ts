@@ -22,6 +22,42 @@ function snapshotDistFiles(distDir: string) {
   fs.rmSync(distDir, { recursive: true })
 }
 
+describe('v2', () => {
+  describe('simple', () => {
+    const [root, prefixes] = prepareRootWithSubCmd(['v2-simple'], {
+      notWorkspace: true
+    })
+    test('common', async () => {
+      process.argv = prefixes
+      program.parse(process.argv)
+      await actionFuture
+      snapshotDistFiles(path.resolve(root, 'dist'))
+    })
+  })
+  describe('simple-mjs', () => {
+    const [root, prefixes] = prepareRootWithSubCmd(['v2-simple-mjs'], {
+      notWorkspace: true
+    })
+    test('common', async () => {
+      process.argv = prefixes
+      program.parse(process.argv)
+      await actionFuture
+      snapshotDistFiles(path.resolve(root, 'dist'))
+    })
+  })
+  describe('multiple-exports', () => {
+    const [root, prefixes] = prepareRootWithSubCmd(['v2-multiple-exports'], {
+      notWorkspace: true
+    })
+    test('common', async () => {
+      process.argv = prefixes
+      program.parse(process.argv)
+      await actionFuture
+      snapshotDistFiles(path.resolve(root, 'dist'))
+    })
+  })
+})
+
 describe('base', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['base'])
   test('common', async () => {

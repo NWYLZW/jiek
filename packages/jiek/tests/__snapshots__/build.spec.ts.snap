@@ -138,6 +138,153 @@ exports[`base > common 15`] = `
 {"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":["a","b"],"mappings":"6PAAA,SAAyBA,EAAWC,GAClC,OAAOD,EAAIC,CACb"}"
 `;
 
+exports[`multiple-exports > common 1`] = `
+[
+  "foo.d.ts",
+  "foo.js",
+  "foo.min.js",
+  "foo.min.mjs",
+  "foo.mjs",
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+]
+`;
+
+exports[`multiple-exports > common 2`] = `
+"foo.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`multiple-exports > common 3`] = `
+"foo.js:
+'use strict';
+
+function foo() {
+  return "foo";
+}
+
+exports.foo = foo;
+"
+`;
+
+exports[`multiple-exports > common 4`] = `
+"foo.min.js:
+"use strict";exports.foo=function(){return"foo"};
+"
+`;
+
+exports[`multiple-exports > common 5`] = `
+"foo.min.mjs:
+function o(){return"foo"}export{o as foo};
+"
+`;
+
+exports[`multiple-exports > common 6`] = `
+"foo.mjs:
+function foo() {
+  return 'foo'
+}
+
+export { foo };
+"
+`;
+
+exports[`multiple-exports > common 7`] = `
+"index.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`multiple-exports > common 8`] = `
+"index.js:
+'use strict';
+
+function foo() {
+  return "foo";
+}
+
+exports.foo = foo;
+"
+`;
+
+exports[`multiple-exports > common 9`] = `
+"index.min.js:
+"use strict";exports.foo=function(){return"foo"};
+"
+`;
+
+exports[`simple > common 1`] = `
+[
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+]
+`;
+
+exports[`simple > common 2`] = `
+"index.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`simple > common 3`] = `
+"index.js:
+'use strict';
+
+function foo() {
+  return "foo";
+}
+
+exports.foo = foo;
+"
+`;
+
+exports[`simple > common 4`] = `
+"index.min.js:
+"use strict";exports.foo=function(){return"foo"};
+"
+`;
+
+exports[`simple-mjs > common 1`] = `
+[
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+]
+`;
+
+exports[`simple-mjs > common 2`] = `
+"index.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`simple-mjs > common 3`] = `
+"index.js:
+function foo() {
+  return "foo";
+}
+
+export { foo };
+"
+`;
+
+exports[`simple-mjs > common 4`] = `
+"index.min.js:
+function o(){return"foo"}export{o as foo};
+"
+`;
+
 exports[`single package and multiple entries > common 1`] = `
 [
   "a.d.ts",

@@ -5,7 +5,6 @@ import path from 'node:path'
 import { program } from 'commander'
 
 import { actionDone, actionRestore } from '../inner'
-import { mergePackageJson } from '../merge-package-json'
 import { getSelectedProjectsGraph } from '../utils/filterSupport'
 import { tsRegisterName } from '../utils/tsRegister'
 
@@ -17,7 +16,7 @@ const templateArg = jiek.templateArgFilePath
   : {
     styled: jiek.styled
   }
-module.exports = require('jiek/rollup').template(templateArg, pkg)
+module.exports = require('jiek/rollup.v2').template(pkg, templateArg)
 `.trimStart()
 
 program
@@ -41,13 +40,12 @@ program
       .replace(/dist\/rollup.js$/, 'dist/bin/rollup')
     let i = 0
     for (const [dir, manifest] of Object.entries(value)) {
-      const newManifest = mergePackageJson(manifest, dir, { excludeDistInExports: true })
       // TODO support auto build child packages in workspaces
       const escapeManifestName = manifest.name?.replace(/^@/g, '').replace(/\//g, '+')
       const configFile = jiekTempDir(
         `${escapeManifestName ?? `anonymous-${i++}`}.rollup.config.js`
       )
-      fs.writeFileSync(configFile, FILE_TEMPLATE(newManifest))
+      fs.writeFileSync(configFile, FILE_TEMPLATE(manifest))
       let prefix = ''
       if (tsRegisterName) {
         prefix = `node -r ${tsRegisterName} `

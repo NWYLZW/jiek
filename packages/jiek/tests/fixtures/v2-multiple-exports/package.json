@@ -1,0 +1,29 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var name = "multiple-exports";
+var version = "0.1.0";
+var exports$1 = {
+	"./package.json": "./package.json",
+	".": "./src/index.ts",
+	"./foo": {
+		"import": "./src/foo.mts",
+		"default": "./src/foo.ts"
+	}
+};
+var devDependencies = {
+	jiek: "ln:../../../../../"
+};
+var _package = {
+	name: name,
+	version: version,
+	exports: exports$1,
+	devDependencies: devDependencies
+};
+
+exports.default = _package;
+exports.devDependencies = devDependencies;
+exports.exports = exports$1;
+exports.name = name;
+exports.version = version;
