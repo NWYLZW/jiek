@@ -9,8 +9,8 @@ import { mergePackageJson } from '../merge-package-json'
 import { getSelectedProjectsGraph } from '../utils/filterSupport'
 import { tsRegisterName } from '../utils/tsRegister'
 
-const FILE_TEMPLATE = (manifest: unknown) => `
-const pkg = ${JSON.stringify(manifest, null, 2)}
+const FILE_TEMPLATE = (manifest: unknown) =>
+  `const pkg = ${JSON.stringify(manifest, null, 2)}
 const { jiek = {} } = pkg
 const templateArg = jiek.templateArgFilePath
   ? require.resolve(jiek.templateArgFilePath)
@@ -27,7 +27,8 @@ program
   .action(async ({ target, silent }) => {
     actionRestore()
     const {
-      wd, value = {}
+      wd,
+      value = {}
     } = await getSelectedProjectsGraph() ?? {}
 
     if (Object.keys(value).length === 0) {
@@ -54,7 +55,8 @@ program
       // TODO replace with `spawn` to support watch mode
       const command = `${prefix}${rollupBinaryPath} --silent -c ${configFile}`
       childProcess.execSync(command, {
-        cwd: dir, stdio: 'inherit',
+        cwd: dir,
+        stdio: 'inherit',
         env: {
           JIEK_TARGET: target ?? process.env.JIEK_TARGET ?? 'esm,umd,dts',
           JIEK_SILENT: `${silent}` ?? process.env.JIEK_SILENT,
