@@ -104,6 +104,38 @@ type GetAllLeafsShouldSkip = (context: {
   level: number
 }) => boolean
 
+export function filterLeafs(
+  obj: RecursiveRecord<string>,
+  {
+    skipKey = DEFAULT_SKIP_KEYS,
+    skipValue = DEFAULT_SKIP_VALUES
+  }: Pick<Entrypoints2ExportsOptions, 'skipKey' | 'skipValue'> = {}
+): RecursiveRecord<string> {
+  return deepClone(obj, {
+    filter: (keys, value) => {
+      const key = keys[keys.length - 1]
+      if (
+        keys.length === 1 && skipKey && skipKey.some(k => {
+          if (typeof k === 'string') {
+            return key === k
+          }
+          if (typeof key === 'string') {
+            return key.match(k)
+          }
+          return false
+        })
+      ) {
+        return false
+      }
+      // noinspection RedundantIfStatementJS
+      if (typeof value === 'string' && skipValue && skipValue.some(v => value.match(v))) {
+        return false
+      }
+      return true
+    }
+  }) as RecursiveRecord<string>
+}
+
 export function getAllLeafs(
   obj: RecursiveRecord<string>,
   shouldSkip?: GetAllLeafsShouldSkip,
@@ -175,29 +207,7 @@ export function resolveEntrypoints(
       entrypointMapping = entrypoints
       // 叶子节点列表需要按照配置的规则过滤掉，这些被过滤掉的叶子结点不需要参与到共用目录的计算
       const leafs = [
-        ...new Set(getAllLeafs(deepClone(entrypoints, {
-          filter: (keys, value) => {
-            const key = keys[keys.length - 1]
-            if (
-              keys.length === 1 && skipKey && skipKey.some(k => {
-                if (typeof k === 'string') {
-                  return key === k
-                }
-                if (typeof key === 'string') {
-                  return key.match(k)
-                }
-                return false
-              })
-            ) {
-              return false
-            }
-            // noinspection RedundantIfStatementJS
-            if (typeof value === 'string' && skipValue && skipValue.some(v => value.match(v))) {
-              return false
-            }
-            return true
-          }
-        }) as RecursiveRecord<string>))
+        ...new Set(getAllLeafs(filterLeafs(entrypoints as RecursiveRecord<string>, { skipKey, skipValue })))
       ]
       dir = leafs.length > 1
         ? commondir(leafs, cwd)
