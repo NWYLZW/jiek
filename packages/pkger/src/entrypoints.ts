@@ -173,20 +173,31 @@ export function resolveEntrypoints(
   } else {
     if (typeof entrypoints === 'object') {
       entrypointMapping = entrypoints
+      // 叶子节点列表需要按照配置的规则过滤掉，这些被过滤掉的叶子结点不需要参与到共用目录的计算
       const leafs = [
-        ...new Set(getAllLeafs(
-          entrypoints as RecursiveRecord<string>,
-          ({ key, value, level }) => {
-            let is = false
-            if (level === 1) {
-              is ||= skipKey && skipKey.some(k => key.match(k))
+        ...new Set(getAllLeafs(deepClone(entrypoints, {
+          filter: (keys, value) => {
+            const key = keys[keys.length - 1]
+            if (
+              keys.length === 1 && skipKey && skipKey.some(k => {
+                if (typeof k === 'string') {
+                  return key === k
+                }
+                if (typeof key === 'string') {
+                  return key.match(k)
+                }
+                return false
+              })
+            ) {
+              return false
             }
-            if (typeof value === 'string') {
-              is ||= skipValue && skipValue.some(v => value.match(v))
+            // noinspection RedundantIfStatementJS
+            if (typeof value === 'string' && skipValue && skipValue.some(v => value.match(v))) {
+              return false
             }
-            return is
+            return true
           }
-        ))
+        }) as RecursiveRecord<string>))
       ]
       dir = leafs.length > 1
         ? commondir(leafs, cwd)
