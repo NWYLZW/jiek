@@ -1,6 +1,7 @@
 import { resolve } from 'node:path'
 
 import type { RecursiveRecord } from '@jiek/pkger/entrypoints'
+import { filterLeafs } from '@jiek/pkger/entrypoints'
 import { entrypoints2Exports, getAllLeafs, resolveEntrypoints } from '@jiek/pkger/entrypoints'
 import { dts } from '@jiek/rollup-plugin-dts'
 import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
@@ -115,10 +116,16 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
   if (!entrypoints) throw new Error('package.json exports is required')
 
   const packageName = pascalCase(name)
+
   const [, resolvedEntrypoints] = resolveEntrypoints(entrypoints)
-  const exports = entrypoints2Exports(resolvedEntrypoints, {})
+  const filteredResolvedEntrypoints = filterLeafs(
+    resolvedEntrypoints as RecursiveRecord<string>,
+    {}
+  )
+  const exports = entrypoints2Exports(filteredResolvedEntrypoints, {})
+
   const leafMap = new Map<string, string[][]>()
-  getAllLeafs(resolvedEntrypoints as RecursiveRecord<string>, ({ keys, value }) => {
+  getAllLeafs(filteredResolvedEntrypoints as RecursiveRecord<string>, ({ keys, value }) => {
     if (typeof value === 'string') {
       const keysArr = leafMap.get(value) ?? []
       leafMap.set(value, keysArr)
@@ -126,6 +133,7 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
     }
     return false
   })
+
   const configs: (RollupOptions & {
     plugins: Plugin[]
   })[] = []
