@@ -1,6 +1,51 @@
-import { describe, expect, test } from 'vitest'
+import { describe, expect, it, test } from 'vitest'
 
-import { entrypoints2Exports } from '#~/entrypoints.ts'
+import { deepClone, entrypoints2Exports } from '#~/entrypoints.ts'
+
+describe('deepClone', () => {
+  it('should deep clone object', () => {
+    const obj = {
+      a: {
+        b: {
+          c: 'd'
+        }
+      }
+    }
+    const cloned = deepClone(obj)
+    expect(cloned).toStrictEqual(obj)
+    expect(cloned).not.toBe(obj)
+    expect(cloned).property('a').deep.equal(obj.a)
+    expect(cloned).property('a').property('b').deep.equal(obj.a.b)
+  })
+  it('should deep clone object with filter', () => {
+    const obj = {
+      a: {
+        b: {
+          c: 'd'
+        }
+      }
+    }
+    const cloned = deepClone(obj, {
+      filter: keys => keys.join('.') === 'a.b'
+    })
+    expect(cloned).toStrictEqual({})
+  })
+  // filter deep clone and with other keys is not filtered
+  it('should deep clone object with filter and other keys', () => {
+    const obj = {
+      a: {
+        b: {
+          c: 'd'
+        }
+      },
+      e: 'f'
+    }
+    const cloned = deepClone(obj, {
+      filter: keys => keys.join('.') !== 'a.b'
+    })
+    expect(cloned).toStrictEqual({ e: 'f' })
+  })
+})
 
 describe('entrypoints2Exports', () => {
   test('single file', () => {

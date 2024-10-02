@@ -2,6 +2,46 @@ import path from 'node:path'
 
 import { commondir } from '@jiek/utils/commondir'
 
+type Cloneable = Record<PropertyKey, unknown> | unknown[]
+
+export const deepClone = (
+  obj: Cloneable,
+  {
+    filter
+  }: {
+    filter?: (keys: PropertyKey[], value: unknown) => boolean
+  } = {},
+  keys: PropertyKey[] = []
+) => {
+  return Array.isArray(obj)
+    ? obj
+      .filter((_, i) => {
+        return !(filter && !filter(keys, obj[i]))
+      })
+      .map((value, i): unknown => {
+        const newKeys = [...keys, i]
+        if (typeof value === 'object' && value !== null) {
+          return deepClone(value as Cloneable, { filter }, newKeys)
+        }
+        return value
+      })
+    : Object
+      .entries(obj as Record<PropertyKey, unknown>)
+      .reduce((acc, [key, value]) => {
+        const newKeys = [...keys, key]
+        if (filter && !filter(newKeys, value)) return acc
+        if (typeof value === 'object' && value !== null) {
+          const newValue = deepClone(value as Cloneable, { filter }, newKeys)
+          if (Object.keys(newValue).length !== 0) {
+            acc[key] = newValue
+          }
+        } else {
+          acc[key] = value
+        }
+        return acc
+      }, {} as Record<PropertyKey, unknown>)
+}
+
 export const DEFAULT_SKIP_KEYS = [
   /\.json$/,
   /\.d(\..*)?\.ts$/,
