@@ -367,3 +367,196 @@ exports[`rollup - template > with import or require conditional 2`] = `
   },
 ]
 `;
+
+exports[`rollup - template > with package.json and *.d.ts export files and should skip it 1`] = `[]`;
+
+exports[`rollup - template > with package.json and *.d.ts export files and should skip it 2`] = `
+[
+  {
+    "input": "./src/index.ts",
+    "output": [
+      {
+        "file": "./dist/index.js",
+        "format": "cjs",
+        "name": "Foo",
+      },
+      {
+        "file": "./dist/index.min.js",
+        "format": "cjs",
+        "name": "Foo",
+        "plugins": [
+          {
+            "name": "terser",
+            "numOfWorkersUsed": 0,
+            "renderChunk": [Function],
+          },
+        ],
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "buildStart": [Function],
+        "name": "esbuild",
+        "options": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+  {
+    "input": "./src/index.ts",
+    "output": [
+      {
+        "dir": "dist",
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "name": "dts",
+        "options": [Function],
+        "outputOptions": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+]
+`;
+
+exports[`rollup - template > with package.json and *.d.ts export files and should skip it 3`] = `
+[
+  {
+    "input": "./src/index.ts",
+    "output": [
+      {
+        "file": "./dist/index.js",
+        "format": "cjs",
+        "name": "Foo",
+      },
+      {
+        "file": "./dist/index.min.js",
+        "format": "cjs",
+        "name": "Foo",
+        "plugins": [
+          {
+            "name": "terser",
+            "numOfWorkersUsed": 0,
+            "renderChunk": [Function],
+          },
+        ],
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "buildStart": [Function],
+        "name": "esbuild",
+        "options": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+  {
+    "input": "./src/index.ts",
+    "output": [
+      {
+        "dir": "dist",
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "name": "dts",
+        "options": [Function],
+        "outputOptions": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+]
+`;
+
+exports[`rollup - template > with package.json export and should skip it 1`] = `[]`;
+
+exports[`rollup - template > with package.json export and should skip it 2`] = `
+[
+  {
+    "input": "./src/index.ts",
+    "output": [
+      {
+        "file": "./dist/index.js",
+        "format": "cjs",
+        "name": "Foo",
+      },
+      {
+        "file": "./dist/index.min.js",
+        "format": "cjs",
+        "name": "Foo",
+        "plugins": [
+          {
+            "name": "terser",
+            "numOfWorkersUsed": 0,
+            "renderChunk": [Function],
+          },
+        ],
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "buildStart": [Function],
+        "name": "esbuild",
+        "options": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+  {
+    "input": "./src/index.ts",
+    "output": [
+      {
+        "dir": "dist",
+      },
+    ],
+    "plugins": [
+      {
+        "name": "json",
+        "transform": [Function],
+      },
+      {
+        "name": "dts",
+        "options": [Function],
+        "outputOptions": [Function],
+        "renderChunk": [Function],
+        "resolveId": [Function],
+        "transform": [Function],
+      },
+    ],
+  },
+]
+`;

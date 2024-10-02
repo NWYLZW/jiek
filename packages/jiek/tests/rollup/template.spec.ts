@@ -13,14 +13,28 @@ describe('rollup - template', () => {
       exports: './src/index.ts'
     })).toMatchSnapshot()
   })
-  test('with package.json export and should skip it', () => {
-    template({
+  test('with package.json and *.d.ts export files and should skip it', () => {
+    expect(template({
+      name: 'foo',
+      exports: {
+        './package.json': './package.json'
+      }
+    })).toMatchSnapshot()
+    expect(template({
       name: 'foo',
       exports: {
         './package.json': './package.json',
         '.': './src/index.ts'
       }
-    }).forEach(c => console.log(c))
+    })).toMatchSnapshot()
+    expect(template({
+      name: 'foo',
+      exports: {
+        './package.json': './package.json',
+        '.': './src/index.ts',
+        './foo': './src/foo.d.ts'
+      }
+    })).toMatchSnapshot()
   })
   test('with import or require conditional', () => {
     expect(template({
