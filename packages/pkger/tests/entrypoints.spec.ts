@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 
-import { entrypoints2Exports } from '.././src/entrypoints'
+import { entrypoints2Exports } from '#~/entrypoints.ts'
 
 describe('entrypoints2Exports', () => {
   test('single file', () => {

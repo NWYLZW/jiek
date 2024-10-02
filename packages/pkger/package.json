@@ -10,5 +10,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./entrypoints": "./src/entrypoints.ts"
+  },
+  "imports": {
+    "#~/*": "./src/*"
   }
 }
