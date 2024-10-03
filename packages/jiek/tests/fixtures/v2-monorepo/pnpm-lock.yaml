@@ -1,0 +1,17 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .: {}
+
+  packages/bar: {}
+
+  packages/foo:
+    dependencies:
+      '@jiek/test-monorepo-bar':
+        specifier: workspace:^*
+        version: link:../bar
