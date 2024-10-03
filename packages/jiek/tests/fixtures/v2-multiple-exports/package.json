@@ -8,8 +8,5 @@
       "import": "./src/foo.mts",
       "default": "./src/foo.ts"
     }
-  },
-  "devDependencies": {
-    "jiek": "ln:../../../../../"
   }
 }

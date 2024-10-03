@@ -6,8 +6,4 @@ settings:
 
 importers:
 
-  .:
-    devDependencies:
-      jiek:
-        specifier: ln:../../../../../
-        version: link:../../..
+  .: {}
