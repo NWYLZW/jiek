@@ -1322,6 +1322,87 @@ exports[`unordered exports inputs > common 31`] = `
 {"version":3,"file":"b.umd.min.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
 `;
 
+exports[`v2 > multiple-exports > common 1`] = `
+[
+  "foo.d.ts",
+  "foo.js",
+  "foo.min.js",
+  "foo.min.mjs",
+  "foo.mjs",
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+]
+`;
+
+exports[`v2 > multiple-exports > common 2`] = `
+"foo.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`v2 > multiple-exports > common 3`] = `
+"foo.js:
+'use strict';
+
+function foo() {
+  return "foo";
+}
+
+exports.foo = foo;
+"
+`;
+
+exports[`v2 > multiple-exports > common 4`] = `
+"foo.min.js:
+"use strict";exports.foo=function(){return"foo"};
+"
+`;
+
+exports[`v2 > multiple-exports > common 5`] = `
+"foo.min.mjs:
+function o(){return"foo"}export{o as foo};
+"
+`;
+
+exports[`v2 > multiple-exports > common 6`] = `
+"foo.mjs:
+function foo() {
+  return 'foo'
+}
+
+export { foo };
+"
+`;
+
+exports[`v2 > multiple-exports > common 7`] = `
+"index.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`v2 > multiple-exports > common 8`] = `
+"index.js:
+'use strict';
+
+function foo() {
+  return "foo";
+}
+
+exports.foo = foo;
+"
+`;
+
+exports[`v2 > multiple-exports > common 9`] = `
+"index.min.js:
+"use strict";exports.foo=function(){return"foo"};
+"
+`;
+
 exports[`with no resolve exports > common 1`] = `
 [
   "index.d.ts",
