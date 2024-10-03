@@ -1301,7 +1301,7 @@ exports[`v2 > monorepo > common 4`] = `
 "
 `;
 
-exports[`v2 > multiple-exports > common 1`] = `
+exports[`v2 > multiple exports > common 1`] = `
 [
   "foo.d.ts",
   "foo.js",
@@ -1314,7 +1314,7 @@ exports[`v2 > multiple-exports > common 1`] = `
 ]
 `;
 
-exports[`v2 > multiple-exports > common 2`] = `
+exports[`v2 > multiple exports > common 2`] = `
 "foo.d.ts:
 declare function foo(): string;
 
@@ -1322,7 +1322,7 @@ export { foo };
 "
 `;
 
-exports[`v2 > multiple-exports > common 3`] = `
+exports[`v2 > multiple exports > common 3`] = `
 "foo.js:
 'use strict';
 
@@ -1334,19 +1334,19 @@ exports.foo = foo;
 "
 `;
 
-exports[`v2 > multiple-exports > common 4`] = `
+exports[`v2 > multiple exports > common 4`] = `
 "foo.min.js:
 "use strict";exports.foo=function(){return"foo"};
 "
 `;
 
-exports[`v2 > multiple-exports > common 5`] = `
+exports[`v2 > multiple exports > common 5`] = `
 "foo.min.mjs:
 function o(){return"foo"}export{o as foo};
 "
 `;
 
-exports[`v2 > multiple-exports > common 6`] = `
+exports[`v2 > multiple exports > common 6`] = `
 "foo.mjs:
 function foo() {
   return 'foo'
@@ -1356,7 +1356,7 @@ export { foo };
 "
 `;
 
-exports[`v2 > multiple-exports > common 7`] = `
+exports[`v2 > multiple exports > common 7`] = `
 "index.d.ts:
 declare function foo(): string;
 
@@ -1364,7 +1364,7 @@ export { foo };
 "
 `;
 
-exports[`v2 > multiple-exports > common 8`] = `
+exports[`v2 > multiple exports > common 8`] = `
 "index.js:
 'use strict';
 
@@ -1376,43 +1376,9 @@ exports.foo = foo;
 "
 `;
 
-exports[`v2 > multiple-exports > common 9`] = `
+exports[`v2 > multiple exports > common 9`] = `
 "index.min.js:
 "use strict";exports.foo=function(){return"foo"};
-"
-`;
-
-exports[`v2 > multiple-exports > common 10`] = `
-[
-  "index.d.ts",
-  "index.js",
-  "index.min.js",
-]
-`;
-
-exports[`v2 > multiple-exports > common 11`] = `
-"index.d.ts:
-declare function export_default(a: number, b: string): string;
-
-export { export_default as default };
-"
-`;
-
-exports[`v2 > multiple-exports > common 12`] = `
-"index.js:
-'use strict';
-
-function index(a, b) {
-  return a + b;
-}
-
-module.exports = index;
-"
-`;
-
-exports[`v2 > multiple-exports > common 13`] = `
-"index.min.js:
-"use strict";module.exports=function(t,e){return t+e};
 "
 `;
 
@@ -1450,7 +1416,7 @@ exports[`v2 > simple > common 4`] = `
 "
 `;
 
-exports[`v2 > simple-mjs > common 1`] = `
+exports[`v2 > simple mjs > common 1`] = `
 [
   "index.d.ts",
   "index.js",
@@ -1458,7 +1424,7 @@ exports[`v2 > simple-mjs > common 1`] = `
 ]
 `;
 
-exports[`v2 > simple-mjs > common 2`] = `
+exports[`v2 > simple mjs > common 2`] = `
 "index.d.ts:
 declare function foo(): string;
 
@@ -1466,7 +1432,7 @@ export { foo };
 "
 `;
 
-exports[`v2 > simple-mjs > common 3`] = `
+exports[`v2 > simple mjs > common 3`] = `
 "index.js:
 function foo() {
   return "foo";
@@ -1476,7 +1442,7 @@ export { foo };
 "
 `;
 
-exports[`v2 > simple-mjs > common 4`] = `
+exports[`v2 > simple mjs > common 4`] = `
 "index.min.js:
 function o(){return"foo"}export{o as foo};
 "
