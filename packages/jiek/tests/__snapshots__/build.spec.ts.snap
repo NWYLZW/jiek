@@ -138,153 +138,6 @@ exports[`base > common 15`] = `
 {"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":["a","b"],"mappings":"6PAAA,SAAyBA,EAAWC,GAClC,OAAOD,EAAIC,CACb"}"
 `;
 
-exports[`multiple-exports > common 1`] = `
-[
-  "foo.d.ts",
-  "foo.js",
-  "foo.min.js",
-  "foo.min.mjs",
-  "foo.mjs",
-  "index.d.ts",
-  "index.js",
-  "index.min.js",
-]
-`;
-
-exports[`multiple-exports > common 2`] = `
-"foo.d.ts:
-declare function foo(): string;
-
-export { foo };
-"
-`;
-
-exports[`multiple-exports > common 3`] = `
-"foo.js:
-'use strict';
-
-function foo() {
-  return "foo";
-}
-
-exports.foo = foo;
-"
-`;
-
-exports[`multiple-exports > common 4`] = `
-"foo.min.js:
-"use strict";exports.foo=function(){return"foo"};
-"
-`;
-
-exports[`multiple-exports > common 5`] = `
-"foo.min.mjs:
-function o(){return"foo"}export{o as foo};
-"
-`;
-
-exports[`multiple-exports > common 6`] = `
-"foo.mjs:
-function foo() {
-  return 'foo'
-}
-
-export { foo };
-"
-`;
-
-exports[`multiple-exports > common 7`] = `
-"index.d.ts:
-declare function foo(): string;
-
-export { foo };
-"
-`;
-
-exports[`multiple-exports > common 8`] = `
-"index.js:
-'use strict';
-
-function foo() {
-  return "foo";
-}
-
-exports.foo = foo;
-"
-`;
-
-exports[`multiple-exports > common 9`] = `
-"index.min.js:
-"use strict";exports.foo=function(){return"foo"};
-"
-`;
-
-exports[`simple > common 1`] = `
-[
-  "index.d.ts",
-  "index.js",
-  "index.min.js",
-]
-`;
-
-exports[`simple > common 2`] = `
-"index.d.ts:
-declare function foo(): string;
-
-export { foo };
-"
-`;
-
-exports[`simple > common 3`] = `
-"index.js:
-'use strict';
-
-function foo() {
-  return "foo";
-}
-
-exports.foo = foo;
-"
-`;
-
-exports[`simple > common 4`] = `
-"index.min.js:
-"use strict";exports.foo=function(){return"foo"};
-"
-`;
-
-exports[`simple-mjs > common 1`] = `
-[
-  "index.d.ts",
-  "index.js",
-  "index.min.js",
-]
-`;
-
-exports[`simple-mjs > common 2`] = `
-"index.d.ts:
-declare function foo(): string;
-
-export { foo };
-"
-`;
-
-exports[`simple-mjs > common 3`] = `
-"index.js:
-function foo() {
-  return "foo";
-}
-
-export { foo };
-"
-`;
-
-exports[`simple-mjs > common 4`] = `
-"index.min.js:
-function o(){return"foo"}export{o as foo};
-"
-`;
-
 exports[`single package and multiple entries > common 1`] = `
 [
   "a.d.ts",
@@ -1322,6 +1175,86 @@ exports[`unordered exports inputs > common 31`] = `
 {"version":3,"file":"b.umd.min.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
 `;
 
+exports[`v2 > monorepo > build bar 1`] = `
+[
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+]
+`;
+
+exports[`v2 > monorepo > build bar 2`] = `
+"index.d.ts:
+declare function bar(a: number, b: number): number;
+
+export { bar };
+"
+`;
+
+exports[`v2 > monorepo > build bar 3`] = `
+"index.js:
+'use strict';
+
+function bar(a, b) {
+  return a - b;
+}
+
+exports.bar = bar;
+"
+`;
+
+exports[`v2 > monorepo > build bar 4`] = `
+"index.min.js:
+"use strict";exports.bar=function(r,t){return r-t};
+"
+`;
+
+exports[`v2 > monorepo > build foo 1`] = `
+[
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+]
+`;
+
+exports[`v2 > monorepo > build foo 2`] = `
+"index.d.ts:
+export * from '@jiek/test-monorepo-bar';
+
+declare function export_default(a: number, b: string): string;
+
+export { export_default as default };
+"
+`;
+
+exports[`v2 > monorepo > build foo 3`] = `
+"index.js:
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var testMonorepoBar = require('@jiek/test-monorepo-bar');
+
+function index(a, b) {
+  return a + b;
+}
+
+exports.default = index;
+Object.keys(testMonorepoBar).forEach(function (k) {
+  if (k !== 'default' && !Object.prototype.hasOwnProperty.call(exports, k)) Object.defineProperty(exports, k, {
+    enumerable: true,
+    get: function () { return testMonorepoBar[k]; }
+  });
+});
+"
+`;
+
+exports[`v2 > monorepo > build foo 4`] = `
+"index.min.js:
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("@jiek/test-monorepo-bar");exports.default=function(e,t){return e+t},Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})}));
+"
+`;
+
 exports[`v2 > monorepo > common 1`] = `
 [
   "index.d.ts",
@@ -1332,6 +1265,8 @@ exports[`v2 > monorepo > common 1`] = `
 
 exports[`v2 > monorepo > common 2`] = `
 "index.d.ts:
+export * from '@jiek/test-monorepo-bar';
+
 declare function export_default(a: number, b: string): string;
 
 export { export_default as default };
@@ -1342,17 +1277,27 @@ exports[`v2 > monorepo > common 3`] = `
 "index.js:
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var testMonorepoBar = require('@jiek/test-monorepo-bar');
+
 function index(a, b) {
   return a + b;
 }
 
-module.exports = index;
+exports.default = index;
+Object.keys(testMonorepoBar).forEach(function (k) {
+  if (k !== 'default' && !Object.prototype.hasOwnProperty.call(exports, k)) Object.defineProperty(exports, k, {
+    enumerable: true,
+    get: function () { return testMonorepoBar[k]; }
+  });
+});
 "
 `;
 
 exports[`v2 > monorepo > common 4`] = `
 "index.min.js:
-"use strict";module.exports=function(t,e){return t+e};
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("@jiek/test-monorepo-bar");exports.default=function(e,t){return e+t},Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})}));
 "
 `;
 

@@ -53,8 +53,12 @@ describe('v2', () => {
   describe('monorepo', () => {
     const [root, prefixes] = prepareRootWithSubCmd(['v2-monorepo'])
     test(
-      'common',
+      'build foo',
       runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-foo', root, prefixes, 'packages/foo/dist')
+    )
+    test(
+      'build bar',
+      runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-bar', root, prefixes, 'packages/bar/dist')
     )
   })
 })
