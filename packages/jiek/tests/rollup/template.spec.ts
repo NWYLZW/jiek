@@ -32,7 +32,10 @@ describe('rollup - template', () => {
       exports: {
         './package.json': './package.json',
         '.': './src/index.ts',
-        './foo': './src/foo.d.ts'
+        './foo': './src/foo.d.ts',
+        './bar.0': './.jk-noentry.bar.ts',
+        './bar.1': './.jk-noentry/bar.ts',
+        './bar.2': './.jk-noentry-bar.ts'
       }
     })).toMatchSnapshot()
   })

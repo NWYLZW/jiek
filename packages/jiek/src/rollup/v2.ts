@@ -1,6 +1,6 @@
 import { resolve } from 'node:path'
 
-import type { RecursiveRecord } from '@jiek/pkger/entrypoints'
+import { DEFAULT_SKIP_VALUES, RecursiveRecord } from '@jiek/pkger/entrypoints'
 import { filterLeafs } from '@jiek/pkger/entrypoints'
 import { entrypoints2Exports, getAllLeafs, resolveEntrypoints } from '@jiek/pkger/entrypoints'
 import { dts } from '@jiek/rollup-plugin-dts'
@@ -120,7 +120,13 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
   const [, resolvedEntrypoints] = resolveEntrypoints(entrypoints)
   const filteredResolvedEntrypoints = filterLeafs(
     resolvedEntrypoints as RecursiveRecord<string>,
-    {}
+    {
+      skipValue: [
+        // ignore values that filename start with `.jk-noentry`
+        /(^|\/)\.jk-noentry/,
+        ...DEFAULT_SKIP_VALUES
+      ]
+    }
   )
   const exports = entrypoints2Exports(filteredResolvedEntrypoints, {})
 
