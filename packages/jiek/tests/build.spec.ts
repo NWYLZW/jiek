@@ -7,7 +7,8 @@ import path from 'node:path'
 import { program } from 'commander'
 import { describe, expect, test } from 'vitest'
 
-import { actionFuture } from '../src/inner'
+import { actionFuture } from '#~/inner.ts'
+
 import { prepareROOT } from './prepareROOT'
 
 const prepareRootWithSubCmd = prepareROOT.bind(null, 'build')

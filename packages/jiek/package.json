@@ -18,6 +18,9 @@
     "./rollup": "./src/rollup/index.ts",
     "./rollup.v2": "./src/rollup/v2.ts"
   },
+  "imports": {
+    "#~/*": "./src/*"
+  },
   "dependencies": {
     "@jiek/pkger": "workspace:^",
     "@jiek/utils": "workspace:^",
