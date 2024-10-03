@@ -31,6 +31,14 @@ export function prepareROOT(
   })
   afterAll(() => {
     fs.rmSync(path.resolve(ROOT, 'node_modules'), { recursive: true })
+    fs.readdirSync(path.resolve(ROOT, 'packages'))
+      .forEach(pkg => {
+        if (typeof pkg !== 'string') return
+        const nodeModulesPath = path.resolve(ROOT, 'packages', pkg, 'node_modules')
+        if (!fs.existsSync(nodeModulesPath)) return
+        if (!fs.statSync(nodeModulesPath).isDirectory()) return
+        fs.rmSync(nodeModulesPath, { recursive: true })
+      })
   })
   return [ROOT, [...commonPrefixes, command, '--root', ROOT]] as [string, string[]]
 }
