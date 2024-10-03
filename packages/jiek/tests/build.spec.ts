@@ -1,6 +1,7 @@
 import '../src/commands/base'
 import '../src/commands/build'
 
+import childProcess from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 
@@ -23,39 +24,31 @@ function snapshotDistFiles(distDir: string) {
   fs.rmSync(distDir, { recursive: true })
 }
 
+function runCommandAndSnapshotDistFiles(cmd: string, root: string, prefixes: string[]) {
+  const cliBinPath = path.resolve(__dirname, '../bin/jiek.js')
+  const args = ['node', cliBinPath, cmd, ...prefixes].join(' ')
+  childProcess.execSync(args, { cwd: root, stdio: 'inherit' })
+  snapshotDistFiles(path.resolve(root, 'dist'))
+}
+
 describe('v2', () => {
   describe('simple', () => {
     const [root, prefixes] = prepareRootWithSubCmd(['v2-simple'], {
       notWorkspace: true
     })
-    test('common', async () => {
-      process.argv = prefixes
-      program.parse(process.argv)
-      await actionFuture
-      snapshotDistFiles(path.resolve(root, 'dist'))
-    })
+    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes))
   })
   describe('simple-mjs', () => {
     const [root, prefixes] = prepareRootWithSubCmd(['v2-simple-mjs'], {
       notWorkspace: true
     })
-    test('common', async () => {
-      process.argv = prefixes
-      program.parse(process.argv)
-      await actionFuture
-      snapshotDistFiles(path.resolve(root, 'dist'))
-    })
+    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes))
   })
   describe('multiple-exports', () => {
     const [root, prefixes] = prepareRootWithSubCmd(['v2-multiple-exports'], {
       notWorkspace: true
     })
-    test('common', async () => {
-      process.argv = prefixes
-      program.parse(process.argv)
-      await actionFuture
-      snapshotDistFiles(path.resolve(root, 'dist'))
-    })
+    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes))
   })
 })
 
