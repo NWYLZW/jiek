@@ -28,7 +28,7 @@ function runCommandAndSnapshotDistFiles(cmd: string, root: string, prefixes: str
   const cliBinPath = path.resolve(__dirname, '../bin/jiek.js')
   const args = ['node', cliBinPath, cmd, ...prefixes].join(' ')
   childProcess.execSync(args, { cwd: root, stdio: 'inherit' })
-  // snapshotDistFiles(path.resolve(root, distPath))
+  snapshotDistFiles(path.resolve(root, distPath))
 }
 
 describe('v2', () => {
@@ -52,6 +52,12 @@ describe('v2', () => {
   })
   describe('unordered exports inputs', () => {
     const [root, prefixes] = prepareRootWithSubCmd(['v2-unordered-exports_input'], {
+      notWorkspace: true
+    })
+    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
+  })
+  describe('with no resolve exports', () => {
+    const [root, prefixes] = prepareRootWithSubCmd(['v2-with-no-resolve-export'], {
       notWorkspace: true
     })
     test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))

@@ -1,9 +1,6 @@
 {
   "name": "with-no-resolve-export",
   "version": "0.1.0",
-  "devDependencies": {
-    "jiek": "ln:../../../../../"
-  },
   "exports": {
     ".": "./src/index.ts",
     "./test.css": "./dist/test.css"
