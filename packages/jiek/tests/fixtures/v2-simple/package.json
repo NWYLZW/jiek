@@ -1,8 +1,5 @@
 {
   "name": "simple",
   "version": "0.1.0",
-  "exports": "./src/index.ts",
-  "devDependencies": {
-    "jiek": "ln:../../../../../"
-  }
+  "exports": "./src/index.ts"
 }
