@@ -1,6 +1,7 @@
 import { resolve } from 'node:path'
 
-import { DEFAULT_SKIP_VALUES, RecursiveRecord } from '@jiek/pkger/entrypoints'
+import type { RecursiveRecord } from '@jiek/pkger/entrypoints'
+import { DEFAULT_SKIP_VALUES } from '@jiek/pkger/entrypoints'
 import { filterLeafs } from '@jiek/pkger/entrypoints'
 import { entrypoints2Exports, getAllLeafs, resolveEntrypoints } from '@jiek/pkger/entrypoints'
 import { dts } from '@jiek/rollup-plugin-dts'
