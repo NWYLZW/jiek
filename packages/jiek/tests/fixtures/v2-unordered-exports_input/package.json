@@ -7,8 +7,5 @@
   },
   "dependencies": {
     "unordered-exports_input": "file:."
-  },
-  "devDependencies": {
-    "jiek": "ln:../../../../../"
   }
 }

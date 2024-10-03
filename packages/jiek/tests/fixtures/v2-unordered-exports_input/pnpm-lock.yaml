@@ -1,0 +1,22 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      unordered-exports_input:
+        specifier: file:.
+        version: 'file:'
+
+packages:
+
+  'unordered-exports_input@file:':
+    resolution: {directory: '', type: directory}
+
+snapshots:
+
+  'unordered-exports_input@file:': {}

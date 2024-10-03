@@ -1482,6 +1482,63 @@ function o(){return"foo"}export{o as foo};
 "
 `;
 
+exports[`v2 > unordered exports inputs > common 1`] = `
+[
+  "a.d.ts",
+  "a.js",
+  "a.min.js",
+  "b.d.ts",
+  "b.js",
+  "b.min.js",
+]
+`;
+
+exports[`v2 > unordered exports inputs > common 2`] = `
+"a.d.ts:
+type A = 'a';
+
+export type { A };
+"
+`;
+
+exports[`v2 > unordered exports inputs > common 3`] = `
+"a.js:
+'use strict';
+
+"
+`;
+
+exports[`v2 > unordered exports inputs > common 4`] = `
+"a.min.js:
+"use strict";
+"
+`;
+
+exports[`v2 > unordered exports inputs > common 5`] = `
+"b.d.ts:
+type BDepDep = 1;
+
+type BDep = BDepDep;
+
+type B = BDep;
+
+export type { B };
+"
+`;
+
+exports[`v2 > unordered exports inputs > common 6`] = `
+"b.js:
+'use strict';
+
+"
+`;
+
+exports[`v2 > unordered exports inputs > common 7`] = `
+"b.min.js:
+"use strict";
+"
+`;
+
 exports[`with no resolve exports > common 1`] = `
 [
   "index.d.ts",

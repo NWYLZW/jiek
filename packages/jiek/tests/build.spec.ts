@@ -50,6 +50,12 @@ describe('v2', () => {
     })
     test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
   })
+  describe('unordered exports inputs', () => {
+    const [root, prefixes] = prepareRootWithSubCmd(['v2-unordered-exports_input'], {
+      notWorkspace: true
+    })
+    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
+  })
   describe('monorepo', () => {
     const [root, prefixes] = prepareRootWithSubCmd(['v2-monorepo'])
     test(
