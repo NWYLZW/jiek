@@ -1,14 +1,8 @@
-import '../src/commands/base'
-import '../src/commands/build'
-
 import childProcess from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { program } from 'commander'
 import { describe, expect, test } from 'vitest'
-
-import { actionFuture } from '#~/inner.ts'
 
 import { prepareROOT } from './prepareROOT'
 
@@ -31,100 +25,44 @@ function runCommandAndSnapshotDistFiles(cmd: string, root: string, prefixes: str
   snapshotDistFiles(path.resolve(root, distPath))
 }
 
-describe('v2', () => {
-  describe('simple', () => {
-    const [root, prefixes] = prepareRootWithSubCmd(['v2-simple'], {
-      notWorkspace: true
-    })
-    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
-  })
-  describe('simple mjs', () => {
-    const [root, prefixes] = prepareRootWithSubCmd(['v2-simple-mjs'], {
-      notWorkspace: true
-    })
-    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
-  })
-  describe('multiple exports', () => {
-    const [root, prefixes] = prepareRootWithSubCmd(['v2-multiple-exports'], {
-      notWorkspace: true
-    })
-    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
-  })
-  describe('unordered exports inputs', () => {
-    const [root, prefixes] = prepareRootWithSubCmd(['v2-unordered-exports_input'], {
-      notWorkspace: true
-    })
-    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
-  })
-  describe('with no resolve exports', () => {
-    const [root, prefixes] = prepareRootWithSubCmd(['v2-with-no-resolve-export'], {
-      notWorkspace: true
-    })
-    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
-  })
-  describe('monorepo', () => {
-    const [root, prefixes] = prepareRootWithSubCmd(['v2-monorepo'])
-    test(
-      'build foo',
-      runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-foo', root, prefixes, 'packages/foo/dist')
-    )
-    test(
-      'build bar',
-      runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-bar', root, prefixes, 'packages/bar/dist')
-    )
-  })
-})
-
-describe('base', () => {
-  const [root, prefixes] = prepareRootWithSubCmd(['base'])
-  test('common', async () => {
-    process.argv = [...prefixes, '--filter', 'test-foo']
-    program.parse(process.argv)
-    await actionFuture
-    snapshotDistFiles(path.resolve(root, 'packages/foo/dist'))
-  })
-})
-describe('single package and single entry', () => {
-  const [root, prefixes] = prepareRootWithSubCmd(['single-package-and-single-entry'], {
+describe('simple', () => {
+  const [root, prefixes] = prepareRootWithSubCmd(['v2-simple'], {
     notWorkspace: true
   })
-  test('common', async () => {
-    process.argv = prefixes
-    program.parse(process.argv)
-    await actionFuture
-    snapshotDistFiles(path.resolve(root, 'dist'))
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
+})
+describe('simple mjs', () => {
+  const [root, prefixes] = prepareRootWithSubCmd(['v2-simple-mjs'], {
+    notWorkspace: true
   })
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
+})
+describe('multiple exports', () => {
+  const [root, prefixes] = prepareRootWithSubCmd(['v2-multiple-exports'], {
+    notWorkspace: true
+  })
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
 })
 describe('unordered exports inputs', () => {
-  const [root, prefixes] = prepareRootWithSubCmd(['unordered-exports_input'], {
+  const [root, prefixes] = prepareRootWithSubCmd(['v2-unordered-exports_input'], {
     notWorkspace: true
   })
-  test('common', async () => {
-    process.argv = prefixes
-    program.parse(process.argv)
-    await actionFuture
-    snapshotDistFiles(path.resolve(root, 'dist'))
-  })
-})
-describe('single package and multiple entries', () => {
-  const [root, prefixes] = prepareRootWithSubCmd(['single-package-and-multiple-entries'], {
-    notWorkspace: true
-  })
-  test('common', async () => {
-    process.argv = prefixes
-    program.parse(process.argv)
-    await actionFuture
-    snapshotDistFiles(path.resolve(root, 'dist'))
-  })
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
 })
 describe('with no resolve exports', () => {
-  const [root, prefixes] = prepareRootWithSubCmd(['with-no-resolve-export'], {
+  const [root, prefixes] = prepareRootWithSubCmd(['v2-with-no-resolve-export'], {
     notWorkspace: true
   })
-  test('common', async () => {
-    process.argv = prefixes
-    program.parse(process.argv)
-    await actionFuture
-    snapshotDistFiles(path.resolve(root, 'dist'))
-  })
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
+})
+describe('monorepo', () => {
+  const [root, prefixes] = prepareRootWithSubCmd(['v2-monorepo'])
+  test(
+    'build foo',
+    runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-foo', root, prefixes, 'packages/foo/dist')
+  )
+  test(
+    'build bar',
+    runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-bar', root, prefixes, 'packages/bar/dist')
+  )
 })

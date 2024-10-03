@@ -1,1181 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`base > common 1`] = `
-[
-  "index.d.ts",
-  "index.esm.d.ts",
-  "index.esm.js",
-  "index.esm.js.map",
-  "index.esm.min.js",
-  "index.esm.min.js.map",
-  "index.iife.js",
-  "index.iife.js.map",
-  "index.iife.min.js",
-  "index.iife.min.js.map",
-  "index.umd.js",
-  "index.umd.js.map",
-  "index.umd.min.js",
-  "index.umd.min.js.map",
-]
-`;
-
-exports[`base > common 2`] = `
-"index.d.ts:
-declare function export_default(a: number, b: string): string;
-
-export { export_default as default };
-"
-`;
-
-exports[`base > common 3`] = `
-"index.esm.d.ts:
-declare function export_default(a: number, b: string): string;
-
-export { export_default as default };
-"
-`;
-
-exports[`base > common 4`] = `
-"index.esm.js:
-function index(a, b) {
-  return a + b;
-}
-
-export { index as default };
-//# sourceMappingURL=index.esm.js.map
-"
-`;
-
-exports[`base > common 5`] = `
-"index.esm.js.map:
-{"version":3,"file":"index.esm.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":[],"mappings":"AAAA,cAAA,CAAyB,GAAW,CAAW,EAAA;AAC7C,EAAA,OAAO,CAAI,GAAA,CAAA,CAAA;AACb;;;;"}"
-`;
-
-exports[`base > common 6`] = `
-"index.esm.min.js:
-function t(t,e){return t+e}export{t as default};
-//# sourceMappingURL=index.esm.min.js.map
-"
-`;
-
-exports[`base > common 7`] = `
-"index.esm.min.js.map:
-{"version":3,"file":"index.esm.min.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":["index","a","b"],"mappings":"AAAA,SAAAA,EAAyBC,EAAWC,GAClC,OAAOD,EAAIC,CACb"}"
-`;
-
-exports[`base > common 8`] = `
-"index.iife.js:
-var JiekTestFoo = (function (exports) {
-  'use strict';
-
-  function index(a, b) {
-    return a + b;
-  }
-
-  exports.default = index;
-
-  Object.defineProperty(exports, '__esModule', { value: true });
-
-  return exports;
-
-})({});
-//# sourceMappingURL=index.iife.js.map
-"
-`;
-
-exports[`base > common 9`] = `
-"index.iife.js.map:
-{"version":3,"file":"index.iife.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":[],"mappings":";;;EAAA,cAAA,CAAyB,GAAW,CAAW,EAAA;EAC7C,EAAA,OAAO,CAAI,GAAA,CAAA,CAAA;EACb;;;;;;;;;;;;"}"
-`;
-
-exports[`base > common 10`] = `
-"index.iife.min.js:
-var JiekTestFoo=function(e){"use strict";return e.default=function(e,t){return e+t},Object.defineProperty(e,"__esModule",{value:!0}),e}({});
-//# sourceMappingURL=index.iife.min.js.map
-"
-`;
-
-exports[`base > common 11`] = `
-"index.iife.min.js.map:
-{"version":3,"file":"index.iife.min.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":["a","b"],"mappings":"0DAAA,SAAyBA,EAAWC,GAClC,OAAOD,EAAIC,CACb"}"
-`;
-
-exports[`base > common 12`] = `
-"index.umd.js:
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.JiekTestFoo = {}));
-})(this, (function (exports) { 'use strict';
-
-  function index(a, b) {
-    return a + b;
-  }
-
-  exports.default = index;
-
-  Object.defineProperty(exports, '__esModule', { value: true });
-
-}));
-//# sourceMappingURL=index.umd.js.map
-"
-`;
-
-exports[`base > common 13`] = `
-"index.umd.js.map:
-{"version":3,"file":"index.umd.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":[],"mappings":";;;;;;EAAA,cAAA,CAAyB,GAAW,CAAW,EAAA;EAC7C,EAAA,OAAO,CAAI,GAAA,CAAA,CAAA;EACb;;;;;;;;;;"}"
-`;
-
-exports[`base > common 14`] = `
-"index.umd.min.js:
-!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t((e="undefined"!=typeof globalThis?globalThis:e||self).JiekTestFoo={})}(this,(function(e){"use strict";e.default=function(e,t){return e+t},Object.defineProperty(e,"__esModule",{value:!0})}));
-//# sourceMappingURL=index.umd.min.js.map
-"
-`;
-
-exports[`base > common 15`] = `
-"index.umd.min.js.map:
-{"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export default function (a: number, b: string) {\\n  return a + b\\n}\\n"],"names":["a","b"],"mappings":"6PAAA,SAAyBA,EAAWC,GAClC,OAAOD,EAAIC,CACb"}"
-`;
-
-exports[`single package and multiple entries > common 1`] = `
-[
-  "a.d.ts",
-  "a.esm.d.ts",
-  "a.esm.js",
-  "a.esm.js.map",
-  "a.esm.min.js",
-  "a.esm.min.js.map",
-  "a.iife.js",
-  "a.iife.js.map",
-  "a.iife.min.js",
-  "a.iife.min.js.map",
-  "a.umd.js",
-  "a.umd.js.map",
-  "a.umd.min.js",
-  "a.umd.min.js.map",
-  "b.d.ts",
-  "b.esm.d.ts",
-  "b.esm.js",
-  "b.esm.js.map",
-  "b.esm.min.js",
-  "b.esm.min.js.map",
-  "b.iife.js",
-  "b.iife.js.map",
-  "b.iife.min.js",
-  "b.iife.min.js.map",
-  "b.umd.js",
-  "b.umd.js.map",
-  "b.umd.min.js",
-  "b.umd.min.js.map",
-  "c.d.ts",
-  "c.esm.d.ts",
-  "c.esm.js",
-  "c.esm.js.map",
-  "c.esm.min.js",
-  "c.esm.min.js.map",
-  "c.iife.js",
-  "c.iife.js.map",
-  "c.iife.min.js",
-  "c.iife.min.js.map",
-  "c.umd.js",
-  "c.umd.js.map",
-  "c.umd.min.js",
-  "c.umd.min.js.map",
-  "index.d.ts",
-  "index.esm.d.ts",
-  "index.esm.js",
-  "index.esm.js.map",
-  "index.esm.min.js",
-  "index.esm.min.js.map",
-  "index.iife.js",
-  "index.iife.js.map",
-  "index.iife.min.js",
-  "index.iife.min.js.map",
-  "index.umd.js",
-  "index.umd.js.map",
-  "index.umd.min.js",
-  "index.umd.min.js.map",
-  "jsx.d.ts",
-  "jsx.esm.d.ts",
-  "jsx.esm.js",
-  "jsx.esm.js.map",
-  "jsx.esm.min.js",
-  "jsx.esm.min.js.map",
-  "jsx.iife.js",
-  "jsx.iife.js.map",
-  "jsx.iife.min.js",
-  "jsx.iife.min.js.map",
-  "jsx.umd.js",
-  "jsx.umd.js.map",
-  "jsx.umd.min.js",
-  "jsx.umd.min.js.map",
-]
-`;
-
-exports[`single package and multiple entries > common 2`] = `
-"a.d.ts:
-type A = 'a';
-declare const a = "a";
-
-export { type A, a };
-"
-`;
-
-exports[`single package and multiple entries > common 3`] = `
-"a.esm.d.ts:
-type A = 'a';
-declare const a = "a";
-
-export { type A, a };
-"
-`;
-
-exports[`single package and multiple entries > common 4`] = `
-"a.esm.js:
-const a = "a";
-
-export { a };
-//# sourceMappingURL=a.esm.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 5`] = `
-"a.esm.js.map:
-{"version":3,"file":"a.esm.js","sources":["../src/a.ts"],"sourcesContent":["export type A = 'a'\\nexport const a = 'a'\\n"],"names":[],"mappings":"AACO,MAAM,CAAI,GAAA;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 6`] = `
-"a.esm.min.js:
-const o="a";export{o as a};
-//# sourceMappingURL=a.esm.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 7`] = `
-"a.esm.min.js.map:
-{"version":3,"file":"a.esm.min.js","sources":["../src/a.ts"],"sourcesContent":["export type A = 'a'\\nexport const a = 'a'\\n"],"names":["a"],"mappings":"AACO,MAAMA,EAAI"}"
-`;
-
-exports[`single package and multiple entries > common 8`] = `
-"a.iife.js:
-var singlePackageAndMultipleEntriesa = (function (exports) {
-	'use strict';
-
-	const a = "a";
-
-	exports.a = a;
-
-	return exports;
-
-})({});
-//# sourceMappingURL=a.iife.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 9`] = `
-"a.iife.js.map:
-{"version":3,"file":"a.iife.js","sources":["../src/a.ts"],"sourcesContent":["export type A = 'a'\\nexport const a = 'a'\\n"],"names":[],"mappings":";;;AACO,OAAM,CAAI,GAAA;;;;;;;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 10`] = `
-"a.iife.min.js:
-var singlePackageAndMultipleEntriesa=function(a){"use strict";return a.a="a",a}({});
-//# sourceMappingURL=a.iife.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 11`] = `
-"a.iife.min.js.map:
-{"version":3,"file":"a.iife.min.js","sources":["../src/a.ts"],"sourcesContent":["export type A = 'a'\\nexport const a = 'a'\\n"],"names":[],"mappings":"yEACiB"}"
-`;
-
-exports[`single package and multiple entries > common 12`] = `
-"a.umd.js:
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.singlePackageAndMultipleEntriesa = {}));
-})(this, (function (exports) { 'use strict';
-
-	const a = "a";
-
-	exports.a = a;
-
-}));
-//# sourceMappingURL=a.umd.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 13`] = `
-"a.umd.js.map:
-{"version":3,"file":"a.umd.js","sources":["../src/a.ts"],"sourcesContent":["export type A = 'a'\\nexport const a = 'a'\\n"],"names":[],"mappings":";;;;;;AACO,OAAM,CAAI,GAAA;;;;;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 14`] = `
-"a.umd.min.js:
-!function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n(exports):"function"==typeof define&&define.amd?define(["exports"],n):n((e="undefined"!=typeof globalThis?globalThis:e||self).singlePackageAndMultipleEntriesa={})}(this,(function(e){"use strict";e.a="a"}));
-//# sourceMappingURL=a.umd.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 15`] = `
-"a.umd.min.js.map:
-{"version":3,"file":"a.umd.min.js","sources":["../src/a.ts"],"sourcesContent":["export type A = 'a'\\nexport const a = 'a'\\n"],"names":[],"mappings":"4QACiB"}"
-`;
-
-exports[`single package and multiple entries > common 16`] = `
-"b.d.ts:
-import { A } from 'single-package-and-multiple-entries/a';
-
-type B = \`\${A}B\`;
-declare const b = "b";
-
-export { type B, b };
-"
-`;
-
-exports[`single package and multiple entries > common 17`] = `
-"b.esm.d.ts:
-import { A } from 'single-package-and-multiple-entries/a';
-
-type B = \`\${A}B\`;
-declare const b = "b";
-
-export { type B, b };
-"
-`;
-
-exports[`single package and multiple entries > common 18`] = `
-"b.esm.js:
-const b = "b";
-
-export { b };
-//# sourceMappingURL=b.esm.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 19`] = `
-"b.esm.js.map:
-{"version":3,"file":"b.esm.js","sources":["../src/b.ts"],"sourcesContent":["import type { A } from 'single-package-and-multiple-entries/a'\\n\\nexport type B = \`\${A}B\`\\nexport const b = 'b'\\n"],"names":[],"mappings":"AAGO,MAAM,CAAI,GAAA;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 20`] = `
-"b.esm.min.js:
-const o="b";export{o as b};
-//# sourceMappingURL=b.esm.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 21`] = `
-"b.esm.min.js.map:
-{"version":3,"file":"b.esm.min.js","sources":["../src/b.ts"],"sourcesContent":["import type { A } from 'single-package-and-multiple-entries/a'\\n\\nexport type B = \`\${A}B\`\\nexport const b = 'b'\\n"],"names":["b"],"mappings":"AAGO,MAAMA,EAAI"}"
-`;
-
-exports[`single package and multiple entries > common 22`] = `
-"b.iife.js:
-var singlePackageAndMultipleEntriesb = (function (exports) {
-	'use strict';
-
-	const b = "b";
-
-	exports.b = b;
-
-	return exports;
-
-})({});
-//# sourceMappingURL=b.iife.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 23`] = `
-"b.iife.js.map:
-{"version":3,"file":"b.iife.js","sources":["../src/b.ts"],"sourcesContent":["import type { A } from 'single-package-and-multiple-entries/a'\\n\\nexport type B = \`\${A}B\`\\nexport const b = 'b'\\n"],"names":[],"mappings":";;;AAGO,OAAM,CAAI,GAAA;;;;;;;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 24`] = `
-"b.iife.min.js:
-var singlePackageAndMultipleEntriesb=function(e){"use strict";return e.b="b",e}({});
-//# sourceMappingURL=b.iife.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 25`] = `
-"b.iife.min.js.map:
-{"version":3,"file":"b.iife.min.js","sources":["../src/b.ts"],"sourcesContent":["import type { A } from 'single-package-and-multiple-entries/a'\\n\\nexport type B = \`\${A}B\`\\nexport const b = 'b'\\n"],"names":[],"mappings":"yEAGiB"}"
-`;
-
-exports[`single package and multiple entries > common 26`] = `
-"b.umd.js:
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.singlePackageAndMultipleEntriesb = {}));
-})(this, (function (exports) { 'use strict';
-
-	const b = "b";
-
-	exports.b = b;
-
-}));
-//# sourceMappingURL=b.umd.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 27`] = `
-"b.umd.js.map:
-{"version":3,"file":"b.umd.js","sources":["../src/b.ts"],"sourcesContent":["import type { A } from 'single-package-and-multiple-entries/a'\\n\\nexport type B = \`\${A}B\`\\nexport const b = 'b'\\n"],"names":[],"mappings":";;;;;;AAGO,OAAM,CAAI,GAAA;;;;;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 28`] = `
-"b.umd.min.js:
-!function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n(exports):"function"==typeof define&&define.amd?define(["exports"],n):n((e="undefined"!=typeof globalThis?globalThis:e||self).singlePackageAndMultipleEntriesb={})}(this,(function(e){"use strict";e.b="b"}));
-//# sourceMappingURL=b.umd.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 29`] = `
-"b.umd.min.js.map:
-{"version":3,"file":"b.umd.min.js","sources":["../src/b.ts"],"sourcesContent":["import type { A } from 'single-package-and-multiple-entries/a'\\n\\nexport type B = \`\${A}B\`\\nexport const b = 'b'\\n"],"names":[],"mappings":"4QAGiB"}"
-`;
-
-exports[`single package and multiple entries > common 30`] = `
-"c.d.ts:
-declare const c = "c";
-
-export { c };
-"
-`;
-
-exports[`single package and multiple entries > common 31`] = `
-"c.esm.d.ts:
-declare const c = "c";
-
-export { c };
-"
-`;
-
-exports[`single package and multiple entries > common 32`] = `
-"c.esm.js:
-const c = "c";
-
-export { c };
-//# sourceMappingURL=c.esm.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 33`] = `
-"c.esm.js.map:
-{"version":3,"file":"c.esm.js","sources":["../src/c.ts"],"sourcesContent":["export const c = 'c'\\n"],"names":[],"mappings":"AAAO,MAAM,CAAI,GAAA;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 34`] = `
-"c.esm.min.js:
-const c="c";export{c};
-//# sourceMappingURL=c.esm.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 35`] = `
-"c.esm.min.js.map:
-{"version":3,"file":"c.esm.min.js","sources":["../src/c.ts"],"sourcesContent":["export const c = 'c'\\n"],"names":["c"],"mappings":"AAAO,MAAMA,EAAI"}"
-`;
-
-exports[`single package and multiple entries > common 36`] = `
-"c.iife.js:
-var singlePackageAndMultipleEntriesc = (function (exports) {
-	'use strict';
-
-	const c = "c";
-
-	exports.c = c;
-
-	return exports;
-
-})({});
-//# sourceMappingURL=c.iife.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 37`] = `
-"c.iife.js.map:
-{"version":3,"file":"c.iife.js","sources":["../src/c.ts"],"sourcesContent":["export const c = 'c'\\n"],"names":[],"mappings":";;;AAAO,OAAM,CAAI,GAAA;;;;;;;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 38`] = `
-"c.iife.min.js:
-var singlePackageAndMultipleEntriesc=function(c){"use strict";return c.c="c",c}({});
-//# sourceMappingURL=c.iife.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 39`] = `
-"c.iife.min.js.map:
-{"version":3,"file":"c.iife.min.js","sources":["../src/c.ts"],"sourcesContent":["export const c = 'c'\\n"],"names":[],"mappings":"yEAAiB"}"
-`;
-
-exports[`single package and multiple entries > common 40`] = `
-"c.umd.js:
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.singlePackageAndMultipleEntriesc = {}));
-})(this, (function (exports) { 'use strict';
-
-	const c = "c";
-
-	exports.c = c;
-
-}));
-//# sourceMappingURL=c.umd.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 41`] = `
-"c.umd.js.map:
-{"version":3,"file":"c.umd.js","sources":["../src/c.ts"],"sourcesContent":["export const c = 'c'\\n"],"names":[],"mappings":";;;;;;AAAO,OAAM,CAAI,GAAA;;;;;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 42`] = `
-"c.umd.min.js:
-!function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n(exports):"function"==typeof define&&define.amd?define(["exports"],n):n((e="undefined"!=typeof globalThis?globalThis:e||self).singlePackageAndMultipleEntriesc={})}(this,(function(e){"use strict";e.c="c"}));
-//# sourceMappingURL=c.umd.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 43`] = `
-"c.umd.min.js.map:
-{"version":3,"file":"c.umd.min.js","sources":["../src/c.ts"],"sourcesContent":["export const c = 'c'\\n"],"names":[],"mappings":"4QAAiB"}"
-`;
-
-exports[`single package and multiple entries > common 44`] = `
-"index.d.ts:
-declare function foo(): string;
-
-export { foo };
-"
-`;
-
-exports[`single package and multiple entries > common 45`] = `
-"index.esm.d.ts:
-declare function foo(): string;
-
-export { foo };
-"
-`;
-
-exports[`single package and multiple entries > common 46`] = `
-"index.esm.js:
-function foo() {
-  return "foo";
-}
-
-export { foo };
-//# sourceMappingURL=index.esm.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 47`] = `
-"index.esm.js.map:
-{"version":3,"file":"index.esm.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"AAAO,SAAS,GAAM,GAAA;AACpB,EAAO,OAAA,KAAA,CAAA;AACT;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 48`] = `
-"index.esm.min.js:
-function o(){return"foo"}export{o as foo};
-//# sourceMappingURL=index.esm.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 49`] = `
-"index.esm.min.js.map:
-{"version":3,"file":"index.esm.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":["foo"],"mappings":"AAAO,SAASA,IACP,MAAA,KACT"}"
-`;
-
-exports[`single package and multiple entries > common 50`] = `
-"index.iife.js:
-var singlePackageAndMultipleEntries = (function (exports) {
-  'use strict';
-
-  function foo() {
-    return "foo";
-  }
-
-  exports.foo = foo;
-
-  return exports;
-
-})({});
-//# sourceMappingURL=index.iife.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 51`] = `
-"index.iife.js.map:
-{"version":3,"file":"index.iife.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":";;;EAAO,SAAS,GAAM,GAAA;EACpB,EAAO,OAAA,KAAA,CAAA;EACT;;;;;;;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 52`] = `
-"index.iife.min.js:
-var singlePackageAndMultipleEntries=function(n){"use strict";return n.foo=function(){return"foo"},n}({});
-//# sourceMappingURL=index.iife.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 53`] = `
-"index.iife.min.js.map:
-{"version":3,"file":"index.iife.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"0EAAO,WACE,MAAA,KACT"}"
-`;
-
-exports[`single package and multiple entries > common 54`] = `
-"index.umd.js:
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.singlePackageAndMultipleEntries = {}));
-})(this, (function (exports) { 'use strict';
-
-  function foo() {
-    return "foo";
-  }
-
-  exports.foo = foo;
-
-}));
-//# sourceMappingURL=index.umd.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 55`] = `
-"index.umd.js.map:
-{"version":3,"file":"index.umd.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":";;;;;;EAAO,SAAS,GAAM,GAAA;EACpB,EAAO,OAAA,KAAA,CAAA;EACT;;;;;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 56`] = `
-"index.umd.min.js:
-!function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n(exports):"function"==typeof define&&define.amd?define(["exports"],n):n((e="undefined"!=typeof globalThis?globalThis:e||self).singlePackageAndMultipleEntries={})}(this,(function(e){"use strict";e.foo=function(){return"foo"}}));
-//# sourceMappingURL=index.umd.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 57`] = `
-"index.umd.min.js.map:
-{"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"6QAAO,WACE,MAAA,KACT"}"
-`;
-
-exports[`single package and multiple entries > common 58`] = `
-"jsx.d.ts:
-declare const Jsx = "PascalCaseEntry";
-
-export { Jsx };
-"
-`;
-
-exports[`single package and multiple entries > common 59`] = `
-"jsx.esm.d.ts:
-declare const Jsx = "PascalCaseEntry";
-
-export { Jsx };
-"
-`;
-
-exports[`single package and multiple entries > common 60`] = `
-"jsx.esm.js:
-const Jsx = "PascalCaseEntry";
-
-export { Jsx };
-//# sourceMappingURL=jsx.esm.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 61`] = `
-"jsx.esm.js.map:
-{"version":3,"file":"jsx.esm.js","sources":["../src/jsx.tsx"],"sourcesContent":["export const Jsx = 'PascalCaseEntry'\\n"],"names":[],"mappings":"AAAO,MAAM,GAAM,GAAA;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 62`] = `
-"jsx.esm.min.js:
-const a="PascalCaseEntry";export{a as Jsx};
-//# sourceMappingURL=jsx.esm.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 63`] = `
-"jsx.esm.min.js.map:
-{"version":3,"file":"jsx.esm.min.js","sources":["../src/jsx.tsx"],"sourcesContent":["export const Jsx = 'PascalCaseEntry'\\n"],"names":["Jsx"],"mappings":"AAAO,MAAMA,EAAM"}"
-`;
-
-exports[`single package and multiple entries > common 64`] = `
-"jsx.iife.js:
-var singlePackageAndMultipleEntriesjsx = (function (exports) {
-	'use strict';
-
-	const Jsx = "PascalCaseEntry";
-
-	exports.Jsx = Jsx;
-
-	return exports;
-
-})({});
-//# sourceMappingURL=jsx.iife.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 65`] = `
-"jsx.iife.js.map:
-{"version":3,"file":"jsx.iife.js","sources":["../src/jsx.tsx"],"sourcesContent":["export const Jsx = 'PascalCaseEntry'\\n"],"names":[],"mappings":";;;AAAO,OAAM,GAAM,GAAA;;;;;;;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 66`] = `
-"jsx.iife.min.js:
-var singlePackageAndMultipleEntriesjsx=function(s){"use strict";return s.Jsx="PascalCaseEntry",s}({});
-//# sourceMappingURL=jsx.iife.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 67`] = `
-"jsx.iife.min.js.map:
-{"version":3,"file":"jsx.iife.min.js","sources":["../src/jsx.tsx"],"sourcesContent":["export const Jsx = 'PascalCaseEntry'\\n"],"names":[],"mappings":"6EAAmB"}"
-`;
-
-exports[`single package and multiple entries > common 68`] = `
-"jsx.umd.js:
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.singlePackageAndMultipleEntriesjsx = {}));
-})(this, (function (exports) { 'use strict';
-
-	const Jsx = "PascalCaseEntry";
-
-	exports.Jsx = Jsx;
-
-}));
-//# sourceMappingURL=jsx.umd.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 69`] = `
-"jsx.umd.js.map:
-{"version":3,"file":"jsx.umd.js","sources":["../src/jsx.tsx"],"sourcesContent":["export const Jsx = 'PascalCaseEntry'\\n"],"names":[],"mappings":";;;;;;AAAO,OAAM,GAAM,GAAA;;;;;;;;"}"
-`;
-
-exports[`single package and multiple entries > common 70`] = `
-"jsx.umd.min.js:
-!function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n(exports):"function"==typeof define&&define.amd?define(["exports"],n):n((e="undefined"!=typeof globalThis?globalThis:e||self).singlePackageAndMultipleEntriesjsx={})}(this,(function(e){"use strict";e.Jsx="PascalCaseEntry"}));
-//# sourceMappingURL=jsx.umd.min.js.map
-"
-`;
-
-exports[`single package and multiple entries > common 71`] = `
-"jsx.umd.min.js.map:
-{"version":3,"file":"jsx.umd.min.js","sources":["../src/jsx.tsx"],"sourcesContent":["export const Jsx = 'PascalCaseEntry'\\n"],"names":[],"mappings":"gRAAmB"}"
-`;
-
-exports[`single package and single entry > common 1`] = `
-[
-  "index.d.ts",
-  "index.esm.d.ts",
-  "index.esm.js",
-  "index.esm.js.map",
-  "index.esm.min.js",
-  "index.esm.min.js.map",
-  "index.iife.js",
-  "index.iife.js.map",
-  "index.iife.min.js",
-  "index.iife.min.js.map",
-  "index.umd.js",
-  "index.umd.js.map",
-  "index.umd.min.js",
-  "index.umd.min.js.map",
-]
-`;
-
-exports[`single package and single entry > common 2`] = `
-"index.d.ts:
-declare function foo(): string;
-
-export { foo };
-"
-`;
-
-exports[`single package and single entry > common 3`] = `
-"index.esm.d.ts:
-declare function foo(): string;
-
-export { foo };
-"
-`;
-
-exports[`single package and single entry > common 4`] = `
-"index.esm.js:
-function foo() {
-  return "foo";
-}
-
-export { foo };
-//# sourceMappingURL=index.esm.js.map
-"
-`;
-
-exports[`single package and single entry > common 5`] = `
-"index.esm.js.map:
-{"version":3,"file":"index.esm.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"AAAO,SAAS,GAAM,GAAA;AACpB,EAAO,OAAA,KAAA,CAAA;AACT;;;;"}"
-`;
-
-exports[`single package and single entry > common 6`] = `
-"index.esm.min.js:
-function o(){return"foo"}export{o as foo};
-//# sourceMappingURL=index.esm.min.js.map
-"
-`;
-
-exports[`single package and single entry > common 7`] = `
-"index.esm.min.js.map:
-{"version":3,"file":"index.esm.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":["foo"],"mappings":"AAAO,SAASA,IACP,MAAA,KACT"}"
-`;
-
-exports[`single package and single entry > common 8`] = `
-"index.iife.js:
-var singlePackageAndSingleEntry = (function (exports) {
-  'use strict';
-
-  function foo() {
-    return "foo";
-  }
-
-  exports.foo = foo;
-
-  return exports;
-
-})({});
-//# sourceMappingURL=index.iife.js.map
-"
-`;
-
-exports[`single package and single entry > common 9`] = `
-"index.iife.js.map:
-{"version":3,"file":"index.iife.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":";;;EAAO,SAAS,GAAM,GAAA;EACpB,EAAO,OAAA,KAAA,CAAA;EACT;;;;;;;;;;"}"
-`;
-
-exports[`single package and single entry > common 10`] = `
-"index.iife.min.js:
-var singlePackageAndSingleEntry=function(n){"use strict";return n.foo=function(){return"foo"},n}({});
-//# sourceMappingURL=index.iife.min.js.map
-"
-`;
-
-exports[`single package and single entry > common 11`] = `
-"index.iife.min.js.map:
-{"version":3,"file":"index.iife.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"sEAAO,WACE,MAAA,KACT"}"
-`;
-
-exports[`single package and single entry > common 12`] = `
-"index.umd.js:
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.singlePackageAndSingleEntry = {}));
-})(this, (function (exports) { 'use strict';
-
-  function foo() {
-    return "foo";
-  }
-
-  exports.foo = foo;
-
-}));
-//# sourceMappingURL=index.umd.js.map
-"
-`;
-
-exports[`single package and single entry > common 13`] = `
-"index.umd.js.map:
-{"version":3,"file":"index.umd.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":";;;;;;EAAO,SAAS,GAAM,GAAA;EACpB,EAAO,OAAA,KAAA,CAAA;EACT;;;;;;;;"}"
-`;
-
-exports[`single package and single entry > common 14`] = `
-"index.umd.min.js:
-!function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n(exports):"function"==typeof define&&define.amd?define(["exports"],n):n((e="undefined"!=typeof globalThis?globalThis:e||self).singlePackageAndSingleEntry={})}(this,(function(e){"use strict";e.foo=function(){return"foo"}}));
-//# sourceMappingURL=index.umd.min.js.map
-"
-`;
-
-exports[`single package and single entry > common 15`] = `
-"index.umd.min.js.map:
-{"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"yQAAO,WACE,MAAA,KACT"}"
-`;
-
-exports[`unordered exports inputs > common 1`] = `
-[
-  "a.d.ts",
-  "a.esm.d.ts",
-  "a.esm.js",
-  "a.esm.js.map",
-  "a.esm.min.js",
-  "a.esm.min.js.map",
-  "a.iife.js",
-  "a.iife.js.map",
-  "a.iife.min.js",
-  "a.iife.min.js.map",
-  "a.umd.js",
-  "a.umd.js.map",
-  "a.umd.min.js",
-  "a.umd.min.js.map",
-  "b-dep-dep.esm.d.ts",
-  "b-dep.esm.d.ts",
-  "b.d.ts",
-  "b.esm.d.ts",
-  "b.esm.js",
-  "b.esm.js.map",
-  "b.esm.min.js",
-  "b.esm.min.js.map",
-  "b.iife.js",
-  "b.iife.js.map",
-  "b.iife.min.js",
-  "b.iife.min.js.map",
-  "b.umd.js",
-  "b.umd.js.map",
-  "b.umd.min.js",
-  "b.umd.min.js.map",
-]
-`;
-
-exports[`unordered exports inputs > common 2`] = `
-"a.d.ts:
-type A = 'a';
-
-export type { A };
-"
-`;
-
-exports[`unordered exports inputs > common 3`] = `
-"a.esm.d.ts:
-type A = 'a';
-
-export type { A };
-"
-`;
-
-exports[`unordered exports inputs > common 4`] = `
-"a.esm.js:
-
-//# sourceMappingURL=a.esm.js.map
-"
-`;
-
-exports[`unordered exports inputs > common 5`] = `
-"a.esm.js.map:
-{"version":3,"file":"a.esm.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
-`;
-
-exports[`unordered exports inputs > common 6`] = `
-"a.esm.min.js:
-
-//# sourceMappingURL=a.esm.min.js.map
-"
-`;
-
-exports[`unordered exports inputs > common 7`] = `
-"a.esm.min.js.map:
-{"version":3,"file":"a.esm.min.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
-`;
-
-exports[`unordered exports inputs > common 8`] = `
-"a.iife.js:
-(function () {
-	'use strict';
-
-
-
-})();
-//# sourceMappingURL=a.iife.js.map
-"
-`;
-
-exports[`unordered exports inputs > common 9`] = `
-"a.iife.js.map:
-{"version":3,"file":"a.iife.js","sources":[],"sourcesContent":[],"names":[],"mappings":";;;;;;;"}"
-`;
-
-exports[`unordered exports inputs > common 10`] = `
-"a.iife.min.js:
-(function () {
-	'use strict';
-
-
-
-})();
-//# sourceMappingURL=a.iife.min.js.map
-"
-`;
-
-exports[`unordered exports inputs > common 11`] = `
-"a.iife.min.js.map:
-{"version":3,"file":"a.iife.min.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
-`;
-
-exports[`unordered exports inputs > common 12`] = `
-"a.umd.js:
-(function (factory) {
-	typeof define === 'function' && define.amd ? define(factory) :
-	factory();
-})((function () { 'use strict';
-
-
-
-}));
-//# sourceMappingURL=a.umd.js.map
-"
-`;
-
-exports[`unordered exports inputs > common 13`] = `
-"a.umd.js.map:
-{"version":3,"file":"a.umd.js","sources":[],"sourcesContent":[],"names":[],"mappings":";;;;;;;;;"}"
-`;
-
-exports[`unordered exports inputs > common 14`] = `
-"a.umd.min.js:
-!function(n){"function"==typeof define&&define.amd?define(n):n()}((function(){}));
-//# sourceMappingURL=a.umd.min.js.map
-"
-`;
-
-exports[`unordered exports inputs > common 15`] = `
-"a.umd.min.js.map:
-{"version":3,"file":"a.umd.min.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
-`;
-
-exports[`unordered exports inputs > common 16`] = `
-"b-dep-dep.esm.d.ts:
-type BDepDep = 1;
-
-export type { BDepDep };
-"
-`;
-
-exports[`unordered exports inputs > common 17`] = `
-"b-dep.esm.d.ts:
-import { BDepDep } from './b-dep-dep.esm.js';
-
-type BDep = BDepDep;
-
-export type { BDep };
-"
-`;
-
-exports[`unordered exports inputs > common 18`] = `
-"b.d.ts:
-type BDepDep = 1;
-
-type BDep = BDepDep;
-
-type B = BDep;
-
-export type { B };
-"
-`;
-
-exports[`unordered exports inputs > common 19`] = `
-"b.esm.d.ts:
-import { BDep } from './b-dep.esm.js';
-
-type B = BDep;
-
-export type { B };
-"
-`;
-
-exports[`unordered exports inputs > common 20`] = `
-"b.esm.js:
-
-//# sourceMappingURL=b.esm.js.map
-"
-`;
-
-exports[`unordered exports inputs > common 21`] = `
-"b.esm.js.map:
-{"version":3,"file":"b.esm.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
-`;
-
-exports[`unordered exports inputs > common 22`] = `
-"b.esm.min.js:
-
-//# sourceMappingURL=b.esm.min.js.map
-"
-`;
-
-exports[`unordered exports inputs > common 23`] = `
-"b.esm.min.js.map:
-{"version":3,"file":"b.esm.min.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
-`;
-
-exports[`unordered exports inputs > common 24`] = `
-"b.iife.js:
-(function () {
-	'use strict';
-
-
-
-})();
-//# sourceMappingURL=b.iife.js.map
-"
-`;
-
-exports[`unordered exports inputs > common 25`] = `
-"b.iife.js.map:
-{"version":3,"file":"b.iife.js","sources":[],"sourcesContent":[],"names":[],"mappings":";;;;;;;"}"
-`;
-
-exports[`unordered exports inputs > common 26`] = `
-"b.iife.min.js:
-(function () {
-	'use strict';
-
-
-
-})();
-//# sourceMappingURL=b.iife.min.js.map
-"
-`;
-
-exports[`unordered exports inputs > common 27`] = `
-"b.iife.min.js.map:
-{"version":3,"file":"b.iife.min.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
-`;
-
-exports[`unordered exports inputs > common 28`] = `
-"b.umd.js:
-(function (factory) {
-	typeof define === 'function' && define.amd ? define(factory) :
-	factory();
-})((function () { 'use strict';
-
-
-
-}));
-//# sourceMappingURL=b.umd.js.map
-"
-`;
-
-exports[`unordered exports inputs > common 29`] = `
-"b.umd.js.map:
-{"version":3,"file":"b.umd.js","sources":[],"sourcesContent":[],"names":[],"mappings":";;;;;;;;;"}"
-`;
-
-exports[`unordered exports inputs > common 30`] = `
-"b.umd.min.js:
-!function(n){"function"==typeof define&&define.amd?define(n):n()}((function(){}));
-//# sourceMappingURL=b.umd.min.js.map
-"
-`;
-
-exports[`unordered exports inputs > common 31`] = `
-"b.umd.min.js.map:
-{"version":3,"file":"b.umd.min.js","sources":[],"sourcesContent":[],"names":[],"mappings":""}"
-`;
-
-exports[`v2 > monorepo > build bar 1`] = `
+exports[`monorepo > build bar 1`] = `
 [
   "index.d.ts",
   "index.js",
@@ -1183,7 +8,7 @@ exports[`v2 > monorepo > build bar 1`] = `
 ]
 `;
 
-exports[`v2 > monorepo > build bar 2`] = `
+exports[`monorepo > build bar 2`] = `
 "index.d.ts:
 declare function bar(a: number, b: number): number;
 
@@ -1191,7 +16,7 @@ export { bar };
 "
 `;
 
-exports[`v2 > monorepo > build bar 3`] = `
+exports[`monorepo > build bar 3`] = `
 "index.js:
 'use strict';
 
@@ -1203,13 +28,13 @@ exports.bar = bar;
 "
 `;
 
-exports[`v2 > monorepo > build bar 4`] = `
+exports[`monorepo > build bar 4`] = `
 "index.min.js:
 "use strict";exports.bar=function(r,t){return r-t};
 "
 `;
 
-exports[`v2 > monorepo > build foo 1`] = `
+exports[`monorepo > build foo 1`] = `
 [
   "index.d.ts",
   "index.js",
@@ -1217,7 +42,7 @@ exports[`v2 > monorepo > build foo 1`] = `
 ]
 `;
 
-exports[`v2 > monorepo > build foo 2`] = `
+exports[`monorepo > build foo 2`] = `
 "index.d.ts:
 export * from '@jiek/test-monorepo-bar';
 
@@ -1227,7 +52,7 @@ export { export_default as default };
 "
 `;
 
-exports[`v2 > monorepo > build foo 3`] = `
+exports[`monorepo > build foo 3`] = `
 "index.js:
 'use strict';
 
@@ -1249,59 +74,13 @@ Object.keys(testMonorepoBar).forEach(function (k) {
 "
 `;
 
-exports[`v2 > monorepo > build foo 4`] = `
+exports[`monorepo > build foo 4`] = `
 "index.min.js:
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("@jiek/test-monorepo-bar");exports.default=function(e,t){return e+t},Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})}));
 "
 `;
 
-exports[`v2 > monorepo > common 1`] = `
-[
-  "index.d.ts",
-  "index.js",
-  "index.min.js",
-]
-`;
-
-exports[`v2 > monorepo > common 2`] = `
-"index.d.ts:
-export * from '@jiek/test-monorepo-bar';
-
-declare function export_default(a: number, b: string): string;
-
-export { export_default as default };
-"
-`;
-
-exports[`v2 > monorepo > common 3`] = `
-"index.js:
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-var testMonorepoBar = require('@jiek/test-monorepo-bar');
-
-function index(a, b) {
-  return a + b;
-}
-
-exports.default = index;
-Object.keys(testMonorepoBar).forEach(function (k) {
-  if (k !== 'default' && !Object.prototype.hasOwnProperty.call(exports, k)) Object.defineProperty(exports, k, {
-    enumerable: true,
-    get: function () { return testMonorepoBar[k]; }
-  });
-});
-"
-`;
-
-exports[`v2 > monorepo > common 4`] = `
-"index.min.js:
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("@jiek/test-monorepo-bar");exports.default=function(e,t){return e+t},Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})}));
-"
-`;
-
-exports[`v2 > multiple exports > common 1`] = `
+exports[`multiple exports > common 1`] = `
 [
   "foo.d.ts",
   "foo.js",
@@ -1314,7 +93,7 @@ exports[`v2 > multiple exports > common 1`] = `
 ]
 `;
 
-exports[`v2 > multiple exports > common 2`] = `
+exports[`multiple exports > common 2`] = `
 "foo.d.ts:
 declare function foo(): string;
 
@@ -1322,7 +101,7 @@ export { foo };
 "
 `;
 
-exports[`v2 > multiple exports > common 3`] = `
+exports[`multiple exports > common 3`] = `
 "foo.js:
 'use strict';
 
@@ -1334,19 +113,19 @@ exports.foo = foo;
 "
 `;
 
-exports[`v2 > multiple exports > common 4`] = `
+exports[`multiple exports > common 4`] = `
 "foo.min.js:
 "use strict";exports.foo=function(){return"foo"};
 "
 `;
 
-exports[`v2 > multiple exports > common 5`] = `
+exports[`multiple exports > common 5`] = `
 "foo.min.mjs:
 function o(){return"foo"}export{o as foo};
 "
 `;
 
-exports[`v2 > multiple exports > common 6`] = `
+exports[`multiple exports > common 6`] = `
 "foo.mjs:
 function foo() {
   return 'foo'
@@ -1356,7 +135,7 @@ export { foo };
 "
 `;
 
-exports[`v2 > multiple exports > common 7`] = `
+exports[`multiple exports > common 7`] = `
 "index.d.ts:
 declare function foo(): string;
 
@@ -1364,7 +143,7 @@ export { foo };
 "
 `;
 
-exports[`v2 > multiple exports > common 8`] = `
+exports[`multiple exports > common 8`] = `
 "index.js:
 'use strict';
 
@@ -1376,13 +155,13 @@ exports.foo = foo;
 "
 `;
 
-exports[`v2 > multiple exports > common 9`] = `
+exports[`multiple exports > common 9`] = `
 "index.min.js:
 "use strict";exports.foo=function(){return"foo"};
 "
 `;
 
-exports[`v2 > simple > common 1`] = `
+exports[`simple > common 1`] = `
 [
   "index.d.ts",
   "index.js",
@@ -1390,7 +169,7 @@ exports[`v2 > simple > common 1`] = `
 ]
 `;
 
-exports[`v2 > simple > common 2`] = `
+exports[`simple > common 2`] = `
 "index.d.ts:
 declare function foo(): string;
 
@@ -1398,7 +177,7 @@ export { foo };
 "
 `;
 
-exports[`v2 > simple > common 3`] = `
+exports[`simple > common 3`] = `
 "index.js:
 'use strict';
 
@@ -1410,13 +189,13 @@ exports.foo = foo;
 "
 `;
 
-exports[`v2 > simple > common 4`] = `
+exports[`simple > common 4`] = `
 "index.min.js:
 "use strict";exports.foo=function(){return"foo"};
 "
 `;
 
-exports[`v2 > simple mjs > common 1`] = `
+exports[`simple mjs > common 1`] = `
 [
   "index.d.ts",
   "index.js",
@@ -1424,7 +203,7 @@ exports[`v2 > simple mjs > common 1`] = `
 ]
 `;
 
-exports[`v2 > simple mjs > common 2`] = `
+exports[`simple mjs > common 2`] = `
 "index.d.ts:
 declare function foo(): string;
 
@@ -1432,7 +211,7 @@ export { foo };
 "
 `;
 
-exports[`v2 > simple mjs > common 3`] = `
+exports[`simple mjs > common 3`] = `
 "index.js:
 function foo() {
   return "foo";
@@ -1442,13 +221,13 @@ export { foo };
 "
 `;
 
-exports[`v2 > simple mjs > common 4`] = `
+exports[`simple mjs > common 4`] = `
 "index.min.js:
 function o(){return"foo"}export{o as foo};
 "
 `;
 
-exports[`v2 > unordered exports inputs > common 1`] = `
+exports[`unordered exports inputs > common 1`] = `
 [
   "a.d.ts",
   "a.js",
@@ -1459,7 +238,7 @@ exports[`v2 > unordered exports inputs > common 1`] = `
 ]
 `;
 
-exports[`v2 > unordered exports inputs > common 2`] = `
+exports[`unordered exports inputs > common 2`] = `
 "a.d.ts:
 type A = 'a';
 
@@ -1467,20 +246,20 @@ export type { A };
 "
 `;
 
-exports[`v2 > unordered exports inputs > common 3`] = `
+exports[`unordered exports inputs > common 3`] = `
 "a.js:
 'use strict';
 
 "
 `;
 
-exports[`v2 > unordered exports inputs > common 4`] = `
+exports[`unordered exports inputs > common 4`] = `
 "a.min.js:
 "use strict";
 "
 `;
 
-exports[`v2 > unordered exports inputs > common 5`] = `
+exports[`unordered exports inputs > common 5`] = `
 "b.d.ts:
 type BDepDep = 1;
 
@@ -1492,14 +271,14 @@ export type { B };
 "
 `;
 
-exports[`v2 > unordered exports inputs > common 6`] = `
+exports[`unordered exports inputs > common 6`] = `
 "b.js:
 'use strict';
 
 "
 `;
 
-exports[`v2 > unordered exports inputs > common 7`] = `
+exports[`unordered exports inputs > common 7`] = `
 "b.min.js:
 "use strict";
 "
@@ -1508,19 +287,8 @@ exports[`v2 > unordered exports inputs > common 7`] = `
 exports[`with no resolve exports > common 1`] = `
 [
   "index.d.ts",
-  "index.esm.d.ts",
-  "index.esm.js",
-  "index.esm.js.map",
-  "index.esm.min.js",
-  "index.esm.min.js.map",
-  "index.iife.js",
-  "index.iife.js.map",
-  "index.iife.min.js",
-  "index.iife.min.js.map",
-  "index.umd.js",
-  "index.umd.js.map",
-  "index.umd.min.js",
-  "index.umd.min.js.map",
+  "index.js",
+  "index.min.js",
 ]
 `;
 
@@ -1533,108 +301,19 @@ export { foo };
 `;
 
 exports[`with no resolve exports > common 3`] = `
-"index.esm.d.ts:
-declare function foo(): string;
+"index.js:
+'use strict';
 
-export { foo };
-"
-`;
-
-exports[`with no resolve exports > common 4`] = `
-"index.esm.js:
 function foo() {
   return "foo";
 }
 
-export { foo };
-//# sourceMappingURL=index.esm.js.map
+exports.foo = foo;
 "
 `;
 
-exports[`with no resolve exports > common 5`] = `
-"index.esm.js.map:
-{"version":3,"file":"index.esm.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"AAAO,SAAS,GAAM,GAAA;AACpB,EAAO,OAAA,KAAA,CAAA;AACT;;;;"}"
-`;
-
-exports[`with no resolve exports > common 6`] = `
-"index.esm.min.js:
-function o(){return"foo"}export{o as foo};
-//# sourceMappingURL=index.esm.min.js.map
+exports[`with no resolve exports > common 4`] = `
+"index.min.js:
+"use strict";exports.foo=function(){return"foo"};
 "
-`;
-
-exports[`with no resolve exports > common 7`] = `
-"index.esm.min.js.map:
-{"version":3,"file":"index.esm.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":["foo"],"mappings":"AAAO,SAASA,IACP,MAAA,KACT"}"
-`;
-
-exports[`with no resolve exports > common 8`] = `
-"index.iife.js:
-var withNoResolveExport = (function (exports) {
-  'use strict';
-
-  function foo() {
-    return "foo";
-  }
-
-  exports.foo = foo;
-
-  return exports;
-
-})({});
-//# sourceMappingURL=index.iife.js.map
-"
-`;
-
-exports[`with no resolve exports > common 9`] = `
-"index.iife.js.map:
-{"version":3,"file":"index.iife.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":";;;EAAO,SAAS,GAAM,GAAA;EACpB,EAAO,OAAA,KAAA,CAAA;EACT;;;;;;;;;;"}"
-`;
-
-exports[`with no resolve exports > common 10`] = `
-"index.iife.min.js:
-var withNoResolveExport=function(o){"use strict";return o.foo=function(){return"foo"},o}({});
-//# sourceMappingURL=index.iife.min.js.map
-"
-`;
-
-exports[`with no resolve exports > common 11`] = `
-"index.iife.min.js.map:
-{"version":3,"file":"index.iife.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"8DAAO,WACE,MAAA,KACT"}"
-`;
-
-exports[`with no resolve exports > common 12`] = `
-"index.umd.js:
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.withNoResolveExport = {}));
-})(this, (function (exports) { 'use strict';
-
-  function foo() {
-    return "foo";
-  }
-
-  exports.foo = foo;
-
-}));
-//# sourceMappingURL=index.umd.js.map
-"
-`;
-
-exports[`with no resolve exports > common 13`] = `
-"index.umd.js.map:
-{"version":3,"file":"index.umd.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":";;;;;;EAAO,SAAS,GAAM,GAAA;EACpB,EAAO,OAAA,KAAA,CAAA;EACT;;;;;;;;"}"
-`;
-
-exports[`with no resolve exports > common 14`] = `
-"index.umd.min.js:
-!function(e,o){"object"==typeof exports&&"undefined"!=typeof module?o(exports):"function"==typeof define&&define.amd?define(["exports"],o):o((e="undefined"!=typeof globalThis?globalThis:e||self).withNoResolveExport={})}(this,(function(e){"use strict";e.foo=function(){return"foo"}}));
-//# sourceMappingURL=index.umd.min.js.map
-"
-`;
-
-exports[`with no resolve exports > common 15`] = `
-"index.umd.min.js.map:
-{"version":3,"file":"index.umd.min.js","sources":["../src/index.ts"],"sourcesContent":["export function foo() {\\n  return 'foo'\\n}\\n"],"names":[],"mappings":"iQAAO,WACE,MAAA,KACT"}"
 `;
