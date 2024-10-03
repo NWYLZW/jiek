@@ -24,11 +24,11 @@ function snapshotDistFiles(distDir: string) {
   fs.rmSync(distDir, { recursive: true })
 }
 
-function runCommandAndSnapshotDistFiles(cmd: string, root: string, prefixes: string[]) {
+function runCommandAndSnapshotDistFiles(cmd: string, root: string, prefixes: string[], distPath = 'dist') {
   const cliBinPath = path.resolve(__dirname, '../bin/jiek.js')
   const args = ['node', cliBinPath, cmd, ...prefixes].join(' ')
   childProcess.execSync(args, { cwd: root, stdio: 'inherit' })
-  snapshotDistFiles(path.resolve(root, 'dist'))
+  snapshotDistFiles(path.resolve(root, distPath))
 }
 
 describe('v2', () => {
@@ -36,19 +36,19 @@ describe('v2', () => {
     const [root, prefixes] = prepareRootWithSubCmd(['v2-simple'], {
       notWorkspace: true
     })
-    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes))
+    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
   })
   describe('simple-mjs', () => {
     const [root, prefixes] = prepareRootWithSubCmd(['v2-simple-mjs'], {
       notWorkspace: true
     })
-    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes))
+    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
   })
   describe('multiple-exports', () => {
     const [root, prefixes] = prepareRootWithSubCmd(['v2-multiple-exports'], {
       notWorkspace: true
     })
-    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes))
+    test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
   })
 })
 
