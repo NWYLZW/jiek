@@ -170,6 +170,40 @@ exports[`multiple exports > common 10`] = `
 "
 `;
 
+exports[`not dts tsconfig > common 1`] = `
+[
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+]
+`;
+
+exports[`not dts tsconfig > common 2`] = `
+"index.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`not dts tsconfig > common 3`] = `
+"index.js:
+'use strict';
+
+function foo() {
+  return "foo";
+}
+
+exports.foo = foo;
+"
+`;
+
+exports[`not dts tsconfig > common 4`] = `
+"index.min.js:
+"use strict";exports.foo=function(){return"foo"};
+"
+`;
+
 exports[`simple > common 1`] = `
 [
   "index.d.ts",

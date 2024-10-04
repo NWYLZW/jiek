@@ -66,3 +66,9 @@ describe('monorepo', () => {
     runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-bar', root, prefixes, 'packages/bar/dist')
   )
 })
+describe('not dts tsconfig', () => {
+  const [root, prefixes] = prepareRootWithSubCmd(['not-dts-tsconfig'], {
+    notWorkspace: true
+  })
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
+})
