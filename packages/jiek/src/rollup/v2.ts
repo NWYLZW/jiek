@@ -1,3 +1,4 @@
+import fs from 'node:fs'
 import { resolve } from 'node:path'
 
 import type { RecursiveRecord } from '@jiek/pkger/entrypoints'
@@ -63,6 +64,10 @@ const withMinify = (
   }
 ]
 
+type NormalPluginsRollupOptions = RollupOptions & {
+  plugins: Plugin[]
+}
+
 const generateConfigs = ({
   name,
   input,
@@ -77,10 +82,20 @@ const generateConfigs = ({
   outdir: string
   pkgIsModule: boolean
   conditionals: string[]
-}) => {
+}): NormalPluginsRollupOptions[] => {
   const isModule = conditionals.includes('import')
   const isCommonJS = conditionals.includes('require')
   const isBrowser = conditionals.includes('browser')
+  const dtsTSConfigPaths = [
+    resolveWorkspacePath('tsconfig.dts.json'),
+    resolveWorkspacePath('tsconfig.json')
+  ]
+  let dtsTSConfigPath: string | undefined
+  dtsTSConfigPaths.forEach(p => {
+    if (!dtsTSConfigPath && fs.existsSync(p) && !fs.statSync(p).isFile()) {
+      dtsTSConfigPath = p
+    }
+  })
   return [
     {
       input,
@@ -107,7 +122,7 @@ const generateConfigs = ({
         { dir: outdir }
       ],
       plugins: [
-        dts({ tsconfig: resolveWorkspacePath('tsconfig.dts.json') })
+        dts({ tsconfig: dtsTSConfigPath })
       ]
     }
   ]
@@ -145,9 +160,7 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
     return false
   })
 
-  const configs: (RollupOptions & {
-    plugins: Plugin[]
-  })[] = []
+  const configs: NormalPluginsRollupOptions[] = []
   leafMap.forEach((keysArr, input) =>
     keysArr.forEach((keys) => {
       const [path, ...conditionals] = keys
