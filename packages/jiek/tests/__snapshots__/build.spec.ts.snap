@@ -82,6 +82,7 @@ exports[`monorepo > build foo 4`] = `
 
 exports[`multiple exports > common 1`] = `
 [
+  "foo.d.mts",
   "foo.d.ts",
   "foo.js",
   "foo.min.js",
@@ -94,7 +95,7 @@ exports[`multiple exports > common 1`] = `
 `;
 
 exports[`multiple exports > common 2`] = `
-"foo.d.ts:
+"foo.d.mts:
 declare function foo(): string;
 
 export { foo };
@@ -102,6 +103,14 @@ export { foo };
 `;
 
 exports[`multiple exports > common 3`] = `
+"foo.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`multiple exports > common 4`] = `
 "foo.js:
 'use strict';
 
@@ -113,19 +122,19 @@ exports.foo = foo;
 "
 `;
 
-exports[`multiple exports > common 4`] = `
+exports[`multiple exports > common 5`] = `
 "foo.min.js:
 "use strict";exports.foo=function(){return"foo"};
 "
 `;
 
-exports[`multiple exports > common 5`] = `
+exports[`multiple exports > common 6`] = `
 "foo.min.mjs:
 function o(){return"foo"}export{o as foo};
 "
 `;
 
-exports[`multiple exports > common 6`] = `
+exports[`multiple exports > common 7`] = `
 "foo.mjs:
 function foo() {
   return 'foo'
@@ -135,7 +144,7 @@ export { foo };
 "
 `;
 
-exports[`multiple exports > common 7`] = `
+exports[`multiple exports > common 8`] = `
 "index.d.ts:
 declare function foo(): string;
 
@@ -143,7 +152,7 @@ export { foo };
 "
 `;
 
-exports[`multiple exports > common 8`] = `
+exports[`multiple exports > common 9`] = `
 "index.js:
 'use strict';
 
@@ -155,7 +164,7 @@ exports.foo = foo;
 "
 `;
 
-exports[`multiple exports > common 9`] = `
+exports[`multiple exports > common 10`] = `
 "index.min.js:
 "use strict";exports.foo=function(){return"foo"};
 "

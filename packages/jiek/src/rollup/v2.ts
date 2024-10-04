@@ -119,7 +119,10 @@ const generateConfigs = ({
     {
       input,
       output: [
-        { dir: outdir }
+        {
+          dir: outdir,
+          entryFileNames: ({ name }) => `${name.replace(/^src\//, '')}.d.${input.endsWith('.mts') ? 'm' : ''}ts`
+        }
       ],
       plugins: [
         dts({ tsconfig: dtsTSConfigPath })
