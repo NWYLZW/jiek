@@ -237,7 +237,7 @@ const generateConfigs = ({
       output: [
         {
           dir: outdir,
-          entryFileNames: ({ name }) => `${name.replace(/^src\//, '')}.d.${input.endsWith('.mts') ? 'm' : ''}ts`
+          entryFileNames: () => input.replace(/^\.\/src\//, '').replace(/(.[cm]?ts)$/, '.d$1')
         }
       ],
       plugins: [
