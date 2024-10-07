@@ -20,6 +20,7 @@ import esbuild from 'rollup-plugin-esbuild'
 import ts from 'typescript'
 
 import skip from './plugins/skip'
+import externalResolver from './utils/externalResolver'
 
 export interface TemplateOptions {
 }
@@ -153,6 +154,7 @@ const generateConfigs = ({
   input,
   output,
   outdir,
+  external,
   pkgIsModule,
   conditionals
 }: {
@@ -160,6 +162,7 @@ const generateConfigs = ({
   input: string
   output: string
   outdir: string
+  external: (string | RegExp)[]
   pkgIsModule: boolean
   conditionals: string[]
 }): RollupOptions[] => {
@@ -191,6 +194,7 @@ const generateConfigs = ({
   return [
     {
       input,
+      external,
       output: [
         ...withMinify({
           file: output,
@@ -241,6 +245,8 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
 
   const packageName = pascalCase(name)
 
+  const external = externalResolver(packageJSON as Record<string, unknown>)
+
   const [, resolvedEntrypoints] = resolveEntrypoints(entrypoints)
   const filteredResolvedEntrypoints = filterLeafs(
     resolvedEntrypoints as RecursiveRecord<string>,
@@ -279,6 +285,7 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
             input,
             output: keyExports,
             outdir,
+            external,
             pkgIsModule,
             conditionals
           }))
@@ -293,6 +300,7 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
                 input,
                 output: value,
                 outdir,
+                external,
                 pkgIsModule,
                 conditionals: allConditionals
               }))

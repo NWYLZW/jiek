@@ -1,9 +1,15 @@
-export default function () {
-  const cwd = process.cwd()
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const pkg = require(`${cwd}/package.json`)
+import fs from 'node:fs'
+
+export default function(json: Record<string, unknown>): (string | RegExp)[]
+export default function(path: string): (string | RegExp)[]
+export default function(jsonOrPath: string | Record<string, unknown> = process.cwd()): (string | RegExp)[] {
+  const pkg = typeof jsonOrPath === 'string'
+    ? fs.existsSync(`${jsonOrPath}/package.json`)
+      ? JSON.parse(fs.readFileSync(`${jsonOrPath}/package.json`, 'utf-8'))
+      : {}
+    : jsonOrPath
   const { dependencies = {}, peerDependencies = {}, optionalDependencies = {} } = pkg
-  const external = <(string | RegExp)[]>Object
+  const external = <(string | RegExp)[]> Object
     .keys(dependencies)
     .concat(Object.keys(peerDependencies))
     .concat(Object.keys(optionalDependencies))
