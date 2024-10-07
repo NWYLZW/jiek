@@ -12,6 +12,7 @@ import {
 import { dts } from '@jiek/rollup-plugin-dts'
 import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import json from '@rollup/plugin-json'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
 import terser from '@rollup/plugin-terser'
 import { parse } from 'jsonc-parser'
 import { isMatch } from 'micromatch'
@@ -209,6 +210,7 @@ const generateConfigs = ({
         })
       ],
       plugins: [
+        nodeResolve({ exportConditions: conditionals }),
         import('rollup-plugin-postcss')
           .then(({ default: postcss }) =>
             postcss({
@@ -222,6 +224,7 @@ const generateConfigs = ({
     },
     {
       input,
+      external,
       output: [
         {
           dir: outdir,
@@ -229,6 +232,8 @@ const generateConfigs = ({
         }
       ],
       plugins: [
+        // TODO external dev dependecies module is not bundled
+        nodeResolve({ exportConditions: conditionals }),
         skip({ patterns: [STYLE_REGEXP] }),
         dts({ compilerOptions })
       ]
