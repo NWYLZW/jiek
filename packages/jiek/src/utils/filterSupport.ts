@@ -61,7 +61,8 @@ export async function getSelectedProjectsGraph(): Promise<ProjectsGraph> {
       patterns: pnpmWorkspace.packages
     })
     return {
-      wd, root,
+      wd,
+      root,
       value: Object.entries(selectedProjectsGraph)
         .reduce((acc, [key, value]) => {
           acc[key] = value.package.manifest
@@ -70,7 +71,8 @@ export async function getSelectedProjectsGraph(): Promise<ProjectsGraph> {
     }
   }
   return {
-    wd, root,
+    wd,
+    root,
     value: {
       [wd]: JSON.parse(fs.readFileSync(path.resolve(wd, 'package.json'), 'utf-8'))
     }
