@@ -87,12 +87,12 @@ const generateConfigs = ({
   const isCommonJS = conditionals.includes('require')
   const isBrowser = conditionals.includes('browser')
   const dtsTSConfigPaths = [
-    resolveWorkspacePath('tsconfig.dts.json'),
-    resolveWorkspacePath('tsconfig.json')
+    resolveWorkspacePath('tsconfig.json'),
+    resolveWorkspacePath('tsconfig.dts.json')
   ]
   let dtsTSConfigPath: string | undefined
   dtsTSConfigPaths.forEach(p => {
-    if (!dtsTSConfigPath && fs.existsSync(p) && !fs.statSync(p).isFile()) {
+    if (fs.existsSync(p) && fs.statSync(p).isFile()) {
       dtsTSConfigPath = p
     }
   })
