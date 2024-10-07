@@ -360,3 +360,108 @@ exports[`with no resolve exports > common 4`] = `
 "use strict";exports.foo=function(){return"foo"};
 "
 `;
+
+exports[`with scss file import > common 1`] = `
+[
+  "foo.css",
+  "foo.d.ts",
+  "foo.js",
+  "foo.min.js",
+  "index.css",
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+  "index.styless.d.ts",
+  "index.styless.js",
+  "index.styless.min.js",
+]
+`;
+
+exports[`with scss file import > common 2`] = `
+"foo.css:
+.foo{display:none}.foo--bar{display:block}"
+`;
+
+exports[`with scss file import > common 3`] = `
+"foo.d.ts:
+
+export {  }
+"
+`;
+
+exports[`with scss file import > common 4`] = `
+"foo.js:
+'use strict';
+
+require('with-scss-file-import/foo.css');
+
+"
+`;
+
+exports[`with scss file import > common 5`] = `
+"foo.min.js:
+"use strict";require("with-scss-file-import/foo.css");
+"
+`;
+
+exports[`with scss file import > common 6`] = `
+"index.css:
+#app{color:red}"
+`;
+
+exports[`with scss file import > common 7`] = `
+"index.d.ts:
+declare function bar(): string;
+
+export { bar };
+"
+`;
+
+exports[`with scss file import > common 8`] = `
+"index.js:
+'use strict';
+
+require('with-scss-file-import/index.css');
+require('with-scss-file-import/foo');
+
+function bar() {
+  return "bar";
+}
+
+exports.bar = bar;
+"
+`;
+
+exports[`with scss file import > common 9`] = `
+"index.min.js:
+"use strict";require("with-scss-file-import/index.css"),require("with-scss-file-import/foo"),exports.bar=function(){return"bar"};
+"
+`;
+
+exports[`with scss file import > common 10`] = `
+"index.styless.d.ts:
+declare function bar(): string;
+
+export { bar };
+"
+`;
+
+exports[`with scss file import > common 11`] = `
+"index.styless.js:
+'use strict';
+
+require('with-scss-file-import/foo');
+
+function bar() {
+  return "bar";
+}
+
+exports.bar = bar;
+"
+`;
+
+exports[`with scss file import > common 12`] = `
+"index.styless.min.js:
+"use strict";require("with-scss-file-import/foo"),exports.bar=function(){return"bar"};
+"
+`;

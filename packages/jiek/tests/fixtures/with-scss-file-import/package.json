@@ -1,0 +1,16 @@
+{
+  "name": "simple",
+  "version": "0.1.0",
+  "exports": {
+    "./package.json": "./package.json",
+    "./*.css": ["./dist/*.css", "./src/*.scss"],
+    ".": {
+      "styless": "./src/index.styless.ts",
+      "default": "./src/index.ts"
+    },
+    "./foo": "./src/foo.ts"
+  },
+  "dependencies": {
+    "with-scss-file-import": "file:."
+  }
+}

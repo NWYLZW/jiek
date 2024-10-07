@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@jiek/pkger": "workspace:^",
+    "@jiek/rollup-plugin-dts": "^6.1.1",
     "@jiek/utils": "workspace:^",
     "@rollup/plugin-json": "^6.0.1",
     "@rollup/plugin-terser": "^0.4.4",
@@ -36,13 +37,13 @@
     "micromatch": "^4.0.5",
     "rollup": "^4.1.5",
     "rollup-plugin-copy": "^3.5.0",
-    "@jiek/rollup-plugin-dts": "^6.1.1",
-    "rollup-plugin-esbuild": "^6.1.0",
-    "rollup-plugin-postcss": "^4.0.2"
+    "rollup-plugin-esbuild": "^6.1.0"
   },
   "optionalDependencies": {
     "@pnpm/filter-workspace-packages": "^7.2.13",
-    "esbuild-register": "^3.5.0"
+    "esbuild-register": "^3.5.0",
+    "postcss": "^8.4.47",
+    "rollup-plugin-postcss": "^4.0.2"
   },
   "devDependencies": {
     "@npm/types": "^1.0.2",
@@ -52,7 +53,10 @@
     "@types/inquirer": "^9.0.7",
     "@types/js-yaml": "^4.0.9",
     "@types/micromatch": "^4.0.6",
-    "esbuild-register": "^3.5.0"
+    "esbuild-register": "^3.5.0",
+    "node-sass": "^9.0.0",
+    "postcss": "^8.4.47",
+    "rollup-plugin-postcss": "^4.0.2"
   },
   "publishConfig": {
     "exports": {

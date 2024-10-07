@@ -72,3 +72,9 @@ describe('not dts tsconfig', () => {
   })
   test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
 })
+describe('with scss file import', () => {
+  const [root, prefixes] = prepareRootWithSubCmd(['with-scss-file-import'], {
+    notWorkspace: true
+  })
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
+})

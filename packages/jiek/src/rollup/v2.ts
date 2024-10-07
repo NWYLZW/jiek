@@ -16,6 +16,8 @@ import terser from '@rollup/plugin-terser'
 import type { OutputOptions, OutputPlugin, RollupOptions } from 'rollup'
 import esbuild from 'rollup-plugin-esbuild'
 
+import skip from '#~/rollup/plugins/skip.ts'
+
 export interface TemplateOptions {
 }
 
@@ -33,6 +35,8 @@ const COMMON_OPTIONS = {} satisfies RollupOptions
 const COMMON_PLUGINS = [
   json()
 ]
+
+const STYLE_REGEXP = /\.(css|s[ac]ss|less|styl)$/
 
 const resolveWorkspacePath = (p: string) => resolve(WORKSPACE_ROOT, p)
 
@@ -109,6 +113,14 @@ const generateConfigs = ({
         })
       ],
       plugins: [
+        import('rollup-plugin-postcss')
+          .then(({ default: postcss }) =>
+            postcss({
+              extract: resolve(output.replace(/\.[cm]?js$/, '.css')),
+              minimize: true
+            })
+          )
+          .catch(() => void 0),
         esbuild()
       ]
     },
@@ -121,6 +133,7 @@ const generateConfigs = ({
         }
       ],
       plugins: [
+        skip({ patterns: [STYLE_REGEXP] }),
         dts({ tsconfig: dtsTSConfigPath })
       ]
     }

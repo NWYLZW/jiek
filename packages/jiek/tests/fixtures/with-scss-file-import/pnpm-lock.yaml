@@ -1,0 +1,22 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      with-scss-file-import:
+        specifier: file:.
+        version: 'simple@file:'
+
+packages:
+
+  'simple@file:':
+    resolution: {directory: '', type: directory}
+
+snapshots:
+
+  'simple@file:': {}

@@ -1,0 +1,6 @@
+.foo {
+  display: none;
+  &--bar {
+    display: block;
+  }
+}
