@@ -323,11 +323,11 @@ exports[`project references > build fuo 1`] = `
 
 exports[`project references > build fuo 2`] = `
 "index.d.ts:
-export * from '@jiek/test-monorepo-bar';
+declare function bar(a: number, b: number): number;
 
 declare function export_default(a: number, b: string): string;
 
-export { export_default as default };
+export { bar, export_default as default };
 "
 `;
 
@@ -366,11 +366,11 @@ exports[`project references > build fuu 1`] = `
 
 exports[`project references > build fuu 2`] = `
 "index.d.ts:
-export * from '@jiek/test-monorepo-bar';
+declare function bar(a: number, b: number): number;
 
 declare function export_default(a: number, b: string): string;
 
-export { export_default as default };
+export { bar, export_default as default };
 "
 `;
 

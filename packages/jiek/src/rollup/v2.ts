@@ -241,10 +241,12 @@ const generateConfigs = ({
         }
       ],
       plugins: [
-        // TODO external dev dependecies module is not bundled
         nodeResolve({ exportConditions }),
         skip({ patterns: [STYLE_REGEXP] }),
-        dts({ compilerOptions })
+        dts({
+          respectExternal: true,
+          compilerOptions
+        })
       ]
     }
   ]
