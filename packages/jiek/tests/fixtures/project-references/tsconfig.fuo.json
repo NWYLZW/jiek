@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "customConditions": ["special"]
+  },
+  "include": [
+    "./packages/fuo/src/**/*.ts"
+  ]
+}

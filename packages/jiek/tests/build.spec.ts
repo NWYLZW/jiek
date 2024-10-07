@@ -78,3 +78,22 @@ describe('with scss file import', () => {
   })
   test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
 })
+describe('project references', () => {
+  const [root, prefixes] = prepareRootWithSubCmd(['project-references'])
+  test(
+    'build foo',
+    runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-foo', root, prefixes, 'packages/foo/dist')
+  )
+  test(
+    'build fuo',
+    runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-fuo', root, prefixes, 'packages/fuo/dist')
+  )
+  test(
+    'build fuu',
+    runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-fuu', root, prefixes, 'packages/fuu/dist')
+  )
+  test(
+    'build bar',
+    runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-bar', root, prefixes, 'packages/bar/dist')
+  )
+})

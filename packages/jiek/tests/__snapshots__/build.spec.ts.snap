@@ -204,6 +204,201 @@ exports[`not dts tsconfig > common 4`] = `
 "
 `;
 
+exports[`project references > build bar 1`] = `
+[
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+  "index.special.d.ts",
+  "index.special.js",
+  "index.special.min.js",
+]
+`;
+
+exports[`project references > build bar 2`] = `
+"index.d.ts:
+declare function bar(a: number, b: number): number;
+
+export { bar };
+"
+`;
+
+exports[`project references > build bar 3`] = `
+"index.js:
+'use strict';
+
+function bar(a, b) {
+  return a - b;
+}
+
+exports.bar = bar;
+"
+`;
+
+exports[`project references > build bar 4`] = `
+"index.min.js:
+"use strict";exports.bar=function(r,t){return r-t};
+"
+`;
+
+exports[`project references > build bar 5`] = `
+"index.special.d.ts:
+declare function bar(a: number, b: number): number;
+
+export { bar };
+"
+`;
+
+exports[`project references > build bar 6`] = `
+"index.special.js:
+'use strict';
+
+function bar(a, b) {
+  return a * b;
+}
+
+exports.bar = bar;
+"
+`;
+
+exports[`project references > build bar 7`] = `
+"index.special.min.js:
+"use strict";exports.bar=function(r,t){return r*t};
+"
+`;
+
+exports[`project references > build foo 1`] = `
+[
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+]
+`;
+
+exports[`project references > build foo 2`] = `
+"index.d.ts:
+export * from '@jiek/test-monorepo-bar';
+
+declare function export_default(a: number, b: string): string;
+
+export { export_default as default };
+"
+`;
+
+exports[`project references > build foo 3`] = `
+"index.js:
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var testMonorepoBar = require('@jiek/test-monorepo-bar');
+
+function index(a, b) {
+  return a + b;
+}
+
+exports.default = index;
+Object.keys(testMonorepoBar).forEach(function (k) {
+  if (k !== 'default' && !Object.prototype.hasOwnProperty.call(exports, k)) Object.defineProperty(exports, k, {
+    enumerable: true,
+    get: function () { return testMonorepoBar[k]; }
+  });
+});
+"
+`;
+
+exports[`project references > build foo 4`] = `
+"index.min.js:
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("@jiek/test-monorepo-bar");exports.default=function(e,t){return e+t},Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})}));
+"
+`;
+
+exports[`project references > build fuo 1`] = `
+[
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+]
+`;
+
+exports[`project references > build fuo 2`] = `
+"index.d.ts:
+export * from '@jiek/test-monorepo-bar';
+
+declare function export_default(a: number, b: string): string;
+
+export { export_default as default };
+"
+`;
+
+exports[`project references > build fuo 3`] = `
+"index.js:
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function bar(a, b) {
+  return a * b;
+}
+
+function index(a, b) {
+  return a + b;
+}
+
+exports.bar = bar;
+exports.default = index;
+"
+`;
+
+exports[`project references > build fuo 4`] = `
+"index.min.js:
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.bar=function(e,t){return e*t},exports.default=function(e,t){return e+t};
+"
+`;
+
+exports[`project references > build fuu 1`] = `
+[
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+]
+`;
+
+exports[`project references > build fuu 2`] = `
+"index.d.ts:
+export * from '@jiek/test-monorepo-bar';
+
+declare function export_default(a: number, b: string): string;
+
+export { export_default as default };
+"
+`;
+
+exports[`project references > build fuu 3`] = `
+"index.js:
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function bar(a, b) {
+  return a - b;
+}
+
+function index(a, b) {
+  return a + b;
+}
+
+exports.bar = bar;
+exports.default = index;
+"
+`;
+
+exports[`project references > build fuu 4`] = `
+"index.min.js:
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.bar=function(e,t){return e-t},exports.default=function(e,t){return e+t};
+"
+`;
+
 exports[`simple > common 1`] = `
 [
   "index.d.ts",
