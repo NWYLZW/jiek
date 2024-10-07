@@ -13,7 +13,7 @@ import { dts } from '@jiek/rollup-plugin-dts'
 import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import json from '@rollup/plugin-json'
 import terser from '@rollup/plugin-terser'
-import type { OutputOptions, OutputPlugin, Plugin, RollupOptions } from 'rollup'
+import type { OutputOptions, OutputPlugin, RollupOptions } from 'rollup'
 import esbuild from 'rollup-plugin-esbuild'
 
 export interface TemplateOptions {
@@ -64,10 +64,6 @@ const withMinify = (
   }
 ]
 
-type NormalPluginsRollupOptions = RollupOptions & {
-  plugins: Plugin[]
-}
-
 const generateConfigs = ({
   name,
   input,
@@ -82,7 +78,7 @@ const generateConfigs = ({
   outdir: string
   pkgIsModule: boolean
   conditionals: string[]
-}): NormalPluginsRollupOptions[] => {
+}): RollupOptions[] => {
   const isModule = conditionals.includes('import')
   const isCommonJS = conditionals.includes('require')
   const isBrowser = conditionals.includes('browser')
@@ -163,7 +159,7 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
     return false
   })
 
-  const configs: NormalPluginsRollupOptions[] = []
+  const configs: RollupOptions[] = []
   leafMap.forEach((keysArr, input) =>
     keysArr.forEach((keys) => {
       const [path, ...conditionals] = keys
@@ -208,7 +204,7 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
     ...c,
     plugins: [
       ...COMMON_PLUGINS,
-      ...(c.plugins ?? [])
+      c.plugins
     ]
   }))
 }
