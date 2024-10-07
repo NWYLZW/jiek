@@ -277,16 +277,19 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
 
       const name = packageName + (path === '.' ? '' : pascalCase(path))
       const keyExports = reveal(exports, keys)
+      const commonOptions = {
+        name,
+        input,
+        outdir,
+        external,
+        pkgIsModule
+      }
 
       switch (typeof keyExports) {
         case 'string': {
           configs.push(...generateConfigs({
-            name,
-            input,
+            ...commonOptions,
             output: keyExports,
-            outdir,
-            external,
-            pkgIsModule,
             conditionals
           }))
           break
@@ -296,12 +299,8 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
             const allConditionals = [...new Set([...conditionals, ...nextKeys])]
             if (typeof value === 'string') {
               configs.push(...generateConfigs({
-                name,
-                input,
+                ...commonOptions,
                 output: value,
-                outdir,
-                external,
-                pkgIsModule,
                 conditionals: allConditionals
               }))
             }
