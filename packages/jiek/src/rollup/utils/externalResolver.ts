@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 
 export default function(json: Record<string, unknown>): (string | RegExp)[]
-export default function(path: string): (string | RegExp)[]
+export default function(path?: string): (string | RegExp)[]
 export default function(jsonOrPath: string | Record<string, unknown> = process.cwd()): (string | RegExp)[] {
   const pkg = typeof jsonOrPath === 'string'
     ? fs.existsSync(`${jsonOrPath}/package.json`)
