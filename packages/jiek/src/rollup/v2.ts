@@ -119,8 +119,6 @@ const getCompilerOptionsByFilePath = (tsconfigPath: string, filePath: string): R
   // It’s worth noting that files, include, and exclude from the inheriting config file overwrite
   // those from the base config file, and that circularity between configuration files is not allowed.
   const tsconfig = getExtendTSConfig(tsconfigPath)
-  const existReferences = !!tsconfig.references
-  if (!existReferences) return tsconfig.compilerOptions ?? {}
 
   const resolvePaths = (paths: string[] | undefined) => paths?.map(p => resolve(tsconfigPathDirname, p)) ?? []
 
@@ -137,10 +135,20 @@ const getCompilerOptionsByFilePath = (tsconfigPath: string, filePath: string): R
   ].map(resolvePaths)
   if (exclude.length > 0 && exclude.some(i => isMatch(filePath, i))) return
 
+  // when files or include is not empty, the tsconfig should be ignored
+  if (tsconfig.files?.length === 0 && tsconfig.include?.length === 0) return
   let isInclude = false
   isInclude ||= files.length > 0 && files.includes(filePath)
   isInclude ||= include.length > 0 && include.some(i => isMatch(filePath, i))
-  if (isInclude) return tsconfig.compilerOptions ?? {}
+  if (isInclude) {
+    return tsconfig.compilerOptions ?? {}
+  } else {
+    // when files or include is not empty, but the file is not matched, the tsconfig should be ignored
+    if (
+      (tsconfig.files && tsconfig.files.length > 0)
+      || (tsconfig.include && tsconfig.include.length > 0)
+    ) return
+  }
 
   references.reverse()
   for (const ref of references) {
@@ -192,6 +200,7 @@ const generateConfigs = ({
     }
     compilerOptions = options
   }
+  const exportConditions = [...conditionals, ...(compilerOptions.customConditions ?? [])]
   return [
     {
       input,
@@ -210,7 +219,7 @@ const generateConfigs = ({
         })
       ],
       plugins: [
-        nodeResolve({ exportConditions: conditionals }),
+        nodeResolve({ exportConditions }),
         import('rollup-plugin-postcss')
           .then(({ default: postcss }) =>
             postcss({
@@ -233,7 +242,7 @@ const generateConfigs = ({
       ],
       plugins: [
         // TODO external dev dependecies module is not bundled
-        nodeResolve({ exportConditions: conditionals }),
+        nodeResolve({ exportConditions }),
         skip({ patterns: [STYLE_REGEXP] }),
         dts({ compilerOptions })
       ]
