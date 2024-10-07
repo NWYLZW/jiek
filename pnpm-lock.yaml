@@ -25,6 +25,9 @@ importers:
       '@rollup/plugin-json':
         specifier: ^6.0.1
         version: 6.1.0(rollup@4.16.0)
+      '@rollup/plugin-node-resolve':
+        specifier: ^15.3.0
+        version: 15.3.0(rollup@4.16.0)
       '@rollup/plugin-terser':
         specifier: ^0.4.4
         version: 0.4.4(rollup@4.16.0)
@@ -80,7 +83,7 @@ importers:
         specifier: workspace:^*
         version: link:packages/standard
       typescript:
-        specifier: ^5.5.3
+        specifier: ^5.0.0
         version: 5.5.3
       vite-tsconfig-paths:
         specifier: ^4.3.2
@@ -142,6 +145,9 @@ importers:
       rollup-plugin-esbuild:
         specifier: ^6.1.0
         version: 6.1.1(esbuild@0.20.2)(rollup@4.13.0)
+      typescript:
+        specifier: ^5.0.0
+        version: 5.5.3
     optionalDependencies:
       '@pnpm/filter-workspace-packages':
         specifier: ^7.2.13
@@ -4589,6 +4595,16 @@ snapshots:
       resolve: 1.22.8
     optionalDependencies:
       rollup: 4.13.0
+
+  '@rollup/plugin-node-resolve@15.3.0(rollup@4.16.0)':
+    dependencies:
+      '@rollup/pluginutils': 5.1.0(rollup@4.16.0)
+      '@types/resolve': 1.20.2
+      deepmerge: 4.3.1
+      is-module: 1.0.0
+      resolve: 1.22.8
+    optionalDependencies:
+      rollup: 4.16.0
 
   '@rollup/plugin-terser@0.4.4(rollup@4.13.0)':
     dependencies:
