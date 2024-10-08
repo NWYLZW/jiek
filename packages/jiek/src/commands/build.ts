@@ -1,8 +1,8 @@
-import * as childProcess from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 
 import { program } from 'commander'
+import { execaCommand } from 'execa'
 
 import { actionDone, actionRestore } from '../inner'
 import { getSelectedProjectsGraph } from '../utils/filterSupport'
@@ -39,29 +39,42 @@ program
     const rollupBinaryPath = require.resolve('rollup')
       .replace(/dist\/rollup.js$/, 'dist/bin/rollup')
     let i = 0
-    for (const [dir, manifest] of Object.entries(value)) {
-      // TODO support auto build child packages in workspaces
-      const escapeManifestName = manifest.name?.replace(/^@/g, '').replace(/\//g, '+')
-      const configFile = jiekTempDir(
-        `${escapeManifestName ?? `anonymous-${i++}`}.rollup.config.js`
-      )
-      fs.writeFileSync(configFile, FILE_TEMPLATE(manifest))
-      let prefix = ''
-      if (tsRegisterName) {
-        prefix = `node -r ${tsRegisterName} `
-      }
-      // TODO replace with `spawn` to support watch mode
-      const command = `${prefix}${rollupBinaryPath} --silent -c ${configFile}`
-      childProcess.execSync(command, {
-        cwd: dir,
-        stdio: 'inherit',
-        env: {
-          JIEK_TARGET: target ?? process.env.JIEK_TARGET ?? 'esm,umd,dts',
-          JIEK_SILENT: `${silent}` ?? process.env.JIEK_SILENT,
-          JIEK_ROOT: wd
+    await Promise.all(
+      Object.entries(value).map(async ([dir, manifest]) => {
+        // TODO support auto build child packages in workspaces
+        const escapeManifestName = manifest.name?.replace(/^@/g, '').replace(/\//g, '+')
+        const configFile = jiekTempDir(
+          `${escapeManifestName ?? `anonymous-${i++}`}.rollup.config.js`
+        )
+        fs.writeFileSync(configFile, FILE_TEMPLATE(manifest))
+        let prefix = ''
+        if (tsRegisterName) {
+          prefix = `node -r ${tsRegisterName} `
         }
+        // TODO replace with `spawn` to support watch mode
+        const command = `${prefix}${rollupBinaryPath} --silent -c ${configFile}`
+        const child = execaCommand(command, {
+          cwd: dir,
+          env: {
+            ...process.env,
+            JIEK_TARGET: target ?? process.env.JIEK_TARGET ?? 'esm,umd,dts',
+            JIEK_SILENT: `${silent}` ?? process.env.JIEK_SILENT,
+            JIEK_ROOT: wd
+          }
+        })
+        child.on('message', console.log)
+        await new Promise<void>((resolve, reject) => {
+          let errorStr = ''
+          child.stderr?.on('data', (data) => {
+            errorStr += data
+          })
+          child.once('exit', (code) =>
+            code === 0
+              ? resolve()
+              : reject(new Error(`rollup build failed: ${errorStr}`)))
+        })
       })
-    }
+    )
 
     actionDone()
   })

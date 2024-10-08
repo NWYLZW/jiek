@@ -14,11 +14,13 @@ import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import json from '@rollup/plugin-json'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import terser from '@rollup/plugin-terser'
+import { sendMessage } from 'execa'
 import { parse } from 'jsonc-parser'
 import { isMatch } from 'micromatch'
 import type { OutputOptions, OutputPlugin, RollupOptions } from 'rollup'
 import esbuild from 'rollup-plugin-esbuild'
 import ts from 'typescript'
+import progress from './plugins/progress'
 
 import skip from './plugins/skip'
 import externalResolver from './utils/externalResolver'
@@ -246,6 +248,9 @@ const generateConfigs = ({
         dts({
           respectExternal: true,
           compilerOptions
+        }),
+        progress({
+          onEvent: (event, message) => sendMessage({ event, message })
         })
       ]
     }

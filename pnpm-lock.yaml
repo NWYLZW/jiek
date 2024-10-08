@@ -52,6 +52,9 @@ importers:
       esbuild-register:
         specifier: ^3.5.0
         version: 3.5.0(esbuild@0.20.2)
+      execa:
+        specifier: ^8.0.1
+        version: 8.0.1
       inquirer:
         specifier: ^8.2.6
         version: 8.2.6
@@ -124,6 +127,9 @@ importers:
       detect-indent:
         specifier: ^6.1.0
         version: 6.1.0
+      execa:
+        specifier: ^8.0.1
+        version: 8.0.1
       inquirer:
         specifier: ^8.2.6
         version: 8.2.6
