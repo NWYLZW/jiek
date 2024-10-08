@@ -78,7 +78,7 @@ program
         })
         const bars: Record<string, ReturnType<typeof multiBars.create>> = {}
         let inputMaxLen = 10
-        child.on('message', (e: RollupProgressEvent) => {
+        !silent && child.on('message', (e: RollupProgressEvent) => {
           if (e.type === 'init') {
             const { leafMap, targetsLength } = e.data
             const leafs = Array
