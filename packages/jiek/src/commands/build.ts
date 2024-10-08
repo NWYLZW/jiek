@@ -70,7 +70,6 @@ program
           cwd: dir,
           env: {
             ...process.env,
-            JIEK_TARGET: target ?? process.env.JIEK_TARGET ?? 'esm,umd,dts',
             JIEK_SILENT: `${silent}` ?? process.env.JIEK_SILENT,
             JIEK_ROOT: wd
           }
