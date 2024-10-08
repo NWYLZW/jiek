@@ -15,7 +15,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./cli": "./src/cli.ts",
-    "./rollup.v2": "./src/rollup/v2.ts"
+    "./rollup": "./src/rollup/index.ts"
   },
   "imports": {
     "#~/*": "./src/*"
