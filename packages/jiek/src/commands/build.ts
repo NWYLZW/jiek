@@ -23,7 +23,6 @@ module.exports = require('jiek/rollup.v2').template(pkg, templateArg)
 
 program
   .command('build')
-  .option('-t, --target <type>', 'target flow: esm|umd|dts, default esm,umd,dts')
   .option('-s, --silent', 'silent mode')
   .action(async ({ target, silent }) => {
     actionRestore()
