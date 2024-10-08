@@ -54,6 +54,7 @@ program
         // TODO replace with `spawn` to support watch mode
         const command = `${prefix}${rollupBinaryPath} --silent -c ${configFile}`
         const child = execaCommand(command, {
+          ipc: true,
           cwd: dir,
           env: {
             ...process.env,
