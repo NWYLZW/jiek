@@ -26,7 +26,7 @@ export function prepareROOT(
     ].filter(Boolean).join(' ')
     childProcess.execSync(args, {
       cwd: ROOT,
-      stdio: 'inherit'
+      stdio: ['ignore', 'ignore', 'inherit']
     })
   })
   afterAll(() => {
