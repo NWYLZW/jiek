@@ -20,8 +20,8 @@ import { isMatch } from 'micromatch'
 import type { OutputOptions, OutputPlugin, RollupOptions } from 'rollup'
 import esbuild from 'rollup-plugin-esbuild'
 import ts from 'typescript'
-import progress from './plugins/progress'
 
+import progress from './plugins/progress'
 import skip from './plugins/skip'
 import externalResolver from './utils/externalResolver'
 
