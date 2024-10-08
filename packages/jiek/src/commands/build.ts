@@ -1,10 +1,12 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
+import { MultiBar, Presets } from 'cli-progress'
 import { program } from 'commander'
 import { execaCommand } from 'execa'
 
 import { actionDone, actionRestore } from '../inner'
+import type { RollupProgressEvent } from '../rollup/base'
 import { getSelectedProjectsGraph } from '../utils/filterSupport'
 import { tsRegisterName } from '../utils/tsRegister'
 
@@ -33,11 +35,22 @@ program
     if (Object.keys(value).length === 0) {
       throw new Error('no package found')
     }
-    const jiekTempDir = (...paths: string[]) => path.resolve(wd, 'node_modules/.jiek', ...paths)
-    if (!fs.existsSync(jiekTempDir())) fs.mkdirSync(jiekTempDir())
+    const wdNodeModules = path.resolve(wd, 'node_modules')
+    if (!fs.existsSync(wdNodeModules)) {
+      fs.mkdirSync(wdNodeModules)
+    }
+    const jiekTempDir = (...paths: string[]) => path.resolve(wdNodeModules, '.jiek', ...paths)
+    if (!fs.existsSync(jiekTempDir())) {
+      fs.mkdirSync(jiekTempDir())
+    }
 
     const rollupBinaryPath = require.resolve('rollup')
       .replace(/dist\/rollup.js$/, 'dist/bin/rollup')
+    const multiBars = new MultiBar({
+      clearOnComplete: false,
+      hideCursor: true,
+      format: '- {bar} | {status} | {input} | {message}'
+    }, Presets.shades_classic)
     let i = 0
     await Promise.all(
       Object.entries(value).map(async ([dir, manifest]) => {
@@ -63,7 +76,60 @@ program
             JIEK_ROOT: wd
           }
         })
-        child.on('message', console.log)
+        const bars: Record<string, ReturnType<typeof multiBars.create>> = {}
+        let inputMaxLen = 10
+        child.on('message', (e: RollupProgressEvent) => {
+          if (e.type === 'init') {
+            const { leafMap, targetsLength } = e.data
+            const leafs = Array
+              .from(leafMap.entries())
+              .flatMap(([input, pathAndCondiions]) =>
+                pathAndCondiions.map(([path, ...conditions]) => ({
+                  input,
+                  path,
+                  conditions
+                }))
+              )
+            console.log(`Package '${manifest.name}' has ${targetsLength} targets to build`)
+            leafs.forEach(({ input }) => {
+              inputMaxLen = Math.max(inputMaxLen, input.length)
+            })
+            leafs.forEach(({ input, path }) => {
+              const key = `${input}:${path}`
+              if (bars[key]) return
+              bars[key] = multiBars.create(50, 0, {
+                input: input.padEnd(inputMaxLen),
+                status: 'waiting'.padEnd(10)
+              }, {
+                barsize: 20,
+                linewrap: true
+              })
+            })
+          }
+          if (e.type === 'progress') {
+            const {
+              path,
+              tags,
+              input,
+              event,
+              message
+            } = e.data
+            const bar = bars[`${input}:${path}`]
+            if (!bar) return
+            bar.update(
+              {
+                start: 0,
+                resolve: 20,
+                end: 100
+              }[event ?? 'start'] ?? 0,
+              {
+                input: input.padEnd(inputMaxLen),
+                status: event?.padEnd(10),
+                message: `${tags?.join(', ')}: ${message}`
+              }
+            )
+          }
+        })
         await new Promise<void>((resolve, reject) => {
           let errorStr = ''
           child.stderr?.on('data', (data) => {
@@ -77,5 +143,6 @@ program
       })
     )
 
+    multiBars.stop()
     actionDone()
   })

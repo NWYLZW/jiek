@@ -21,6 +21,7 @@ import type { OutputOptions, OutputPlugin, RollupOptions } from 'rollup'
 import esbuild from 'rollup-plugin-esbuild'
 import ts from 'typescript'
 
+import type { RollupProgressEvent } from './base'
 import progress from './plugins/progress'
 import skip from './plugins/skip'
 import externalResolver from './utils/externalResolver'
@@ -161,6 +162,7 @@ const getCompilerOptionsByFilePath = (tsconfigPath: string, filePath: string): R
 }
 
 const generateConfigs = ({
+  path,
   name,
   input,
   output,
@@ -169,6 +171,7 @@ const generateConfigs = ({
   pkgIsModule,
   conditionals
 }: {
+  path: string
   name: string
   input: string
   output: string
@@ -203,6 +206,10 @@ const generateConfigs = ({
     compilerOptions = options
   }
   const exportConditions = [...conditionals, ...(compilerOptions.customConditions ?? [])]
+  const throughEventProps: RollupProgressEvent & { type: 'progress' } = {
+    type: 'progress',
+    data: { name, path, exportConditions, input }
+  }
   return [
     {
       input,
@@ -230,7 +237,16 @@ const generateConfigs = ({
             })
           )
           .catch(() => void 0),
-        esbuild()
+        esbuild(),
+        progress({
+          onEvent: (event, message) =>
+            sendMessage(
+              {
+                ...throughEventProps,
+                data: { ...throughEventProps.data, event, message, tags: ['js'] }
+              } satisfies RollupProgressEvent
+            )
+        })
       ]
     },
     {
@@ -250,7 +266,13 @@ const generateConfigs = ({
           compilerOptions
         }),
         progress({
-          onEvent: (event, message) => sendMessage({ event, message })
+          onEvent: (event, message) =>
+            sendMessage(
+              {
+                ...throughEventProps,
+                data: { ...throughEventProps.data, event, message, tags: ['dts'] }
+              } satisfies RollupProgressEvent
+            )
         })
       ]
     }
@@ -299,6 +321,7 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
       const name = packageName + (path === '.' ? '' : pascalCase(path))
       const keyExports = reveal(exports, keys)
       const commonOptions = {
+        path,
         name,
         input,
         outdir,
@@ -331,6 +354,15 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
         }
       }
     })
+  )
+  sendMessage(
+    {
+      type: 'init',
+      data: {
+        leafMap,
+        targetsLength: configs.length
+      }
+    } satisfies RollupProgressEvent
   )
   return configs.map(c => ({
     ...COMMON_OPTIONS,
