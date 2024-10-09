@@ -295,7 +295,7 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
     resolvedEntrypoints as RecursiveRecord<string>,
     {
       skipValue: [
-        // ignore values that filename start with `.jk-noentry`
+        // ignore values that filename starts with `.jk-noentry`
         /(^|\/)\.jk-noentry/,
         ...DEFAULT_SKIP_VALUES
       ]
