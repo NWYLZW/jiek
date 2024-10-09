@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import { dirname, resolve } from 'node:path'
 
-import type { RecursiveRecord } from '@jiek/pkger/entrypoints'
+import type { Entrypoints2ExportsOptions, RecursiveRecord } from '@jiek/pkger/entrypoints'
 import {
   DEFAULT_SKIP_VALUES,
   entrypoints2Exports,
@@ -27,6 +27,15 @@ import skip from './plugins/skip'
 import externalResolver from './utils/externalResolver'
 
 export interface TemplateOptions {
+  /**
+   * When the user configures type: module, the generated output from entry points that don't
+   * have cts as a suffix will automatically include the CJS version.
+   * if it is not configured, and the generated output from entry points that do not have mts
+   * as a suffix will automatically include the ESM version.
+   *
+   * @default true
+   */
+  crossModuleConvertor?: boolean
 }
 
 interface PackageJSON {
@@ -260,7 +269,10 @@ const generateConfigs = ({
       output: [
         {
           dir: outdir,
-          entryFileNames: () => input.replace(/^\.\/src\//, '').replace(/(.[cm]?ts)$/, '.d$1')
+          entryFileNames: () =>
+            output
+              .replace(/^\.\/dist\//, '')
+              .replace(/(\.[cm]?)js$/, '.d$1ts')
         }
       ],
       plugins: [
@@ -291,6 +303,10 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
   if (!name) throw new Error('package.json name is required')
   if (!entrypoints) throw new Error('package.json exports is required')
 
+  const {
+    crossModuleConvertor = true
+  } = options
+
   const packageName = pascalCase(name)
 
   const external = externalResolver(packageJSON as Record<string, unknown>)
@@ -306,7 +322,30 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
       ]
     }
   )
-  const exports = entrypoints2Exports(filteredResolvedEntrypoints, {})
+  const crossModuleWithConditional: Entrypoints2ExportsOptions['withConditional'] = crossModuleConvertor
+    ? {
+      import: opts =>
+        !pkgIsModule && intersection(
+              new Set(opts.conditionals),
+              new Set(['import', 'module'])
+            ).size === 0
+          ? opts.dist.replace(/\.js$/, '.mjs')
+          : false,
+      require: opts => {
+        return pkgIsModule && intersection(
+              new Set(opts.conditionals),
+              new Set(['require', 'node'])
+            ).size === 0
+          ? opts.dist.replace(/\.js$/, '.cjs')
+          : false
+      }
+    }
+    : {}
+  const exports = entrypoints2Exports(filteredResolvedEntrypoints, {
+    withConditional: {
+      ...crossModuleWithConditional
+    }
+  })
 
   const leafMap = new Map<string, string[][]>()
   getAllLeafs(filteredResolvedEntrypoints as RecursiveRecord<string>, ({ keys, value }) => {
