@@ -318,17 +318,23 @@ export { foo };
 
 exports[`project references > build bar 1`] = `
 [
+  "index.d.mts",
   "index.d.ts",
   "index.js",
   "index.min.js",
+  "index.min.mjs",
+  "index.mjs",
+  "index.special.d.mts",
   "index.special.d.ts",
   "index.special.js",
   "index.special.min.js",
+  "index.special.min.mjs",
+  "index.special.mjs",
 ]
 `;
 
 exports[`project references > build bar 2`] = `
-"index.d.ts:
+"index.d.mts:
 declare function bar(a: number, b: number): number;
 
 export { bar };
@@ -336,6 +342,14 @@ export { bar };
 `;
 
 exports[`project references > build bar 3`] = `
+"index.d.ts:
+declare function bar(a: number, b: number): number;
+
+export { bar };
+"
+`;
+
+exports[`project references > build bar 4`] = `
 "index.js:
 'use strict';
 
@@ -347,13 +361,37 @@ exports.bar = bar;
 "
 `;
 
-exports[`project references > build bar 4`] = `
+exports[`project references > build bar 5`] = `
 "index.min.js:
 "use strict";exports.bar=function(r,t){return r-t};
 "
 `;
 
-exports[`project references > build bar 5`] = `
+exports[`project references > build bar 6`] = `
+"index.min.mjs:
+function n(n,r){return n-r}export{n as bar};
+"
+`;
+
+exports[`project references > build bar 7`] = `
+"index.mjs:
+function bar(a, b) {
+  return a - b;
+}
+
+export { bar };
+"
+`;
+
+exports[`project references > build bar 8`] = `
+"index.special.d.mts:
+declare function bar(a: number, b: number): number;
+
+export { bar };
+"
+`;
+
+exports[`project references > build bar 9`] = `
 "index.special.d.ts:
 declare function bar(a: number, b: number): number;
 
@@ -361,7 +399,7 @@ export { bar };
 "
 `;
 
-exports[`project references > build bar 6`] = `
+exports[`project references > build bar 10`] = `
 "index.special.js:
 'use strict';
 
@@ -373,22 +411,41 @@ exports.bar = bar;
 "
 `;
 
-exports[`project references > build bar 7`] = `
+exports[`project references > build bar 11`] = `
 "index.special.min.js:
 "use strict";exports.bar=function(r,t){return r*t};
 "
 `;
 
+exports[`project references > build bar 12`] = `
+"index.special.min.mjs:
+function n(n,r){return n*r}export{n as bar};
+"
+`;
+
+exports[`project references > build bar 13`] = `
+"index.special.mjs:
+function bar(a, b) {
+  return a * b;
+}
+
+export { bar };
+"
+`;
+
 exports[`project references > build foo 1`] = `
 [
+  "index.d.mts",
   "index.d.ts",
   "index.js",
   "index.min.js",
+  "index.min.mjs",
+  "index.mjs",
 ]
 `;
 
 exports[`project references > build foo 2`] = `
-"index.d.ts:
+"index.d.mts:
 export * from '@jiek/test-monorepo-bar';
 
 declare function export_default(a: number, b: string): string;
@@ -398,6 +455,16 @@ export { export_default as default };
 `;
 
 exports[`project references > build foo 3`] = `
+"index.d.ts:
+export * from '@jiek/test-monorepo-bar';
+
+declare function export_default(a: number, b: string): string;
+
+export { export_default as default };
+"
+`;
+
+exports[`project references > build foo 4`] = `
 "index.js:
 'use strict';
 
@@ -419,22 +486,43 @@ Object.keys(testMonorepoBar).forEach(function (k) {
 "
 `;
 
-exports[`project references > build foo 4`] = `
+exports[`project references > build foo 5`] = `
 "index.min.js:
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("@jiek/test-monorepo-bar");exports.default=function(e,t){return e+t},Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})}));
 "
 `;
 
+exports[`project references > build foo 6`] = `
+"index.min.mjs:
+export*from"@jiek/test-monorepo-bar";function e(e,o){return e+o}export{e as default};
+"
+`;
+
+exports[`project references > build foo 7`] = `
+"index.mjs:
+export * from '@jiek/test-monorepo-bar';
+
+function index(a, b) {
+  return a + b;
+}
+
+export { index as default };
+"
+`;
+
 exports[`project references > build fuo 1`] = `
 [
+  "index.d.mts",
   "index.d.ts",
   "index.js",
   "index.min.js",
+  "index.min.mjs",
+  "index.mjs",
 ]
 `;
 
 exports[`project references > build fuo 2`] = `
-"index.d.ts:
+"index.d.mts:
 declare function bar(a: number, b: number): number;
 
 declare function export_default(a: number, b: string): string;
@@ -444,6 +532,16 @@ export { bar, export_default as default };
 `;
 
 exports[`project references > build fuo 3`] = `
+"index.d.ts:
+declare function bar(a: number, b: number): number;
+
+declare function export_default(a: number, b: string): string;
+
+export { bar, export_default as default };
+"
+`;
+
+exports[`project references > build fuo 4`] = `
 "index.js:
 'use strict';
 
@@ -462,22 +560,45 @@ exports.default = index;
 "
 `;
 
-exports[`project references > build fuo 4`] = `
+exports[`project references > build fuo 5`] = `
 "index.min.js:
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.bar=function(e,t){return e*t},exports.default=function(e,t){return e+t};
 "
 `;
 
+exports[`project references > build fuo 6`] = `
+"index.min.mjs:
+function n(n,t){return n*t}function t(n,t){return n+t}export{n as bar,t as default};
+"
+`;
+
+exports[`project references > build fuo 7`] = `
+"index.mjs:
+function bar(a, b) {
+  return a * b;
+}
+
+function index(a, b) {
+  return a + b;
+}
+
+export { bar, index as default };
+"
+`;
+
 exports[`project references > build fuu 1`] = `
 [
+  "index.d.mts",
   "index.d.ts",
   "index.js",
   "index.min.js",
+  "index.min.mjs",
+  "index.mjs",
 ]
 `;
 
 exports[`project references > build fuu 2`] = `
-"index.d.ts:
+"index.d.mts:
 declare function bar(a: number, b: number): number;
 
 declare function export_default(a: number, b: string): string;
@@ -487,6 +608,16 @@ export { bar, export_default as default };
 `;
 
 exports[`project references > build fuu 3`] = `
+"index.d.ts:
+declare function bar(a: number, b: number): number;
+
+declare function export_default(a: number, b: string): string;
+
+export { bar, export_default as default };
+"
+`;
+
+exports[`project references > build fuu 4`] = `
 "index.js:
 'use strict';
 
@@ -505,9 +636,29 @@ exports.default = index;
 "
 `;
 
-exports[`project references > build fuu 4`] = `
+exports[`project references > build fuu 5`] = `
 "index.min.js:
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.bar=function(e,t){return e-t},exports.default=function(e,t){return e+t};
+"
+`;
+
+exports[`project references > build fuu 6`] = `
+"index.min.mjs:
+function n(n,t){return n-t}function t(n,t){return n+t}export{n as bar,t as default};
+"
+`;
+
+exports[`project references > build fuu 7`] = `
+"index.mjs:
+function bar(a, b) {
+  return a - b;
+}
+
+function index(a, b) {
+  return a + b;
+}
+
+export { bar, index as default };
 "
 `;
 
