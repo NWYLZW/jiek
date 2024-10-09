@@ -119,7 +119,7 @@ program
               {
                 start: 0,
                 resolve: 20,
-                end: 100
+                end: 50
               }[event ?? 'start'] ?? 0,
               {
                 input: input.padEnd(inputMaxLen),
