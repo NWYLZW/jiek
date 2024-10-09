@@ -18,7 +18,7 @@ const templateArg = jiek.templateArgFilePath
   : {
     styled: jiek.styled
   }
-module.exports = require('jiek/rollup.v2').template(pkg, templateArg)
+module.exports = require('jiek/rollup').template(pkg, templateArg)
 `.trimStart()
 
 program
