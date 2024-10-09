@@ -46,6 +46,9 @@ const COMMON_PLUGINS = [
 
 const STYLE_REGEXP = /\.(css|s[ac]ss|less|styl)$/
 
+// eslint-disable-next-line unused-imports/no-unused-vars
+const debug = (...args: unknown[]) => sendMessage({ type: 'debug', data: args } satisfies RollupProgressEvent)
+
 const resolveWorkspacePath = (p: string) => resolve(WORKSPACE_ROOT, p)
 
 const pascalCase = (str: string) =>

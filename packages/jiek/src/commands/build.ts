@@ -105,6 +105,7 @@ program
               })
             })
           }
+          if (e.type === 'debug') console.log(e.data)
           if (e.type === 'progress') {
             const {
               path,
