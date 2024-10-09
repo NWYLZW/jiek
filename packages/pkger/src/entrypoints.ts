@@ -262,7 +262,7 @@ export function entrypoints2Exports(
                 src: value,
                 dist: outfile,
                 path,
-                conditionals: [...conditionalKeys, k]
+                conditionals: conditionalKeys
               })
               if (result === false) break
 
@@ -344,7 +344,7 @@ export function entrypoints2Exports(
                   src: value as string,
                   dist: newValue,
                   path: key,
-                  conditionals: [k]
+                  conditionals: []
                 })
                 if (result === false) break
                 v[k] = result === true ? value : result
