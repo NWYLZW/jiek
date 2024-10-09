@@ -804,16 +804,25 @@ export { foo };
 exports[`with scss file import > common 1`] = `
 [
   "foo.css",
+  "foo.d.mts",
   "foo.d.ts",
   "foo.js",
   "foo.min.js",
+  "foo.min.mjs",
+  "foo.mjs",
   "index.css",
+  "index.d.mts",
   "index.d.ts",
   "index.js",
   "index.min.js",
+  "index.min.mjs",
+  "index.mjs",
+  "index.styless.d.mts",
   "index.styless.d.ts",
   "index.styless.js",
   "index.styless.min.js",
+  "index.styless.min.mjs",
+  "index.styless.mjs",
 ]
 `;
 
@@ -823,13 +832,20 @@ exports[`with scss file import > common 2`] = `
 `;
 
 exports[`with scss file import > common 3`] = `
-"foo.d.ts:
+"foo.d.mts:
 
 export {  }
 "
 `;
 
 exports[`with scss file import > common 4`] = `
+"foo.d.ts:
+
+export {  }
+"
+`;
+
+exports[`with scss file import > common 5`] = `
 "foo.js:
 'use strict';
 
@@ -838,18 +854,38 @@ require('with-scss-file-import/foo.css');
 "
 `;
 
-exports[`with scss file import > common 5`] = `
+exports[`with scss file import > common 6`] = `
 "foo.min.js:
 "use strict";require("with-scss-file-import/foo.css");
 "
 `;
 
-exports[`with scss file import > common 6`] = `
+exports[`with scss file import > common 7`] = `
+"foo.min.mjs:
+import"with-scss-file-import/foo.css";
+"
+`;
+
+exports[`with scss file import > common 8`] = `
+"foo.mjs:
+import 'with-scss-file-import/foo.css';
+"
+`;
+
+exports[`with scss file import > common 9`] = `
 "index.css:
 #app{color:red}"
 `;
 
-exports[`with scss file import > common 7`] = `
+exports[`with scss file import > common 10`] = `
+"index.d.mts:
+declare function bar(): string;
+
+export { bar };
+"
+`;
+
+exports[`with scss file import > common 11`] = `
 "index.d.ts:
 declare function bar(): string;
 
@@ -857,7 +893,7 @@ export { bar };
 "
 `;
 
-exports[`with scss file import > common 8`] = `
+exports[`with scss file import > common 12`] = `
 "index.js:
 'use strict';
 
@@ -872,13 +908,40 @@ exports.bar = bar;
 "
 `;
 
-exports[`with scss file import > common 9`] = `
+exports[`with scss file import > common 13`] = `
 "index.min.js:
 "use strict";require("with-scss-file-import/index.css"),require("with-scss-file-import/foo"),exports.bar=function(){return"bar"};
 "
 `;
 
-exports[`with scss file import > common 10`] = `
+exports[`with scss file import > common 14`] = `
+"index.min.mjs:
+import"with-scss-file-import/index.css";import"with-scss-file-import/foo";function i(){return"bar"}export{i as bar};
+"
+`;
+
+exports[`with scss file import > common 15`] = `
+"index.mjs:
+import 'with-scss-file-import/index.css';
+import 'with-scss-file-import/foo';
+
+function bar() {
+  return "bar";
+}
+
+export { bar };
+"
+`;
+
+exports[`with scss file import > common 16`] = `
+"index.styless.d.mts:
+declare function bar(): string;
+
+export { bar };
+"
+`;
+
+exports[`with scss file import > common 17`] = `
 "index.styless.d.ts:
 declare function bar(): string;
 
@@ -886,7 +949,7 @@ export { bar };
 "
 `;
 
-exports[`with scss file import > common 11`] = `
+exports[`with scss file import > common 18`] = `
 "index.styless.js:
 'use strict';
 
@@ -900,8 +963,26 @@ exports.bar = bar;
 "
 `;
 
-exports[`with scss file import > common 12`] = `
+exports[`with scss file import > common 19`] = `
 "index.styless.min.js:
 "use strict";require("with-scss-file-import/foo"),exports.bar=function(){return"bar"};
+"
+`;
+
+exports[`with scss file import > common 20`] = `
+"index.styless.min.mjs:
+import"with-scss-file-import/foo";function o(){return"bar"}export{o as bar};
+"
+`;
+
+exports[`with scss file import > common 21`] = `
+"index.styless.mjs:
+import 'with-scss-file-import/foo';
+
+function bar() {
+  return "bar";
+}
+
+export { bar };
 "
 `;
