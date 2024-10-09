@@ -88,9 +88,12 @@ exports[`multiple exports > common 1`] = `
   "foo.min.js",
   "foo.min.mjs",
   "foo.mjs",
+  "index.d.mts",
   "index.d.ts",
   "index.js",
   "index.min.js",
+  "index.min.mjs",
+  "index.mjs",
 ]
 `;
 
@@ -137,7 +140,7 @@ function o(){return"foo"}export{o as foo};
 exports[`multiple exports > common 7`] = `
 "foo.mjs:
 function foo() {
-  return 'foo'
+  return "foo";
 }
 
 export { foo };
@@ -145,7 +148,7 @@ export { foo };
 `;
 
 exports[`multiple exports > common 8`] = `
-"index.d.ts:
+"index.d.mts:
 declare function foo(): string;
 
 export { foo };
@@ -153,6 +156,14 @@ export { foo };
 `;
 
 exports[`multiple exports > common 9`] = `
+"index.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`multiple exports > common 10`] = `
 "index.js:
 'use strict';
 
@@ -164,9 +175,25 @@ exports.foo = foo;
 "
 `;
 
-exports[`multiple exports > common 10`] = `
+exports[`multiple exports > common 11`] = `
 "index.min.js:
 "use strict";exports.foo=function(){return"foo"};
+"
+`;
+
+exports[`multiple exports > common 12`] = `
+"index.min.mjs:
+function o(){return"foo"}export{o as foo};
+"
+`;
+
+exports[`multiple exports > common 13`] = `
+"index.mjs:
+function foo() {
+  return "foo";
+}
+
+export { foo };
 "
 `;
 
