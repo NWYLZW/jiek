@@ -1,5 +1,5 @@
 {
-  "name": "simple",
+  "name": "with-scss-file-import",
   "version": "0.1.0",
   "exports": {
     "./package.json": "./package.json",
