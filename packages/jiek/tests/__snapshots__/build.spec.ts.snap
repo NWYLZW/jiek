@@ -550,17 +550,23 @@ function o(){return"foo"}export{o as foo};
 
 exports[`unordered exports inputs > common 1`] = `
 [
+  "a.d.mts",
   "a.d.ts",
   "a.js",
   "a.min.js",
+  "a.min.mjs",
+  "a.mjs",
+  "b.d.mts",
   "b.d.ts",
   "b.js",
   "b.min.js",
+  "b.min.mjs",
+  "b.mjs",
 ]
 `;
 
 exports[`unordered exports inputs > common 2`] = `
-"a.d.ts:
+"a.d.mts:
 type A = 'a';
 
 export type { A };
@@ -568,19 +574,51 @@ export type { A };
 `;
 
 exports[`unordered exports inputs > common 3`] = `
+"a.d.ts:
+type A = 'a';
+
+export type { A };
+"
+`;
+
+exports[`unordered exports inputs > common 4`] = `
 "a.js:
 'use strict';
 
 "
 `;
 
-exports[`unordered exports inputs > common 4`] = `
+exports[`unordered exports inputs > common 5`] = `
 "a.min.js:
 "use strict";
 "
 `;
 
-exports[`unordered exports inputs > common 5`] = `
+exports[`unordered exports inputs > common 6`] = `
+"a.min.mjs:
+
+"
+`;
+
+exports[`unordered exports inputs > common 7`] = `
+"a.mjs:
+
+"
+`;
+
+exports[`unordered exports inputs > common 8`] = `
+"b.d.mts:
+type BDepDep = 1;
+
+type BDep = BDepDep;
+
+type B = BDep;
+
+export type { B };
+"
+`;
+
+exports[`unordered exports inputs > common 9`] = `
 "b.d.ts:
 type BDepDep = 1;
 
@@ -592,16 +630,28 @@ export type { B };
 "
 `;
 
-exports[`unordered exports inputs > common 6`] = `
+exports[`unordered exports inputs > common 10`] = `
 "b.js:
 'use strict';
 
 "
 `;
 
-exports[`unordered exports inputs > common 7`] = `
+exports[`unordered exports inputs > common 11`] = `
 "b.min.js:
 "use strict";
+"
+`;
+
+exports[`unordered exports inputs > common 12`] = `
+"b.min.mjs:
+
+"
+`;
+
+exports[`unordered exports inputs > common 13`] = `
+"b.mjs:
+
 "
 `;
 
