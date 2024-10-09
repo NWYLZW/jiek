@@ -7,6 +7,10 @@ export type RollupProgressEvent =
     }
   }
   | {
+    type: 'debug'
+    data: unknown
+  }
+  | {
     type: 'progress'
     data: {
       // name, path, exportConditions, input
