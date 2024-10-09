@@ -657,14 +657,17 @@ exports[`unordered exports inputs > common 13`] = `
 
 exports[`with no resolve exports > common 1`] = `
 [
+  "index.d.mts",
   "index.d.ts",
   "index.js",
   "index.min.js",
+  "index.min.mjs",
+  "index.mjs",
 ]
 `;
 
 exports[`with no resolve exports > common 2`] = `
-"index.d.ts:
+"index.d.mts:
 declare function foo(): string;
 
 export { foo };
@@ -672,6 +675,14 @@ export { foo };
 `;
 
 exports[`with no resolve exports > common 3`] = `
+"index.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`with no resolve exports > common 4`] = `
 "index.js:
 'use strict';
 
@@ -683,9 +694,25 @@ exports.foo = foo;
 "
 `;
 
-exports[`with no resolve exports > common 4`] = `
+exports[`with no resolve exports > common 5`] = `
 "index.min.js:
 "use strict";exports.foo=function(){return"foo"};
+"
+`;
+
+exports[`with no resolve exports > common 6`] = `
+"index.min.mjs:
+function o(){return"foo"}export{o as foo};
+"
+`;
+
+exports[`with no resolve exports > common 7`] = `
+"index.mjs:
+function foo() {
+  return "foo";
+}
+
+export { foo };
 "
 `;
 
