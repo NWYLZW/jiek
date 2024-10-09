@@ -13,13 +13,15 @@ function getConfigPath(root: string) {
   const isSupportTsLoader = !!tsRegisterName
   function configWithExtIsExist(ext: string) {
     const filenames = [
+      path.resolve(process.cwd(), `${configName}.${ext}`),
+      path.resolve(process.cwd(), `.${configName}.${ext}`),
       path.resolve(root, `${configName}.${ext}`),
       path.resolve(root, `.${configName}.${ext}`)
     ]
     for (const filename of filenames) {
       if (
-        fs.existsSync(filename) &&
-        fs.lstatSync(filename)
+        fs.existsSync(filename)
+        && fs.lstatSync(filename)
           .isFile()
       ) {
         return filename
@@ -38,18 +40,21 @@ function getConfigPath(root: string) {
 
 export function loadConfig() {
   const { wd: root, notWorkspace } = getWD()
-  if (notWorkspace)
+  if (notWorkspace) {
     throw new Error('not in workspace')
+  }
 
   let configPath = program.getOptionValue('configPath')
 
   if (!configPath) {
     configPath = getConfigPath(root)
   } else {
-    if (!fs.existsSync(configPath))
+    if (!fs.existsSync(configPath)) {
       throw new Error(`config file not found: ${configPath}`)
-    if (!path.isAbsolute(configPath))
+    }
+    if (!path.isAbsolute(configPath)) {
       configPath = path.resolve(root, configPath)
+    }
   }
   const ext = path.extname(configPath)
 
@@ -69,8 +74,8 @@ export function loadConfig() {
         break
       }
       throw new Error(
-        'ts config file is not supported without ts register, ' +
-        'please install esbuild-register or set JIEK_TS_REGISTER env for custom ts register'
+        'ts config file is not supported without ts register, '
+          + 'please install esbuild-register or set JIEK_TS_REGISTER env for custom ts register'
       )
     case '.config':
       module = {}
