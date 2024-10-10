@@ -285,7 +285,7 @@ const generateConfigs = ({
   ]
 }
 
-export function template(packageJSON: PackageJSON) {
+export function template(packageJSON: PackageJSON): RollupOptions[] {
   const { build } = loadConfig()
   const { name, type, exports: entrypoints } = packageJSON
   const pkgIsModule = type === 'module'
