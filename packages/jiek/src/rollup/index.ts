@@ -79,18 +79,33 @@ const reveal = (obj: string | Record<string, unknown>, keys: string[]) =>
 const withMinify = (
   output: OutputOptions & {
     plugins?: OutputPlugin[]
-  }
-) => [
-  output,
-  {
-    ...output,
-    file: output.file?.replace(/(\.[cm]?js)$/, '.min$1'),
-    plugins: [
-      ...(output.plugins ?? []),
-      terser()
+  },
+  minify = build?.output?.minify
+) =>
+  minify === false
+    ? [output]
+    : minify === 'only-minify'
+    ? [{
+      ...output,
+      // TODO replace suffix when pubish to npm and the `build.output.minify` is 'only-minify'
+      // TODO resolve dts output file name
+      file: output.file?.replace(/(\.[cm]?js)$/, '.min$1'),
+      plugins: [
+        ...(output.plugins ?? []),
+        terser()
+      ]
+    }]
+    : [
+      output,
+      {
+        ...output,
+        file: output.file?.replace(/(\.[cm]?js)$/, '.min$1'),
+        plugins: [
+          ...(output.plugins ?? []),
+          terser()
+        ]
+      }
     ]
-  }
-]
 
 type TSConfig = {
   extends?: string | string[]

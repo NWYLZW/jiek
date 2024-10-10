@@ -17,6 +17,13 @@ export interface TemplateOptions {
   crossModuleConvertor?: boolean
   output?: {
     /**
+     * @default true
+     *
+     * When minify is set to true, the output will with minified files.
+     * When minify is set to 'only-minify', the output will direct output minified files.
+     */
+    minify?: boolean | 'only-minify'
+    /**
      * @default 'dist'
      */
     dir?: Mapping2ROO<'dir'>
