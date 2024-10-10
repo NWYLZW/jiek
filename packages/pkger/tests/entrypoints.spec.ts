@@ -93,6 +93,9 @@ describe('entrypoints2Exports', () => {
     expect(entrypoints2Exports([])).toStrictEqual({})
     expect(entrypoints2Exports({})).toStrictEqual({})
   })
+  test('null value', () => {
+    // TODO
+  })
   test('nested conditional', () => {
     expect(entrypoints2Exports({
       '.': {
