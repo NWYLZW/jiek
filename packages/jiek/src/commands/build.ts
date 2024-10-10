@@ -150,8 +150,9 @@ program
               : reject(new Error(`rollup build failed: ${errorStr}`)))
         })
       })
-    )
+    ).finally(() => {
+      multiBars.stop()
+    })
 
-    multiBars.stop()
     actionDone()
   })
