@@ -19,7 +19,9 @@ module.exports = require('jiek/rollup').template(manifest)
 program
   .command('build')
   .option('-s, --silent', 'silent mode')
-  .action(async ({ silent }) => {
+  .action(async ({ silent }: {
+    silent: boolean
+  }) => {
     actionRestore()
     const { build } = loadConfig()
     silent = silent ?? build?.silent ?? false
