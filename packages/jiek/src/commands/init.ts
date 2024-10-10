@@ -4,12 +4,74 @@ import path from 'node:path'
 import { program } from 'commander'
 import detectIndent from 'detect-indent'
 import inquirer from 'inquirer'
+import type { Config, InitNamed } from 'jiek'
 import { applyEdits, modify } from 'jsonc-parser'
 import { isMatch } from 'micromatch'
 
-import type { Config, InitNamed } from '../base'
 import { getWD } from '../utils/getWD'
 import { loadConfig } from '../utils/loadConfig'
+
+declare module 'jiek' {
+  export type InitNamedFunction = (
+    argument: string,
+    paths: {
+      full: string
+      relative: string
+      basename?: string
+    }
+  ) => [name?: string, path?: string]
+  export type InitNamed =
+    | InitNamedFunction
+    | {
+      [key: string]: string | InitNamedFunction
+    }
+  export interface Config {
+    init?: {
+      /**
+       * the package.json template file path or file content
+       *
+       * if it can be parsed as json, it will be parsed
+       * if it is a relative file path, it will be resolved to an absolute path based on the current working directory
+       * if it is an absolute file path, it will be used directly
+       * @default '.jiek.template.package.json'
+       */
+      template?: string
+      /**
+       * the readme content
+       *
+       * $name will be replaced with the package name
+       * $license will be replaced with the license
+       */
+      readme?:
+        | string
+        | ((ctx: {
+          dir: string
+          packageJson: Record<string, any>
+        }) => string)
+      /**
+       * the readme template file path
+       * @default '.jiek.template.readme.md'
+       */
+      readmeTemplate?: string
+      bug?: {
+        /**
+         * @default 'bug_report.yml'
+         */
+        template?: string
+        /**
+         * @default ['bug']
+         */
+        labels?:
+          | string[]
+          | ((ctx: {
+            name: string
+            dir: string
+          }) => string[])
+      }
+      named?: InitNamed
+    }
+  }
+}
 
 const PACKAGE_JSON_TEMPLATE = `{
   "name": "",
@@ -75,7 +137,8 @@ async function getName(
   named: InitNamed | undefined,
   name: string,
   {
-    wd, cwd,
+    wd,
+    cwd,
     workspaceName
   }: {
     wd: string
@@ -110,17 +173,19 @@ async function getName(
         matchedKey = rule
         matchedRule = named[rule]
       }
-    } else for (const [key, value] of Object.entries(named)) {
-      if (isMatch(relativePath, key)) {
-        matchedKey = key
-        matchedRule = value
-        break
-      }
-      if (isMatch(`${relativePath}/jiek_ignore_dont_use_same_file_name`, key)) {
-        isParentMatched = true
-        matchedKey = key
-        matchedRule = value
-        break
+    } else {
+      for (const [key, value] of Object.entries(named)) {
+        if (isMatch(relativePath, key)) {
+          matchedKey = key
+          matchedRule = value
+          break
+        }
+        if (isMatch(`${relativePath}/jiek_ignore_dont_use_same_file_name`, key)) {
+          isParentMatched = true
+          matchedKey = key
+          matchedRule = value
+          break
+        }
       }
     }
   }
@@ -128,8 +193,9 @@ async function getName(
     matchedKey = 'packages/*'
     matchedRule = `@${workspaceName}/$basename`
   }
-  if (!matchedRule)
+  if (!matchedRule) {
     throw new Error('no matched rule')
+  }
   if (!name && isParentMatched) {
     basename = await inquirer.prompt<{ name: string }>({
       type: 'input',
@@ -191,16 +257,24 @@ program
       insertSpaces: true
     }
     const passFields = [
-      'license', 'author'
+      'license',
+      'author'
     ]
     let newJSONString = templateString
     for (const field of passFields) {
-      newJSONString = applyEdits(newJSONString, modify(
-        newJSONString, [field], getWDPackageJSONFiled(wd, field), { formattingOptions }
-      ))
+      newJSONString = applyEdits(
+        newJSONString,
+        modify(
+          newJSONString,
+          [field],
+          getWDPackageJSONFiled(wd, field),
+          { formattingOptions }
+        )
+      )
     }
     let [pkgName, pkgDir] = await getName(named, name, {
-      wd, cwd,
+      wd,
+      cwd,
       workspaceName
     })
     if (!pkgDir) {
@@ -233,26 +307,43 @@ program
         directory: pkgDir
       }
     }
-    newJSONString = applyEdits(newJSONString, modify(
-      newJSONString, ['repository'], pkgRepo, { formattingOptions }
-    ))
+    newJSONString = applyEdits(
+      newJSONString,
+      modify(
+        newJSONString,
+        ['repository'],
+        pkgRepo,
+        { formattingOptions }
+      )
+    )
     const homepage = `${pkgRepo?.url}/blob/master/${pkgDir}/README.md`
-    newJSONString = applyEdits(newJSONString, modify(
-      newJSONString, ['homepage'], homepage, { formattingOptions }
-    ))
+    newJSONString = applyEdits(
+      newJSONString,
+      modify(
+        newJSONString,
+        ['homepage'],
+        homepage,
+        { formattingOptions }
+      )
+    )
     let labels = resolvedBug.labels
-    if (typeof labels === 'function') labels = labels({
-      name: pkgName, dir: pkgDir
-    })
+    if (typeof labels === 'function') {
+      labels = labels({
+        name: pkgName,
+        dir: pkgDir
+      })
+    }
     labels.push(`scope:${pkgName}`)
-    const bugs = `${pkgRepo?.url}/issues/new?template=${
-      resolvedBug.template
-    }&labels=${
-      labels.join(',')
-    }`
-    newJSONString = applyEdits(newJSONString, modify(
-      newJSONString, ['bugs'], bugs, { formattingOptions }
-    ))
+    const bugs = `${pkgRepo?.url}/issues/new?template=${resolvedBug.template}&labels=${labels.join(',')}`
+    newJSONString = applyEdits(
+      newJSONString,
+      modify(
+        newJSONString,
+        ['bugs'],
+        bugs,
+        { formattingOptions }
+      )
+    )
 
     function pkgDirTo(to: string) {
       if (!pkgDir) throw new Error('pkgDir is not defined')

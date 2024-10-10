@@ -2,9 +2,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import { program } from 'commander'
+import type { Config } from 'jiek'
 import { load } from 'js-yaml'
-
-import type { Config } from '#~/base.ts'
 
 import { getWD } from './getWD'
 import { tsRegisterName } from './tsRegister'
