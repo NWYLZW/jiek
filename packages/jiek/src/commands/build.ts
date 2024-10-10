@@ -33,7 +33,7 @@ module.exports = require('jiek/rollup').template(pkg, templateArg)
 program
   .command('build')
   .option('-s, --silent', 'silent mode')
-  .action(async ({ target, silent }) => {
+  .action(async ({ silent }) => {
     actionRestore()
     const { build } = loadConfig()
     silent = silent ?? build?.silent
