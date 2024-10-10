@@ -35,3 +35,16 @@ export type RollupProgressEvent =
       message?: string
     }
   }
+
+declare module '#~/base.ts' {
+  export interface Config {
+    build?: TemplateOptions & {
+      /**
+       * Whether to run in silent mode, only active when configured in the workspace root or cwd.
+       *
+       * @default false
+       */
+      silent?: boolean
+    }
+  }
+}

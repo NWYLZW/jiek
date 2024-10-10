@@ -6,23 +6,10 @@ import { program } from 'commander'
 import { execaCommand } from 'execa'
 
 import { actionDone, actionRestore } from '../inner'
-import type { RollupProgressEvent, TemplateOptions } from '../rollup/base'
+import type { RollupProgressEvent } from '../rollup/base'
 import { getSelectedProjectsGraph } from '../utils/filterSupport'
 import { loadConfig } from '../utils/loadConfig'
 import { tsRegisterName } from '../utils/tsRegister'
-
-declare module 'jiek' {
-  export interface Config {
-    build?: TemplateOptions & {
-      /**
-       * Whether to run in silent mode, only active when configured in the workspace root or cwd.
-       *
-       * @default false
-       */
-      silent?: boolean
-    }
-  }
-}
 
 const FILE_TEMPLATE = (manifest: unknown) => (`
 const manifest = ${JSON.stringify(manifest, null, 2)}
