@@ -1,3 +1,10 @@
+import type { OutputOptions } from 'rollup'
+
+export type Mapping2ROO<K extends keyof OutputOptions> = OutputOptions[K] | {
+  js?: OutputOptions[K]
+  dts?: OutputOptions[K]
+}
+
 export interface TemplateOptions {
   /**
    * When the user configures type: module, the generated output from entry points that don't
@@ -8,6 +15,17 @@ export interface TemplateOptions {
    * @default true
    */
   crossModuleConvertor?: boolean
+  output?: {
+    /**
+     * @default 'dist'
+     */
+    dir?: Mapping2ROO<'dir'>
+    /**
+     * @default true
+     */
+    sourcemap?: Mapping2ROO<'sourcemap'>
+    strict?: Mapping2ROO<'strict'>
+  }
 }
 
 export type RollupProgressEvent =

@@ -24,7 +24,7 @@ import esbuild from 'rollup-plugin-esbuild'
 import ts from 'typescript'
 
 import { loadConfig } from '../utils/loadConfig'
-import type { RollupProgressEvent } from './base'
+import type { RollupProgressEvent, TemplateOptions } from './base'
 import progress from './plugins/progress'
 import skip from './plugins/skip'
 import externalResolver from './utils/externalResolver'
@@ -172,7 +172,6 @@ const generateConfigs = ({
   name,
   input,
   output,
-  outdir,
   external,
   pkgIsModule,
   conditionals
@@ -181,11 +180,10 @@ const generateConfigs = ({
   name: string
   input: string
   output: string
-  outdir: string
   external: (string | RegExp)[]
   pkgIsModule: boolean
   conditionals: string[]
-}): RollupOptions[] => {
+}, options: TemplateOptions = {}): RollupOptions[] => {
   const isModule = conditionals.includes('import')
   const isCommonJS = conditionals.includes('require')
   const isBrowser = conditionals.includes('browser')
@@ -216,6 +214,7 @@ const generateConfigs = ({
     type: 'progress',
     data: { name, path, exportConditions, input }
   }
+  const outdir = options?.output?.dir
   return [
     {
       input,
@@ -224,13 +223,19 @@ const generateConfigs = ({
         ...withMinify({
           file: output,
           name,
+          sourcemap: typeof options?.output?.sourcemap === 'object'
+            ? options.output.sourcemap.js
+            : options?.output?.sourcemap ?? true,
           format: isModule ? 'esm' : (
             isCommonJS ? 'cjs' : (
               isBrowser ? 'umd' : (
                 pkgIsModule ? 'esm' : 'cjs'
               )
             )
-          )
+          ),
+          strict: typeof options?.output?.strict === 'object'
+            ? options.output.strict.js
+            : options?.output?.strict
         })
       ],
       plugins: [
@@ -260,11 +265,17 @@ const generateConfigs = ({
       external,
       output: [
         {
-          dir: outdir,
+          dir: typeof outdir === 'object' ? outdir.dts : outdir,
+          sourcemap: typeof options?.output?.sourcemap === 'object'
+            ? options.output.sourcemap.dts
+            : options?.output?.sourcemap ?? true,
           entryFileNames: () =>
             output
               .replace(/^\.\/dist\//, '')
-              .replace(/(\.[cm]?)js$/, '.d$1ts')
+              .replace(/(\.[cm]?)js$/, '.d$1ts'),
+          strict: typeof options?.output?.strict === 'object'
+            ? options.output.strict.dts
+            : options?.output?.strict
         }
       ],
       plugins: [
@@ -292,7 +303,10 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
   const { build } = loadConfig()
   const { name, type, exports: entrypoints } = packageJSON
   const pkgIsModule = type === 'module'
-  const outdir = 'dist'
+  const outdir = typeof build?.output?.dir === 'object'
+    // the outdir only effect js output in this function
+    ? build.output.dir.js
+    : build?.output?.dir ?? 'dist'
   if (!name) throw new Error('package.json name is required')
   if (!entrypoints) throw new Error('package.json exports is required')
 
@@ -351,6 +365,7 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
     }
     : {}
   const exports = entrypoints2Exports(filteredResolvedEntrypoints, {
+    outdir,
     withConditional: {
       ...crossModuleWithConditional
     }
@@ -377,7 +392,6 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
         path,
         name,
         input,
-        outdir,
         external,
         pkgIsModule
       }
@@ -388,7 +402,7 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
             ...commonOptions,
             output: keyExports,
             conditionals
-          }))
+          }, build))
           break
         }
         case 'object': {
@@ -399,7 +413,7 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
                 ...commonOptions,
                 output: value,
                 conditionals: allConditionals
-              }))
+              }, build))
             }
             return false
           })
