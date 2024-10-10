@@ -20,9 +20,14 @@ module.exports = require('jiek/rollup').template(manifest)
 
 program
   .command('build')
-  .option('-s, --silent', 'silent mode')
-  .action(async ({ silent }: {
+  .option('-s, --silent', "Don't display logs.")
+  .option('-e, --entries <ENTRIES>', "Specify the entries of the package.json's 'exports' field.(support glob)")
+  .action(async ({
+    silent,
+    entries
+  }: {
     silent: boolean
+    entries: string
   }) => {
     actionRestore()
     const { build } = loadConfig()
@@ -71,8 +76,8 @@ program
           cwd: dir,
           env: {
             ...process.env,
-            JIEK_SILENT: `${silent}` ?? process.env.JIEK_SILENT,
-            JIEK_ROOT: wd
+            JIEK_ROOT: wd,
+            JIEK_ENTRIES: entries
           }
         })
         const bars: Record<string, ReturnType<typeof multiBars.create>> = {}

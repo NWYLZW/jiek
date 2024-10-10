@@ -36,7 +36,8 @@ interface PackageJSON {
 }
 
 const {
-  JIEK_ROOT
+  JIEK_ROOT,
+  JIEK_ENTRIES
 } = process.env
 const WORKSPACE_ROOT = JIEK_ROOT ?? getWorkspaceDir()
 const COMMON_OPTIONS = {} satisfies RollupOptions
@@ -295,6 +296,13 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
   if (!name) throw new Error('package.json name is required')
   if (!entrypoints) throw new Error('package.json exports is required')
 
+  const entries = JIEK_ENTRIES
+    ?.split(',')
+    .map(e => e.trim())
+    .map(e => ({
+      'index': '.'
+    }[e] ?? e))
+
   const {
     crossModuleConvertor = true
   } = build ?? {}
@@ -304,6 +312,15 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
   const external = externalResolver(packageJSON as Record<string, unknown>)
 
   const [, resolvedEntrypoints] = resolveEntrypoints(entrypoints)
+  if (entries) {
+    Object
+      .entries(resolvedEntrypoints)
+      .forEach(([key]) => {
+        if (!entries.some(e => isMatch(key, e, { matchBase: true }))) {
+          delete resolvedEntrypoints[key]
+        }
+      })
+  }
   const filteredResolvedEntrypoints = filterLeafs(
     resolvedEntrypoints as RecursiveRecord<string>,
     {
