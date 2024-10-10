@@ -1,3 +1,15 @@
+export interface TemplateOptions {
+  /**
+   * When the user configures type: module, the generated output from entry points that don't
+   * have cts as a suffix will automatically include the CJS version.
+   * if it is not configured, and the generated output from entry points that do not have mts
+   * as a suffix will automatically include the ESM version.
+   *
+   * @default true
+   */
+  crossModuleConvertor?: boolean
+}
+
 export type RollupProgressEvent =
   | {
     type: 'init'

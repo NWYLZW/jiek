@@ -21,22 +21,10 @@ import type { OutputOptions, OutputPlugin, RollupOptions } from 'rollup'
 import esbuild from 'rollup-plugin-esbuild'
 import ts from 'typescript'
 
-import type { RollupProgressEvent } from './base'
+import type { RollupProgressEvent, TemplateOptions } from './base'
 import progress from './plugins/progress'
 import skip from './plugins/skip'
 import externalResolver from './utils/externalResolver'
-
-export interface TemplateOptions {
-  /**
-   * When the user configures type: module, the generated output from entry points that don't
-   * have cts as a suffix will automatically include the CJS version.
-   * if it is not configured, and the generated output from entry points that do not have mts
-   * as a suffix will automatically include the ESM version.
-   *
-   * @default true
-   */
-  crossModuleConvertor?: boolean
-}
 
 interface PackageJSON {
   name?: string
