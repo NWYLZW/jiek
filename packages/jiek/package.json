@@ -6,9 +6,6 @@
     "jiek": "bin/jiek.js",
     "jk": "bin/jiek.js"
   },
-  "jiek": {
-    "noBrowser": true
-  },
   "files": ["dist", "src", "bin", "LICENSE", "README.md"],
   "typesVersions": {
     "<5.0": { "*": ["*", "./dist/*", "./dist/*/index.d.ts"] }
