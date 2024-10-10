@@ -45,6 +45,16 @@ const COMMON_PLUGINS = [
   json()
 ]
 
+const { build } = loadConfig()
+const jsOutdir = resolve(
+  (
+    typeof build?.output?.dir === 'object'
+      // the outdir only effect js output in this function
+      ? build.output.dir.js
+      : build?.output?.dir
+  ) ?? 'dist'
+)
+
 const STYLE_REGEXP = /\.(css|s[ac]ss|less|styl)$/
 
 // eslint-disable-next-line unused-imports/no-unused-vars
@@ -265,13 +275,13 @@ const generateConfigs = ({
       external,
       output: [
         {
-          dir: typeof outdir === 'object' ? outdir.dts : outdir,
+          dir: resolve((typeof outdir === 'object' ? outdir.dts : outdir) ?? 'dist'),
           sourcemap: typeof options?.output?.sourcemap === 'object'
             ? options.output.sourcemap.dts
             : options?.output?.sourcemap ?? true,
           entryFileNames: () =>
             output
-              .replace(/^\.\/dist\//, '')
+              .replace(`${jsOutdir}/`, '')
               .replace(/(\.[cm]?)js$/, '.d$1ts'),
           strict: typeof options?.output?.strict === 'object'
             ? options.output.strict.dts
@@ -300,13 +310,8 @@ const generateConfigs = ({
 }
 
 export function template(packageJSON: PackageJSON): RollupOptions[] {
-  const { build } = loadConfig()
   const { name, type, exports: entrypoints } = packageJSON
   const pkgIsModule = type === 'module'
-  const outdir = typeof build?.output?.dir === 'object'
-    // the outdir only effect js output in this function
-    ? build.output.dir.js
-    : build?.output?.dir ?? 'dist'
   if (!name) throw new Error('package.json name is required')
   if (!entrypoints) throw new Error('package.json exports is required')
 
@@ -365,7 +370,7 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
     }
     : {}
   const exports = entrypoints2Exports(filteredResolvedEntrypoints, {
-    outdir,
+    outdir: jsOutdir,
     withConditional: {
       ...crossModuleWithConditional
     }
