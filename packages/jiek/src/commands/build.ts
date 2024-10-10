@@ -14,21 +14,20 @@ import { tsRegisterName } from '../utils/tsRegister'
 declare module 'jiek' {
   export interface Config {
     build?: TemplateOptions & {
+      /**
+       * Whether to run in silent mode, only active when configured in the workspace root or cwd.
+       *
+       * @default false
+       */
       silent?: boolean
     }
   }
 }
 
-const FILE_TEMPLATE = (manifest: unknown) =>
-  `const pkg = ${JSON.stringify(manifest, null, 2)}
-const { jiek = {} } = pkg
-const templateArg = jiek.templateArgFilePath
-  ? require.resolve(jiek.templateArgFilePath)
-  : {
-    styled: jiek.styled
-  }
-module.exports = require('jiek/rollup').template(pkg, templateArg)
-`.trimStart()
+const FILE_TEMPLATE = (manifest: unknown) => (`
+const manifest = ${JSON.stringify(manifest, null, 2)}
+module.exports = require('jiek/rollup').template(manifest)
+`.trimStart())
 
 program
   .command('build')
@@ -36,7 +35,7 @@ program
   .action(async ({ silent }) => {
     actionRestore()
     const { build } = loadConfig()
-    silent = silent ?? build?.silent
+    silent = silent ?? build?.silent ?? false
     const {
       wd,
       value = {}

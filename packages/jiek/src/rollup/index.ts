@@ -21,7 +21,8 @@ import type { OutputOptions, OutputPlugin, RollupOptions } from 'rollup'
 import esbuild from 'rollup-plugin-esbuild'
 import ts from 'typescript'
 
-import type { RollupProgressEvent, TemplateOptions } from './base'
+import { loadConfig } from '../utils/loadConfig'
+import type { RollupProgressEvent } from './base'
 import progress from './plugins/progress'
 import skip from './plugins/skip'
 import externalResolver from './utils/externalResolver'
@@ -284,7 +285,8 @@ const generateConfigs = ({
   ]
 }
 
-export function template(packageJSON: PackageJSON, options: TemplateOptions = {}) {
+export function template(packageJSON: PackageJSON) {
+  const { build } = loadConfig()
   const { name, type, exports: entrypoints } = packageJSON
   const pkgIsModule = type === 'module'
   const outdir = 'dist'
@@ -293,7 +295,7 @@ export function template(packageJSON: PackageJSON, options: TemplateOptions = {}
 
   const {
     crossModuleConvertor = true
-  } = options
+  } = build ?? {}
 
   const packageName = pascalCase(name)
 
