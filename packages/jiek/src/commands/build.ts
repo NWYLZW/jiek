@@ -147,7 +147,7 @@ program
           child.once('exit', (code) =>
             code === 0
               ? resolve()
-              : reject(new Error(`rollup build failed: ${errorStr}`)))
+              : reject(new Error(`rollup build failed:\n${errorStr}`)))
         })
       })
     ).finally(() => {
