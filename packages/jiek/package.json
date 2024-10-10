@@ -9,10 +9,12 @@
   "jiek": {
     "noBrowser": true
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist", "src", "bin", "LICENSE", "README.md"],
+  "typesVersions": {
+    "<5.0": { "*": ["*", "./dist/*", "./dist/*/index.d.ts"] }
+  },
   "exports": {
+    "./package.json": "./package.json",
     ".": "./src/index.ts",
     "./cli": "./src/cli.ts",
     "./rollup": "./src/rollup/index.ts"
@@ -61,38 +63,8 @@
     "rollup-plugin-postcss": "^4.0.2"
   },
   "publishConfig": {
-    "exports": {
-      "./package.json": "./package.json",
-      ".": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.esm.js",
-        "require": "./dist/index.cjs",
-        "inner-src": "./src/index.ts"
-      },
-      "./cli": {
-        "types": "./dist/cli.d.ts",
-        "import": "./dist/cli.esm.js",
-        "require": "./dist/cli.cjs",
-        "inner-src": "./src/cli.ts"
-      },
-      "./rollup": {
-        "types": "./dist/rollup.d.ts",
-        "import": "./dist/rollup.esm.js",
-        "require": "./dist/rollup.cjs",
-        "inner-src": "./src/rollup/index.ts"
-      }
-    },
     "types": "./dist/index.d.ts",
     "main": "./dist/index.cjs",
-    "module": "./dist/index.esm.js",
-    "typesVersions": {
-      "<5.0": {
-        "*": [
-          "*",
-          "./dist/*",
-          "./dist/*/index.esm.d.ts"
-        ]
-      }
-    }
+    "module": "./dist/index.esm.js"
   }
 }
