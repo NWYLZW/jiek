@@ -4,6 +4,8 @@ import path from 'node:path'
 import { program } from 'commander'
 import { load } from 'js-yaml'
 
+import type { Config } from '#~/base.ts'
+
 import { getWD } from './getWD'
 import { tsRegisterName } from './tsRegister'
 
@@ -38,7 +40,7 @@ function getConfigPath(root: string) {
   return path.resolve(root, configName)
 }
 
-export function loadConfig() {
+export function loadConfig(): Config {
   const { wd: root, notWorkspace } = getWD()
   if (notWorkspace) {
     throw new Error('not in workspace')
@@ -66,7 +68,7 @@ export function loadConfig() {
     case '.json':
       return require(configPath)
     case '.yaml':
-      return load(fs.readFileSync(configPath, 'utf-8'))
+      return load(fs.readFileSync(configPath, 'utf-8')) as Config
     case '.ts':
       if (tsRegisterName) {
         require(tsRegisterName)

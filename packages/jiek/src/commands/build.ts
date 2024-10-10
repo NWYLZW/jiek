@@ -6,9 +6,18 @@ import { program } from 'commander'
 import { execaCommand } from 'execa'
 
 import { actionDone, actionRestore } from '../inner'
-import type { RollupProgressEvent } from '../rollup/base'
+import type { RollupProgressEvent, TemplateOptions } from '../rollup/base'
 import { getSelectedProjectsGraph } from '../utils/filterSupport'
+import { loadConfig } from '../utils/loadConfig'
 import { tsRegisterName } from '../utils/tsRegister'
+
+declare module 'jiek' {
+  export interface Config {
+    build?: TemplateOptions & {
+      silent?: boolean
+    }
+  }
+}
 
 const FILE_TEMPLATE = (manifest: unknown) =>
   `const pkg = ${JSON.stringify(manifest, null, 2)}
@@ -26,6 +35,8 @@ program
   .option('-s, --silent', 'silent mode')
   .action(async ({ target, silent }) => {
     actionRestore()
+    const { build } = loadConfig()
+    silent = silent ?? build?.silent
     const {
       wd,
       value = {}
