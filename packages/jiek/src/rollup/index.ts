@@ -1,3 +1,5 @@
+import '../rollup/base'
+
 import fs from 'node:fs'
 import { dirname, resolve } from 'node:path'
 
