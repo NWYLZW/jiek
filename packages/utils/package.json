@@ -1,9 +1,11 @@
 {
   "name": "@jiek/utils",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "license": "MIT",
   "exports": {
-    "./*": ["./src/*.ts", "./src/*/index.ts"]
+    "./bumper": "./src/bumper.ts",
+    "./commondir": "./src/commondir.ts",
+    "./getWorkspaceDir": "./src/getWorkspaceDir.ts"
   },
-  "files": ["dist"]
+  "files": ["dist", "src", "README.md"]
 }
