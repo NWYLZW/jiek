@@ -29,71 +29,107 @@ describe('simple', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['simple'], {
     notWorkspace: true
   })
-  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s', root, prefixes, 'dist'))
 })
 describe('simple mjs', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['simple-mjs'], {
     notWorkspace: true
   })
-  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s', root, prefixes, 'dist'))
 })
 describe('multiple exports', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['multiple-exports'], {
     notWorkspace: true
   })
-  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s', root, prefixes, 'dist'))
 })
 describe('unordered exports inputs', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['unordered-exports_input'], {
     notWorkspace: true
   })
-  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s', root, prefixes, 'dist'))
 })
 describe('with no resolve exports', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['with-no-resolve-export'], {
     notWorkspace: true
   })
-  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s', root, prefixes, 'dist'))
 })
 describe('monorepo', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['monorepo'])
   test(
     'build foo',
-    runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-foo', root, prefixes, 'packages/foo/dist')
+    runCommandAndSnapshotDistFiles.bind(
+      null,
+      'build -s -f @jiek/test-monorepo-foo',
+      root,
+      prefixes,
+      'packages/foo/dist'
+    )
   )
   test(
     'build bar',
-    runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-bar', root, prefixes, 'packages/bar/dist')
+    runCommandAndSnapshotDistFiles.bind(
+      null,
+      'build -s -f @jiek/test-monorepo-bar',
+      root,
+      prefixes,
+      'packages/bar/dist'
+    )
   )
 })
 describe('not dts tsconfig', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['not-dts-tsconfig'], {
     notWorkspace: true
   })
-  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s', root, prefixes, 'dist'))
 })
 describe('with scss file import', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['with-scss-file-import'], {
     notWorkspace: true
   })
-  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build', root, prefixes, 'dist'))
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s', root, prefixes, 'dist'))
 })
 describe('project references', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['project-references'])
   test(
     'build foo',
-    runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-foo', root, prefixes, 'packages/foo/dist')
+    runCommandAndSnapshotDistFiles.bind(
+      null,
+      'build -s -f @jiek/test-monorepo-foo',
+      root,
+      prefixes,
+      'packages/foo/dist'
+    )
   )
   test(
     'build fuo',
-    runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-fuo', root, prefixes, 'packages/fuo/dist')
+    runCommandAndSnapshotDistFiles.bind(
+      null,
+      'build -s -f @jiek/test-monorepo-fuo',
+      root,
+      prefixes,
+      'packages/fuo/dist'
+    )
   )
   test(
     'build fuu',
-    runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-fuu', root, prefixes, 'packages/fuu/dist')
+    runCommandAndSnapshotDistFiles.bind(
+      null,
+      'build -s -f @jiek/test-monorepo-fuu',
+      root,
+      prefixes,
+      'packages/fuu/dist'
+    )
   )
   test(
     'build bar',
-    runCommandAndSnapshotDistFiles.bind(null, 'build -f @jiek/test-monorepo-bar', root, prefixes, 'packages/bar/dist')
+    runCommandAndSnapshotDistFiles.bind(
+      null,
+      'build -s -f @jiek/test-monorepo-bar',
+      root,
+      prefixes,
+      'packages/bar/dist'
+    )
   )
 })
