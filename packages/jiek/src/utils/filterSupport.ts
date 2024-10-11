@@ -24,6 +24,8 @@ interface ProjectsGraph {
   root: string
   value?: Record<string, {
     name?: string
+    type?: string
+    exports?: string | string[] | Record<string, unknown>
   }>
 }
 
