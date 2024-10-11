@@ -18,13 +18,15 @@ export function getExports({
   pkgIsModule,
   entries,
   config,
-  dir
+  dir,
+  noFilter
 }: {
   entrypoints: string | string[] | Record<string, unknown>
   pkgIsModule: boolean
   entries?: string[]
   config?: Config
   dir?: string
+  noFilter?: boolean
 }) {
   const dirResolve = (...paths: string[]) => resolve(dir ?? process.cwd(), ...paths)
   const dirRelative = (path: string) => relative(dir ?? process.cwd(), path)
@@ -52,7 +54,7 @@ export function getExports({
         }
       })
   }
-  const filteredResolvedEntrypoints = filterLeafs(
+  const filteredResolvedEntrypoints = noFilter ? resolvedEntrypoints : filterLeafs(
     resolvedEntrypoints as RecursiveRecord<string>,
     {
       skipValue: [

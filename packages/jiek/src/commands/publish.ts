@@ -33,13 +33,17 @@ program
         const { type, exports: entrypoints = {} } = manifest
         const pkgIsModule = type === 'module'
         const newManifest = { ...manifest }
-        const [, exports] = getExports({
+        const [resolvedEntrypoints, exports] = getExports({
           entrypoints,
           pkgIsModule,
           config: loadConfig(dir),
-          dir
+          dir,
+          noFilter: true
         })
-        newManifest.exports = exports
+        newManifest.exports = {
+          ...resolvedEntrypoints,
+          ...exports
+        }
         return [dir, newManifest] as const
       })
     const passArgs = Object
