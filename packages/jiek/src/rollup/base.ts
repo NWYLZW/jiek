@@ -27,9 +27,6 @@ export interface TemplateOptions {
      * @default 'dist'
      */
     dir?: Mapping2ROO<'dir'>
-    /**
-     * @default true
-     */
     sourcemap?: Mapping2ROO<'sourcemap'>
     strict?: Mapping2ROO<'strict'>
   }

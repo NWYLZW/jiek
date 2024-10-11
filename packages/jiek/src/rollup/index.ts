@@ -246,7 +246,7 @@ const generateConfigs = ({
           name,
           sourcemap: typeof options?.output?.sourcemap === 'object'
             ? options.output.sourcemap.js
-            : options?.output?.sourcemap ?? true,
+            : options?.output?.sourcemap,
           format: isModule ? 'esm' : (
             isCommonJS ? 'cjs' : (
               isBrowser ? 'umd' : (
@@ -289,7 +289,7 @@ const generateConfigs = ({
           dir: resolve((typeof outdir === 'object' ? outdir.dts : outdir) ?? 'dist'),
           sourcemap: typeof options?.output?.sourcemap === 'object'
             ? options.output.sourcemap.dts
-            : options?.output?.sourcemap ?? true,
+            : options?.output?.sourcemap,
           entryFileNames: () =>
             output
               .replace(`${jsOutdir}/`, '')
