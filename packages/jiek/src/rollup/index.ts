@@ -248,6 +248,7 @@ const generateConfigs = ({
         ...withMinify({
           file: output,
           name,
+          interop: 'auto',
           sourcemap: typeof options?.output?.sourcemap === 'object'
             ? options.output.sourcemap.js
             : options?.output?.sourcemap,
