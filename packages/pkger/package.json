@@ -1,6 +1,6 @@
 {
   "name": "@jiek/pkger",
-  "version": "0.1.11",
+  "version": "0.2.0",
   "dependencies": {
     "fast-glob": "^3.3.2"
   },
