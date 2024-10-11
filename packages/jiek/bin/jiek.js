@@ -1,4 +1,4 @@
-#!/usr/bin/env node -m
+#!/usr/bin/env node
 import { existsSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { createRequire } from 'node:module'
