@@ -74,6 +74,8 @@ pnpm install -D jiek
 
 </details>
 
+> 在这里你肯定想问如果你有复杂的导出呢？或者说多个入口呢？在[这里](../pkger/README.md)你可以看到我们的工具的生成规则。
+
 #### 运行指令
 
 假设你有一个 pakcages 下面的包叫 `@monorepo/utils` ，那么你可以这样运行：
@@ -104,3 +106,11 @@ export default defineConfig({
 
 - 入口的约定：还没写好
 - 插件的抉择：还没写好
+
+#### 补充内容
+
+- 关于样式
+- 关于类型
+- 关于 `monorepo`
+
+### publish
