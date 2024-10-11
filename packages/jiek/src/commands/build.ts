@@ -15,8 +15,7 @@ import { loadConfig } from '../utils/loadConfig'
 import { tsRegisterName } from '../utils/tsRegister'
 
 const FILE_TEMPLATE = (manifest: unknown) => (`
-import { template } from 'jiek/rollup'
-export default template(${JSON.stringify(manifest, null, 2)})
+module.exports = require('jiek/rollup').template(${JSON.stringify(manifest, null, 2)})
 `.trimStart())
 
 const require = createRequire(import.meta.url)
@@ -65,7 +64,7 @@ program
         // TODO support auto build child packages in workspaces
         const escapeManifestName = manifest.name?.replace(/^@/g, '').replace(/\//g, '+')
         const configFile = jiekTempDir(
-          `${escapeManifestName ?? `anonymous-${i++}`}.rollup.config.mjs`
+          `${escapeManifestName ?? `anonymous-${i++}`}.rollup.config.js`
         )
         fs.writeFileSync(configFile, FILE_TEMPLATE(manifest))
         let prefix = ''
