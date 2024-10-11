@@ -133,6 +133,7 @@ const getExtendTSConfig = (tsconfigPath: string): TSConfig => {
   if (extendsPaths.length === 0) return tsconfig
   return extendsPaths
     .map(getExtendTSConfig)
+    .concat(tsconfig)
     // https://www.typescriptlang.org/tsconfig/#files:~:text=Currently%2C%20the%20only%20top%2Dlevel%20property%20that%20is%20excluded%20from%20inheritance%20is%20references.
     // Currently, the only top-level property that is excluded from inheritance is references.
     .reduce((acc, { compilerOptions = {}, references: _, ...curr }) => ({
@@ -142,7 +143,7 @@ const getExtendTSConfig = (tsconfigPath: string): TSConfig => {
         ...acc.compilerOptions,
         ...compilerOptions
       }
-    }), tsconfig)
+    }), {})
 }
 
 const getCompilerOptionsByFilePath = (tsconfigPath: string, filePath: string): Record<string, unknown> | undefined => {
