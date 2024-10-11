@@ -3,14 +3,8 @@ import '../rollup/base'
 import fs from 'node:fs'
 import { dirname, resolve } from 'node:path'
 
-import type { Entrypoints2ExportsOptions, RecursiveRecord } from '@jiek/pkger/entrypoints'
-import {
-  DEFAULT_SKIP_VALUES,
-  entrypoints2Exports,
-  filterLeafs,
-  getAllLeafs,
-  resolveEntrypoints
-} from '@jiek/pkger/entrypoints'
+import type { RecursiveRecord } from '@jiek/pkger/entrypoints'
+import { getAllLeafs } from '@jiek/pkger/entrypoints'
 import { dts } from '@jiek/rollup-plugin-dts'
 import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import json from '@rollup/plugin-json'
@@ -23,6 +17,7 @@ import type { OutputOptions, OutputPlugin, RollupOptions } from 'rollup'
 import esbuild from 'rollup-plugin-esbuild'
 import ts from 'typescript'
 
+import { getExports } from '../utils/getExports'
 import { loadConfig } from '../utils/loadConfig'
 import type { RollupProgressEvent, TemplateOptions } from './base'
 import progress from './plugins/progress'
@@ -45,7 +40,8 @@ const COMMON_PLUGINS = [
   json()
 ]
 
-const { build } = loadConfig()
+const config = loadConfig() ?? {}
+const { build = {} } = config
 const jsOutdir = resolve(
   (
     typeof build?.output?.dir === 'object'
@@ -337,57 +333,15 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
       'index': '.'
     }[e] ?? e))
 
-  const {
-    crossModuleConvertor = true
-  } = build ?? {}
-
   const packageName = pascalCase(name)
 
   const external = externalResolver(packageJSON as Record<string, unknown>)
 
-  const [, resolvedEntrypoints] = resolveEntrypoints(entrypoints)
-  if (entries) {
-    Object
-      .entries(resolvedEntrypoints)
-      .forEach(([key]) => {
-        if (!entries.some(e => isMatch(key, e, { matchBase: true }))) {
-          delete resolvedEntrypoints[key]
-        }
-      })
-  }
-  const filteredResolvedEntrypoints = filterLeafs(
-    resolvedEntrypoints as RecursiveRecord<string>,
-    {
-      skipValue: [
-        // ignore values that filename starts with `.jk-noentry`
-        /(^|\/)\.jk-noentry/,
-        ...DEFAULT_SKIP_VALUES
-      ]
-    }
-  )
-  const crossModuleWithConditional: Entrypoints2ExportsOptions['withConditional'] = crossModuleConvertor
-    ? {
-      import: opts =>
-        !pkgIsModule && intersection(
-              new Set(opts.conditionals),
-              new Set(['import', 'module'])
-            ).size === 0
-          ? opts.dist.replace(/\.js$/, '.mjs')
-          : false,
-      require: opts =>
-        pkgIsModule && intersection(
-              new Set(opts.conditionals),
-              new Set(['require', 'node'])
-            ).size === 0
-          ? opts.dist.replace(/\.js$/, '.cjs')
-          : false
-    }
-    : {}
-  const exports = entrypoints2Exports(filteredResolvedEntrypoints, {
-    outdir: jsOutdir,
-    withConditional: {
-      ...crossModuleWithConditional
-    }
+  const [filteredResolvedEntrypoints, exports] = getExports({
+    entrypoints,
+    pkgIsModule,
+    entries,
+    config
   })
 
   const leafMap = new Map<string, string[][]>()
