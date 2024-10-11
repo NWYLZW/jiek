@@ -40,10 +40,7 @@ function getConfigPath(root: string) {
 }
 
 export function loadConfig(): Config {
-  const { wd: root, notWorkspace } = getWD()
-  if (notWorkspace) {
-    throw new Error('not in workspace')
-  }
+  const { wd: root } = getWD()
 
   let configPath = program.getOptionValue('configPath')
 
