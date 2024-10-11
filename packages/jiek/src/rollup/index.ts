@@ -63,8 +63,6 @@ const debug = (...args: unknown[]) => sendMessage({ type: 'debug', data: args } 
 
 const resolveWorkspacePath = (p: string) => resolve(WORKSPACE_ROOT, p)
 
-const intersection = <T>(a: Set<T>, b: Set<T>) => new Set([...a].filter(i => b.has(i)))
-
 const pascalCase = (str: string) =>
   str
     .replace(/[@|/-](\w)/g, (_, $1) => $1.toUpperCase())
