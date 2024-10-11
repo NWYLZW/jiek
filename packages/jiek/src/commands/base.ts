@@ -1,6 +1,5 @@
 import { program } from 'commander'
-
-import pkg from '../pkg'
+import pkg from 'jiek/package.json'
 
 program
   .version(pkg.version)
