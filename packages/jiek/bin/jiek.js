@@ -1,10 +1,13 @@
-#!/usr/bin/env node
-const fs = require('node:fs')
-const path = require('node:path')
+#!/usr/bin/env node -m
+import { existsSync } from 'node:fs'
+import { resolve, dirname } from 'node:path'
+import { createRequire } from 'node:module'
 
-if (fs.existsSync(path.join(__dirname, '../.jiek-dev-tag'))) {
+const __dirname = dirname(import.meta.url.replace('file://', ''))
+if (existsSync(resolve(__dirname, '../.jiek-dev-tag'))) {
+  const require = createRequire(import.meta.url)
   require('esbuild-register')
-  require('../src/cli.ts')
+  require('../src/cli')
 } else {
-  require('jiek/cli')
+  import('jiek/cli')
 }
