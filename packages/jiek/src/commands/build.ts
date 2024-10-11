@@ -1,6 +1,7 @@
 import '../rollup/base'
 
 import fs from 'node:fs'
+import { createRequire } from 'node:module'
 import path from 'node:path'
 
 import { MultiBar, Presets } from 'cli-progress'
@@ -17,6 +18,8 @@ const FILE_TEMPLATE = (manifest: unknown) => (`
 const manifest = ${JSON.stringify(manifest, null, 2)}
 module.exports = require('jiek/rollup').template(manifest)
 `.trimStart())
+
+const require = createRequire(import.meta.url)
 
 program
   .command('build')
