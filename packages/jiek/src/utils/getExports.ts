@@ -1,4 +1,4 @@
-import { resolve } from 'node:path'
+import { relative, resolve } from 'node:path'
 
 import {
   DEFAULT_SKIP_VALUES,
@@ -17,25 +17,31 @@ export function getExports({
   entrypoints,
   pkgIsModule,
   entries,
-  config
+  config,
+  dir
 }: {
   entrypoints: string | string[] | Record<string, unknown>
   pkgIsModule: boolean
   entries?: string[]
   config?: Config
+  dir?: string
 }) {
+  const dirResolve = (...paths: string[]) => resolve(dir ?? process.cwd(), ...paths)
+  const dirRelative = (path: string) => relative(dir ?? process.cwd(), path)
   const { build = {} } = config ?? {}
   const {
     crossModuleConvertor = true
   } = build
-  const jsOutdir = resolve(
-    (
-      typeof build?.output?.dir === 'object'
-        // the outdir only affect js output in this function
-        ? build.output.dir.js
-        : build?.output?.dir
-    ) ?? 'dist'
-  )
+  const jsOutdir = `./${
+    dirRelative(dirResolve(
+      (
+        typeof build?.output?.dir === 'object'
+          // the outdir only affect js output in this function
+          ? build.output.dir.js
+          : build?.output?.dir
+      ) ?? 'dist'
+    ))
+  }`
   const [, resolvedEntrypoints] = resolveEntrypoints(entrypoints)
   if (entries) {
     Object
