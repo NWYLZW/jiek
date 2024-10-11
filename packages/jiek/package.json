@@ -58,10 +58,5 @@
     "node-sass": "^9.0.0",
     "postcss": "^8.4.47",
     "rollup-plugin-postcss": "^4.0.2"
-  },
-  "publishConfig": {
-    "types": "./dist/index.d.ts",
-    "main": "./dist/index.cjs",
-    "module": "./dist/index.esm.js"
   }
 }

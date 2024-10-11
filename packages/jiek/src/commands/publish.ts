@@ -8,8 +8,9 @@ import detectIndent from 'detect-indent'
 import { applyEdits, modify } from 'jsonc-parser'
 
 import { actionDone, actionRestore } from '../inner'
-import { mergePackageJson } from '../merge-package-json'
 import { getSelectedProjectsGraph } from '../utils/filterSupport'
+import { getExports } from '../utils/getExports'
+import { loadConfig } from '../utils/loadConfig'
 
 program
   .command('publish')
@@ -28,9 +29,19 @@ program
       throw new Error('no packages selected')
     }
     const mainfests = selectedProjectsGraphEntries
-      .map(([dir, manifest]) => [
-        dir, mergePackageJson(manifest, dir)
-      ] as const)
+      .map(([dir, manifest]) => {
+        const { type, exports: entrypoints = {} } = manifest
+        const pkgIsModule = type === 'module'
+        const newManifest = { ...manifest }
+        const [, exports] = getExports({
+          entrypoints,
+          pkgIsModule,
+          config: loadConfig(dir),
+          dir
+        })
+        newManifest.exports = exports
+        return [dir, newManifest] as const
+      })
     const passArgs = Object
       .entries(options)
       .reduce((acc, [key, value]) => {
