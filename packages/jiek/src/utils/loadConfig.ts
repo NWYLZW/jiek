@@ -10,7 +10,7 @@ import { tsRegisterName } from './tsRegister'
 
 let configName = 'jiek.config'
 
-function getConfigPath(root: string) {
+function getConfigPath(root: string, dir?: string) {
   const isSupportTsLoader = !!tsRegisterName
   function configWithExtIsExist(ext: string) {
     const filenames = [
@@ -19,6 +19,12 @@ function getConfigPath(root: string) {
       path.resolve(root, `${configName}.${ext}`),
       path.resolve(root, `.${configName}.${ext}`)
     ]
+    if (dir) {
+      filenames.unshift(...[
+        path.resolve(dir, `${configName}.${ext}`),
+        path.resolve(dir, `.${configName}.${ext}`)
+      ])
+    }
     for (const filename of filenames) {
       if (
         fs.existsSync(filename)
@@ -39,13 +45,13 @@ function getConfigPath(root: string) {
   return path.resolve(root, configName)
 }
 
-export function loadConfig(): Config {
+export function loadConfig(dir?: string): Config {
   const { wd: root } = getWD()
 
   let configPath = program.getOptionValue('configPath')
 
   if (!configPath) {
-    configPath = getConfigPath(root)
+    configPath = getConfigPath(root, dir)
   } else {
     if (!fs.existsSync(configPath)) {
       throw new Error(`config file not found: ${configPath}`)
