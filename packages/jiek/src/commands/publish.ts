@@ -31,10 +31,11 @@ program
   .command('publish')
   .aliases(['pub', 'p'])
   .option('-b, --bumper <bumper>', 'bump version', 'patch')
+  .option('-no-b, --no-bumper', 'no bump version')
   .option('-p, --preview', 'preview publish')
   .action(async ({ preview, bumper, ...options }: {
     preview?: boolean
-    bumper: BumperType
+    bumper: false | BumperType
   }) => {
     actionRestore()
 
@@ -73,7 +74,7 @@ program
     for (const [dir, manifest] of manifests) {
       const oldJSONString = fs.readFileSync(path.join(dir, 'package.json'), 'utf-8')
       const oldJSON = JSON.parse(oldJSONString) ?? '0.0.0'
-      const newVersion = bump(oldJSON.version, bumper)
+      const newVersion = bumper ? bump(oldJSON.version, bumper) : oldJSON.version
       // TODO detectIndent by editorconfig
       const { indent = '    ' } = detectIndent(oldJSONString)
       const formattingOptions = {
