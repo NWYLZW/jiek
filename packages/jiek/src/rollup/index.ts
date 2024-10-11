@@ -1,7 +1,7 @@
 import '../rollup/base'
 
 import fs from 'node:fs'
-import { dirname, resolve } from 'node:path'
+import { dirname, relative, resolve } from 'node:path'
 
 import type { RecursiveRecord } from '@jiek/pkger/entrypoints'
 import { getAllLeafs } from '@jiek/pkger/entrypoints'
@@ -42,14 +42,19 @@ const COMMON_PLUGINS = [
 
 const config = loadConfig() ?? {}
 const { build = {} } = config
-const jsOutdir = resolve(
-  (
-    typeof build?.output?.dir === 'object'
-      // the outdir only affect js output in this function
-      ? build.output.dir.js
-      : build?.output?.dir
-  ) ?? 'dist'
-)
+const jsOutdir = `./${
+  relative(
+    process.cwd(),
+    resolve(
+      (
+        typeof build?.output?.dir === 'object'
+          // the outdir only affect js output in this function
+          ? build.output.dir.js
+          : build?.output?.dir
+      ) ?? 'dist'
+    )
+  )
+}`
 
 const STYLE_REGEXP = /\.(css|s[ac]ss|less|styl)$/
 
