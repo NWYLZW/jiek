@@ -24,6 +24,14 @@
   - 定义了一定的 exports 产物到输入文件的规则，能实现一定的灵活性，但是编写导出规则时会过于冗长
   - 没办法在 monorepo 的复杂依赖关系场景中去减轻开发负担
 
+## 安装
+
+目前只支持 pnpm，因为 workspace 的相关机制在 pnpm 的支持是最好的（主要也没时间支持别的工具了）。
+
+```bash
+pnpm install -D jiek
+```
+
 ## Features
 
 ### build
@@ -36,15 +44,63 @@
 
 #### 定义入口
 
-当你阅读了上面的内容后，在这里我们可以简单的对 exports 进行一定的扩展，我们可以叫
+在这里我们可以简单的对 exports 进行一定的扩展，在这里我们把我们定义在 `package.json` 中的 `exports` 字段可以看作为我们的入口文件。在这里我们简单定义一个入口：
+
+```json
+{
+  "exports": "./src/index.ts"
+}
+```
+
+是不是很简单呢？如果你不了解其他的工具，在这里我示范一段其他的工具你需要定义的：
+
+<details>
+
+```json
+{
+  "type": "module",
+  "exports": {
+    "import": {
+      "types": "./dist/es/index.d.mts",
+      "default": "./dist/es/index.mjs"
+    },
+    "require": {
+      "types": "./dist/cjs/index.d.ts",
+      "default": "./dist/cjs/index.js"
+    }
+  }
+}
+```
+
+</details>
 
 #### 运行指令
 
+假设你有一个 pakcages 下面的包叫 `@monorepo/utils` ，那么你可以这样运行：
+
+```shell
+jiek build -f utils
+```
+
+是不是很简单呢？在这里我们只需要告诉工具我们的包名就可以了，其他的事情我们都不需要关心。
+
 #### 个性化需求
+
+我知道，你肯定想定义一些自己的东西，你可以在你的根目录或者包的根目录下面创建一个 `jiek.config.ts` 文件：
+
+```typescript
+import { defineConfig } from 'jiek'
+
+export default defineConfig({
+  build: {
+    output: 'lib'
+  }
+})
+```
 
 #### 幕后的故事
 
 一些关于本工具的设计思路和实现细节，不阅读也不会影响各位的使用，感兴趣的各位可以看看。
 
-- 入口的约定
-- 插件的抉择
+- 入口的约定：还没写好
+- 插件的抉择：还没写好
