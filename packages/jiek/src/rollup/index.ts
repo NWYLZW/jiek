@@ -49,7 +49,7 @@ const { build } = loadConfig()
 const jsOutdir = resolve(
   (
     typeof build?.output?.dir === 'object'
-      // the outdir only effect js output in this function
+      // the outdir only affect js output in this function
       ? build.output.dir.js
       : build?.output?.dir
   ) ?? 'dist'
