@@ -10,13 +10,13 @@ importers:
     dependencies:
       with-scss-file-import:
         specifier: file:.
-        version: 'simple@file:'
+        version: 'file:'
 
 packages:
 
-  'simple@file:':
+  'with-scss-file-import@file:':
     resolution: {directory: '', type: directory}
 
 snapshots:
 
-  'simple@file:': {}
+  'with-scss-file-import@file:': {}
