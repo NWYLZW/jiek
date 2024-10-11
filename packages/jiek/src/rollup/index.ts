@@ -374,14 +374,13 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
             ).size === 0
           ? opts.dist.replace(/\.js$/, '.mjs')
           : false,
-      require: opts => {
-        return pkgIsModule && intersection(
+      require: opts =>
+        pkgIsModule && intersection(
               new Set(opts.conditionals),
               new Set(['require', 'node'])
             ).size === 0
           ? opts.dist.replace(/\.js$/, '.cjs')
           : false
-      }
     }
     : {}
   const exports = entrypoints2Exports(filteredResolvedEntrypoints, {
