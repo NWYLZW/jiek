@@ -1,3 +1,7 @@
+import { createRequire } from 'node:module'
+
+const require = createRequire(import.meta.url)
+
 function packageIsExist(name: string) {
   try {
     require.resolve(name)
