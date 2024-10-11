@@ -28,7 +28,7 @@ program
     if (selectedProjectsGraphEntries.length === 0) {
       throw new Error('no packages selected')
     }
-    const mainfests = selectedProjectsGraphEntries
+    const manifests = selectedProjectsGraphEntries
       .map(([dir, manifest]) => {
         const { type, exports: entrypoints = {} } = manifest
         const pkgIsModule = type === 'module'
@@ -50,7 +50,7 @@ program
         }
         return acc
       }, [] as string[])
-    for (const [dir, manifest] of mainfests) {
+    for (const [dir, manifest] of manifests) {
       const oldJSONString = fs.readFileSync(path.join(dir, 'package.json'), 'utf-8')
       const oldJSON = JSON.parse(oldJSONString) ?? '0.0.0'
       const newVersion = bump(oldJSON.version, bumper)
@@ -84,7 +84,8 @@ program
             )
           )
         } else {
-          for (const [k, v] of Object.entries(value)) {
+          const exports = value as Record<string, unknown>
+          for (const [k, v] of Object.entries(exports)) {
             newJSONString = applyEdits(
               newJSONString,
               modify(
@@ -94,6 +95,35 @@ program
                 { formattingOptions }
               )
             )
+          }
+          const index = exports?.['.']
+          const indexPublishConfig: Record<string, string> = {}
+          if (index) {
+            switch (typeof index) {
+              case 'string':
+                indexPublishConfig[
+                  manifest?.type === 'module' ? 'module' : 'main'
+                ] = index
+                break
+              case 'object': {
+                const indexExports = index as Record<string, string>
+                indexPublishConfig.main = indexExports['require'] ?? indexExports['default']
+                indexPublishConfig.module = indexExports['import'] ?? indexExports['module'] ?? indexExports['default']
+                break
+              }
+            }
+            for (const [k, v] of Object.entries(indexPublishConfig)) {
+              if (v === undefined) continue
+              newJSONString = applyEdits(
+                newJSONString,
+                modify(
+                  newJSONString,
+                  ['publishConfig', k],
+                  v,
+                  { formattingOptions }
+                )
+              )
+            }
           }
         }
       }
