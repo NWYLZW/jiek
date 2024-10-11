@@ -38,7 +38,9 @@ program
           pkgIsModule,
           config: loadConfig(dir),
           dir,
-          noFilter: true
+          noFilter: true,
+          withSource: true,
+          withSuffix: true
         })
         newManifest.exports = {
           ...resolvedEntrypoints,

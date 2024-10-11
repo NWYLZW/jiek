@@ -19,7 +19,9 @@ export function getExports({
   entries,
   config,
   dir,
-  noFilter
+  noFilter,
+  withSource,
+  withSuffix
 }: {
   entrypoints: string | string[] | Record<string, unknown>
   pkgIsModule: boolean
@@ -27,6 +29,8 @@ export function getExports({
   config?: Config
   dir?: string
   noFilter?: boolean
+  withSource?: boolean
+  withSuffix?: boolean
 }) {
   const dirResolve = (...paths: string[]) => resolve(dir ?? process.cwd(), ...paths)
   const dirRelative = (path: string) => relative(dir ?? process.cwd(), path)
@@ -86,6 +90,8 @@ export function getExports({
     filteredResolvedEntrypoints,
     entrypoints2Exports(filteredResolvedEntrypoints, {
       outdir: jsOutdir,
+      withSource,
+      withSuffix,
       withConditional: {
         ...crossModuleWithConditional
       }
