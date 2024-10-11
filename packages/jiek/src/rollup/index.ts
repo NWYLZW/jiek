@@ -7,6 +7,7 @@ import type { RecursiveRecord } from '@jiek/pkger/entrypoints'
 import { getAllLeafs } from '@jiek/pkger/entrypoints'
 import { dts } from '@jiek/rollup-plugin-dts'
 import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
+import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import terser from '@rollup/plugin-terser'
@@ -273,6 +274,7 @@ const generateConfigs = ({
           )
           .catch(() => void 0),
         esbuild(),
+        commonjs(),
         progress({
           onEvent: (event, message) =>
             sendMessage(
