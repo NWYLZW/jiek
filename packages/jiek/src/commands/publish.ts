@@ -12,6 +12,21 @@ import { getSelectedProjectsGraph } from '../utils/filterSupport'
 import { getExports } from '../utils/getExports'
 import { loadConfig } from '../utils/loadConfig'
 
+declare module 'jiek' {
+  export interface Config {
+    publish?: {
+      /**
+       * @default false
+       */
+      withSuffix?: boolean
+      /**
+       * @default true
+       */
+      withSource?: boolean
+    }
+  }
+}
+
 program
   .command('publish')
   .aliases(['pub', 'p'])
@@ -39,8 +54,7 @@ program
           config: loadConfig(dir),
           dir,
           noFilter: true,
-          withSource: true,
-          withSuffix: true
+          isPublish: true
         })
         newManifest.exports = {
           ...resolvedEntrypoints,

@@ -20,8 +20,7 @@ export function getExports({
   config,
   dir,
   noFilter,
-  withSource,
-  withSuffix
+  isPublish
 }: {
   entrypoints: string | string[] | Record<string, unknown>
   pkgIsModule: boolean
@@ -29,12 +28,17 @@ export function getExports({
   config?: Config
   dir?: string
   noFilter?: boolean
-  withSource?: boolean
-  withSuffix?: boolean
+  isPublish?: boolean
 }) {
   const dirResolve = (...paths: string[]) => resolve(dir ?? process.cwd(), ...paths)
   const dirRelative = (path: string) => relative(dir ?? process.cwd(), path)
-  const { build = {} } = config ?? {}
+  const {
+    build = {},
+    publish: {
+      withSuffix = false,
+      withSource = true
+    } = {}
+  } = config ?? {}
   const {
     crossModuleConvertor = true
   } = build
@@ -90,8 +94,8 @@ export function getExports({
     filteredResolvedEntrypoints,
     entrypoints2Exports(filteredResolvedEntrypoints, {
       outdir: jsOutdir,
-      withSource,
-      withSuffix,
+      withSuffix: isPublish ? withSuffix : undefined,
+      withSource: isPublish ? withSource : undefined,
       withConditional: {
         ...crossModuleWithConditional
       }
