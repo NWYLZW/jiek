@@ -275,7 +275,9 @@ const generateConfigs = ({
             })
           )
           .catch(() => void 0),
-        esbuild(),
+        esbuild({
+          tsconfig: dtsTSConfigPath
+        }),
         commonjs(),
         progress({
           onEvent: (event, message) =>
