@@ -167,6 +167,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
       throw new Error(errors.map(e => e.messageText).join('\n'))
     }
     compilerOptions = options
+    delete compilerOptions.composite
   }
   const exportConditions = [...conditionals, ...(compilerOptions.customConditions ?? [])]
   const throughEventProps: RollupProgressEvent & { type: 'progress' } = {
