@@ -1,4 +1,4 @@
-import type { OutputOptions } from 'rollup'
+import type { InputPluginOption, OutputOptions } from 'rollup'
 
 export type Mapping2ROO<K extends keyof OutputOptions> = OutputOptions[K] | {
   js?: OutputOptions[K]
@@ -30,6 +30,17 @@ export interface TemplateOptions {
     sourcemap?: Mapping2ROO<'sourcemap'>
     strict?: Mapping2ROO<'strict'>
   }
+  plugins?:
+    | InputPluginOption
+    | ((type: 'js' | 'dts') => InputPluginOption)
+    | {
+      js: InputPluginOption
+      dts?: InputPluginOption
+    }
+    | {
+      js?: InputPluginOption
+      dts: InputPluginOption
+    }
 }
 
 export type RollupProgressEvent =

@@ -14,7 +14,7 @@ import terser from '@rollup/plugin-terser'
 import { sendMessage } from 'execa'
 import { parse } from 'jsonc-parser'
 import { isMatch } from 'micromatch'
-import type { OutputOptions, OutputPlugin, RollupOptions } from 'rollup'
+import type { InputPluginOption, OutputOptions, OutputPlugin, RollupOptions } from 'rollup'
 import esbuild from 'rollup-plugin-esbuild'
 import ts from 'typescript'
 
@@ -61,6 +61,33 @@ const STYLE_REGEXP = /\.(css|s[ac]ss|less|styl)$/
 
 // eslint-disable-next-line unused-imports/no-unused-vars
 const debug = (...args: unknown[]) => sendMessage({ type: 'debug', data: args } satisfies RollupProgressEvent)
+
+const resolveBuildPlugins = (plugins: TemplateOptions['plugins']): {
+  js: InputPluginOption
+  dts: InputPluginOption
+} => {
+  if (plugins === false || plugins === undefined || plugins === null) {
+    return { js: [], dts: [] }
+  }
+  let js: InputPluginOption = []
+  let dts: InputPluginOption = []
+  switch (typeof plugins) {
+    case 'function':
+      js = plugins('js')
+      dts = plugins('dts')
+      break
+    case 'object':
+      if ('js' in plugins || 'dts' in plugins) {
+        js = plugins.js ?? []
+        dts = plugins.dts ?? []
+      } else {
+        js = plugins
+        dts = plugins
+      }
+      break
+  }
+  return { js, dts }
+}
 
 const resolveWorkspacePath = (p: string) => resolve(WORKSPACE_ROOT, p)
 
@@ -241,6 +268,7 @@ const generateConfigs = ({
     data: { name, path, exportConditions, input }
   }
   const outdir = options?.output?.dir
+  const { js: jsPlugins, dts: dtsPlugins } = resolveBuildPlugins(build.plugins)
   return [
     {
       input,
@@ -287,7 +315,8 @@ const generateConfigs = ({
                 data: { ...throughEventProps.data, event, message, tags: ['js'] }
               } satisfies RollupProgressEvent
             )
-        })
+        }),
+        jsPlugins
       ]
     },
     {
@@ -323,7 +352,8 @@ const generateConfigs = ({
                 data: { ...throughEventProps.data, event, message, tags: ['dts'] }
               } satisfies RollupProgressEvent
             )
-        })
+        }),
+        dtsPlugins
       ]
     }
   ]
