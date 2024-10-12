@@ -20,7 +20,7 @@ import ts from 'typescript'
 
 import { getExports } from '../utils/getExports'
 import { loadConfig } from '../utils/loadConfig'
-import type { RollupProgressEvent, TemplateOptions } from './base'
+import type { ConfigGenerateContext, RollupProgressEvent, TemplateOptions } from './base'
 import progress from './plugins/progress'
 import skip from './plugins/skip'
 import externalResolver from './utils/externalResolver'
@@ -62,7 +62,7 @@ const STYLE_REGEXP = /\.(css|s[ac]ss|less|styl)$/
 // eslint-disable-next-line unused-imports/no-unused-vars
 const debug = (...args: unknown[]) => sendMessage({ type: 'debug', data: args } satisfies RollupProgressEvent)
 
-const resolveBuildPlugins = (plugins: TemplateOptions['plugins']): {
+const resolveBuildPlugins = (context: ConfigGenerateContext, plugins: TemplateOptions['plugins']): {
   js: InputPluginOption
   dts: InputPluginOption
 } => {
@@ -73,8 +73,8 @@ const resolveBuildPlugins = (plugins: TemplateOptions['plugins']): {
   let dts: InputPluginOption = []
   switch (typeof plugins) {
     case 'function':
-      js = plugins('js')
-      dts = plugins('dts')
+      js = plugins('js', context)
+      dts = plugins('dts', context)
       break
     case 'object':
       if ('js' in plugins || 'dts' in plugins) {
@@ -220,23 +220,16 @@ const getCompilerOptionsByFilePath = (tsconfigPath: string, filePath: string): R
   return tsconfig.compilerOptions
 }
 
-const generateConfigs = ({
-  path,
-  name,
-  input,
-  output,
-  external,
-  pkgIsModule,
-  conditionals
-}: {
-  path: string
-  name: string
-  input: string
-  output: string
-  external: (string | RegExp)[]
-  pkgIsModule: boolean
-  conditionals: string[]
-}, options: TemplateOptions = {}): RollupOptions[] => {
+const generateConfigs = (context: ConfigGenerateContext, options: TemplateOptions = {}): RollupOptions[] => {
+  const {
+    path,
+    name,
+    input,
+    output,
+    external,
+    pkgIsModule,
+    conditionals
+  } = context
   const isModule = conditionals.includes('import')
   const isCommonJS = conditionals.includes('require')
   const isBrowser = conditionals.includes('browser')
@@ -268,7 +261,7 @@ const generateConfigs = ({
     data: { name, path, exportConditions, input }
   }
   const outdir = options?.output?.dir
-  const { js: jsPlugins, dts: dtsPlugins } = resolveBuildPlugins(build.plugins)
+  const { js: jsPlugins, dts: dtsPlugins } = resolveBuildPlugins(context, build.plugins)
   return [
     {
       input,

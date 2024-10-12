@@ -5,6 +5,16 @@ export type Mapping2ROO<K extends keyof OutputOptions> = OutputOptions[K] | {
   dts?: OutputOptions[K]
 }
 
+export interface ConfigGenerateContext {
+  path: string
+  name: string
+  input: string
+  output: string
+  external: (string | RegExp)[]
+  pkgIsModule: boolean
+  conditionals: string[]
+}
+
 export interface TemplateOptions {
   /**
    * When the user configures type: module, the generated output from entry points that don't
@@ -32,7 +42,7 @@ export interface TemplateOptions {
   }
   plugins?:
     | InputPluginOption
-    | ((type: 'js' | 'dts') => InputPluginOption)
+    | ((type: 'js' | 'dts', context: ConfigGenerateContext) => InputPluginOption)
     | {
       js: InputPluginOption
       dts?: InputPluginOption
