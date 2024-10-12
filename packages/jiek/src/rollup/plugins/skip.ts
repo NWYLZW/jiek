@@ -4,20 +4,18 @@ interface Options {
   patterns?: (string | RegExp)[]
 }
 
-export default ((options = {}) => {
-  return {
-    name: 'skip',
-    // skip the specified files by `options.patterns`
-    load(id) {
-      if (
-        options.patterns?.some((pattern) =>
-          typeof pattern === 'string'
-            ? id.includes(pattern)
-            : pattern.test(id)
-        )
-      ) {
-        return ''
-      }
+export default ((options = {}) => ({
+  name: 'skip',
+  // skip the specified files by `options.patterns`
+  load(id) {
+    if (
+      options.patterns?.some((pattern) =>
+        typeof pattern === 'string'
+          ? id.includes(pattern)
+          : pattern.test(id)
+      )
+    ) {
+      return ''
     }
   }
-}) as PluginImpl<Options>
+})) as PluginImpl<Options>
