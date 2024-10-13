@@ -24,12 +24,15 @@ program
   .command('build')
   .option('-s, --silent', "Don't display logs.")
   .option('-e, --entries <ENTRIES>', "Specify the entries of the package.json's 'exports' field.(support glob)")
+  .option('-v, --verbose', 'Display debug logs.')
   .action(async ({
     silent,
-    entries
+    entries,
+    verbose
   }: {
     silent: boolean
     entries: string
+    verbose: boolean
   }) => {
     actionRestore()
     const { build } = loadConfig()
@@ -148,6 +151,7 @@ program
             code === 0
               ? resolve()
               : reject(new Error(`rollup build failed:\n${errorStr}`)))
+          verbose && child.stdout?.pipe(process.stdout)
         })
       })
     ).finally(() => {
