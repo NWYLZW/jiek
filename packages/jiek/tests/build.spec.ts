@@ -37,6 +37,13 @@ describe('simple mjs', () => {
   })
   test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s', root, prefixes, 'dist'))
 })
+describe('export self subpath', () => {
+  const [root, prefixes] = prepareRootWithSubCmd(['export-self-subpath'])
+  test(
+    'common',
+    runCommandAndSnapshotDistFiles.bind(null, 'build -s -f export-self-subpath', root, prefixes, 'dist')
+  )
+})
 describe('multiple exports', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['multiple-exports'], {
     notWorkspace: true

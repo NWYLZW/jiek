@@ -8,11 +8,12 @@ export default function(jsonOrPath: string | Record<string, unknown> = process.c
       ? JSON.parse(fs.readFileSync(`${jsonOrPath}/package.json`, 'utf-8'))
       : {}
     : jsonOrPath
-  const { dependencies = {}, peerDependencies = {}, optionalDependencies = {} } = pkg
+  const { name, dependencies = {}, peerDependencies = {}, optionalDependencies = {} } = pkg
   const external = <(string | RegExp)[]> Object
     .keys(dependencies)
     .concat(Object.keys(peerDependencies))
     .concat(Object.keys(optionalDependencies))
+    .concat(name)
   return external
     .map(dep => new RegExp(`^${dep}(/.*)?$`))
     .concat([

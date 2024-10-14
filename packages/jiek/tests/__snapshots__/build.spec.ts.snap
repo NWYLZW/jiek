@@ -1,5 +1,136 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`export self subpath > common 1`] = `
+[
+  "base.cjs",
+  "base.d.cts",
+  "base.d.ts",
+  "base.js",
+  "base.min.cjs",
+  "base.min.js",
+  "index.cjs",
+  "index.d.cts",
+  "index.d.ts",
+  "index.js",
+  "index.min.cjs",
+  "index.min.js",
+]
+`;
+
+exports[`export self subpath > common 2`] = `
+"base.cjs:
+'use strict';
+
+function base() {
+  return "base";
+}
+
+exports.base = base;
+"
+`;
+
+exports[`export self subpath > common 3`] = `
+"base.d.cts:
+declare function base(): string;
+
+export { base };
+"
+`;
+
+exports[`export self subpath > common 4`] = `
+"base.d.ts:
+declare function base(): string;
+
+export { base };
+"
+`;
+
+exports[`export self subpath > common 5`] = `
+"base.js:
+function base() {
+  return "base";
+}
+
+export { base };
+"
+`;
+
+exports[`export self subpath > common 6`] = `
+"base.min.cjs:
+"use strict";exports.base=function(){return"base"};
+"
+`;
+
+exports[`export self subpath > common 7`] = `
+"base.min.js:
+function e(){return"base"}export{e as base};
+"
+`;
+
+exports[`export self subpath > common 8`] = `
+"index.cjs:
+'use strict';
+
+var base = require('export-self-subpath/base');
+
+function foo() {
+  return "foo";
+}
+
+exports.foo = foo;
+Object.keys(base).forEach(function (k) {
+  if (k !== 'default' && !Object.prototype.hasOwnProperty.call(exports, k)) Object.defineProperty(exports, k, {
+    enumerable: true,
+    get: function () { return base[k]; }
+  });
+});
+"
+`;
+
+exports[`export self subpath > common 9`] = `
+"index.d.cts:
+export * from 'export-self-subpath/base';
+
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`export self subpath > common 10`] = `
+"index.d.ts:
+export * from 'export-self-subpath/base';
+
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`export self subpath > common 11`] = `
+"index.js:
+export * from 'export-self-subpath/base';
+
+function foo() {
+  return "foo";
+}
+
+export { foo };
+"
+`;
+
+exports[`export self subpath > common 12`] = `
+"index.min.cjs:
+"use strict";var e=require("export-self-subpath/base");exports.foo=function(){return"foo"},Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})}));
+"
+`;
+
+exports[`export self subpath > common 13`] = `
+"index.min.js:
+export*from"export-self-subpath/base";function o(){return"foo"}export{o as foo};
+"
+`;
+
 exports[`monorepo > build bar 1`] = `
 [
   "index.d.mts",
