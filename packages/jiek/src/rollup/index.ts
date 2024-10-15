@@ -58,9 +58,6 @@ const jsOutdir = `./${
 
 const STYLE_REGEXP = /\.(css|s[ac]ss|less|styl)$/
 
-// eslint-disable-next-line unused-imports/no-unused-vars
-const debug = (...args: unknown[]) => sendMessage({ type: 'debug', data: args } satisfies RollupProgressEvent)
-
 const resolveBuildPlugins = (context: ConfigGenerateContext, plugins: TemplateOptions['plugins']): {
   js: InputPluginOption
   dts: InputPluginOption
