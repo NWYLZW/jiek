@@ -1,0 +1,22 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    devDependencies:
+      glob-exports:
+        specifier: file:.
+        version: 'file:'
+
+packages:
+
+  'glob-exports@file:':
+    resolution: {directory: '', type: directory}
+
+snapshots:
+
+  'glob-exports@file:': {}

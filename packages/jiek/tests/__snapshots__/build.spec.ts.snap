@@ -169,6 +169,175 @@ export*from"export-self-subpath/base";var e="export-self-subpath";function r(){r
 "
 `;
 
+exports[`glob exports > common 1`] = `
+[
+  "bar.d.ts",
+  "bar.js",
+  "bar.min.js",
+  "foo.d.ts",
+  "foo.js",
+  "foo.min.js",
+  "index.cjs",
+  "index.d.cts",
+  "index.d.ts",
+  "index.js",
+  "index.min.cjs",
+  "index.min.js",
+  "sub",
+  "sub/bor.d.ts",
+  "sub/bor.js",
+  "sub/bor.min.js",
+  "sub/fuo.d.ts",
+  "sub/fuo.js",
+  "sub/fuo.min.js",
+]
+`;
+
+exports[`glob exports > common 2`] = `
+"bar.d.ts:
+declare const bar = "bar";
+
+export { bar };
+"
+`;
+
+exports[`glob exports > common 3`] = `
+"bar.js:
+const bar = "bar";
+
+export { bar };
+"
+`;
+
+exports[`glob exports > common 4`] = `
+"bar.min.js:
+const o="bar";export{o as bar};
+"
+`;
+
+exports[`glob exports > common 5`] = `
+"foo.d.ts:
+declare const foo = "foo";
+
+export { foo };
+"
+`;
+
+exports[`glob exports > common 6`] = `
+"foo.js:
+const foo = "foo";
+
+export { foo };
+"
+`;
+
+exports[`glob exports > common 7`] = `
+"foo.min.js:
+const o="foo";export{o as foo};
+"
+`;
+
+exports[`glob exports > common 8`] = `
+"index.cjs:
+'use strict';
+
+var bar = require('glob-exports/bar');
+var foo = require('glob-exports/foo');
+
+
+
+Object.keys(bar).forEach(function (k) {
+	if (k !== 'default' && !Object.prototype.hasOwnProperty.call(exports, k)) Object.defineProperty(exports, k, {
+		enumerable: true,
+		get: function () { return bar[k]; }
+	});
+});
+Object.keys(foo).forEach(function (k) {
+	if (k !== 'default' && !Object.prototype.hasOwnProperty.call(exports, k)) Object.defineProperty(exports, k, {
+		enumerable: true,
+		get: function () { return foo[k]; }
+	});
+});
+"
+`;
+
+exports[`glob exports > common 9`] = `
+"index.d.cts:
+export * from 'glob-exports/bar';
+export * from 'glob-exports/foo';
+"
+`;
+
+exports[`glob exports > common 10`] = `
+"index.d.ts:
+export * from 'glob-exports/bar';
+export * from 'glob-exports/foo';
+"
+`;
+
+exports[`glob exports > common 11`] = `
+"index.js:
+export * from 'glob-exports/bar';
+export * from 'glob-exports/foo';
+"
+`;
+
+exports[`glob exports > common 12`] = `
+"index.min.cjs:
+"use strict";var e=require("glob-exports/bar"),t=require("glob-exports/foo");Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})})),Object.keys(t).forEach((function(e){"default"===e||Object.prototype.hasOwnProperty.call(exports,e)||Object.defineProperty(exports,e,{enumerable:!0,get:function(){return t[e]}})}));
+"
+`;
+
+exports[`glob exports > common 13`] = `
+"index.min.js:
+export*from"glob-exports/bar";export*from"glob-exports/foo";
+"
+`;
+
+exports[`glob exports > common 14`] = `
+"sub/bor.d.ts:
+declare const bor = "bor";
+
+export { bor };
+"
+`;
+
+exports[`glob exports > common 15`] = `
+"sub/bor.js:
+const bor = "bor";
+
+export { bor };
+"
+`;
+
+exports[`glob exports > common 16`] = `
+"sub/bor.min.js:
+const o="bor";export{o as bor};
+"
+`;
+
+exports[`glob exports > common 17`] = `
+"sub/fuo.d.ts:
+declare const fuo = "fuo";
+
+export { fuo };
+"
+`;
+
+exports[`glob exports > common 18`] = `
+"sub/fuo.js:
+const fuo = "fuo";
+
+export { fuo };
+"
+`;
+
+exports[`glob exports > common 19`] = `
+"sub/fuo.min.js:
+const o="fuo";export{o as fuo};
+"
+`;
+
 exports[`monorepo > build bar 1`] = `
 [
   "index.d.mts",

@@ -16,6 +16,8 @@ import type { InputPluginOption, OutputOptions, OutputPlugin, RollupOptions } fr
 import esbuild from 'rollup-plugin-esbuild'
 import ts from 'typescript'
 
+import { recusiveListFiles } from '#~/utils/recusiveListFiles.ts'
+
 import { getExports } from '../utils/getExports'
 import { loadConfig } from '../utils/loadConfig'
 import { getCompilerOptionsByFilePath } from '../utils/ts'
@@ -104,7 +106,7 @@ const withMinify = (
     plugins?: OutputPlugin[]
   },
   minify = build?.output?.minify
-) =>
+): OutputOptions[] =>
   minify === false
     ? [output]
     : minify === 'only-minify'
@@ -112,7 +114,12 @@ const withMinify = (
       ...output,
       // TODO replace suffix when pubish to npm and the `build.output.minify` is 'only-minify'
       // TODO resolve dts output file name
-      file: output.file?.replace(/(\.[cm]?js)$/, '.min$1'),
+      entryFileNames: chunkInfo =>
+        typeof output.entryFileNames === 'function'
+          ? output.entryFileNames(chunkInfo).replace(/(\.[cm]?js)$/, '.min$1')
+          : (() => {
+            throw new Error('entryFileNames must be a function')
+          })(),
       plugins: [
         ...(output.plugins ?? []),
         terser()
@@ -122,6 +129,12 @@ const withMinify = (
       output,
       {
         ...output,
+        entryFileNames: chunkInfo =>
+          typeof output.entryFileNames === 'function'
+            ? output.entryFileNames(chunkInfo).replace(/(\.[cm]?js)$/, '.min$1')
+            : (() => {
+              throw new Error('entryFileNames must be a function')
+            })(),
         file: output.file?.replace(/(\.[cm]?js)$/, '.min$1'),
         plugins: [
           ...(output.plugins ?? []),
@@ -173,15 +186,34 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
   }
   const outdir = options?.output?.dir
   const { js: jsPlugins, dts: dtsPlugins } = resolveBuildPlugins(context, build.plugins)
+  if (input.includes('**')) {
+    throw new Error(
+      'input should not include "**", please read the [documentation](https://nodejs.org/api/packages.html#subpath-patterns).'
+    )
+  }
+  const inputObj = !input.includes('*')
+    ? input
+    : recusiveListFiles(process.cwd())
+      .filter(p => /(?<!\.d)\.[cm]?tsx?$/.test(p))
+  const globCommonDir = input.includes('*')
+    ? input.split('*')[0]
+    : ''
   return [
     {
-      input,
+      input: inputObj,
       external,
       output: [
         ...withMinify({
-          file: output,
+          dir: jsOutdir,
           name,
           interop: 'auto',
+          entryFileNames: (chunkInfo) => (
+            Array.isArray(inputObj)
+              ? chunkInfo.facadeModuleId!.replace(`${process.cwd()}/`, './')
+                .replace(globCommonDir, '')
+                .replace(/(\.[cm]?)ts$/, '$1js')
+              : output.replace(`${jsOutdir}/`, '')
+          ),
           sourcemap: typeof options?.output?.sourcemap === 'object'
             ? options.output.sourcemap.js
             : options?.output?.sourcemap,
@@ -224,7 +256,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
       ]
     },
     {
-      input,
+      input: inputObj,
       external,
       output: [
         {
@@ -232,10 +264,15 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           sourcemap: typeof options?.output?.sourcemap === 'object'
             ? options.output.sourcemap.dts
             : options?.output?.sourcemap,
-          entryFileNames: () =>
-            output
-              .replace(`${jsOutdir}/`, '')
-              .replace(/(\.[cm]?)js$/, '.d$1ts'),
+          entryFileNames: (chunkInfo) => (
+            Array.isArray(inputObj)
+              ? chunkInfo.facadeModuleId!.replace(`${process.cwd()}/`, './')
+                .replace(globCommonDir, '')
+                .replace(/(\.[cm]?)ts$/, '.d$1ts')
+              : output
+                .replace(`${jsOutdir}/`, '')
+                .replace(/(\.[cm]?)js$/, '.d$1ts')
+          ),
           strict: typeof options?.output?.strict === 'object'
             ? options.output.strict.dts
             : options?.output?.strict

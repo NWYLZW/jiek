@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "name": "glob-exports",
+  "version": "0.1.0",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "devDependencies": {
+    "glob-exports": "file:."
+  }
+}
