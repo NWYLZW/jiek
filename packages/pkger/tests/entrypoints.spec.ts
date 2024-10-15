@@ -96,6 +96,14 @@ describe('entrypoints2Exports', () => {
   test('null value', () => {
     // TODO
   })
+  test('glob', () => {
+    // https://nodejs.org/api/packages.html#subpath-patterns
+    expect(entrypoints2Exports({
+      './*': './src/*.ts'
+    })).toStrictEqual({
+      './*': './dist/*.js'
+    })
+  })
   test('nested conditional', () => {
     expect(entrypoints2Exports({
       '.': {
