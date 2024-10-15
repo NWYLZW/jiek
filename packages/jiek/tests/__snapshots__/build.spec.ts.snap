@@ -73,8 +73,27 @@ exports[`export self subpath > common 8`] = `
 
 var base = require('export-self-subpath/base');
 
+var type = "module";
+var name = "export-self-subpath";
+var version = "0.1.0";
+var exports$1 = {
+	"./package.json": "./package.json",
+	".": "./src/index.ts",
+	"./base": "./src/base.ts"
+};
+var devDependencies = {
+	"export-self-subpath": "file:."
+};
+var pkg = {
+	type: type,
+	name: name,
+	version: version,
+	exports: exports$1,
+	devDependencies: devDependencies
+};
+
 function foo() {
-  return "foo";
+  return pkg.name;
 }
 
 exports.foo = foo;
@@ -111,8 +130,27 @@ exports[`export self subpath > common 11`] = `
 "index.js:
 export * from 'export-self-subpath/base';
 
+var type = "module";
+var name = "export-self-subpath";
+var version = "0.1.0";
+var exports = {
+	"./package.json": "./package.json",
+	".": "./src/index.ts",
+	"./base": "./src/base.ts"
+};
+var devDependencies = {
+	"export-self-subpath": "file:."
+};
+var pkg = {
+	type: type,
+	name: name,
+	version: version,
+	exports: exports,
+	devDependencies: devDependencies
+};
+
 function foo() {
-  return "foo";
+  return pkg.name;
 }
 
 export { foo };
@@ -121,13 +159,13 @@ export { foo };
 
 exports[`export self subpath > common 12`] = `
 "index.min.cjs:
-"use strict";var e=require("export-self-subpath/base");exports.foo=function(){return"foo"},Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})}));
+"use strict";var e=require("export-self-subpath/base"),t="export-self-subpath";exports.foo=function(){return t},Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})}));
 "
 `;
 
 exports[`export self subpath > common 13`] = `
 "index.min.js:
-export*from"export-self-subpath/base";function o(){return"foo"}export{o as foo};
+export*from"export-self-subpath/base";var e="export-self-subpath";function r(){return e}export{r as foo};
 "
 `;
 
