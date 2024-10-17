@@ -1,7 +1,5 @@
-import './base'
-
 import fs from 'node:fs'
-import { dirname, relative, resolve } from 'node:path'
+import { dirname, extname, relative, resolve } from 'node:path'
 
 import type { RecursiveRecord } from '@jiek/pkger/entrypoints'
 import { getAllLeafs } from '@jiek/pkger/entrypoints'
@@ -12,6 +10,7 @@ import json from '@rollup/plugin-json'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import terser from '@rollup/plugin-terser'
 import { sendMessage } from 'execa'
+import { isMatch } from 'micromatch'
 import type { InputPluginOption, OutputOptions, OutputPlugin, RollupOptions } from 'rollup'
 import esbuild from 'rollup-plugin-esbuild'
 import ts from 'typescript'
@@ -195,9 +194,22 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
     ? input
     : recusiveListFiles(process.cwd())
       .filter(p => /(?<!\.d)\.[cm]?tsx?$/.test(p))
+      .map(p => relative(process.cwd(), p))
+      .filter(p => isMatch(p, input.slice(2)))
   const globCommonDir = input.includes('*')
-    ? input.split('*')[0]
+    ? input.split('*')[0].replace('./', '')
     : ''
+  const pathCommonDir = path.includes('*')
+    ? path.split('*')[0].replace('./', '')
+    : ''
+  if (
+    (globCommonDir.length > 0 && pathCommonDir.length === 0)
+    || (globCommonDir.length === 0 && pathCommonDir.length > 0)
+  ) {
+    throw new Error('input and path should both include "*" or not include "*"')
+  }
+  const jsOutputSuffix = extname(output)
+  const tsOutputSuffix = jsOutputSuffix.replace(/(\.[cm]?)js$/, '.d$1ts')
   return [
     {
       input: inputObj,
@@ -209,9 +221,9 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           interop: 'auto',
           entryFileNames: (chunkInfo) => (
             Array.isArray(inputObj)
-              ? chunkInfo.facadeModuleId!.replace(`${process.cwd()}/`, './')
-                .replace(globCommonDir, '')
-                .replace(/(\.[cm]?)ts$/, '$1js')
+              ? chunkInfo.facadeModuleId!.replace(`${process.cwd()}/`, '')
+                .replace(globCommonDir, pathCommonDir)
+                .replace(/(\.[cm]?)ts$/, jsOutputSuffix)
               : output.replace(`${jsOutdir}/`, '')
           ),
           sourcemap: typeof options?.output?.sourcemap === 'object'
@@ -266,12 +278,12 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
             : options?.output?.sourcemap,
           entryFileNames: (chunkInfo) => (
             Array.isArray(inputObj)
-              ? chunkInfo.facadeModuleId!.replace(`${process.cwd()}/`, './')
-                .replace(globCommonDir, '')
-                .replace(/(\.[cm]?)ts$/, '.d$1ts')
+              ? chunkInfo.facadeModuleId!.replace(`${process.cwd()}/`, '')
+                .replace(globCommonDir, pathCommonDir)
+                .replace(/(\.[cm]?)ts$/, tsOutputSuffix)
               : output
                 .replace(`${jsOutdir}/`, '')
-                .replace(/(\.[cm]?)js$/, '.d$1ts')
+                .replace(/(\.[cm]?)js$/, tsOutputSuffix)
           ),
           strict: typeof options?.output?.strict === 'object'
             ? options.output.strict.dts

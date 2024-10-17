@@ -5,7 +5,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": "./src/index.ts",
-    "./*": "./src/*.ts"
+    "./sub/*": "./src/sub/*.ts"
   },
   "devDependencies": {
     "glob-exports": "file:."

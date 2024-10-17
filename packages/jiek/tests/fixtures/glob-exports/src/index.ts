@@ -1,2 +1,2 @@
-export * from 'glob-exports/bar'
-export * from 'glob-exports/foo'
+export * from 'glob-exports/sub/bar'
+export * from 'glob-exports/sub/foo'
