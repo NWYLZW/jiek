@@ -16,7 +16,7 @@ function snapshotDistFiles(distDir: string) {
     if (fs.statSync(path.resolve(distDir, file)).isDirectory()) return
     expect(`${file}:\n${fs.readFileSync(path.resolve(distDir, file), 'utf-8')}`).toMatchSnapshot()
   })
-  fs.rmSync(distDir, { recursive: true })
+  // fs.rmSync(distDir, { recursive: true })
 }
 
 function runCommandAndSnapshotDistFiles(cmd: string, root: string, prefixes: string[], distPath = 'dist') {
@@ -56,6 +56,12 @@ describe('glob exports', () => {
     notWorkspace: true
   })
   test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s -v', root, prefixes, 'dist'))
+})
+describe('resolve imports', () => {
+  const [root, prefixes] = prepareRootWithSubCmd(['resolve-imports'], {
+    notWorkspace: true
+  })
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s', root, prefixes, 'dist'))
 })
 describe('unordered exports inputs', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['unordered-exports_input'], {

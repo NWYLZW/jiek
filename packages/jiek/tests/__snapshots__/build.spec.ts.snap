@@ -1108,6 +1108,72 @@ export { bar, index as default };
 "
 `;
 
+exports[`resolve imports > common 1`] = `
+[
+  "index.cjs",
+  "index.d.cts",
+  "index.d.ts",
+  "index.js",
+  "index.min.cjs",
+  "index.min.js",
+]
+`;
+
+exports[`resolve imports > common 2`] = `
+"index.cjs:
+'use strict';
+
+const bar = "bar";
+
+const foo = "foo";
+
+exports.bar = bar;
+exports.foo = foo;
+"
+`;
+
+exports[`resolve imports > common 3`] = `
+"index.d.cts:
+const bar = 'bar';
+
+const foo = 'foo';
+
+export { bar, foo };
+"
+`;
+
+exports[`resolve imports > common 4`] = `
+"index.d.ts:
+const bar = 'bar';
+
+const foo = 'foo';
+
+export { bar, foo };
+"
+`;
+
+exports[`resolve imports > common 5`] = `
+"index.js:
+const bar = "bar";
+
+const foo = "foo";
+
+export { bar, foo };
+"
+`;
+
+exports[`resolve imports > common 6`] = `
+"index.min.cjs:
+"use strict";exports.bar="bar",exports.foo="foo";
+"
+`;
+
+exports[`resolve imports > common 7`] = `
+"index.min.js:
+const o="bar",r="foo";export{o as bar,r as foo};
+"
+`;
+
 exports[`simple > common 1`] = `
 [
   "index.d.mts",
