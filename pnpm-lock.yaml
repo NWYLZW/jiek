@@ -14,8 +14,8 @@ importers:
         specifier: workspace:^
         version: link:packages/pkger
       '@jiek/rollup-plugin-dts':
-        specifier: ^6.1.1
-        version: 6.1.1(rollup@4.16.0)(typescript@5.5.3)
+        specifier: ^6.1.2
+        version: 6.1.2(rollup@4.16.0)(typescript@5.5.3)
       '@jiek/utils':
         specifier: workspace:^
         version: link:packages/utils
@@ -101,8 +101,8 @@ importers:
         specifier: workspace:^
         version: link:../pkger
       '@jiek/rollup-plugin-dts':
-        specifier: ^6.1.1
-        version: 6.1.1(rollup@4.13.0)(typescript@5.5.3)
+        specifier: ^6.1.2
+        version: 6.1.2(rollup@4.13.0)(typescript@5.5.3)
       '@jiek/utils':
         specifier: workspace:^
         version: link:../utils
@@ -300,12 +300,24 @@ packages:
     resolution: {integrity: sha512-y5+tLQyV8pg3fsiln67BVLD1P13Eg4lh5RW9mF0zUuvLrv9uIQ4MCL+CRT+FTsBlBjcIan6PGsLcBN0m3ClUyQ==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/code-frame@7.25.7':
+    resolution: {integrity: sha512-0xZJFNE5XMpENsgfHYTw8FbX4kv53mFLn2i3XPoq69LyhYSCBJtitaHx9QnsVTrsogI4Z3+HtEfZ2/GFPOtf5g==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/helper-validator-identifier@7.22.20':
     resolution: {integrity: sha512-Y4OZ+ytlatR8AI+8KZfKuL5urKp7qey08ha31L8b3BwewJAoJamTzyvxPR/5D+KkdJCGPq/+8TukHBlY10FX9A==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/helper-validator-identifier@7.25.7':
+    resolution: {integrity: sha512-AM6TzwYqGChO45oiuPqwL2t20/HdMC1rTPAesnBCgPCSF1x3oN9MVUwQV2iyz4xqWrctwK5RNC8LV22kaQCNYg==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/highlight@7.24.2':
     resolution: {integrity: sha512-Yac1ao4flkTxTteCDZLEvdxg2fZfz1v8M4QpaGypq/WPDqg3ijHYbDfs+LG5hvzSoqaSZ9/Z9lKSP3CjZjv+pA==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/highlight@7.25.7':
+    resolution: {integrity: sha512-iYyACpW3iW8Fw+ZybQK+drQre+ns/tKpXbNESfrhNnPLIklLbXr7MYJ6gPEd0iETGLOK+SxMjVvKb/ffmk+FEw==}
     engines: {node: '>=6.9.0'}
 
   '@dprint/darwin-arm64@0.45.1':
@@ -526,8 +538,8 @@ packages:
     resolution: {integrity: sha512-mo5j5X+jIZmJQveBKeS/clAueipV7KgiX1vMgCxam1RNYiqE1w62n0/tJJnHtjW8ZHcQco5gY85jA3mi0L+nSA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
 
-  '@jiek/rollup-plugin-dts@6.1.1':
-    resolution: {integrity: sha512-TILGtvW9iAI5RdnLYt3YCobWss8Z24Lh/u0JD9v/uYpjnKE90XBWMEW0PlXPAGDOQGTtJeRXC7RdRNw2y7O64w==}
+  '@jiek/rollup-plugin-dts@6.1.2':
+    resolution: {integrity: sha512-Jb3H9F6Il4lurcIk0WOyVLRC+m1Zyi0bkN9p1HgaZhhehsW+QKj0VWIxOgx4mi8ESbHWgTy0j7DEcsBbVL0mww==}
     engines: {node: '>=16'}
     peerDependencies:
       rollup: ^3.29.4 || ^4
@@ -550,6 +562,9 @@ packages:
 
   '@jridgewell/sourcemap-codec@1.4.15':
     resolution: {integrity: sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==}
+
+  '@jridgewell/sourcemap-codec@1.5.0':
+    resolution: {integrity: sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==}
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
@@ -2629,6 +2644,9 @@ packages:
   magic-string@0.30.10:
     resolution: {integrity: sha512-iIRwTIf0QKV3UAnYK4PU8uiEc4SRh5jX0mwpIwETPpHdhVM4f53RSwS/vXvN1JhGX+Cs7B8qIq3d6AH49O5fAQ==}
 
+  magic-string@0.30.12:
+    resolution: {integrity: sha512-Ea8I3sQMVXr8JhN4z+H/d8zwo+tYDgHE9+5G4Wnrwhs0gaK9fXTKx0Tw5Xwsd/bCPTTZNRAdpyzvoeORe9LYpw==}
+
   magic-string@0.30.8:
     resolution: {integrity: sha512-ISQTe55T2ao7XtlAStud6qwYPZjE4GK1S/BeVPus4jrq6JuOnQ00YKQC581RWhR122W7msZV263KzVeLoqidyQ==}
     engines: {node: '>=12'}
@@ -4093,7 +4111,16 @@ snapshots:
       '@babel/highlight': 7.24.2
       picocolors: 1.0.0
 
+  '@babel/code-frame@7.25.7':
+    dependencies:
+      '@babel/highlight': 7.25.7
+      picocolors: 1.1.0
+    optional: true
+
   '@babel/helper-validator-identifier@7.22.20': {}
+
+  '@babel/helper-validator-identifier@7.25.7':
+    optional: true
 
   '@babel/highlight@7.24.2':
     dependencies:
@@ -4101,6 +4128,14 @@ snapshots:
       chalk: 2.4.2
       js-tokens: 4.0.0
       picocolors: 1.0.0
+
+  '@babel/highlight@7.25.7':
+    dependencies:
+      '@babel/helper-validator-identifier': 7.25.7
+      chalk: 2.4.2
+      js-tokens: 4.0.0
+      picocolors: 1.1.0
+    optional: true
 
   '@dprint/darwin-arm64@0.45.1':
     optional: true
@@ -4237,21 +4272,21 @@ snapshots:
     dependencies:
       '@sinclair/typebox': 0.27.8
 
-  '@jiek/rollup-plugin-dts@6.1.1(rollup@4.13.0)(typescript@5.5.3)':
+  '@jiek/rollup-plugin-dts@6.1.2(rollup@4.13.0)(typescript@5.5.3)':
     dependencies:
-      magic-string: 0.30.10
+      magic-string: 0.30.12
       rollup: 4.13.0
       typescript: 5.5.3
     optionalDependencies:
-      '@babel/code-frame': 7.24.2
+      '@babel/code-frame': 7.25.7
 
-  '@jiek/rollup-plugin-dts@6.1.1(rollup@4.16.0)(typescript@5.5.3)':
+  '@jiek/rollup-plugin-dts@6.1.2(rollup@4.16.0)(typescript@5.5.3)':
     dependencies:
-      magic-string: 0.30.10
+      magic-string: 0.30.12
       rollup: 4.16.0
       typescript: 5.5.3
     optionalDependencies:
-      '@babel/code-frame': 7.24.2
+      '@babel/code-frame': 7.25.7
 
   '@jridgewell/gen-mapping@0.3.5':
     dependencies:
@@ -4269,6 +4304,8 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.25
 
   '@jridgewell/sourcemap-codec@1.4.15': {}
+
+  '@jridgewell/sourcemap-codec@1.5.0': {}
 
   '@jridgewell/trace-mapping@0.3.25':
     dependencies:
@@ -6702,6 +6739,10 @@ snapshots:
   magic-string@0.30.10:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  magic-string@0.30.12:
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.5.0
 
   magic-string@0.30.8:
     dependencies:
