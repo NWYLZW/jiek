@@ -16,7 +16,7 @@ function snapshotDistFiles(distDir: string) {
     if (fs.statSync(path.resolve(distDir, file)).isDirectory()) return
     expect(`${file}:\n${fs.readFileSync(path.resolve(distDir, file), 'utf-8')}`).toMatchSnapshot()
   })
-  // fs.rmSync(distDir, { recursive: true })
+  fs.rmSync(distDir, { recursive: true })
 }
 
 function runCommandAndSnapshotDistFiles(cmd: string, root: string, prefixes: string[], distPath = 'dist') {
