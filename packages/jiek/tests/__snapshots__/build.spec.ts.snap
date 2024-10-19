@@ -1134,21 +1134,25 @@ exports.foo = foo;
 
 exports[`resolve imports > common 3`] = `
 "index.d.cts:
-const bar = 'bar';
+type Bar = 'bar';
+declare const bar = "bar";
 
-const foo = 'foo';
+type Foo = 'foo';
+declare const foo = "foo";
 
-export { bar, foo };
+export { type Bar, type Foo, bar, foo };
 "
 `;
 
 exports[`resolve imports > common 4`] = `
 "index.d.ts:
-const bar = 'bar';
+type Bar = 'bar';
+declare const bar = "bar";
 
-const foo = 'foo';
+type Foo = 'foo';
+declare const foo = "foo";
 
-export { bar, foo };
+export { type Bar, type Foo, bar, foo };
 "
 `;
 

@@ -295,7 +295,13 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
         skip({ patterns: [STYLE_REGEXP] }),
         dts({
           respectExternal: true,
-          compilerOptions
+          compilerOptions: {
+            ...compilerOptions,
+            // temp directory, it not affect the output
+            // but if the user not set it and `declaration`, inputs can't generate any dts files when the input relative imports of `package.json`
+            outDir: 'dist',
+            declaration: true
+          }
         }),
         progress({
           onEvent: (event, message) =>

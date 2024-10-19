@@ -7,7 +7,6 @@
     ".": "./src/index.ts"
   },
   "imports": {
-    "#internal": "./src/internal/index.ts",
-    "#internal/*.ts": "./src/internal/*.ts"
+    "#foo": "./src/foo.ts"
   }
 }

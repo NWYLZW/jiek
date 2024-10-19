@@ -61,7 +61,7 @@ describe('resolve imports', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['resolve-imports'], {
     notWorkspace: true
   })
-  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s', root, prefixes, 'dist'))
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s -v', root, prefixes, 'dist'))
 })
 describe('unordered exports inputs', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['unordered-exports_input'], {
