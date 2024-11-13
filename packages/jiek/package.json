@@ -1,7 +1,7 @@
 {
   "name": "jiek",
   "type": "module",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "YiJie's personal kits.",
   "bin": {
     "jiek": "bin/jiek.js",
