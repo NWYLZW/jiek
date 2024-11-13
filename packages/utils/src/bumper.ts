@@ -27,6 +27,6 @@ export function bump(originalVersion: string, bumper: BumperType) {
     case 'dev':
       return `${major}.${minor}.${patch}-dev.${preReleaseVersion + 1}`
     default:
-      return originalVersion
+      return bumper
   }
 }
