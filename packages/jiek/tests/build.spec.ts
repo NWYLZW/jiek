@@ -38,6 +38,12 @@ describe('simple mjs', () => {
   })
   test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s', root, prefixes, 'dist'))
 })
+describe('only minify', () => {
+  const [root, prefixes] = prepareRootWithSubCmd(['only-minify'], {
+    notWorkspace: true
+  })
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s', root, prefixes, 'dist'))
+})
 describe('export self subpath', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['export-self-subpath'])
   test(

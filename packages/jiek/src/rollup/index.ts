@@ -115,7 +115,7 @@ const withMinify = (
       // TODO resolve dts output file name
       entryFileNames: chunkInfo =>
         typeof output.entryFileNames === 'function'
-          ? output.entryFileNames(chunkInfo).replace(/(\.[cm]?js)$/, '.min$1')
+          ? output.entryFileNames(chunkInfo)
           : (() => {
             throw new Error('entryFileNames must be a function')
           })(),

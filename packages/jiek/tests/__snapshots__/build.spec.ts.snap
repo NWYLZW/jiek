@@ -762,6 +762,43 @@ export { foo };
 "
 `;
 
+exports[`only minify > common 1`] = `
+[
+  "index.d.mts",
+  "index.d.ts",
+  "index.js",
+  "index.mjs",
+]
+`;
+
+exports[`only minify > common 2`] = `
+"index.d.mts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`only minify > common 3`] = `
+"index.d.ts:
+declare function foo(): string;
+
+export { foo };
+"
+`;
+
+exports[`only minify > common 4`] = `
+"index.js:
+"use strict";exports.foo=function(){return"foo"};
+"
+`;
+
+exports[`only minify > common 5`] = `
+"index.mjs:
+function o(){return"foo"}export{o as foo};
+"
+`;
+
 exports[`project references > build bar 1`] = `
 [
   "index.d.mts",
