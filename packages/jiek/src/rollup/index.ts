@@ -302,7 +302,9 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
             // temp directory, it not affect the output
             // but if the user not set it and `declaration`, inputs can't generate any dts files when the input relative imports of `package.json`
             outDir: 'dist',
-            declaration: true
+            declaration: true,
+            // https://github.com/Swatinem/rollup-plugin-dts/issues/143
+            preserveSymlinks: false
           }
         }),
         progress({
