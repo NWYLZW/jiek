@@ -41,7 +41,9 @@ const COMMON_PLUGINS = [
   json()
 ]
 
-const config = loadConfig() ?? {}
+const config = loadConfig({
+  root: WORKSPACE_ROOT
+}) ?? {}
 const { build = {} } = config
 const jsOutdir = `./${
   relative(

@@ -90,15 +90,7 @@ program
         if (tsRegisterName) {
           prefix = `node -r ${tsRegisterName} `
         }
-        // TODO replace with `spawn` to support watch mode
-        const argv: string[] = []
-        for (const key in program.opts()) {
-          const value = program.opts()[key]
-          if (value) {
-            argv.push(`--${key} ${value}`)
-          }
-        }
-        const command = `${prefix}${rollupBinaryPath} --silent ${argv.join(' ')} -c ${configFile}`
+        const command = `${prefix}${rollupBinaryPath} --silent -c ${configFile}`
         const child = execaCommand(command, {
           ipc: true,
           cwd: dir,

@@ -48,8 +48,23 @@ function getConfigPath(root: string, dir?: string) {
   return path.resolve(root, configName)
 }
 
-export function loadConfig(dir?: string): Config {
-  const { wd: root } = getWD()
+interface LoadConfigOptions {
+  dir?: string
+  root?: string
+}
+
+export function loadConfig(options?: LoadConfigOptions): Config
+export function loadConfig(dir?: string): Config
+export function loadConfig(dirOrOptions?: string | LoadConfigOptions): Config {
+  let dir: string | undefined
+  let root: string
+  if (typeof dirOrOptions === 'object') {
+    dir = dirOrOptions.dir
+    root = dirOrOptions.root ?? getWD().wd
+  } else {
+    dir = dirOrOptions
+    root = getWD().wd
+  }
 
   let configPath = program.getOptionValue('configPath')
 
