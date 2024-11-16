@@ -31,8 +31,13 @@ module.exports = require('jiek/rollup').template(${JSON.stringify(manifest, null
 
 const require = createRequire(import.meta.url)
 
+const description = `
+Build the package according to the 'exports' field in the package.json.
+`.trim()
+
 program
   .command('build')
+  .description(description)
   .option('-s, --silent', "Don't display logs.")
   .option('-e, --entries <ENTRIES>', "Specify the entries of the package.json's 'exports' field.(support glob)")
   .option('-v, --verbose', 'Display debug logs.')
@@ -86,7 +91,14 @@ program
           prefix = `node -r ${tsRegisterName} `
         }
         // TODO replace with `spawn` to support watch mode
-        const command = `${prefix}${rollupBinaryPath} --silent -c ${configFile}`
+        const argv: string[] = []
+        for (const key in program.opts()) {
+          const value = program.opts()[key]
+          if (value) {
+            argv.push(`--${key} ${value}`)
+          }
+        }
+        const command = `${prefix}${rollupBinaryPath} --silent ${argv.join(' ')} -c ${configFile}`
         const child = execaCommand(command, {
           ipc: true,
           cwd: dir,
