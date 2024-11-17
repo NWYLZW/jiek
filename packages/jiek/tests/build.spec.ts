@@ -153,7 +153,7 @@ describe('project references', () => {
     )
   )
 })
-describe('root-pacakge', () => {
+describe('root-package', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['root-package'])
   test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s -f root-package', root, prefixes, 'dist'))
 })
