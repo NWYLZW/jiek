@@ -1,0 +1,5 @@
+{
+  "name": "import-type-from-subpath",
+  "version": "0.1.0",
+  "exports": "./src/index.ts"
+}

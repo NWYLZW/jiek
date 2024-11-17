@@ -304,7 +304,10 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
             outDir: 'dist',
             declaration: true,
             // https://github.com/Swatinem/rollup-plugin-dts/issues/143
-            preserveSymlinks: false
+            preserveSymlinks: false,
+            // Expected '{', got 'type' (Note that you need plugins to import files that are not JavaScript)
+            // https://github.com/Swatinem/rollup-plugin-dts/issues/96
+            noEmit: false
           }
         }),
         progress({

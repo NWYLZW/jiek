@@ -157,3 +157,9 @@ describe('root-package', () => {
   const [root, prefixes] = prepareRootWithSubCmd(['root-package'])
   test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s -f root-package', root, prefixes, 'dist'))
 })
+describe('import-type-from-subpath', () => {
+  const [root, prefixes] = prepareRootWithSubCmd(['import-type-from-subpath'], {
+    notWorkspace: true
+  })
+  test('common', runCommandAndSnapshotDistFiles.bind(null, 'build -s', root, prefixes, 'dist'))
+})

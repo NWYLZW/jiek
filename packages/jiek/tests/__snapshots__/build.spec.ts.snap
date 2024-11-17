@@ -446,6 +446,62 @@ const o="fuo";export{o as fuo};
 "
 `;
 
+exports[`import-type-from-subpath > common 1`] = `
+[
+  "index.d.mts",
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+  "index.min.mjs",
+  "index.mjs",
+]
+`;
+
+exports[`import-type-from-subpath > common 2`] = `
+"index.d.mts:
+interface Foo {
+    name: string;
+}
+
+export type { Foo };
+"
+`;
+
+exports[`import-type-from-subpath > common 3`] = `
+"index.d.ts:
+interface Foo {
+    name: string;
+}
+
+export type { Foo };
+"
+`;
+
+exports[`import-type-from-subpath > common 4`] = `
+"index.js:
+'use strict';
+
+"
+`;
+
+exports[`import-type-from-subpath > common 5`] = `
+"index.min.js:
+"use strict";
+"
+`;
+
+exports[`import-type-from-subpath > common 6`] = `
+"index.min.mjs:
+
+"
+`;
+
+exports[`import-type-from-subpath > common 7`] = `
+"index.mjs:
+
+"
+`;
+
 exports[`monorepo > build bar 1`] = `
 [
   "index.d.mts",
