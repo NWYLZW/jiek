@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import { builtinModules } from 'node:module'
 
 const EXCLUDE_SUFFIX = [
   'te?xt',
@@ -18,11 +19,14 @@ export default function(jsonOrPath: string | Record<string, unknown> = process.c
   if (!name) {
     throw new Error('package.json must have a name field')
   }
+
   const external = <(string | RegExp)[]> Object
     .keys(dependencies)
     .concat(Object.keys(peerDependencies))
     .concat(Object.keys(optionalDependencies))
-  return external
+    .concat(builtinModules)
+
+  return [...new Set(external)]
     .map(dep => new RegExp(`^${dep}(/.*)?$`))
     .concat([
       new RegExp(`^${name}(/.*)?(?<!${EXCLUDE_SUFFIX.map(suffix => `\\.${suffix}`).join('|')})$`),
