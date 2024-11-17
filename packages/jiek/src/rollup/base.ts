@@ -15,6 +15,8 @@ export interface ConfigGenerateContext {
   conditionals: string[]
 }
 
+export type OutputControl = boolean | ((context: ConfigGenerateContext) => boolean)
+
 export interface TemplateOptions {
   /**
    * When the user configures type: module, the generated output from entry points that don't
@@ -39,6 +41,8 @@ export interface TemplateOptions {
     dir?: Mapping2ROO<'dir'>
     sourcemap?: Mapping2ROO<'sourcemap'>
     strict?: Mapping2ROO<'strict'>
+    js?: OutputControl
+    dts?: OutputControl
   }
   plugins?:
     | InputPluginOption

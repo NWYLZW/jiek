@@ -40,15 +40,21 @@ program
   .description(description)
   .option('-s, --silent', "Don't display logs.")
   .option('-e, --entries <ENTRIES>', "Specify the entries of the package.json's 'exports' field.(support glob)")
+  .option('--without-js', 'Do not output js files.')
+  .option('--without-dts', 'Do not output dts files.')
   .option('-v, --verbose', 'Display debug logs.')
   .action(async ({
     silent,
     entries,
-    verbose
+    verbose,
+    withoutJs,
+    withoutDts
   }: {
     silent: boolean
     entries: string
     verbose: boolean
+    withoutJs: boolean
+    withoutDts: boolean
   }) => {
     actionRestore()
     const { build } = loadConfig()
@@ -97,7 +103,9 @@ program
           env: {
             ...process.env,
             JIEK_ROOT: wd,
-            JIEK_ENTRIES: entries
+            JIEK_ENTRIES: entries,
+            JIEK_WITHOUT_JS: String(withoutJs),
+            JIEK_WITHOUT_DTS: String(withoutDts)
           }
         })
         const bars: Record<string, ReturnType<typeof multiBars.create>> = {}
