@@ -36,6 +36,16 @@ const description = `
 Build the package according to the 'exports' field in the package.json.
 `.trim()
 
+interface BuildOptions {
+  silent: boolean
+  entries: string
+  verbose: boolean
+  withoutJs: boolean
+  withoutDts: boolean
+  withoutMinify: boolean
+  onlyMinify: boolean
+}
+
 program
   .command('build')
   .description(description)
@@ -43,23 +53,40 @@ program
   .option('-e, --entries <ENTRIES>', "Specify the entries of the package.json's 'exports' field.(support glob)")
   .option('--without-js', 'Do not output js files.')
   .option('--without-dts', 'Do not output dts files.')
+  .option('--without-minify', 'Do not output minify files.')
+  .option(
+    '--only-minify',
+    'Only output minify files, but dts files will still be output, it only replaces the js files.'
+  )
   .option('-v, --verbose', 'Display debug logs.')
   .action(async ({
     silent,
     entries,
     verbose,
     withoutJs,
-    withoutDts
-  }: {
-    silent: boolean
-    entries: string
-    verbose: boolean
-    withoutJs: boolean
-    withoutDts: boolean
-  }) => {
+    withoutDts,
+    withoutMinify,
+    onlyMinify
+  }: BuildOptions) => {
     actionRestore()
     const { build } = loadConfig()
     silent = silent ?? build?.silent ?? false
+
+    if (withoutMinify && onlyMinify) {
+      throw new Error('Cannot use both --without-minify and --only-minify')
+    }
+    if (onlyMinify && withoutJs) {
+      throw new Error('Cannot use --without-js and --only-minify at the same time')
+    }
+
+    const env = {
+      ...process.env,
+      JIEK_ENTRIES: entries,
+      JIEK_WITHOUT_JS: String(withoutJs),
+      JIEK_WITHOUT_DTS: String(withoutDts),
+      JIEK_WITHOUT_MINIFY: String(withoutMinify),
+      JIEK_ONLY_MINIFY: String(onlyMinify)
+    }
 
     const multiBars = new MultiBar({
       clearOnComplete: false,
@@ -103,11 +130,8 @@ program
             ipc: true,
             cwd: dir,
             env: {
-              ...process.env,
-              JIEK_ROOT: wd,
-              JIEK_ENTRIES: entries,
-              JIEK_WITHOUT_JS: String(withoutJs),
-              JIEK_WITHOUT_DTS: String(withoutDts)
+              ...env,
+              JIEK_ROOT: wd
             }
           })
           const bars: Record<string, ReturnType<typeof multiBars.create>> = {}

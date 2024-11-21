@@ -35,7 +35,9 @@ const {
   JIEK_ROOT,
   JIEK_ENTRIES,
   JIEK_WITHOUT_JS,
-  JIEK_WITHOUT_DTS
+  JIEK_WITHOUT_DTS,
+  JIEK_WITHOUT_MINIFY,
+  JIEK_ONLY_MINIFY
 } = process.env
 const WORKSPACE_ROOT = JIEK_ROOT ?? getWorkspaceDir()
 const COMMON_OPTIONS = {} satisfies RollupOptions
@@ -44,6 +46,14 @@ const COMMON_PLUGINS = [
 ]
 const WITHOUT_JS = JIEK_WITHOUT_JS === 'true'
 const WITHOUT_DTS = JIEK_WITHOUT_DTS === 'true'
+const WITHOUT_MINIFY = JIEK_WITHOUT_MINIFY === 'true'
+const ONLY_MINIFY = JIEK_ONLY_MINIFY === 'true'
+
+const MINIFY_DEFAULT_VALUE = WITHOUT_MINIFY
+  ? false
+  : ONLY_MINIFY
+  ? 'only-minify'
+  : true
 
 const config = loadConfig({
   root: WORKSPACE_ROOT
@@ -126,7 +136,7 @@ const withMinify = (
   output: OutputOptions & {
     plugins?: OutputPlugin[]
   },
-  minify = build?.output?.minify
+  minify = build?.output?.minify ?? MINIFY_DEFAULT_VALUE
 ): OutputOptions[] =>
   minify === false
     ? [output]
