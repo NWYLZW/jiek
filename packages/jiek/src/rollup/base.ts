@@ -66,6 +66,15 @@ export type RollupProgressEvent =
     }
   }
   | {
+    type: 'watchChange'
+    data: {
+      id: string
+      name: string
+      path: string
+      input: string
+    }
+  }
+  | {
     type: 'debug'
     data: unknown
   }

@@ -184,6 +184,8 @@ program
             }
           })
           const bars: Record<string, ReturnType<typeof multiBars.create>> = {}
+          const times: Record<string, number> = {}
+          const locks: Record<string, boolean> = {}
           let inputMaxLen = 10
           child.on('message', (e: RollupProgressEvent) => {
             if (e.type === 'debug') console.log(...(Array.isArray(e.data) ? e.data : [e.data]))
@@ -209,7 +211,7 @@ program
                 if (bars[key]) return
                 bars[key] = multiBars.create(50, 0, {
                   pkgName: manifest.name,
-                  input: input.padEnd(inputMaxLen),
+                  input: input.padEnd(inputMaxLen + 5),
                   status: 'waiting'.padEnd(10)
                 }, {
                   barsize: 20,
@@ -227,6 +229,7 @@ program
               } = e.data
               const bar = bars[`${input}:${path}`]
               if (!bar) return
+              const time = times[`${input}:${path}`]
               bar.update(
                 {
                   start: 0,
@@ -234,11 +237,38 @@ program
                   end: 50
                 }[event ?? 'start'] ?? 0,
                 {
-                  input: input.padEnd(inputMaxLen),
+                  input: (
+                    time
+                      ? `${input}(x${time.toString().padStart(2, '0')})`
+                      : input
+                  ).padEnd(inputMaxLen + 5),
                   status: event?.padEnd(10),
                   message: `${tags?.join(', ')}: ${message}`
                 }
               )
+            }
+            if (e.type === 'watchChange') {
+              const {
+                path,
+                input
+              } = e.data
+              const key = `${input}:${path}`
+              const bar = bars[key]
+              if (!bar) return
+              let time = times[key] ?? 1
+              if (!locks[key]) {
+                time += 1
+                times[key] = time
+                setTimeout(() => {
+                  locks[key] = false
+                }, 100)
+                bar.update(0, {
+                  input: `${input}(x${time.toString().padStart(2, '0')})`.padEnd(inputMaxLen + 5),
+                  status: 'watching'.padEnd(10),
+                  message: 'watching...'
+                })
+              }
+              locks[key] = true
             }
           })
           await new Promise<void>((resolve, reject) => {

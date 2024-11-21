@@ -11,7 +11,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import terser from '@rollup/plugin-terser'
 import { sendMessage } from 'execa'
 import { isMatch } from 'micromatch'
-import type { InputPluginOption, OutputOptions, OutputPlugin, RollupOptions } from 'rollup'
+import type { InputPluginOption, OutputOptions, OutputPlugin, Plugin, RollupOptions } from 'rollup'
 import esbuild from 'rollup-plugin-esbuild'
 import ts from 'typescript'
 
@@ -245,6 +245,8 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
   const tsOutputSuffix = jsOutputSuffix.replace(/(\.[cm]?)js$/, '.d$1ts')
   const { js: jsOutput, dts: dtsOutput } = resolveOutputControls(context, build.output)
   const rollupOptions: RollupOptions[] = []
+
+  const commonPlugins: Plugin[] = []
   if (jsOutput && !WITHOUT_JS) {
     rollupOptions.push({
       input: inputObj,
@@ -277,6 +279,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
         })
       ],
       plugins: [
+        ...commonPlugins,
         nodeResolve({ exportConditions }),
         import('rollup-plugin-postcss')
           .then(({ default: postcss }) =>
@@ -303,6 +306,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
       ]
     })
   }
+
   if (dtsOutput && !WITHOUT_DTS) {
     rollupOptions.push({
       input: inputObj,
@@ -328,6 +332,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
         }
       ],
       plugins: [
+        ...commonPlugins,
         nodeResolve({ exportConditions }),
         skip({ patterns: [STYLE_REGEXP] }),
         dts({
@@ -358,6 +363,20 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
       ]
     })
   }
+  // only push the first one a watcher plugin
+  rollupOptions[0].plugins = [
+    {
+      name: 'jiek-plugin-watcher',
+      watchChange: (id) =>
+        sendMessage(
+          {
+            type: 'watchChange',
+            data: { id, name: JIEK_NAME!, path, input }
+          } satisfies RollupProgressEvent
+        )
+    },
+    ...(rollupOptions[0].plugins as any)
+  ]
   return rollupOptions
 }
 
