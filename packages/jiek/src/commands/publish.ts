@@ -2,7 +2,7 @@ import * as childProcess from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { bump, type BumperType } from '@jiek/utils/bumper'
+import { bump, type BumperType, TAGS } from '@jiek/utils/bumper'
 import { program } from 'commander'
 import detectIndent from 'detect-indent'
 import { applyEdits, modify } from 'jsonc-parser'
@@ -32,9 +32,11 @@ program
   .aliases(['pub', 'p'])
   .option('-b, --bumper <bumper>', 'bump version', 'patch')
   .option('-no-b, --no-bumper', 'no bump version')
+  .option('-s, --silent', 'no output')
   .option('-p, --preview', 'preview publish')
-  .action(async ({ preview, bumper, ...options }: {
+  .action(async ({ preview, silent, bumper, ...options }: {
     preview?: boolean
+    silent?: boolean
     bumper: false | BumperType
   }) => {
     actionRestore()
@@ -151,12 +153,16 @@ program
       try {
         fs.renameSync(path.join(dir, 'package.json'), path.join(dir, 'package.json.bak'))
         fs.writeFileSync(path.join(dir, 'package.json'), newJSONString)
-        console.log(newJSONString)
+        !silent && console.log(newJSONString)
         if (preview) {
-          console.warn('preview mode')
+          !silent && console.warn('preview mode')
           continue
         }
-        childProcess.execSync(['pnpm', 'publish', '--access', 'public', '--no-git-checks', ...passArgs].join(' '), {
+        const args = ['pnpm', 'publish', '--access', 'public', '--no-git-checks', ...passArgs]
+        if (bumper && TAGS.includes(bumper)) {
+          args.push('--tag', bumper)
+        }
+        childProcess.execSync(args.join(' '), {
           cwd: dir,
           stdio: 'inherit'
         })
