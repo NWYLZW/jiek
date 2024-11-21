@@ -183,7 +183,6 @@ program
         fs.writeFileSync(path.join(dir, 'package.json'), newJSONString)
         !silent && console.log(newJSONString)
         if (preview) {
-          !silent && console.warn('preview mode')
           continue
         }
         const args = ['pnpm', 'publish', '--access', 'public', '--no-git-checks', ...passArgs]
