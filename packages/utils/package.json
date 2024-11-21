@@ -1,7 +1,10 @@
 {
   "name": "@jiek/utils",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "license": "MIT",
+  "scripts": {
+    "prepublish": "jk build"
+  },
   "exports": {
     "./bumper": "./src/bumper.ts",
     "./commondir": "./src/commondir.ts",
