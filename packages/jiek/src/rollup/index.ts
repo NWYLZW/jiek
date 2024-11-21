@@ -37,6 +37,7 @@ const {
   JIEK_WITHOUT_JS,
   JIEK_WITHOUT_DTS,
   JIEK_WITHOUT_MINIFY,
+  JIEK_NO_CLEAN,
   JIEK_ONLY_MINIFY
 } = process.env
 const WORKSPACE_ROOT = JIEK_ROOT ?? getWorkspaceDir()
@@ -47,6 +48,7 @@ const COMMON_PLUGINS = [
 const WITHOUT_JS = JIEK_WITHOUT_JS === 'true'
 const WITHOUT_DTS = JIEK_WITHOUT_DTS === 'true'
 const WITHOUT_MINIFY = JIEK_WITHOUT_MINIFY === 'true'
+const CLEAN = JIEK_NO_CLEAN !== 'true'
 const ONLY_MINIFY = JIEK_ONLY_MINIFY === 'true'
 
 const MINIFY_DEFAULT_VALUE = WITHOUT_MINIFY
@@ -59,19 +61,25 @@ const config = loadConfig({
   root: WORKSPACE_ROOT
 }) ?? {}
 const { build = {} } = config
-const jsOutdir = `./${
-  relative(
-    process.cwd(),
-    resolve(
-      (
-        typeof build?.output?.dir === 'object'
-          // the outdir only affect js output in this function
-          ? build.output.dir.js
-          : build?.output?.dir
-      ) ?? 'dist'
-    )
-  )
-}`
+const outdir = build?.output?.dir
+function resolveOutdir(type: 'js' | 'dts') {
+  const dir = (typeof outdir === 'object'
+    ? outdir[type] ?? outdir[
+      ({
+        js: 'dts',
+        dts: 'js'
+      } as const)[type]
+    ]
+    : outdir) ?? 'dist'
+  return `./${relative(process.cwd(), resolve(dir))}`
+}
+const jsOutdir = resolveOutdir('js')
+const dtsOutdir = resolveOutdir('dts')
+
+if (CLEAN) {
+  fs.existsSync(jsOutdir) && fs.rmdirSync(jsOutdir, { recursive: true })
+  fs.existsSync(dtsOutdir) && fs.rmdirSync(dtsOutdir, { recursive: true })
+}
 
 const STYLE_REGEXP = /\.(css|s[ac]ss|less|styl)$/
 
@@ -308,7 +316,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
       external,
       output: [
         {
-          dir: resolve((typeof outdir === 'object' ? outdir.dts : outdir) ?? 'dist'),
+          dir: dtsOutdir,
           sourcemap: typeof options?.output?.sourcemap === 'object'
             ? options.output.sourcemap.dts
             : options?.output?.sourcemap,

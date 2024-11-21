@@ -43,6 +43,10 @@ interface BuildOptions extends Record<string, unknown> {
   noJs: boolean
   noDts: boolean
   noMin: boolean
+  /**
+   * Do not clean the output directory before building.
+   */
+  noClean: boolean
   onlyMin: boolean
 }
 
@@ -59,6 +63,7 @@ program
   .option('-nj, --noJs', 'Do not output js files.', parseBoolean)
   .option('-nd, --noDts', 'Do not output dts files.', parseBoolean)
   .option('-nm, --noMin', 'Do not output minify files.', parseBoolean)
+  .option('-nc, --noClean', 'Do not clean the output directory before building.', parseBoolean)
   .option(
     '-om, --onlyMin',
     'Only output minify files, but dts files will still be output, it only replaces the js files.',
@@ -72,6 +77,7 @@ program
     noJs: withoutJs,
     noDts: withoutDts,
     noMin: withoutMin,
+    noClean,
     onlyMin: onlyMin
   }: BuildOptions) => {
     actionRestore()
@@ -87,6 +93,7 @@ program
 
     const env = {
       ...process.env,
+      JIEK_CLEAN: String(!noClean),
       JIEK_ENTRIES: entries,
       JIEK_WITHOUT_JS: String(withoutJs),
       JIEK_WITHOUT_DTS: String(withoutDts),
