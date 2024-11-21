@@ -12,6 +12,7 @@ import type { ProjectsGraph } from '../utils/filterSupport'
 import { filterPackagesGraph, getSelectedProjectsGraph } from '../utils/filterSupport'
 import { loadConfig } from '../utils/loadConfig'
 import { tsRegisterName } from '../utils/tsRegister'
+import { outdirDescription } from './descriptions'
 
 declare module 'jiek' {
   export interface Config {
@@ -36,12 +37,6 @@ const description = `
 Build the package according to the 'exports' field in the package.json.
 `.trim()
 
-const outDirDescription = `
-The output directory of the build, which relative to the target subpackage root directory.
-Support with variables: 'PKG_NAME',
-.e.g. 'dist/{{PKG_NAME}}'.
-`.trim()
-
 interface BuildOptions extends Record<string, unknown> {
   /**
    * The output directory of the build, which relative to the target subpackage root directory.
@@ -50,7 +45,7 @@ interface BuildOptions extends Record<string, unknown> {
    *
    * @default 'dist'
    */
-  outDir: string
+  outdir: string
   silent: boolean
   entries: string
   verbose: boolean
@@ -72,7 +67,7 @@ function parseBoolean(v?: unknown) {
 program
   .command('build')
   .description(description)
-  .option('-o, --out-dir <OUT_DIR>', outDirDescription, String, 'dist')
+  .option('-o, --outdir <OUTDIR>', outdirDescription, String, 'dist')
   .option('-e, --entries <ENTRIES>', "Specify the entries of the package.json's 'exports' field.(support glob)")
   .option('-nj, --noJs', 'Do not output js files.', parseBoolean)
   .option('-nd, --noDts', 'Do not output dts files.', parseBoolean)
@@ -86,7 +81,7 @@ program
   .option('-s, --silent', "Don't display logs.", parseBoolean)
   .option('-v, --verbose', 'Display debug logs.', parseBoolean)
   .action(async ({
-    outDir,
+    outdir,
     silent,
     entries,
     verbose,
@@ -109,7 +104,7 @@ program
 
     const env = {
       ...process.env,
-      JIEK_OUT_DIR: outDir,
+      JIEK_OUT_DIR: outdir,
       JIEK_CLEAN: String(!noClean),
       JIEK_ENTRIES: entries,
       JIEK_WITHOUT_JS: String(withoutJs),

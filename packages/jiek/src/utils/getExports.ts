@@ -60,8 +60,9 @@ export function getExports({
   entries,
   config,
   dir,
+  defaultOutdir = OUTDIR,
   // FIXME dts support
-  outdir = getOutDirs({ pkgName, config, cwd: dir }).js,
+  outdir = getOutDirs({ pkgName, defaultOutdir, config, cwd: dir }).js,
   noFilter,
   isPublish
 }: {
@@ -72,6 +73,7 @@ export function getExports({
   config?: Config
   dir?: string
   outdir?: string
+  defaultOutdir?: string
   noFilter?: boolean
   isPublish?: boolean
 }) {

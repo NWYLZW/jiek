@@ -11,6 +11,7 @@ import { actionDone, actionRestore } from '../inner'
 import { getSelectedProjectsGraph } from '../utils/filterSupport'
 import { getExports } from '../utils/getExports'
 import { loadConfig } from '../utils/loadConfig'
+import { outdirDescription } from './descriptions'
 
 declare module 'jiek' {
   export interface Config {
@@ -32,9 +33,11 @@ program
   .aliases(['pub', 'p'])
   .option('-b, --bumper <bumper>', 'bump version', 'patch')
   .option('-no-b, --no-bumper', 'no bump version')
+  .option('-o, --outdir <OUTDIR>', outdirDescription, String, 'dist')
   .option('-s, --silent', 'no output')
   .option('-p, --preview', 'preview publish')
-  .action(async ({ preview, silent, bumper, ...options }: {
+  .action(async ({ outdir, preview, silent, bumper, ...options }: {
+    outdir?: string
     preview?: boolean
     silent?: boolean
     bumper: false | BumperType
@@ -61,6 +64,7 @@ program
           pkgName: name,
           config: loadConfig(dir),
           dir,
+          defaultOutdir: outdir,
           noFilter: true,
           isPublish: true
         })
