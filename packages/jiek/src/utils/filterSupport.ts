@@ -38,7 +38,7 @@ export function filterPackagesGraph(filters: string[]): Promise<ProjectsGraph[]>
 export async function getSelectedProjectsGraph(
   filter = program.getOptionValue('filter')
 ): Promise<ProjectsGraph> {
-  const root = getRoot()
+  let root = getRoot()
   const { wd, notWorkspace } = getWD()
   if (notWorkspace) {
     return {
@@ -58,6 +58,9 @@ export async function getSelectedProjectsGraph(
     if (root === wd && !filter) {
       throw new Error('root path is workspace root, please provide a filter')
       // TODO inquirer prompt support user select packages
+    }
+    if (root === undefined) {
+      root = process.cwd()
     }
     if (root !== wd && !filter) {
       const packageJSONIsExist = fs.existsSync(path.resolve(root, 'package.json'))
