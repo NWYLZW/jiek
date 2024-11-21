@@ -134,6 +134,7 @@ export function getExports({
       withConditional: {
         ...crossModuleWithConditional
       }
-    })
+    }),
+    outdir
   ] as const
 }

@@ -58,7 +58,7 @@ program
 
         const pkgIsModule = type === 'module'
         const newManifest = { ...manifest }
-        const [resolvedEntrypoints, exports] = getExports({
+        const [resolvedEntrypoints, exports, resolvedOutdir] = getExports({
           entrypoints,
           pkgIsModule,
           pkgName: name,
@@ -72,7 +72,7 @@ program
           ...resolvedEntrypoints,
           ...exports
         }
-        return [dir, newManifest] as const
+        return [dir, newManifest, resolvedOutdir] as const
       })
     const passArgs = Object
       .entries(options)
@@ -82,7 +82,7 @@ program
         }
         return acc
       }, [] as string[])
-    for (const [dir, manifest] of manifests) {
+    for (const [dir, manifest, resolvedOutdir] of manifests) {
       const oldJSONString = fs.readFileSync(path.join(dir, 'package.json'), 'utf-8')
       const oldJSON = JSON.parse(oldJSONString) ?? '0.0.0'
       const newVersion = bumper ? bump(oldJSON.version, bumper) : oldJSON.version
@@ -159,6 +159,25 @@ program
           }
         }
       }
+      newJSONString = applyEdits(
+        newJSONString,
+        modify(
+          newJSONString,
+          ['publishConfig', 'typesVersions'],
+          {
+            '<5.0': {
+              '*': [
+                '*',
+                `${resolvedOutdir}/*`,
+                `${resolvedOutdir}/*/index.d.ts`,
+                `${resolvedOutdir}/*/index.d.mts`,
+                `${resolvedOutdir}/*/index.d.cts`
+              ]
+            }
+          },
+          { formattingOptions }
+        )
+      )
       try {
         fs.renameSync(path.join(dir, 'package.json'), path.join(dir, 'package.json.bak'))
         fs.writeFileSync(path.join(dir, 'package.json'), newJSONString)

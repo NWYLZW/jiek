@@ -8,9 +8,6 @@
     "jk": "bin/jiek.js"
   },
   "files": ["dist", "src", "bin", "LICENSE", "README.md"],
-  "typesVersions": {
-    "<5.0": { "*": ["*", "./dist/*", "./dist/*/index.d.ts"] }
-  },
   "scripts": {
     "prepublish": "jk build --noMin"
   },
