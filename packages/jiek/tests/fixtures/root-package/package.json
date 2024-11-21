@@ -1,0 +1,11 @@
+{
+  "name": "root-package",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@jiek/test-monorepo-foo": "workspace:^",
+    "@jiek/test-monorepo-bar": "workspace:^"
+  }
+}

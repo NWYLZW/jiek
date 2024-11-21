@@ -1,0 +1,8 @@
+{
+  "name": "@jiek/test-monorepo-bar",
+  "version": "0.1.0",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": "./src/index.ts"
+  }
+}

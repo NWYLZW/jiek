@@ -446,6 +446,62 @@ const o="fuo";export{o as fuo};
 "
 `;
 
+exports[`import-type-from-subpath > common 1`] = `
+[
+  "index.d.mts",
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+  "index.min.mjs",
+  "index.mjs",
+]
+`;
+
+exports[`import-type-from-subpath > common 2`] = `
+"index.d.mts:
+interface Foo {
+    name: string;
+}
+
+export type { Foo };
+"
+`;
+
+exports[`import-type-from-subpath > common 3`] = `
+"index.d.ts:
+interface Foo {
+    name: string;
+}
+
+export type { Foo };
+"
+`;
+
+exports[`import-type-from-subpath > common 4`] = `
+"index.js:
+'use strict';
+
+"
+`;
+
+exports[`import-type-from-subpath > common 5`] = `
+"index.min.js:
+"use strict";
+"
+`;
+
+exports[`import-type-from-subpath > common 6`] = `
+"index.min.mjs:
+
+"
+`;
+
+exports[`import-type-from-subpath > common 7`] = `
+"index.mjs:
+
+"
+`;
+
 exports[`monorepo > build bar 1`] = `
 [
   "index.d.mts",
@@ -1212,6 +1268,87 @@ exports[`resolve imports > common 6`] = `
 exports[`resolve imports > common 7`] = `
 "index.min.js:
 const o="bar",r="foo";export{o as bar,r as foo};
+"
+`;
+
+exports[`root-pacakge > common 1`] = `
+[
+  "index.d.mts",
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+  "index.min.mjs",
+  "index.mjs",
+]
+`;
+
+exports[`root-pacakge > common 2`] = `
+"index.d.mts:
+export * from '@jiek/test-monorepo-bar';
+export * from '@jiek/test-monorepo-foo';
+
+declare const name = "root-package";
+
+export { name };
+"
+`;
+
+exports[`root-pacakge > common 3`] = `
+"index.d.ts:
+export * from '@jiek/test-monorepo-bar';
+export * from '@jiek/test-monorepo-foo';
+
+declare const name = "root-package";
+
+export { name };
+"
+`;
+
+exports[`root-pacakge > common 4`] = `
+"index.js:
+'use strict';
+
+var testMonorepoBar = require('@jiek/test-monorepo-bar');
+var testMonorepoFoo = require('@jiek/test-monorepo-foo');
+
+const name = "root-package";
+
+exports.name = name;
+Object.keys(testMonorepoBar).forEach(function (k) {
+	if (k !== 'default' && !Object.prototype.hasOwnProperty.call(exports, k)) Object.defineProperty(exports, k, {
+		enumerable: true,
+		get: function () { return testMonorepoBar[k]; }
+	});
+});
+Object.keys(testMonorepoFoo).forEach(function (k) {
+	if (k !== 'default' && !Object.prototype.hasOwnProperty.call(exports, k)) Object.defineProperty(exports, k, {
+		enumerable: true,
+		get: function () { return testMonorepoFoo[k]; }
+	});
+});
+"
+`;
+
+exports[`root-pacakge > common 5`] = `
+"index.min.js:
+"use strict";var e=require("@jiek/test-monorepo-bar"),t=require("@jiek/test-monorepo-foo");exports.name="root-package",Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})})),Object.keys(t).forEach((function(e){"default"===e||Object.prototype.hasOwnProperty.call(exports,e)||Object.defineProperty(exports,e,{enumerable:!0,get:function(){return t[e]}})}));
+"
+`;
+
+exports[`root-pacakge > common 6`] = `
+"index.min.mjs:
+export*from"@jiek/test-monorepo-bar";export*from"@jiek/test-monorepo-foo";const o="root-package";export{o as name};
+"
+`;
+
+exports[`root-pacakge > common 7`] = `
+"index.mjs:
+export * from '@jiek/test-monorepo-bar';
+export * from '@jiek/test-monorepo-foo';
+
+const name = "root-package";
+
+export { name };
 "
 `;
 

@@ -18,10 +18,10 @@ try {
 } catch { /* empty */ }
 if (type !== '') {
   program
-    .option('-f, --filter <filter>', 'filter packages')
+    .option('-f, --filter <filter>', 'filter packages, support fuzzy match and array. e.g. -f core,utils')
 }
 
-interface ProjectsGraph {
+export interface ProjectsGraph {
   wd: string
   root: string
   value?: Record<string, {
@@ -31,8 +31,13 @@ interface ProjectsGraph {
   }>
 }
 
-export async function getSelectedProjectsGraph(): Promise<ProjectsGraph> {
-  let filter = program.getOptionValue('filter')
+export function filterPackagesGraph(filters: string[]): Promise<ProjectsGraph[]> {
+  return Promise.all(filters.map(async filter => getSelectedProjectsGraph(filter)))
+}
+
+export async function getSelectedProjectsGraph(
+  filter = program.getOptionValue('filter')
+): Promise<ProjectsGraph> {
   const root = getRoot()
   const { wd, notWorkspace } = getWD()
   if (!notWorkspace && type === 'pnpm') {

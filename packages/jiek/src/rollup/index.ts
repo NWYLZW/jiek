@@ -33,15 +33,21 @@ interface PackageJSON {
 
 const {
   JIEK_ROOT,
-  JIEK_ENTRIES
+  JIEK_ENTRIES,
+  JIEK_WITHOUT_JS,
+  JIEK_WITHOUT_DTS
 } = process.env
 const WORKSPACE_ROOT = JIEK_ROOT ?? getWorkspaceDir()
 const COMMON_OPTIONS = {} satisfies RollupOptions
 const COMMON_PLUGINS = [
   json()
 ]
+const WITHOUT_JS = JIEK_WITHOUT_JS === 'true'
+const WITHOUT_DTS = JIEK_WITHOUT_DTS === 'true'
 
-const config = loadConfig() ?? {}
+const config = loadConfig({
+  root: WORKSPACE_ROOT
+}) ?? {}
 const { build = {} } = config
 const jsOutdir = `./${
   relative(
@@ -85,6 +91,22 @@ const resolveBuildPlugins = (context: ConfigGenerateContext, plugins: TemplateOp
   }
   return { js, dts }
 }
+
+const resolveOutputControls = (
+  context: ConfigGenerateContext,
+  output: TemplateOptions['output']
+): { js: boolean; dts: boolean } => ({
+  js: typeof output?.js === 'boolean'
+    ? output.js
+    : typeof output?.js === 'function'
+    ? output.js(context)
+    : true,
+  dts: typeof output?.dts === 'boolean'
+    ? output.dts
+    : typeof output?.dts === 'function'
+    ? output.dts(context)
+    : true
+})
 
 const resolveWorkspacePath = (p: string) => resolve(WORKSPACE_ROOT, p)
 
@@ -210,8 +232,10 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
   }
   const jsOutputSuffix = extname(output)
   const tsOutputSuffix = jsOutputSuffix.replace(/(\.[cm]?)js$/, '.d$1ts')
-  return [
-    {
+  const { js: jsOutput, dts: dtsOutput } = resolveOutputControls(context, build.output)
+  const rollupOptions: RollupOptions[] = []
+  if (jsOutput && !WITHOUT_JS) {
+    rollupOptions.push({
       input: inputObj,
       external,
       output: [
@@ -266,8 +290,10 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
         }),
         jsPlugins
       ]
-    },
-    {
+    })
+  }
+  if (dtsOutput && !WITHOUT_DTS) {
+    rollupOptions.push({
       input: inputObj,
       external,
       output: [
@@ -300,7 +326,12 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
             // temp directory, it not affect the output
             // but if the user not set it and `declaration`, inputs can't generate any dts files when the input relative imports of `package.json`
             outDir: 'dist',
-            declaration: true
+            declaration: true,
+            // https://github.com/Swatinem/rollup-plugin-dts/issues/143
+            preserveSymlinks: false,
+            // Expected '{', got 'type' (Note that you need plugins to import files that are not JavaScript)
+            // https://github.com/Swatinem/rollup-plugin-dts/issues/96
+            noEmit: false
           }
         }),
         progress({
@@ -314,8 +345,9 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
         }),
         dtsPlugins
       ]
-    }
-  ]
+    })
+  }
+  return rollupOptions
 }
 
 export function template(packageJSON: PackageJSON): RollupOptions[] {
