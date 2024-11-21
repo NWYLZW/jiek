@@ -35,6 +35,8 @@ const require = createRequire(import.meta.url)
 
 const description = `
 Build the package according to the 'exports' field in the package.json.
+If you want to rewrite the rollup command options, you can pass the options after '--'.
+e.g. \`jiek build -- --watch\`
 `.trim()
 
 interface BuildOptions extends Record<string, unknown> {
@@ -91,6 +93,23 @@ program
     noClean,
     onlyMin: onlyMin
   }: BuildOptions) => {
+    let shouldPassThrough = false
+
+    const passThroughOptions = program
+      .parseOptions(process.argv)
+      .unknown
+      .reduce(
+        (acc, value) => {
+          if (shouldPassThrough) {
+            acc.push(value)
+          }
+          if (value === '--') {
+            shouldPassThrough = true
+          }
+          return acc
+        },
+        [] as string[]
+      )
     actionRestore()
     const { build } = loadConfig()
     silent = silent ?? build?.silent ?? false
@@ -154,7 +173,7 @@ program
           if (tsRegisterName) {
             prefix = `node -r ${tsRegisterName} `
           }
-          const command = `${prefix}${rollupBinaryPath} --silent -c ${configFile}`
+          const command = [`${prefix}${rollupBinaryPath} --silent -c ${configFile}`, ...passThroughOptions].join(' ')
           const child = execaCommand(command, {
             ipc: true,
             cwd: dir,
