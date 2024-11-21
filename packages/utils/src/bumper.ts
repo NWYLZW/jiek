@@ -1,5 +1,7 @@
 export type BumperType = 'patch' | 'minor' | 'major' | 'alpha' | 'beta' | 'rc' | 'dev' | (string & {})
 
+export const TAGS = ['alpha', 'beta', 'rc', 'dev']
+
 export function bump(originalVersion: string, bumper: BumperType) {
   const [version, preRelease] = originalVersion.split('-')
   const [major, minor, patch] = version.split('.').map(Number)
