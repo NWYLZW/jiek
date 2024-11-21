@@ -11,6 +11,9 @@
   "typesVersions": {
     "<5.0": { "*": ["*", "./dist/*", "./dist/*/index.d.ts"] }
   },
+  "scripts": {
+    "prepublish": "jk build"
+  },
   "exports": {
     "./package.json": "./package.json",
     ".": "./src/index.ts",
