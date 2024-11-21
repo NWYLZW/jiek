@@ -40,7 +40,16 @@ export async function getSelectedProjectsGraph(
 ): Promise<ProjectsGraph> {
   const root = getRoot()
   const { wd, notWorkspace } = getWD()
-  if (!notWorkspace && type === 'pnpm') {
+  if (notWorkspace) {
+    return {
+      wd,
+      root,
+      value: {
+        [wd]: JSON.parse(fs.readFileSync(path.resolve(wd, 'package.json'), 'utf-8'))
+      }
+    }
+  }
+  if (type === 'pnpm') {
     const pnpmWorkspaceFilePath = path.resolve(wd, 'pnpm-workspace.yaml')
     const pnpmWorkspaceFileContent = fs.readFileSync(pnpmWorkspaceFilePath, 'utf-8')
     const pnpmWorkspace = load(pnpmWorkspaceFileContent) as {
@@ -79,11 +88,5 @@ export async function getSelectedProjectsGraph(
         }, {} as NonNullable<ProjectsGraph['value']>)
     }
   }
-  return {
-    wd,
-    root,
-    value: {
-      [wd]: JSON.parse(fs.readFileSync(path.resolve(wd, 'package.json'), 'utf-8'))
-    }
-  }
+  throw new Error(`not supported package manager ${type}`)
 }

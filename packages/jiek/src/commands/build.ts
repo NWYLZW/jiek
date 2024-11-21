@@ -8,7 +8,7 @@ import { execaCommand } from 'execa'
 
 import { actionDone, actionRestore } from '../inner'
 import type { RollupProgressEvent, TemplateOptions } from '../rollup/base'
-import type { ProjectsGraph } from '../utils/filterSupport'
+import { getSelectedProjectsGraph, ProjectsGraph } from '../utils/filterSupport'
 import { filterPackagesGraph } from '../utils/filterSupport'
 import { loadConfig } from '../utils/loadConfig'
 import { tsRegisterName } from '../utils/tsRegister'
@@ -182,13 +182,17 @@ program
         })
       )
     }
-    const filters: string[] = program.getOptionValue('filter').split(',')
-    const packages = await filterPackagesGraph(filters)
-    await Promise
-      .all(packages.map(buildPackage))
-      .finally(() => {
-        multiBars.stop()
-      })
+    const filters = (program.getOptionValue('filter') as string | undefined)?.split(',')
+    try {
+      if (filters) {
+        const packages = await filterPackagesGraph(filters)
+        await Promise.all(packages.map(buildPackage))
+      } else {
+        await buildPackage(await getSelectedProjectsGraph())
+      }
+    } finally {
+      multiBars.stop()
+    }
 
     actionDone()
   })
