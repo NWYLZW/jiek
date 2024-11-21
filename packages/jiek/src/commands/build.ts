@@ -36,46 +36,47 @@ const description = `
 Build the package according to the 'exports' field in the package.json.
 `.trim()
 
-interface BuildOptions {
+interface BuildOptions extends Record<string, unknown> {
   silent: boolean
   entries: string
   verbose: boolean
-  withoutJs: boolean
-  withoutDts: boolean
-  withoutMinify: boolean
-  onlyMinify: boolean
+  noJs: boolean
+  noDts: boolean
+  noMin: boolean
+  onlyMin: boolean
 }
 
 program
   .command('build')
   .description(description)
-  .option('-s, --silent', "Don't display logs.")
+  .option('-s, --silent', "Don't display logs.", Boolean)
   .option('-e, --entries <ENTRIES>', "Specify the entries of the package.json's 'exports' field.(support glob)")
-  .option('--without-js', 'Do not output js files.')
-  .option('--without-dts', 'Do not output dts files.')
-  .option('--without-minify', 'Do not output minify files.')
+  .option('-nj, --noJs', 'Do not output js files.', Boolean)
+  .option('-nd, --noDts', 'Do not output dts files.', Boolean)
+  .option('-nm, --noMin', 'Do not output minify files.', Boolean)
   .option(
-    '--only-minify',
-    'Only output minify files, but dts files will still be output, it only replaces the js files.'
+    '-om, --onlyMin',
+    'Only output minify files, but dts files will still be output, it only replaces the js files.',
+    Boolean
   )
-  .option('-v, --verbose', 'Display debug logs.')
+  .option('-v, --verbose', 'Display debug logs.', Boolean)
   .action(async ({
     silent,
     entries,
     verbose,
-    withoutJs,
-    withoutDts,
-    withoutMinify,
-    onlyMinify
+    noJs: withoutJs,
+    noDts: withoutDts,
+    noMin: withoutMin,
+    onlyMin: onlyMin
   }: BuildOptions) => {
     actionRestore()
     const { build } = loadConfig()
     silent = silent ?? build?.silent ?? false
 
-    if (withoutMinify && onlyMinify) {
+    if (withoutMin && onlyMin) {
       throw new Error('Cannot use both --without-minify and --only-minify')
     }
-    if (onlyMinify && withoutJs) {
+    if (onlyMin && withoutJs) {
       throw new Error('Cannot use --without-js and --only-minify at the same time')
     }
 
@@ -84,8 +85,8 @@ program
       JIEK_ENTRIES: entries,
       JIEK_WITHOUT_JS: String(withoutJs),
       JIEK_WITHOUT_DTS: String(withoutDts),
-      JIEK_WITHOUT_MINIFY: String(withoutMinify),
-      JIEK_ONLY_MINIFY: String(onlyMinify)
+      JIEK_WITHOUT_MINIFY: String(withoutMin),
+      JIEK_ONLY_MINIFY: String(onlyMin)
     }
 
     const multiBars = new MultiBar({
