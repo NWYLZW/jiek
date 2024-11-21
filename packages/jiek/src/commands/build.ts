@@ -58,7 +58,6 @@ function parseBoolean(v?: unknown) {
 program
   .command('build')
   .description(description)
-  .option('-s, --silent', "Don't display logs.", parseBoolean)
   .option('-e, --entries <ENTRIES>', "Specify the entries of the package.json's 'exports' field.(support glob)")
   .option('-nj, --noJs', 'Do not output js files.', parseBoolean)
   .option('-nd, --noDts', 'Do not output dts files.', parseBoolean)
@@ -69,6 +68,7 @@ program
     'Only output minify files, but dts files will still be output, it only replaces the js files.',
     parseBoolean
   )
+  .option('-s, --silent', "Don't display logs.", parseBoolean)
   .option('-v, --verbose', 'Display debug logs.', parseBoolean)
   .action(async ({
     silent,
