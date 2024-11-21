@@ -46,20 +46,25 @@ interface BuildOptions extends Record<string, unknown> {
   onlyMin: boolean
 }
 
+function parseBoolean(v?: unknown) {
+  if (v === undefined) return true
+  return Boolean(v)
+}
+
 program
   .command('build')
   .description(description)
-  .option('-s, --silent', "Don't display logs.", Boolean)
+  .option('-s, --silent', "Don't display logs.", parseBoolean)
   .option('-e, --entries <ENTRIES>', "Specify the entries of the package.json's 'exports' field.(support glob)")
-  .option('-nj, --noJs', 'Do not output js files.', Boolean)
-  .option('-nd, --noDts', 'Do not output dts files.', Boolean)
-  .option('-nm, --noMin', 'Do not output minify files.', Boolean)
+  .option('-nj, --noJs', 'Do not output js files.', parseBoolean)
+  .option('-nd, --noDts', 'Do not output dts files.', parseBoolean)
+  .option('-nm, --noMin', 'Do not output minify files.', parseBoolean)
   .option(
     '-om, --onlyMin',
     'Only output minify files, but dts files will still be output, it only replaces the js files.',
-    Boolean
+    parseBoolean
   )
-  .option('-v, --verbose', 'Display debug logs.', Boolean)
+  .option('-v, --verbose', 'Display debug logs.', parseBoolean)
   .action(async ({
     silent,
     entries,
