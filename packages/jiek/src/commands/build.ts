@@ -8,8 +8,8 @@ import { execaCommand } from 'execa'
 
 import { actionDone, actionRestore } from '../inner'
 import type { RollupProgressEvent, TemplateOptions } from '../rollup/base'
-import { getSelectedProjectsGraph, ProjectsGraph } from '../utils/filterSupport'
-import { filterPackagesGraph } from '../utils/filterSupport'
+import type { ProjectsGraph } from '../utils/filterSupport'
+import { filterPackagesGraph, getSelectedProjectsGraph } from '../utils/filterSupport'
 import { loadConfig } from '../utils/loadConfig'
 import { tsRegisterName } from '../utils/tsRegister'
 
