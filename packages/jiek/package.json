@@ -12,7 +12,7 @@
     "<5.0": { "*": ["*", "./dist/*", "./dist/*/index.d.ts"] }
   },
   "scripts": {
-    "prepublish": "jk build"
+    "prepublish": "jk build --without-minify"
   },
   "exports": {
     "./package.json": "./package.json",
