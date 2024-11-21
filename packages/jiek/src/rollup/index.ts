@@ -17,7 +17,7 @@ import ts from 'typescript'
 
 import { recusiveListFiles } from '#~/utils/recusiveListFiles.ts'
 
-import { getExports } from '../utils/getExports'
+import { getExports, getOutDirs } from '../utils/getExports'
 import { loadConfig } from '../utils/loadConfig'
 import { getCompilerOptionsByFilePath } from '../utils/ts'
 import type { ConfigGenerateContext, RollupProgressEvent, TemplateOptions } from './base'
@@ -33,6 +33,7 @@ interface PackageJSON {
 
 const {
   JIEK_ROOT,
+  JIEK_NAME,
   JIEK_ENTRIES,
   JIEK_WITHOUT_JS,
   JIEK_WITHOUT_DTS,
@@ -45,11 +46,14 @@ const COMMON_OPTIONS = {} satisfies RollupOptions
 const COMMON_PLUGINS = [
   json()
 ]
+
 const WITHOUT_JS = JIEK_WITHOUT_JS === 'true'
 const WITHOUT_DTS = JIEK_WITHOUT_DTS === 'true'
 const WITHOUT_MINIFY = JIEK_WITHOUT_MINIFY === 'true'
-const CLEAN = JIEK_NO_CLEAN !== 'true'
+
 const ONLY_MINIFY = JIEK_ONLY_MINIFY === 'true'
+
+const CLEAN = JIEK_NO_CLEAN !== 'true'
 
 const MINIFY_DEFAULT_VALUE = WITHOUT_MINIFY
   ? false
@@ -61,20 +65,10 @@ const config = loadConfig({
   root: WORKSPACE_ROOT
 }) ?? {}
 const { build = {} } = config
-const outdir = build?.output?.dir
-function resolveOutdir(type: 'js' | 'dts') {
-  const dir = (typeof outdir === 'object'
-    ? outdir[type] ?? outdir[
-      ({
-        js: 'dts',
-        dts: 'js'
-      } as const)[type]
-    ]
-    : outdir) ?? 'dist'
-  return `./${relative(process.cwd(), resolve(dir))}`
-}
-const jsOutdir = resolveOutdir('js')
-const dtsOutdir = resolveOutdir('dts')
+const { js: jsOutdir, dts: dtsOutdir } = getOutDirs({
+  config,
+  pkgName: JIEK_NAME
+})
 
 if (CLEAN) {
   fs.existsSync(jsOutdir) && fs.rmdirSync(jsOutdir, { recursive: true })
@@ -223,7 +217,6 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
     type: 'progress',
     data: { name, path, exportConditions, input }
   }
-  const outdir = options?.output?.dir
   const { js: jsPlugins, dts: dtsPlugins } = resolveBuildPlugins(context, build.plugins)
   if (input.includes('**')) {
     throw new Error(
@@ -389,6 +382,8 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
     entrypoints,
     pkgIsModule,
     entries,
+    pkgName: JIEK_NAME!,
+    outdir: jsOutdir,
     config
   })
 

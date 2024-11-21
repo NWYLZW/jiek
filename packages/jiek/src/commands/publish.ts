@@ -48,12 +48,17 @@ program
     }
     const manifests = selectedProjectsGraphEntries
       .map(([dir, manifest]) => {
-        const { type, exports: entrypoints = {} } = manifest
+        const { name, type, exports: entrypoints = {} } = manifest
+        if (!name) {
+          throw new Error(`package.json in ${dir} must have a name field`)
+        }
+
         const pkgIsModule = type === 'module'
         const newManifest = { ...manifest }
         const [resolvedEntrypoints, exports] = getExports({
           entrypoints,
           pkgIsModule,
+          pkgName: name,
           config: loadConfig(dir),
           dir,
           noFilter: true,

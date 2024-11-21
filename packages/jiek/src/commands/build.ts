@@ -36,7 +36,21 @@ const description = `
 Build the package according to the 'exports' field in the package.json.
 `.trim()
 
+const outDirDescription = `
+The output directory of the build, which relative to the target subpackage root directory.
+Support with variables: 'PKG_NAME',
+.e.g. 'dist/{{PKG_NAME}}'.
+`.trim()
+
 interface BuildOptions extends Record<string, unknown> {
+  /**
+   * The output directory of the build, which relative to the target subpackage root directory.
+   * Support with variables: 'PKG_NAME',
+   * .e.g. 'dist/{{PKG_NAME}}'.
+   *
+   * @default 'dist'
+   */
+  outDir: string
   silent: boolean
   entries: string
   verbose: boolean
@@ -58,6 +72,7 @@ function parseBoolean(v?: unknown) {
 program
   .command('build')
   .description(description)
+  .option('-o, --out-dir <OUT_DIR>', outDirDescription, String, 'dist')
   .option('-e, --entries <ENTRIES>', "Specify the entries of the package.json's 'exports' field.(support glob)")
   .option('-nj, --noJs', 'Do not output js files.', parseBoolean)
   .option('-nd, --noDts', 'Do not output dts files.', parseBoolean)
@@ -71,6 +86,7 @@ program
   .option('-s, --silent', "Don't display logs.", parseBoolean)
   .option('-v, --verbose', 'Display debug logs.', parseBoolean)
   .action(async ({
+    outDir,
     silent,
     entries,
     verbose,
@@ -93,6 +109,7 @@ program
 
     const env = {
       ...process.env,
+      JIEK_OUT_DIR: outDir,
       JIEK_CLEAN: String(!noClean),
       JIEK_ENTRIES: entries,
       JIEK_WITHOUT_JS: String(withoutJs),
@@ -128,8 +145,12 @@ program
       let i = 0
       await Promise.all(
         Object.entries(value).map(async ([dir, manifest]) => {
+          if (!manifest.name) {
+            throw new Error('package.json must have a name field')
+          }
+
           // TODO support auto build child packages in workspaces
-          const escapeManifestName = manifest.name?.replace(/^@/g, '').replace(/\//g, '+')
+          const escapeManifestName = manifest.name.replace(/^@/g, '').replace(/\//g, '+')
           const configFile = jiekTempDir(
             `${escapeManifestName ?? `anonymous-${i++}`}.rollup.config.js`
           )
@@ -144,6 +165,7 @@ program
             cwd: dir,
             env: {
               ...env,
+              JIEK_NAME: manifest.name,
               JIEK_ROOT: wd
             }
           })

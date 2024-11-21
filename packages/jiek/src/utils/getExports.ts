@@ -1,4 +1,4 @@
-import { relative, resolve } from 'node:path'
+import { isAbsolute, relative, resolve } from 'node:path'
 
 import {
   DEFAULT_SKIP_VALUES,
@@ -13,25 +13,68 @@ import { isMatch } from 'micromatch'
 
 const intersection = <T>(a: Set<T>, b: Set<T>) => new Set([...a].filter(i => b.has(i)))
 
+const {
+  JIEK_OUT_DIR
+} = process.env
+
+const OUTDIR = JIEK_OUT_DIR ?? 'dist'
+
+export function getOutDirs({
+  cwd = process.cwd(),
+  defaultOutdir = OUTDIR,
+  config,
+  pkgName
+}: {
+  cwd?: string
+  defaultOutdir?: string
+  config?: Config
+  pkgName?: string
+}) {
+  const { build = {} } = config ?? {}
+  const outdir = build?.output?.dir
+  function resolveOutdir(type: 'js' | 'dts') {
+    const dir = (typeof outdir === 'object'
+      ? outdir[type] ?? outdir[
+        ({
+          js: 'dts',
+          dts: 'js'
+        } as const)[type]
+      ]
+      : outdir) ?? defaultOutdir
+    return (
+      isAbsolute(dir)
+        ? dir
+        : `./${relative(cwd, resolve(cwd, dir))}`
+    ).replace('{{PKG_NAME}}', pkgName!)
+  }
+  return {
+    js: resolveOutdir('js'),
+    dts: resolveOutdir('dts')
+  }
+}
+
 export function getExports({
   entrypoints,
+  pkgName,
   pkgIsModule,
   entries,
   config,
   dir,
+  // FIXME dts support
+  outdir = getOutDirs({ pkgName, config, cwd: dir }).js,
   noFilter,
   isPublish
 }: {
   entrypoints: string | string[] | Record<string, unknown>
+  pkgName: string
   pkgIsModule: boolean
   entries?: string[]
   config?: Config
   dir?: string
+  outdir?: string
   noFilter?: boolean
   isPublish?: boolean
 }) {
-  const dirResolve = (...paths: string[]) => resolve(dir ?? process.cwd(), ...paths)
-  const dirRelative = (path: string) => relative(dir ?? process.cwd(), path)
   const {
     build = {},
     publish: {
@@ -42,16 +85,6 @@ export function getExports({
   const {
     crossModuleConvertor = true
   } = build
-  const jsOutdir = `./${
-    dirRelative(dirResolve(
-      (
-        typeof build?.output?.dir === 'object'
-          // the outdir only affect js output in this function
-          ? build.output.dir.js
-          : build?.output?.dir
-      ) ?? 'dist'
-    ))
-  }`
   const [, resolvedEntrypoints] = resolveEntrypoints(entrypoints)
   if (entries) {
     Object
@@ -93,7 +126,7 @@ export function getExports({
   return [
     filteredResolvedEntrypoints,
     entrypoints2Exports(filteredResolvedEntrypoints, {
-      outdir: jsOutdir,
+      outdir,
       withSuffix: isPublish ? withSuffix : undefined,
       withSource: isPublish ? withSource : undefined,
       withConditional: {
