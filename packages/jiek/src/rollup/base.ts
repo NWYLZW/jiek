@@ -44,6 +44,10 @@ export interface TemplateOptions {
     js?: OutputControl
     dts?: OutputControl
   }
+  /**
+   * Set the external dependencies of the package.
+   */
+  external?: (string | RegExp)[]
   plugins?:
     | InputPluginOption
     | ((type: 'js' | 'dts', context: ConfigGenerateContext) => InputPluginOption)

@@ -35,12 +35,25 @@ const {
   JIEK_ROOT,
   JIEK_NAME,
   JIEK_ENTRIES,
+  JIEK_EXTERNAL,
   JIEK_WITHOUT_JS,
   JIEK_WITHOUT_DTS,
   JIEK_WITHOUT_MINIFY,
   JIEK_NO_CLEAN,
   JIEK_ONLY_MINIFY
 } = process.env
+
+const entries = JIEK_ENTRIES
+  ?.split(',')
+  .map(e => e.trim())
+  .map(e => ({ 'index': '.' }[e] ?? e))
+
+const commandExternal = JIEK_EXTERNAL
+  ?.split(',')
+  .map(e => e.trim())
+  .map(e => new RegExp(`^${e}$`))
+  ?? []
+
 const WORKSPACE_ROOT = JIEK_ROOT ?? getWorkspaceDir()
 const COMMON_OPTIONS = {} satisfies RollupOptions
 const COMMON_PLUGINS = [
@@ -182,10 +195,11 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
     name,
     input,
     output,
-    external,
+    external: inputExternal,
     pkgIsModule,
     conditionals
   } = context
+  const external = [...inputExternal, ...(options.external ?? []), ...commandExternal]
   const isModule = conditionals.includes('import')
   const isCommonJS = conditionals.includes('require')
   const isBrowser = conditionals.includes('browser')
@@ -397,13 +411,6 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
   const pkgIsModule = type === 'module'
   if (!name) throw new Error('package.json name is required')
   if (!entrypoints) throw new Error('package.json exports is required')
-
-  const entries = JIEK_ENTRIES
-    ?.split(',')
-    .map(e => e.trim())
-    .map(e => ({
-      'index': '.'
-    }[e] ?? e))
 
   const packageName = pascalCase(name)
 
