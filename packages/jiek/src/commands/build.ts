@@ -6,7 +6,6 @@ import { MultiBar, Presets } from 'cli-progress'
 import { program } from 'commander'
 import { execaCommand } from 'execa'
 
-import { actionDone, actionRestore } from '../inner'
 import type { RollupProgressEvent, TemplateOptions } from '../rollup/base'
 import type { ProjectsGraph } from '../utils/filterSupport'
 import { filterPackagesGraph, getSelectedProjectsGraph } from '../utils/filterSupport'
@@ -113,7 +112,6 @@ program
         },
         [] as string[]
       )
-    actionRestore()
     const { build } = loadConfig()
     silent = silent ?? build?.silent ?? false
 
@@ -300,6 +298,4 @@ program
     } finally {
       multiBars.stop()
     }
-
-    actionDone()
   })
