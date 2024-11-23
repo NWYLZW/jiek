@@ -248,6 +248,9 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
 
   const commonPlugins: Plugin[] = []
   if (jsOutput && !WITHOUT_JS) {
+    const sourcemap = typeof options?.output?.sourcemap === 'object'
+      ? options.output.sourcemap.js
+      : options?.output?.sourcemap
     rollupOptions.push({
       input: inputObj,
       external,
@@ -263,9 +266,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
                 .replace(/(\.[cm]?)ts$/, jsOutputSuffix)
               : output.replace(`${jsOutdir}/`, '')
           ),
-          sourcemap: typeof options?.output?.sourcemap === 'object'
-            ? options.output.sourcemap.js
-            : options?.output?.sourcemap,
+          sourcemap,
           format: isModule ? 'esm' : (
             isCommonJS ? 'cjs' : (
               isBrowser ? 'umd' : (
@@ -290,6 +291,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           )
           .catch(() => void 0),
         esbuild({
+          sourceMap: sourcemap === 'hidden' ? false : !!sourcemap,
           tsconfig: dtsTSConfigPath
         }),
         commonjs(),
