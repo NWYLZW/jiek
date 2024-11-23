@@ -10,6 +10,7 @@ export default defineConfig({
         'json-summary'
       ]
     },
+    pool: 'threads',
     include: ['**/tests/**/*.spec.ts'],
     typecheck: {
       include: ['**/tests/**/*.spec.ts']
