@@ -3,6 +3,9 @@
   "compilerOptions": {
     "composite": true
   },
+  "references": [
+    { "path": "tsconfig.bar.json" }
+  ],
   "include": [
     "./packages/foo/src/**/*.ts"
   ]

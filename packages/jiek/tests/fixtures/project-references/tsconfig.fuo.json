@@ -4,6 +4,9 @@
     "composite": true,
     "customConditions": ["special"]
   },
+  "references": [
+    { "path": "tsconfig.bar.json" }
+  ],
   "include": [
     "./packages/fuo/src/**/*.ts"
   ]

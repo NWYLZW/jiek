@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@jiek/pkger": "workspace:^",
-    "@jiek/rollup-plugin-dts": "^6.1.2",
+    "@jiek/rollup-plugin-dts": "^6.2.1",
     "@jiek/utils": "workspace:^",
     "@rollup/plugin-commonjs": "^28.0.0",
     "@rollup/plugin-json": "^6.0.1",

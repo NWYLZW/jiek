@@ -364,7 +364,6 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
         dts({
           respectExternal: true,
           compilerOptions: {
-            ...compilerOptions,
             // temp directory, it not affect the output
             // but if the user not set it and `declaration`, inputs can't generate any dts files when the input relative imports of `package.json`
             outDir: 'dist',
@@ -374,7 +373,8 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
             // Expected '{', got 'type' (Note that you need plugins to import files that are not JavaScript)
             // https://github.com/Swatinem/rollup-plugin-dts/issues/96
             noEmit: false
-          }
+          },
+          tsconfig: dtsTSConfigPath
         }),
         progress({
           onEvent: (event, message) =>
