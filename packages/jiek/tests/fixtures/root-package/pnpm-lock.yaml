@@ -11,6 +11,7 @@ importers:
       '@jiek/test-monorepo-bar':
         specifier: workspace:^
         version: link:packages/bar
+    devDependencies:
       '@jiek/test-monorepo-foo':
         specifier: workspace:^
         version: link:packages/foo

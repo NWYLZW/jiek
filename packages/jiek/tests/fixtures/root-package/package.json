@@ -5,7 +5,9 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@jiek/test-monorepo-foo": "workspace:^",
     "@jiek/test-monorepo-bar": "workspace:^"
+  },
+  "devDependencies": {
+    "@jiek/test-monorepo-foo": "workspace:^"
   }
 }
