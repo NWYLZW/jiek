@@ -193,10 +193,20 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
     resolveWorkspacePath('tsconfig.json'),
     resolveWorkspacePath('tsconfig.dts.json')
   ]
+  const buildTSConfigPaths = [
+    ...dtsTSConfigPaths,
+    resolveWorkspacePath('tsconfig.build.json')
+  ]
   let dtsTSConfigPath: string | undefined
   dtsTSConfigPaths.forEach(p => {
     if (fs.existsSync(p) && fs.statSync(p).isFile()) {
       dtsTSConfigPath = p
+    }
+  })
+  let buildTSConfigPath: string | undefined
+  buildTSConfigPaths.forEach(p => {
+    if (fs.existsSync(p) && fs.statSync(p).isFile()) {
+      buildTSConfigPath = p
     }
   })
   let compilerOptions: ts.CompilerOptions = {}
@@ -292,7 +302,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           .catch(() => void 0),
         esbuild({
           sourceMap: sourcemap === 'hidden' ? false : !!sourcemap,
-          tsconfig: dtsTSConfigPath
+          tsconfig: buildTSConfigPath
         }),
         commonjs(),
         progress({
