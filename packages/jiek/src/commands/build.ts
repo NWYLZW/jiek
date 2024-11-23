@@ -70,7 +70,10 @@ program
   .command('build')
   .description(description)
   .option('-o, --outdir <OUTDIR>', outdirDescription, String, 'dist')
-  .option('-e, --entries <ENTRIES>', "Specify the entries of the package.json's 'exports' field.(support glob)")
+  .option(
+    '-e, --entries <ENTRIES>',
+    "Specify the build entry-points of the package.json's 'exports' field.(support glob)"
+  )
   .option('--external <EXTERNAL>', 'Specify the external dependencies of the package.', String)
   .option('-nj, --noJs', 'Do not output js files.', parseBoolean)
   .option('-nd, --noDts', 'Do not output dts files.', parseBoolean)
