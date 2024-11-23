@@ -1,47 +1,36 @@
 # Jiek
 
-为什么没有一个在 `monorepo` 下面足够现代又足够简单的构建工具呢？恭喜你发现了宝藏～
+| zh-Hans | [en](./.about/en/README.md) |
 
-## 为什么不使用 X？
+[![npm version](https://img.shields.io/npm/v/jiek)](https://npmjs.com/package/jiek)
+[![npm downloads](https://img.shields.io/npm/dm/jiek)](https://npm.chart.dev/jiek)
 
-- Q: [`tsup`](https://github.com/egoist/tsup)
-- A: `tsup` 基于 esbuild 与 rollup，是他们上层的一个 no-config 构建工具
-  - 关于类型编译的支持并不足够智能，无法自动找到对应的 `tsconfig.json`，在 `monorepo` 下面会遇到相关的问题
-  - 虽然它是声称 no-config，但是在多入口，以及其他的复杂情况下的产物时，仍需要编写相关配置
-  - 偏向于使用 cli 中的相关参数，以及配置文件，不够自然
-  - 在 `monorepo` 的场景下使用起来进行开发时，在复杂依赖关系的情况下需要管理复杂的构建依赖关系
-  - 老牌工具，符合时代背景下的相关需求；沉淀时间久，功能相对来说较为完善；生态较为丰富，网络上的资源较多
+> 基于 `package.json` 元数据并适用于 `Monorepo` 的**轻便**工具库编译管理套件。
 
-- Q: [`unbuild`](https://github.com/unjs/unbuild)
-- A: 该工具的底座技术与 `tsup` 也是极为一致，与其不同的便是他的 config 实际上是可以基于 package.json 生成的。
-  - 该工具与 `tsup` 一样，存在对：「`monorepo` 支持不好」、「不支持 Project Reference」这些问题
-  - 使用的时候你需要根据模版声明输出，再反向根据约定好的规则去创建相关的入口文件，不够自然，也不够灵活过于死板
-  - 不过该工具在无配置化上也前进了较大一步，对于一些简单的项目来说，是一个不错的选择
-
-- Q: [`bunchee`](https://github.com/huozhi/bunchee)
-- A: 换成了 `swc` + `rollup`，嗯。
-  - 同样在 `monorepo` 下有着相关问题，同样没办法处理 Project Reference
-  - 定义了一定的 exports 产物到输入文件的规则，能实现一定的灵活性，但是编写导出规则时会过于冗长
-  - 没办法在 monorepo 的复杂依赖关系场景中去减轻开发负担
+- 自动推断：基于 `package.json` 的相关字段自动推断出构建规则
+  - `exports`：根据入口文件推断构建目标与类型
+  - `imports`：定义路径别名，并在构建的时候自动 bundle 进来
+  - `type: module`：当开启时智能决定输出文件后缀，不需要考虑 `cjs` 与 `esm` 的适配问题
+  - `dependencies`、`peerDependencies`、`optionalDependencies`：自动将符合规则的依赖标记为 `external`
+  - `devDependencies`：将标记为开发依赖的 bundle 进对应的最终产物之中
+- 工作空间友好：支持在 pnpm 下的工作空间
+- 类型定义文件：支持聚合生成类型定义文件
+- 监听模式：适配 rollup 的监听模式
+- 发布适配：支持同构生成 `package.json` 等相关字段
 
 ## 安装
 
-目前只支持 pnpm，因为 workspace 的相关机制在 pnpm 的支持是最好的（主要也没时间支持别的工具了）。
-
 ```bash
-pnpm install -D jiek
+npm i -D jiek
+# or
+pnpm i -D jiek
+# or
+yarn add -D jiek
 ```
 
-## Features
+## 使用
 
-有啥好用的？
-
-- 简化你的导出规则，不需要去写一些能够自动化生成的代码
-- 自然而然的对你的输入进行构建，按照统一的规则你可以几乎不用去写多余的配置
-- 在构建的时候不再依赖预构建目标的依赖或者是整体的全量构建，每一次构建只需要关注自己的目标
-- 预集成了一套完整的构建工具链，自动根据需求激活相关的插件进行工作
-
-### build
+### 构建
 
 写构建脚本一直不是一件简单的事情，那么怎么把一个复杂的事情变简单呢？我们可以回到需求的本身，那就是「定义什么便构建什么」。在这里我们用自然的方式来定义构建产物，而不需要去多写一行多余的代码。
 
@@ -128,4 +117,13 @@ export default defineConfig({
   - 本次构建哪些在 package 中声明的依赖没用用到，可以移除（提供配置关闭该警告）
   - 针对构建产物的依赖关系生成关系图（可配置颗粒度为文件或者导出方法）
 
-### publish
+### 发布
+
+## 为什么不使用 X？
+
+在这里与 `jiek` 类似的工具有：[`tsup`](https://github.com/egoist/tsup)、[`unbuild`](https://github.com/unjs/unbuild)、[`bunchee`](https://github.com/huozhi/bunchee)、[`pkgroll`](https://github.com/privatenumber/pkgroll)、[`tsdown`](https://github.com/sxzz/tsdown)。但是他们都有着一些共同问题没有解决，我们来看看：
+
+- `monorepo` 的支持存在一定的问题，在依赖工作空间其他的包时必须重新编译相关依赖
+- 编写入口文件的规则过于繁琐，不够自然
+- 无法处理 `tsconfig.json` 中的 `Project Reference` 相关问题
+- 根据`conditions`
