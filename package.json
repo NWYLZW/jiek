@@ -22,7 +22,7 @@
     "standard": "workspace:^*",
     "js-yaml": "^4.1.0",
     "mock-fs": "^5.2.0",
-    "typescript": "^5.5.3",
+    "typescript": "^5.7.2",
     "vitest": "^1.4.0"
   }
 }
