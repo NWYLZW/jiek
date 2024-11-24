@@ -19,6 +19,11 @@ export type OutputControl = boolean | ((context: ConfigGenerateContext) => boole
 
 export const BUILDER_TYPES = ['esbuild', 'swc'] as const
 
+export const BUILDER_TYPE_PACKAGE_NAME_MAP = {
+  esbuild: 'rollup-plugin-esbuild',
+  swc: 'rollup-plugin-swc3'
+}
+
 export interface TemplateOptions {
   /**
    * When the user configures type: module, the generated output from entry points that don't
@@ -30,6 +35,10 @@ export interface TemplateOptions {
    */
   crossModuleConvertor?: boolean
   /**
+   * Auto-detect the builder from the installed dependencies.
+   * If the builder is not installed, it will prompt the user to install it.
+   * If exists multiple builders, it will fall back to the 'esbuild'.
+   *
    * @default 'esbuild'
    */
   builder?:

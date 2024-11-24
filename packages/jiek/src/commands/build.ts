@@ -13,7 +13,7 @@ import { loadConfig } from '#~/utils/loadConfig.ts'
 import { tsRegisterName } from '#~/utils/tsRegister.ts'
 
 import type { RollupProgressEvent, TemplateOptions } from '../rollup/base'
-import { BUILDER_TYPES } from '../rollup/base'
+import { BUILDER_TYPE_PACKAGE_NAME_MAP, BUILDER_TYPES } from '../rollup/base'
 import { outdirDescription } from './descriptions'
 
 declare module 'jiek' {
@@ -41,8 +41,13 @@ If you want to rewrite the rollup command options, you can pass the options afte
 e.g. \`jiek build -- --watch\`
 `.trim()
 
-interface BuildOptions extends Record<string, unknown> {
-  type?: string
+interface BuildOptions {
+  /**
+   * Auto-detect the builder from the installed dependencies.
+   * If the builder is not installed, it will prompt the user to install it.
+   * If exists multiple builders, it will fall back to the 'esbuild'.
+   */
+  type?: typeof BUILDER_TYPES[number]
   /**
    * The output directory of the build, which relative to the target subpackage root directory.
    * Support with variables: 'PKG_NAME',
@@ -67,9 +72,9 @@ interface BuildOptions extends Record<string, unknown> {
   /**
    * The type of minify, support 'terser' and 'builder'.
    *
-   * @default 'terser'
+   * @default 'builder'
    */
-  minType?: Exclude<NonNullable<TemplateOptions['output']>['minifyOptions'], string | undefined>['type']
+  minType?: string
   /**
    * The path of the tsconfig file which is used to generate js and dts files.
    * If not specified, it will be loaded from:
@@ -102,6 +107,17 @@ async function checkDependency(dependency: string) {
   }
 }
 
+let DEFAULT_BUILDER_TYPE: typeof BUILDER_TYPES[number]
+Object.entries(BUILDER_TYPE_PACKAGE_NAME_MAP).forEach(([type, packageName]) => {
+  try {
+    require.resolve(packageName)
+    DEFAULT_BUILDER_TYPE = type as typeof BUILDER_TYPES[number]
+  } catch { /* empty */ }
+})
+if (!DEFAULT_BUILDER_TYPE!) {
+  DEFAULT_BUILDER_TYPE = 'esbuild'
+}
+
 function parseBoolean(v?: unknown) {
   if (v === undefined) return true
   return Boolean(v)
@@ -127,10 +143,10 @@ program
   .option('-nm, --noMin', 'Do not output minify files.', parseBoolean)
   .option(
     '--minType <MINTYPE>',
-    `The type of minify, support ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')} and "terser".`,
+    'The type of minify, support "builder" and "terser".',
     v => {
-      if (![BUILDER_TYPES, 'terser'].includes(v)) {
-        throw new Error(`The value of 'minType' must be ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')} and "terser"`)
+      if (!['builder', 'terser'].includes(v)) {
+        throw new Error('The value of `minType` must be "builder" or "terser"')
       }
       return String(v)
     }
@@ -163,25 +179,19 @@ program
     tsconfig,
     dtsconfig
   }: BuildOptions) => {
-    if (minifyType && minifyType !== 'terser' && minifyType !== type) {
-      throw new Error(`The value of 'minType' must be "${type}" or "terser"`)
-    }
-    const resolvedType = type ?? 'esbuild'
+    const resolvedType = type ?? DEFAULT_BUILDER_TYPE
     if (!withoutJs) {
-      await checkDependency(
-        {
-          esbuild: 'rollup-plugin-esbuild',
-          swc: 'rollup-plugin-swc3'
-        }[resolvedType]!
-      )
+      await checkDependency(BUILDER_TYPE_PACKAGE_NAME_MAP[resolvedType]!)
+      if (minifyType === 'builder') {
+        minifyType = resolvedType
+      }
     }
     if (!withoutMin) {
       await checkDependency(
         {
-          esbuild: 'rollup-plugin-esbuild',
-          swc: 'rollup-plugin-swc3',
+          ...BUILDER_TYPE_PACKAGE_NAME_MAP,
           terser: '@rollup/plugin-terser'
-        }[minifyType ?? resolvedType]!
+        }[resolvedType]!
       )
     }
     let shouldPassThrough = false
