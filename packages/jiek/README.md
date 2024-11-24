@@ -24,6 +24,7 @@
 - [x] 类型定义文件：支持聚合生成类型定义文件
 - [x] 监听模式：适配 rollup 的监听模式
 - [x] 发布适配：支持同构生成 `package.json` 等相关字段
+  - [ ] 根据 `package.json` 中的路径自动替换 README.md 中的相对路径链接为对应的网络链接
 - [x] CommonJS：产物兼容正在使用 cjs 的用户
 - [ ] 插件化
   - [ ] Dotenv：支持 dotenv 配置文件
