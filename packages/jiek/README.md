@@ -25,10 +25,17 @@
 - [x] 监听模式：适配 rollup 的监听模式
 - [x] 发布适配：支持同构生成 `package.json` 等相关字段
   - [ ] 根据 `package.json` 中的路径自动替换 README.md 中的相对路径链接为对应的网络链接
+  - [ ] 根据仓库、项目自动生成通用字段，如 `license`、`author`、`homepage`、`repository` 等
 - [x] CommonJS：产物兼容正在使用 cjs 的用户
 - [ ] 插件化
   - [ ] Dotenv：支持 dotenv 配置文件
   - [ ] Replacer：支持替换文件内容
+- [ ] 钩子：prepublish、postpublish
+  - [ ] 自动生成 changelog
+  - [ ] 自动决定下一个版本号
+    - [ ] `feat: xxx` -> `patch`
+    - [ ] `feat!: xxx` -> `minor`
+    - [ ] `feat!!: xxx` -> `major`
 
 ## 安装
 
