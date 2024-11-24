@@ -3,6 +3,8 @@
 | English
 | [简体中文](https://github.com/NWYLZW/jiek/blob/master/packages/jiek/.about/zh-Hans/README.md)
 | [繁体中文](https://github.com/NWYLZW/jiek/blob/master/packages/jiek/.about/zh-Hant/README.md)
+| [日本語](https://github.com/NWYLZW/jiek/blob/master/packages/jiek/.about/ja/README.md)
+| [Français](https://github.com/NWYLZW/jiek/blob/master/packages/jiek/.about/fr/README.md)
 
 [![npm version](https://img.shields.io/npm/v/jiek)](https://npmjs.com/package/jiek)
 [![npm downloads](https://img.shields.io/npm/dm/jiek)](https://npm.chart.dev/jiek)
