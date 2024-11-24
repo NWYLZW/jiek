@@ -1,6 +1,4 @@
-import { Options } from '@rollup/plugin-terser'
 import type { InputPluginOption, OutputOptions } from 'rollup'
-import { minify } from 'rollup-plugin-esbuild'
 
 export type Mapping2ROO<K extends keyof OutputOptions> = OutputOptions[K] | {
   js?: OutputOptions[K]
