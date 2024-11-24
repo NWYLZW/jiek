@@ -2,20 +2,41 @@ import * as childProcess from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { afterAll, beforeAll } from 'vitest'
+import { afterAll, beforeAll, expect } from 'vitest'
 
 const getROOT = (paths: string[]) => path.resolve(__dirname, 'fixtures', ...paths)
 
+function snapshotDistFiles(distDir: string) {
+  const files = fs.readdirSync(distDir, { recursive: true })
+  expect(files).toMatchSnapshot()
+  files.forEach((file) => {
+    if (typeof file !== 'string') return
+    if (fs.statSync(path.resolve(distDir, file)).isDirectory()) return
+    expect(`${file}:\n${fs.readFileSync(path.resolve(distDir, file), 'utf-8')}`).toMatchSnapshot()
+  })
+  fs.rmSync(distDir, { recursive: true })
+}
+
+export function runCommandAndSnapshotDistFiles(cmd: string, root: string, prefixes: string[], distPath = 'dist') {
+  const cliBinPath = path.resolve(__dirname, '../bin/jiek.js')
+  const args = ['node', cliBinPath, ...prefixes, cmd].join(' ')
+  childProcess.execSync(args, {
+    cwd: root,
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      JIEK_ROOT: root
+    }
+  })
+  snapshotDistFiles(path.resolve(root, distPath))
+}
+
 export function prepareROOT(
   command: string,
-  paths: string[],
-  {
-    notWorkspace = false
-  }: {
-    notWorkspace?: boolean
-  } = {}
+  ...paths: string[]
 ) {
   const ROOT = getROOT(paths)
+  const notWorkspace = fs.existsSync(path.resolve(ROOT, 'pnpm-workspace.yaml'))
   beforeAll(() => {
     fs.mkdirSync(path.resolve(ROOT, 'node_modules/.jiek'), { recursive: true })
     const args = [
