@@ -214,6 +214,28 @@ Vous pouvez également spécifier le chemin de `dtsconfig` utilisé par le plugi
 jb --dtsconfig ./tsconfig.custom-dts.json
 ```
 
+### Commande de publication
+
+La commande `publish` vous permet de publier le package actuel dans le registre npm. Elle génère également automatiquement le champ `exports` et d'autres champs dans le `package.json` publié.
+
+```bash
+jk publish [options]
+```
+
+#### Options
+
+- `-b, --bumper <bumper>` : Augmenter la version (par défaut : `patch`)
+- `-no-b, --no-bumper` : Ne pas augmenter la version
+- `-o, --outdir <OUTDIR>` : Spécifier le répertoire de sortie (par défaut : `dist`)
+
+#### Options de passage
+
+Si vous souhaitez passer des options à la commande `pnpm publish`, vous pouvez les passer après `--`.
+
+```bash
+jk publish -- --access public --no-git-checks
+```
+
 ## Pourquoi ne pas utiliser X ?
 
 Des outils similaires à `jiek` incluent : [tsup](https://github.com/egoist/tsup), [unbuild](https://github.com/unjs/unbuild), [bunchee](https://github.com/huozhi/bunchee), [pkgroll](https://github.com/privatenumber/pkgroll), [tsdown](https://github.com/sxzz/tsdown). Cependant, ils ont tous des problèmes communs qui n'ont pas été résolus, tels que :
