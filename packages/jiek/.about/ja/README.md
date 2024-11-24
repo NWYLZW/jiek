@@ -214,6 +214,28 @@ jb --tsconfig ./tsconfig.custom-build.json
 jb --dtsconfig ./tsconfig.custom-dts.json
 ```
 
+### パブリッシュコマンド
+
+`publish` コマンドを使用すると、現在のパッケージを npm レジストリに公開できます。また、公開された `package.json` の `exports` フィールドやその他のフィールドを自動的に生成します。
+
+```bash
+jk publish [options]
+```
+
+#### オプション
+
+- `-b, --bumper <bumper>`：バージョンのバンプ（デフォルト：`patch`）
+- `-no-b, --no-bumper`：バージョンのバンプなし
+- `-o, --outdir <OUTDIR>`：出力ディレクトリを指定（デフォルト：`dist`）
+
+#### パススルーオプション
+
+`pnpm publish` コマンドにオプションを渡したい場合は、`--` の後にオプションを渡すことができます。
+
+```bash
+jk publish -- --access public --no-git-checks
+```
+
 ## なぜ X を使用しないのか？
 
 `jiek` に似たツールには、[tsup](https://github.com/egoist/tsup)、[unbuild](https://github.com/unjs/unbuild)、[bunchee](https://github.com/huozhi/bunchee)、[pkgroll](https://github.com/privatenumber/pkgroll)、[tsdown](https://github.com/sxzz/tsdown) があります。しかし、これらのツールには解決されていない共通の問題がいくつかあります。例えば：

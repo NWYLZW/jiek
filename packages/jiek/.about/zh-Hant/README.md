@@ -214,6 +214,28 @@ jb --tsconfig ./tsconfig.custom-build.json
 jb --dtsconfig ./tsconfig.custom-dts.json
 ```
 
+### 發佈命令
+
+`publish` 命令允許你將當前包發佈到 npm 註冊表。它還會自動生成發佈的 `package.json` 中的 `exports` 字段和其他字段。
+
+```bash
+jk publish [options]
+```
+
+#### 選項
+
+- `-b, --bumper <bumper>`：版本號提升（默認：`patch`）
+- `-no-b, --no-bumper`：不提升版本號
+- `-o, --outdir <OUTDIR>`：指定輸出目錄（默認：`dist`）
+
+#### 傳遞選項
+
+如果你想將選項傳遞給 `pnpm publish` 命令，可以在 `--` 之後傳遞選項。
+
+```bash
+jk publish -- --access public --no-git-checks
+```
+
 ## 為什麼不使用 X？
 
 在這裡與 `jiek` 類似的工具有：[tsup](https://github.com/egoist/tsup)、[unbuild](https://github.com/unjs/unbuild)、[bunchee](https://github.com/huozhi/bunchee)、[pkgroll](https://github.com/privatenumber/pkgroll)、[tsdown](https://github.com/sxzz/tsdown)。但是他們都有著一些共同問題沒有解決，比如說：
