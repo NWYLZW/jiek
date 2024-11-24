@@ -79,8 +79,129 @@ yarn add -D jiek
 
 ## CLI
 
-```text
-Usage: jk [options] [command]
+```bash
+jk/jiek [options] [command]
+jb/jiek-build [options] [filters/entries]
+```
+
+### 自定义构建入口
+
+你可以通过 `--entries` 来指定构建入口，这里的入口定义是基于 `package.json` 中的 `exports` 字段来进行的。
+
+```bash
+jb -e .
+jb --entries .
+jb --entries ./foo
+jb --entries ./foo,./bar
+```
+
+当你的项目是一个非 `monorepo` 项目时，你可以直接通过 `jb [entries]` 来进行构建。
+
+```bash
+jb .
+jb ./foo
+jb ./foo,./bar
+```
+
+### 过滤器
+
+你可以通过 `--filter` 来过滤需要构建的包，我们使用了和 pnpm 一样的过滤器规则，所以你可以在这里查阅 [pnpm 的过滤器规则](https://pnpm.io/filtering)
+
+```bash
+jb --filter @monorepo/*
+jb --filter @monorepo/utils
+jb -f utils
+```
+
+当你的项目是一个 `monorepo` 项目时，你可以直接通过 `jb [filters]` 来进行构建。
+
+```bash
+jb @monorepo/*
+jb @monorepo/utils
+jb utils
+```
+
+### 自定义构建工具
+
+我们支持多种构建工具，你可以通过 `--type <type: esbuild | swc>` 来指定构建工具。
+
+- 默认会使用 `esbuild`(`rollup-plugin-esbuild`)
+- 如果你的依赖空间中存在 `swc`(`rollup-plugin-swc3`) 依赖，那么我们会自动切换到 `swc`
+- 如果俩个都存在，默认会使用 `esbuild`
+
+```bash
+jb --type swc
+```
+
+> 如果使用类型的构建工具依赖没有安装，那我们会提示你安装对应的依赖。
+
+### 最小化
+
+我们提供了多种方式来支持最小化的构建，默认会自动启用，同时我们默认会选择使用构建工具内置的最小化插件来进行最小化。
+
+- 你可以通过 `--minType` 选择使用 `terser`(`rollup-plugin-terser`) 来进行最小化，如果你没有安装 `terser`，我们会提示你安装。
+- 你可以通过 `--noMin` 来关闭生成最小化产物。
+- 你可以通过 `--onlyMinify` 来只生成最小化产物，这样我们会直接替换原产物路径，而不是添加一个 `.min` 后缀再进行输出。
+
+```bash
+jb --minType terser
+jb --onlyMinify
+```
+
+### 去除指定构建内容
+
+你可以通过 `--noJs` 来关闭 `js` 的构建，通过 `--noDts` 来关闭 `dts` 的构建。
+
+```bash
+jb --noJs
+jb --noDts
+```
+
+### 自定义产物目录
+
+你可以通过 `--outdir` 来指定产物目录。
+
+```bash
+jb --outdir lib
+```
+
+### 监听模式
+
+你可以通过 `--watch` 来开启监听模式。
+
+```bash
+jb --watch
+```
+
+### 外部模块
+
+除了通过 `package.json` 中的 `dependencies`、`peerDependencies`、`optionalDependencies` 来自动标记外部模块外，你还可以通过 `--external` 来手动标记外部模块。
+
+```bash
+jb --external react
+jb --external react,react-dom
+```
+
+### 关闭产物的自动清理
+
+你可以通过 `--noClean` 来关闭产物的自动清理。
+
+```bash
+jb --noClean
+```
+
+### 自定义 tsconfig 路径
+
+你可以通过 `--tsconfig` 来指定 `tsconfig` 的路径。
+
+```bash
+jb --tsconfig ./tsconfig.custom-build.json
+```
+
+同时你还可以通过 `--dtsconfig` 来指定 `dts` 插件使用的 `tsconfig` 的路径（当然我不建议你这么做）。
+
+```bash
+jb --dtsconfig ./tsconfig.custom-dts.json
 ```
 
 ## 为什么不使用 X？
