@@ -48,9 +48,9 @@ interface BuildOptions extends Record<string, unknown> {
    */
   outdir: string
   silent: boolean
+  verbose: boolean
   entries?: string
   external?: string
-  verbose: boolean
   noJs: boolean
   noDts: boolean
   noMin: boolean
@@ -99,10 +99,10 @@ program
     'Only output minify files, but dts files will still be output, it only replaces the js files.',
     parseBoolean
   )
-  .option('-s, --silent', "Don't display logs.", parseBoolean)
-  .option('-v, --verbose', 'Display debug logs.', parseBoolean)
   .option('--tsconfig <TSCONFIG>', 'The path of the tsconfig file which is used to generate js and dts files.', String)
   .option('--dtsconfig <DTSCONFIG>', 'The path of the tsconfig file which is used to generate dts files.', String)
+  .option('-s, --silent', "Don't display logs.", parseBoolean)
+  .option('-v, --verbose', 'Display debug logs.', parseBoolean)
   .action(async ({
     outdir,
     silent,
