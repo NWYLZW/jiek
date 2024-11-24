@@ -47,6 +47,7 @@ interface BuildOptions extends Record<string, unknown> {
    * @default 'dist'
    */
   outdir: string
+  watch: boolean
   silent: boolean
   verbose: boolean
   entries?: string
@@ -101,14 +102,16 @@ program
   )
   .option('--tsconfig <TSCONFIG>', 'The path of the tsconfig file which is used to generate js and dts files.', String)
   .option('--dtsconfig <DTSCONFIG>', 'The path of the tsconfig file which is used to generate dts files.', String)
+  .option('-w, --watch', 'Watch the file changes.', parseBoolean)
   .option('-s, --silent', "Don't display logs.", parseBoolean)
   .option('-v, --verbose', 'Display debug logs.', parseBoolean)
   .action(async ({
     outdir,
+    watch,
     silent,
+    verbose,
     entries,
     external,
-    verbose,
     noJs: withoutJs,
     noDts: withoutDts,
     noMin: withoutMin,
@@ -119,9 +122,7 @@ program
   }: BuildOptions) => {
     let shouldPassThrough = false
 
-    const passThroughOptions = program
-      .parseOptions(process.argv)
-      .unknown
+    const passThroughOptions = process.argv
       .reduce(
         (acc, value) => {
           if (shouldPassThrough) {
@@ -195,12 +196,15 @@ program
             `${escapeManifestName ?? `anonymous-${i++}`}.rollup.config.js`
           )
           fs.writeFileSync(configFile, FILE_TEMPLATE(manifest))
-          let prefix = ''
+          const command = [rollupBinaryPath, '--silent', '-c', configFile]
           if (tsRegisterName) {
-            prefix = `node -r ${tsRegisterName} `
+            command.unshift(`node -r ${tsRegisterName}`)
           }
-          const command = [`${prefix}${rollupBinaryPath} --silent -c ${configFile}`, ...passThroughOptions].join(' ')
-          const child = execaCommand(command, {
+          if (watch) {
+            command.push('--watch')
+          }
+          command.push(...passThroughOptions)
+          const child = execaCommand(command.join(' '), {
             ipc: true,
             cwd: dir,
             env: {
@@ -228,7 +232,11 @@ program
                     conditions
                   }))
                 )
-              console.log(`Package '${manifest.name}' has ${targetsLength} targets to build`)
+              let initMessage = `Package '${manifest.name}' has ${targetsLength} targets to build`
+              if (watch) {
+                initMessage += ' and watching...'
+              }
+              console.log(initMessage)
               leafs.forEach(({ input }) => {
                 inputMaxLen = Math.max(inputMaxLen, input.length)
               })
