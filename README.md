@@ -4,8 +4,6 @@
 
 # Jiek (YiJie Kit)
 
-My personal kit for building web applications.
-
 ## Sub Packages
 
 - [jiek](./packages/jiek/README.md): A lightweight toolkit for compiling and managing libraries based on `package.json` metadata and suitable for `Monorepo`.
