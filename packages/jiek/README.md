@@ -69,7 +69,7 @@ Usage: jk [options] [command]
 
 ## 为什么不使用 X？
 
-在这里与 `jiek` 类似的工具有：[tsup](https://github.com/egoist/tsup)、[unbuild](https://github.com/unjs/unbuild)、[bunchee](https://github.com/huozhi/bunchee)、[pkgroll](https://github.com/privatenumber/pkgroll)、[tsdown](https://github.com/sxzz/tsdown)。但是他们都有着一些共同问题没有解决，我们来看看：
+在这里与 `jiek` 类似的工具有：[tsup](https://github.com/egoist/tsup)、[unbuild](https://github.com/unjs/unbuild)、[bunchee](https://github.com/huozhi/bunchee)、[pkgroll](https://github.com/privatenumber/pkgroll)、[tsdown](https://github.com/sxzz/tsdown)。但是他们都有着一些共同问题没有解决，比如说：
 
 - `monorepo` 的支持存在一定的问题，在依赖工作空间其他的包时必须重新编译相关依赖
 - 编写入口文件的规则过于繁琐，不够自然
