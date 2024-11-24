@@ -6,4 +6,17 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    devDependencies:
+      export-self-subpath:
+        specifier: file:.
+        version: 'file:'
+
+packages:
+
+  'export-self-subpath@file:':
+    resolution: {directory: '', type: directory}
+
+snapshots:
+
+  'export-self-subpath@file:': {}
