@@ -71,6 +71,7 @@ export interface Entrypoints2ExportsOptions {
       | undefined
     >
   >
+  sourceTag?: string
   /**
    * @default false
    */
@@ -232,11 +233,16 @@ export function entrypoints2Exports(
   const {
     outdir = './dist',
     withConditional = {},
+    sourceTag,
     withSource = false,
     withSuffix = false,
     skipKey = DEFAULT_SKIP_KEYS,
     skipValue = DEFAULT_SKIP_VALUES
   } = options
+  const sourceFieldName = sourceTag
+    ? `${sourceTag}/__source__`
+    : 'source'
+
   const [dir, entrypointMapping] = resolveEntrypoints(JSON.parse(JSON.stringify(entrypoints)), options)
   const withConditionalKeys = Object.keys(withConditional)
   function resolvePath(value: string, path: string, conditionalKeys: string[]) {
@@ -252,7 +258,7 @@ export function entrypoints2Exports(
       if (withSource || withConditionalKeys.length) {
         const record = {} as Record<string, unknown>
         if (withSource) {
-          record.source = value
+          record[sourceFieldName] = value
         }
         withConditionalKeys.forEach(k => {
           const conditional = withConditional[k]
@@ -334,7 +340,7 @@ export function entrypoints2Exports(
         if (shouldNested) {
           const v = {} as Record<string, unknown>
           if (withSource) {
-            v.source = value
+            v[sourceFieldName] = value
           }
           withConditionalKeys.forEach(k => {
             const conditional = withConditional[k]
