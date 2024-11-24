@@ -18,7 +18,8 @@
   },
   "files": ["dist", "src", "bin", "LICENSE", "README.md"],
   "scripts": {
-    "prepublish": "jb --noMin"
+    "prepublish": "jb -nm && jk",
+    "postpublish": "jk"
   },
   "exports": {
     "./package.json": "./package.json",
@@ -55,16 +56,6 @@
     "rollup-plugin-esbuild": "^6.1.0",
     "rollup-plugin-swc3": "^0.12.1",
     "typescript": "^4.0.0||^5.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@rollup/plugin-terser": { "optional": true },
-    "@pnpm/filter-workspace-packages": { "optional": true },
-    "esbuild-register": { "optional": true },
-    "postcss": { "optional": true },
-    "rollup-plugin-postcss": { "optional": true },
-    "rollup-plugin-esbuild": { "optional": true },
-    "rollup-plugin-swc3": { "optional": true },
-    "typescript": { "optional": true }
   },
   "devDependencies": {
     "@npm/types": "^1.0.2",

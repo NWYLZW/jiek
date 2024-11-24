@@ -7,7 +7,7 @@ import { program } from 'commander'
 import detectIndent from 'detect-indent'
 import { applyEdits, modify } from 'jsonc-parser'
 
-import { actionDone, actionRestore } from '../inner'
+import type { ProjectsGraph } from '../utils/filterSupport'
 import { getSelectedProjectsGraph } from '../utils/filterSupport'
 import { getExports } from '../utils/getExports'
 import { loadConfig } from '../utils/loadConfig'
@@ -33,6 +33,19 @@ Publish package to npm registry, and auto generate exports field and other field
 If you want to through the options to the \`pnpm publish\` command, you can pass the options after '--'.
 `.trim()
 
+async function forEachSelectedProjectsGraphEntries(
+  callback: (dir: string, manifest: NonNullable<ProjectsGraph['value']>[string]) => void
+) {
+  const { value = {} } = await getSelectedProjectsGraph() ?? {}
+  const selectedProjectsGraphEntries = Object.entries(value)
+  if (selectedProjectsGraphEntries.length === 0) {
+    throw new Error('no packages selected')
+  }
+  for (const [dir, manifest] of selectedProjectsGraphEntries) {
+    callback(dir, manifest)
+  }
+}
+
 program
   .command('publish')
   .description(description)
@@ -40,12 +53,8 @@ program
   .option('-b, --bumper <bumper>', 'bump version', 'patch')
   .option('-no-b, --no-bumper', 'no bump version')
   .option('-o, --outdir <OUTDIR>', outdirDescription, String, 'dist')
-  .option('-s, --silent', 'no output')
-  .option('-p, --preview', 'preview publish')
-  .action(async ({ outdir, preview, silent, bumper, ...options }: {
+  .action(async ({ outdir, bumper }: {
     outdir?: string
-    preview?: boolean
-    silent?: boolean
     bumper: false | BumperType
   }) => {
     let shouldPassThrough = false
@@ -63,164 +72,346 @@ program
         },
         [] as string[]
       )
-    actionRestore()
 
-    const { value = {} } = await getSelectedProjectsGraph() ?? {}
-    const selectedProjectsGraphEntries = Object.entries(value)
-    if (selectedProjectsGraphEntries.length === 0) {
-      throw new Error('no packages selected')
-    }
-    const manifests = selectedProjectsGraphEntries
-      .map(([dir, manifest]) => {
-        const { name, type, exports: entrypoints = {} } = manifest
-        if (!name) {
-          throw new Error(`package.json in ${dir} must have a name field`)
-        }
-
-        const pkgIsModule = type === 'module'
-        const newManifest = { ...manifest }
-        const [resolvedEntrypoints, exports, resolvedOutdir] = getExports({
-          entrypoints,
-          pkgIsModule,
-          pkgName: name,
-          config: loadConfig(dir),
-          dir,
-          defaultOutdir: outdir,
-          noFilter: true,
-          isPublish: true
-        })
-        newManifest.exports = {
-          ...resolvedEntrypoints,
-          ...exports
-        }
-        return [dir, newManifest, resolvedOutdir] as const
-      })
-    const passArgs = Object
-      .entries(options)
-      .reduce((acc, [key, value]) => {
-        if (value) {
-          acc.push(`--${key}`, value as string)
-        }
-        return acc
-      }, [] as string[])
-    for (const [dir, manifest, resolvedOutdir] of manifests) {
-      const oldJSONString = fs.readFileSync(path.join(dir, 'package.json'), 'utf-8')
-      const oldJSON = JSON.parse(oldJSONString) ?? '0.0.0'
-      const newVersion = bumper ? bump(oldJSON.version, bumper) : oldJSON.version
-      // TODO detectIndent by editorconfig
-      const { indent = '    ' } = detectIndent(oldJSONString)
-      const formattingOptions = {
-        tabSize: indent.length,
-        insertSpaces: true
+    await forEachSelectedProjectsGraphEntries(dir => {
+      const args = ['pnpm', 'publish', '--access', 'public', '--no-git-checks']
+      if (bumper && TAGS.includes(bumper)) {
+        args.push('--tag', bumper)
       }
-      let newJSONString = oldJSONString
-      newJSONString = applyEdits(
-        newJSONString,
-        modify(
-          newJSONString,
-          ['version'],
-          newVersion,
-          { formattingOptions }
-        )
-      )
-      for (const [key, value] of Object.entries(manifest)) {
-        if (JSON.stringify(value) === JSON.stringify(oldJSON[key])) continue
+      args.push(...passThroughOptions)
+      childProcess.execSync(args.join(' '), {
+        cwd: dir,
+        stdio: 'inherit',
+        env: {
+          ...process.env,
+          JIEK_PUBLISH_OUTDIR: JSON.stringify(outdir),
+          JIEK_PUBLISH_BUMPER: JSON.stringify(bumper)
+        }
+      })
+    })
+  })
 
-        if (key !== 'exports') {
+async function prepublish() {
+  const {
+    JIEK_PUBLISH_OUTDIR: outdirEnv,
+    JIEK_PUBLISH_BUMPER: bumperEnv
+  } = process.env
+  const outdir = outdirEnv ? JSON.parse(outdirEnv) : 'dist'
+  const bumper = bumperEnv ? JSON.parse(bumperEnv) : false
+
+  const generateNewManifest = (dir: string, manifest: NonNullable<ProjectsGraph['value']>[string]) => {
+    const { name, type, exports: entrypoints = {} } = manifest
+    if (!name) {
+      throw new Error(`package.json in ${dir} must have a name field`)
+    }
+
+    const pkgIsModule = type === 'module'
+    const newManifest = { ...manifest }
+    const [resolvedEntrypoints, exports, resolvedOutdir] = getExports({
+      entrypoints,
+      pkgIsModule,
+      pkgName: name,
+      config: loadConfig(dir),
+      dir,
+      defaultOutdir: outdir,
+      noFilter: true,
+      isPublish: true
+    })
+    newManifest.exports = {
+      ...resolvedEntrypoints,
+      ...exports
+    }
+    return [newManifest, resolvedOutdir] as const
+  }
+
+  const generateNewPackageJSONString = ({
+    oldJSONString,
+    oldJSON,
+    manifest,
+    formattingOptions
+  }: {
+    oldJSONString: string
+    oldJSON: Record<string, unknown>
+    manifest: NonNullable<ProjectsGraph['value']>[string]
+    formattingOptions: {
+      tabSize: number
+      insertSpaces: boolean
+    }
+  }) => {
+    let newJSONString = oldJSONString
+    newJSONString = applyEdits(
+      newJSONString,
+      modify(
+        newJSONString,
+        ['publishConfig', 'typesVersions'],
+        {
+          '<5.0': {
+            '*': [
+              '*',
+              `./*`,
+              `./*/index.d.ts`,
+              `./*/index.d.mts`,
+              `./*/index.d.cts`
+            ]
+          }
+        },
+        { formattingOptions }
+      )
+    )
+    for (const [key, value] of Object.entries(manifest)) {
+      if (key === 'version') continue
+      if (JSON.stringify(value) === JSON.stringify(oldJSON[key])) continue
+
+      if (key !== 'exports') {
+        newJSONString = applyEdits(
+          newJSONString,
+          modify(
+            newJSONString,
+            ['publishConfig', key],
+            value,
+            { formattingOptions }
+          )
+        )
+      } else {
+        const exports = value as Record<string, unknown>
+        for (const [k, v] of Object.entries(exports)) {
           newJSONString = applyEdits(
             newJSONString,
             modify(
               newJSONString,
-              ['publishConfig', key],
-              value,
+              ['publishConfig', 'exports', k],
+              v,
               { formattingOptions }
             )
           )
-        } else {
-          const exports = value as Record<string, unknown>
-          for (const [k, v] of Object.entries(exports)) {
+        }
+        const index = exports?.['.']
+        const indexPublishConfig: Record<string, string> = {}
+        if (index) {
+          switch (typeof index) {
+            case 'string':
+              indexPublishConfig[
+                manifest?.type === 'module' ? 'module' : 'main'
+              ] = index
+              break
+            case 'object': {
+              const indexExports = index as Record<string, string>
+              indexPublishConfig.main = indexExports['require'] ?? indexExports['default']
+              indexPublishConfig.module = indexExports['import'] ?? indexExports['module'] ?? indexExports['default']
+              break
+            }
+          }
+          for (const [k, v] of Object.entries(indexPublishConfig)) {
+            if (v === undefined) continue
             newJSONString = applyEdits(
               newJSONString,
               modify(
                 newJSONString,
-                ['publishConfig', 'exports', k],
+                ['publishConfig', k],
                 v,
                 { formattingOptions }
               )
             )
           }
-          const index = exports?.['.']
-          const indexPublishConfig: Record<string, string> = {}
-          if (index) {
-            switch (typeof index) {
-              case 'string':
-                indexPublishConfig[
-                  manifest?.type === 'module' ? 'module' : 'main'
-                ] = index
-                break
-              case 'object': {
-                const indexExports = index as Record<string, string>
-                indexPublishConfig.main = indexExports['require'] ?? indexExports['default']
-                indexPublishConfig.module = indexExports['import'] ?? indexExports['module'] ?? indexExports['default']
-                break
-              }
-            }
-            for (const [k, v] of Object.entries(indexPublishConfig)) {
-              if (v === undefined) continue
-              newJSONString = applyEdits(
-                newJSONString,
-                modify(
-                  newJSONString,
-                  ['publishConfig', k],
-                  v,
-                  { formattingOptions }
-                )
-              )
-            }
-          }
         }
       }
+    }
+    if (oldJSON['peerDependencies']) {
+      const peerDependenciesMeta = Object.keys(oldJSON['peerDependencies']).reduce(
+        (acc, key) => {
+          acc[key] = { optional: true }
+          return acc
+        },
+        {} as Record<string, { optional: boolean }>
+      )
       newJSONString = applyEdits(
         newJSONString,
         modify(
           newJSONString,
-          ['publishConfig', 'typesVersions'],
-          {
-            '<5.0': {
-              '*': [
-                '*',
-                `${resolvedOutdir}/*`,
-                `${resolvedOutdir}/*/index.d.ts`,
-                `${resolvedOutdir}/*/index.d.mts`,
-                `${resolvedOutdir}/*/index.d.cts`
-              ]
-            }
-          },
+          ['peerDependenciesMeta'],
+          peerDependenciesMeta,
           { formattingOptions }
         )
       )
-      try {
-        fs.renameSync(path.join(dir, 'package.json'), path.join(dir, 'package.json.bak'))
-        fs.writeFileSync(path.join(dir, 'package.json'), newJSONString)
-        !silent && console.log(newJSONString)
-        if (preview) {
-          continue
+    }
+    if (oldJSON['files']) {
+      newJSONString = applyEdits(
+        newJSONString,
+        modify(
+          newJSONString,
+          ['files'],
+          undefined,
+          { formattingOptions }
+        )
+      )
+    }
+    return newJSONString
+  }
+
+  await forEachSelectedProjectsGraphEntries((dir, originalManifest) => {
+    const [manifest, resolvedOutdir] = generateNewManifest(dir, originalManifest)
+    const resolveByDir = (...paths: string[]) => path.resolve(dir, ...paths)
+
+    const oldJSONString = fs.readFileSync(resolveByDir('package.json'), 'utf-8')
+    const oldJSON = JSON.parse(oldJSONString) ?? '0.0.0'
+    if (typeof oldJSON.version !== 'string') {
+      throw new Error(`${dir}/package.json must have a version field with a string value`)
+    }
+
+    // TODO detectIndent by editorconfig
+    const { indent = '    ' } = detectIndent(oldJSONString)
+    const formattingOptions = {
+      tabSize: indent.length,
+      insertSpaces: true
+    }
+
+    const newVersion = bumper ? bump(oldJSON.version, bumper) : oldJSON.version
+    const modifyVersionPackageJSON = applyEdits(
+      oldJSONString,
+      modify(oldJSONString, ['version'], newVersion, { formattingOptions })
+    )
+
+    const newJSONString = generateNewPackageJSONString({
+      oldJSONString: modifyVersionPackageJSON,
+      oldJSON: {
+        ...oldJSON,
+        version: newVersion
+      },
+      manifest,
+      formattingOptions
+    })
+
+    const withPublishConfigDirectoryOldJSONString = applyEdits(
+      modifyVersionPackageJSON,
+      modify(modifyVersionPackageJSON, ['publishConfig', 'directory'], resolvedOutdir, { formattingOptions })
+    )
+
+    if (!fs.existsSync(resolveByDir(resolvedOutdir))) {
+      fs.mkdirSync(resolveByDir(resolvedOutdir))
+    }
+    const jiekTempDir = resolveByDir('node_modules/.jiek/.tmp')
+    if (!fs.existsSync(resolveByDir(jiekTempDir))) {
+      fs.mkdirSync(resolveByDir(jiekTempDir), { recursive: true })
+    }
+
+    fs.writeFileSync(resolveByDir(resolvedOutdir, 'package.json'), newJSONString)
+    fs.writeFileSync(resolveByDir(jiekTempDir, 'package.json'), modifyVersionPackageJSON)
+    fs.writeFileSync(resolveByDir('package.json'), withPublishConfigDirectoryOldJSONString)
+
+    const allBuildFiles = fs
+      .readdirSync(resolveByDir(resolvedOutdir), { recursive: true })
+      .filter(file => typeof file === 'string')
+      .filter(file => file !== 'package.json')
+    for (const file of allBuildFiles) {
+      const filepath = resolveByDir(resolvedOutdir, file)
+      const stat = fs.statSync(filepath)
+      if (stat.isDirectory()) {
+        const existsIndexFile = allBuildFiles
+          .some(f =>
+            [
+              path.join(file, 'index.js'),
+              path.join(file, 'index.mjs'),
+              path.join(file, 'index.cjs')
+            ].includes(f)
+          )
+        if (existsIndexFile) {
+          const cpDistPath = resolveByDir(resolvedOutdir, resolvedOutdir, file)
+          const pkgJSONPath = resolveByDir(resolvedOutdir, file, 'package.json')
+          const relativePath = path.relative(filepath, cpDistPath)
+          const { type } = manifest
+          fs.writeFileSync(
+            pkgJSONPath,
+            JSON.stringify({
+              type,
+              main: [relativePath, `index.${type === 'module' ? 'c' : ''}js`].join('/'),
+              module: [relativePath, `index.${type === 'module' ? '' : 'm'}js`].join('/')
+            })
+          )
         }
-        const args = ['pnpm', 'publish', '--access', 'public', '--no-git-checks', ...passArgs]
-        if (bumper && TAGS.includes(bumper)) {
-          args.push('--tag', bumper)
-        }
-        args.push(...passThroughOptions)
-        childProcess.execSync(args.join(' '), {
-          cwd: dir,
-          stdio: 'inherit'
-        })
-        const modifyVersionPackageJSON = applyEdits(oldJSONString, modify(oldJSONString, ['version'], newVersion, {}))
-        fs.writeFileSync(path.join(dir, 'package.json.bak'), modifyVersionPackageJSON)
-      } finally {
-        fs.unlinkSync(path.join(dir, 'package.json'))
-        fs.renameSync(path.join(dir, 'package.json.bak'), path.join(dir, 'package.json'))
       }
     }
-    actionDone()
+    fs.mkdirSync(resolveByDir(resolvedOutdir, resolvedOutdir))
+    for (const file of allBuildFiles) {
+      const filepath = resolveByDir(resolvedOutdir, file)
+      const newFilepath = resolveByDir(resolvedOutdir, resolvedOutdir, file)
+      const stat = fs.statSync(filepath)
+      if (stat.isDirectory()) {
+        fs.mkdirSync(newFilepath, { recursive: true })
+        continue
+      }
+      if (stat.isFile()) {
+        fs.cpSync(filepath, newFilepath)
+        fs.rmSync(filepath)
+      }
+    }
+
+    if (oldJSON.files) {
+      if (!Array.isArray(oldJSON.files)) {
+        throw new Error(`${dir}/package.json files field must be an array`)
+      }
+      if (Array.isArray(oldJSON.files) && oldJSON.files.every((file: unknown) => typeof file !== 'string')) {
+        throw new Error(`${dir}/package.json files field must be an array of string`)
+      }
+    }
+    const resolvedOutdirAbs = resolveByDir(resolvedOutdir)
+    const files = (
+      (oldJSON.files as undefined | string[]) ?? fs.readdirSync(resolveByDir('.'))
+    ).filter(file => file === 'node_modules' || resolveByDir(file) !== resolvedOutdirAbs)
+
+    for (const file of files) {
+      const path = resolveByDir(file)
+      try {
+        const stat = fs.statSync(path)
+        if (stat.isDirectory()) {
+          fs.cpSync(path, resolveByDir(resolvedOutdir, file), { recursive: true })
+          continue
+        }
+        if (stat.isFile()) {
+          fs.cpSync(path, resolveByDir(resolvedOutdir, file))
+          continue
+        }
+      } catch (e) {
+        console.warn(String(e))
+        continue
+      }
+      throw new Error(`file type of ${path} is not supported`)
+    }
   })
+}
+
+async function postpublish() {
+  await forEachSelectedProjectsGraphEntries(dir => {
+    const jiekTempDir = path.resolve(dir, 'node_modules/.jiek/.tmp')
+    const packageJSON = path.resolve(dir, 'package.json')
+    const jiekTempPackageJSON = path.resolve(jiekTempDir, 'package.json')
+    if (fs.existsSync(jiekTempPackageJSON)) {
+      fs.copyFileSync(jiekTempPackageJSON, packageJSON)
+      fs.rmSync(jiekTempPackageJSON)
+      console.log(`${dir}/package.json has been restored`)
+    } else {
+      throw new Error(
+        `jiek temp \`${dir}/package.json\` not found, please confirm the jiek pre-publish command has been executed`
+      )
+    }
+  })
+}
+
+program
+  .action(async () => {
+    const {
+      npm_lifecycle_event: NPM_LIFECYCLE_EVENT
+    } = process.env
+    switch (NPM_LIFECYCLE_EVENT) {
+      case 'prepublish':
+        await prepublish()
+        break
+      case 'postpublish':
+        await postpublish()
+        break
+      default:
+        program.help()
+    }
+  })
+
+program.command('prepublish').action(prepublish)
+program.command('postpublish').action(postpublish)
