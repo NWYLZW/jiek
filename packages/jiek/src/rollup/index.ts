@@ -318,7 +318,9 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
   const { js: jsOutput, dts: dtsOutput } = resolveOutputControls(context, build.output)
   const rollupOptions: RollupOptions[] = []
 
-  const commonPlugins: Plugin[] = []
+  const commonPlugins: Plugin[] = [
+    nodeResolve({ exportConditions })
+  ]
   if (jsOutput && !WITHOUT_JS) {
     const sourcemap = typeof options?.output?.sourcemap === 'object'
       ? options.output.sourcemap.js
@@ -375,7 +377,6 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
       ],
       plugins: [
         ...commonPlugins,
-        nodeResolve({ exportConditions }),
         import('rollup-plugin-postcss')
           .then(({ default: postcss }) =>
             postcss({
@@ -426,7 +427,6 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
       ],
       plugins: [
         ...commonPlugins,
-        nodeResolve({ exportConditions }),
         skip({ patterns: [STYLE_REGEXP] }),
         dts({
           respectExternal: true,
