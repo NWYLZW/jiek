@@ -413,5 +413,30 @@ program
     }
   })
 
-program.command('prepublish').action(prepublish)
-program.command('postpublish').action(postpublish)
+const prepublishDescription = `
+Prepare package.json for publish, you can add \`jk\` to the \`prepublish\` script in package.json, the command will automatically run \`jk prepublish\`.
+.e.g
+{
+  "scripts": {
+    "prepublish": "jk"
+  }
+}
+`.trim()
+program
+  .command('prepublish')
+  .description(prepublishDescription)
+  .action(prepublish)
+
+const postpublishDescription = `
+Restore package.json after publish, you can add \`jk\` to the \`postpublish\` script in package.json, the command will automatically run \`jk postpublish\`.
+.e.g
+{
+  "scripts": {
+    "postpublish": "jk"
+  }
+}
+`.trim()
+program
+  .command('postpublish')
+  .description(postpublishDescription)
+  .action(postpublish)
