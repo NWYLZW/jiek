@@ -6,6 +6,7 @@ import { filterPackagesFromDir } from '@pnpm/filter-workspace-packages'
 import { program } from 'commander'
 import { load } from 'js-yaml'
 
+import { filterDescription } from '#~/commands/descriptions.ts'
 import { getRoot } from '#~/utils/getRoot.ts'
 import { getWD } from '#~/utils/getWD.ts'
 
@@ -18,7 +19,7 @@ try {
 } catch { /* empty */ }
 if (type !== '') {
   program
-    .option('-f, --filter <filter>', 'filter packages, support fuzzy match and array. e.g. -f core,utils')
+    .option('-f, --filter <filter>', filterDescription)
 }
 
 export interface ProjectsGraph {

@@ -55,7 +55,7 @@ yarn add -D jiek
 }
 ```
 
-- 假设你在工作空间下有一个包名字为 `@monorepo/utils` ，那么你可以运行 `jb -f utils` 来构建这个包。
+- 假设你在工作空间下有一个包名字为 `@monorepo/utils` ，那么你可以运行 `jb utils` 来构建这个包。
 
 - 当你完成了开发的相关步骤后，在发布阶段你可以使用 `jk -f utils publish` 来发布你的包，本工具会自动转化并填充 `package.json` 对应的字段。
 

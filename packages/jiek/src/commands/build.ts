@@ -6,6 +6,7 @@ import { MultiBar, Presets } from 'cli-progress'
 import { program } from 'commander'
 import { execaCommand } from 'execa'
 
+import { filterDescription, outdirDescription } from '#~/commands/descriptions.ts'
 import type { ProjectsGraph } from '#~/utils/filterSupport.ts'
 import { filterPackagesGraph, getSelectedProjectsGraph } from '#~/utils/filterSupport.ts'
 import { getWD } from '#~/utils/getWD.ts'
@@ -14,7 +15,6 @@ import { tsRegisterName } from '#~/utils/tsRegister.ts'
 
 import type { RollupProgressEvent, TemplateOptions } from '../rollup/base'
 import { BUILDER_TYPE_PACKAGE_NAME_MAP, BUILDER_TYPES } from '../rollup/base'
-import { outdirDescription } from './descriptions'
 
 declare module 'jiek' {
   export interface Config {
@@ -125,8 +125,20 @@ function parseBoolean(v?: unknown) {
   return Boolean(v)
 }
 
-program
-  .command('build', { isDefault })
+const buildFilterDescription = `
+${filterDescription}
+If you pass the --filter option, it will merge into the filters of the command.
+`.trim()
+
+const command = isDefault
+  ? program
+    .name('jb/jiek-build')
+    .helpCommand(false)
+    .argument('[filters]', buildFilterDescription)
+  : program
+    .command('build [filters]')
+
+command
   .description(description)
   .option('-t, --type <TYPE>', `The type of build, support ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')}.`, v => {
     if (!BUILDER_TYPES.includes(v as any)) {
@@ -164,7 +176,7 @@ program
   .option('-w, --watch', 'Watch the file changes.', parseBoolean)
   .option('-s, --silent', "Don't display logs.", parseBoolean)
   .option('-v, --verbose', 'Display debug logs.', parseBoolean)
-  .action(async ({
+  .action(async (commandFilters: string | undefined, {
     type,
     outdir,
     watch,
@@ -397,9 +409,22 @@ program
         })
       )
     }
-    const filters = (program.getOptionValue('filter') as string | undefined)?.split(',')
+    const filters = [
+      ...new Set([
+        ...(program.getOptionValue('filter') as string | undefined)
+          ?.split(',')
+          .map(s => s.trim())
+          .filter(s => s.length > 0)
+          ?? [],
+        ...commandFilters
+          ?.split(',')
+          .map(s => s.trim())
+          .filter(s => s.length > 0)
+          ?? []
+      ])
+    ]
     try {
-      if (filters) {
+      if (filters.length > 0) {
         const packages = await filterPackagesGraph(filters)
         await Promise.all(packages.map(buildPackage))
       } else {
