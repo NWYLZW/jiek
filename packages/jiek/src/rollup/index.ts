@@ -450,20 +450,22 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
       ]
     })
   }
-  // only push the first one a watcher plugin
-  rollupOptions[0].plugins = [
-    {
-      name: 'jiek-plugin-watcher',
-      watchChange: (id) =>
-        sendMessage(
-          {
-            type: 'watchChange',
-            data: { id, name: JIEK_NAME!, path, input }
-          } satisfies RollupProgressEvent
-        )
-    },
-    ...(rollupOptions[0].plugins as any)
-  ]
+  if (rollupOptions.length > 0) {
+    // only push the first one a watcher plugin
+    rollupOptions[0].plugins = [
+      {
+        name: 'jiek-plugin-watcher',
+        watchChange: (id) =>
+          sendMessage(
+            {
+              type: 'watchChange',
+              data: { id, name: JIEK_NAME!, path, input }
+            } satisfies RollupProgressEvent
+          )
+      },
+      ...(rollupOptions[0].plugins as any)
+    ]
+  }
   return rollupOptions
 }
 
