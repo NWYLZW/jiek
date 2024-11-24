@@ -19,7 +19,8 @@
   "files": ["dist", "src", "bin", "LICENSE", "README.md"],
   "scripts": {
     "prepublish": "jb -nm && jk",
-    "postpublish": "jk"
+    "postpublish": "jk",
+    "test": "vitest run"
   },
   "exports": {
     "./package.json": "./package.json",
