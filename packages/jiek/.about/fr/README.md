@@ -9,7 +9,7 @@
 [![npm version](https://img.shields.io/npm/v/jiek)](https://npmjs.com/package/jiek)
 [![npm downloads](https://img.shields.io/npm/dm/jiek)](https://npm.chart.dev/jiek)
 
-> Une boîte à outils légère pour compiler et gérer des bibliothèques basées sur les métadonnées de `package.json` et adaptée à `Monorepo`.
+> Basé sur les métadonnées de `package.json` et adapté à `Monorepo`, un kit d'outils **léger** pour la compilation et la gestion des bibliothèques.
 
 - [x] Inférence automatique : Inférer automatiquement les règles de construction en fonction des champs pertinents dans `package.json`, réduisant ainsi le besoin de fichiers de configuration, rendant le tout plus léger et conforme aux normes
   - `exports` : Inférer les cibles et les types de construction en fonction des fichiers d'entrée
@@ -44,9 +44,9 @@
 
 ```bash
 npm i -D jiek
-# ou
+# or
 pnpm i -D jiek
-# ou
+# or
 yarn add -D jiek
 ```
 
@@ -243,4 +243,16 @@ Des outils similaires à `jiek` incluent : [tsup](https://github.com/egoist/tsup
 - Il y a certains problèmes avec la prise en charge de `monorepo`, et les dépendances à d'autres packages dans l'espace de travail doivent être recompilées
 - Les règles pour écrire des fichiers d'entrée sont trop lourdes et pas assez naturelles
 - Incapable de gérer les problèmes liés à `Project Reference` dans `tsconfig.json`
-- Selon `conditions`
+- Incapable de tirer pleinement parti des fonctionnalités `conditional`
+- Incapable de choisir le constructeur requis, ne peut remplacer toute la chaîne d'outils
+
+## Qui utilise Jiek ?
+
+- [nonzzz/vite-plugin-compression](https://github.com/nonzzz/vite-plugin-compression)
+- [nonzzz/vite-bundle-analyzer](https://github.com/nonzzz/vite-bundle-analyzer)
+- [nonzzz/squarified](https://github.com/nonzzz/squarified)
+- [typp-js/typp](https://github.com/typp-js/typp)
+
+## À propos de ce README
+
+Ce README est généré par [copilot workspace](https://githubnext.com/projects/copilot-workspace) et provient du fichier [zh-Hans/README.md](https://github.com/NWYLZW/jiek/blob/master/packages/jiek/.about/zh-Hans/README.md).

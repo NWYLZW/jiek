@@ -244,3 +244,14 @@ jk publish -- --access public --no-git-checks
 - エントリーファイルの記述ルールが煩雑で自然ではない
 - `tsconfig.json` の `Project Reference` に関連する問題を処理できない
 - `conditions` に基づいて
+
+## 誰が Jiek を使用していますか？
+
+- [nonzzz/vite-plugin-compression](https://github.com/nonzzz/vite-plugin-compression)
+- [nonzzz/vite-bundle-analyzer](https://github.com/nonzzz/vite-bundle-analyzer)
+- [nonzzz/squarified](https://github.com/nonzzz/squarified)
+- [typp-js/typp](https://github.com/typp-js/typp)
+
+## この README について
+
+この README は [copilot workspace](https://githubnext.com/projects/copilot-workspace) によって生成され、[zh-Hans/README.md](https://github.com/NWYLZW/jiek/blob/master/packages/jiek/.about/zh-Hans/README.md) ファイルに由来します。

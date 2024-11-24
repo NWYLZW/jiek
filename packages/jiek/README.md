@@ -243,7 +243,15 @@ Similar tools to `jiek` include: [tsup](https://github.com/egoist/tsup), [unbuil
 - There are certain issues with `monorepo` support, and dependencies on other packages in the workspace must be recompiled
 - The rules for writing entry files are too cumbersome and not natural enough
 - Unable to handle issues related to `Project Reference` in `tsconfig.json`
-- According to `conditions`
+- Unable to fully utilize `conditional` features
+- Unable to choose the required builder, can only replace the entire toolchain
+
+## Who is using Jiek?
+
+- [nonzzz/vite-plugin-compression](https://github.com/nonzzz/vite-plugin-compression)
+- [nonzzz/vite-bundle-analyzer](https://github.com/nonzzz/vite-bundle-analyzer)
+- [nonzzz/squarified](https://github.com/nonzzz/squarified)
+- [typp-js/typp](https://github.com/typp-js/typp)
 
 ## About this README
 
