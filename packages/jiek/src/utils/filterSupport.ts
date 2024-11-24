@@ -19,7 +19,7 @@ try {
 
 export interface ProjectsGraph {
   wd: string
-  root: string
+  root?: string
   value?: Record<string, {
     name?: string
     type?: string
@@ -35,7 +35,7 @@ export async function getSelectedProjectsGraph(
   filter = program.getOptionValue('filter')
 ): Promise<ProjectsGraph> {
   const { wd, notWorkspace } = getWD()
-  let root = getRoot() ?? wd
+  let root = getRoot()
   if (notWorkspace) {
     return {
       wd,
