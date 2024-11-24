@@ -11,7 +11,6 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import { sendMessage } from 'execa'
 import { isMatch } from 'micromatch'
 import type { InputPluginOption, OutputOptions, OutputPlugin, Plugin, RollupOptions } from 'rollup'
-import esbuild, { minify as esbuildMinify } from 'rollup-plugin-esbuild'
 import ts from 'typescript'
 
 import { recusiveListFiles } from '#~/utils/recusiveListFiles.ts'
@@ -33,6 +32,7 @@ interface PackageJSON {
 const {
   JIEK_ROOT,
   JIEK_NAME,
+  JIEK_BUILDER,
   JIEK_ENTRIES,
   JIEK_EXTERNAL,
   JIEK_WITHOUT_JS,
@@ -76,11 +76,17 @@ const MINIFY_DEFAULT_VALUE = WITHOUT_MINIFY
   ? 'only-minify'
   : true
 
+type BuilderOptions = NonNullable<TemplateOptions['builder']>
+
+const BUILDER_OPTIONS = {
+  type: JIEK_BUILDER ?? 'esbuild'
+} as NonNullable<Exclude<BuilderOptions, string>>
+
 type MinifyOptions = NonNullable<TemplateOptions['output']>['minifyOptions']
 
 const MINIFY_OPTIONS = {
   type: JIEK_MINIFY_TYPE ?? 'esbuild'
-} as NonNullable<MinifyOptions>
+} as NonNullable<Exclude<MinifyOptions, string>>
 
 const config = loadConfig({
   root: WORKSPACE_ROOT
@@ -155,19 +161,34 @@ const reveal = (obj: string | Record<string, unknown>, keys: string[]) =>
     return acc[key] as string | Record<string, unknown>
   }, obj)
 
+const resolveMinifyOptions = (minifyOptions: MinifyOptions): typeof MINIFY_OPTIONS =>
+  typeof minifyOptions === 'string'
+    ? { type: minifyOptions }
+    : minifyOptions ?? { type: 'esbuild' }
+
+const resolveBuilderOptions = (
+  builder: TemplateOptions['builder']
+): Exclude<TemplateOptions['builder'], string | undefined> =>
+  typeof builder === 'string'
+    ? { type: builder }
+    : builder ?? { type: 'esbuild' }
+
+const resolvedMinifyOptions = resolveMinifyOptions(build.output?.minifyOptions ?? MINIFY_OPTIONS)
+const resolvedBuilderOptions = resolveBuilderOptions(build.builder ?? BUILDER_OPTIONS)
+
 const withMinify = (
   output: OutputOptions & {
     plugins?: OutputPlugin[]
   },
-  minify = build?.output?.minify ?? MINIFY_DEFAULT_VALUE,
-  minifyOptions: NonNullable<TemplateOptions['output']>['minifyOptions'] = build?.output?.minifyOptions
-    ?? MINIFY_OPTIONS
+  minify = build?.output?.minify ?? MINIFY_DEFAULT_VALUE
 ): OutputOptions[] => {
   if (minify === false) return [output]
 
-  const minifyPlugin = minifyOptions.type === 'esbuild'
-    ? esbuildMinify(minifyOptions)
-    : import('@rollup/plugin-terser').then(({ default: terser }) => terser(minifyOptions))
+  const minifyPlugin = resolvedMinifyOptions.type === 'esbuild'
+    ? import('rollup-plugin-esbuild').then(({ minify }) => minify(resolvedMinifyOptions))
+    : resolvedMinifyOptions.type === 'swc'
+    ? import('rollup-plugin-swc3').then(({ minify }) => minify(resolvedMinifyOptions))
+    : import('@rollup/plugin-terser').then(({ default: minify }) => minify(resolvedMinifyOptions))
   return minify === 'only-minify'
     ? [{
       ...output,
@@ -294,6 +315,28 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
     const sourcemap = typeof options?.output?.sourcemap === 'object'
       ? options.output.sourcemap.js
       : options?.output?.sourcemap
+    const builder = resolvedBuilderOptions.type === 'esbuild'
+      ? import('rollup-plugin-esbuild').then(({ default: esbuild }) =>
+        esbuild({
+          sourceMap: sourcemap === 'hidden' ? false : !!sourcemap,
+          tsconfig: buildTSConfigPath,
+          ...resolvedBuilderOptions
+        })
+      )
+      : import('rollup-plugin-swc3').then(({ default: swc }) =>
+        swc({
+          sourceMaps: typeof sourcemap === 'boolean'
+            ? sourcemap
+            : typeof sourcemap === 'undefined'
+            ? undefined
+            : ({
+              hidden: false,
+              inline: 'inline'
+            } as const)[sourcemap] ?? undefined,
+          tsconfig: buildTSConfigPath,
+          ...resolvedBuilderOptions
+        })
+      )
     rollupOptions.push({
       input: inputObj,
       external,
@@ -333,10 +376,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
             })
           )
           .catch(() => void 0),
-        esbuild({
-          sourceMap: sourcemap === 'hidden' ? false : !!sourcemap,
-          tsconfig: buildTSConfigPath
-        }),
+        builder,
         commonjs(),
         progress({
           onEvent: (event, message) =>

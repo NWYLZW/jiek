@@ -73,9 +73,6 @@ importers:
       rollup:
         specifier: 4.13.2
         version: 4.13.2
-      rollup-plugin-esbuild:
-        specifier: ^6.1.0
-        version: 6.1.1(esbuild@0.20.2)(rollup@4.13.2)
       standard:
         specifier: workspace:^*
         version: link:packages/standard
@@ -133,9 +130,6 @@ importers:
       rollup:
         specifier: 4.13.2
         version: 4.13.2
-      rollup-plugin-esbuild:
-        specifier: ^6.1.0
-        version: 6.1.1(esbuild@0.20.2)(rollup@4.13.2)
       typescript:
         specifier: ^5.0.0
         version: 5.5.3
@@ -152,9 +146,15 @@ importers:
       postcss:
         specifier: ^8.4.47
         version: 8.4.47
+      rollup-plugin-esbuild:
+        specifier: ^6.1.0
+        version: 6.1.1(esbuild@0.20.2)(rollup@4.13.2)
       rollup-plugin-postcss:
         specifier: ^4.0.2
         version: 4.0.2(postcss@8.4.47)
+      rollup-plugin-swc3:
+        specifier: ^0.12.1
+        version: 0.12.1(@swc/core@1.4.12)(rollup@4.13.2)
     devDependencies:
       '@npm/types':
         specifier: ^1.0.2
@@ -339,6 +339,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@dual-bundle/import-meta-resolve@4.1.0':
+    resolution: {integrity: sha512-+nxncfwHM5SgAtrVzgpzJOI1ol0PkumhVo469KCf9lUi21IGcY90G98VuHm9VRrUypmAzawAHO9bs6hqeADaVg==, tarball: https://registry.npmjs.org/@dual-bundle/import-meta-resolve/-/import-meta-resolve-4.1.0.tgz}
+
   '@esbuild/aix-ppc64@0.20.2':
     resolution: {integrity: sha512-D+EBOJHXdNZcLJRBkhENNG8Wji2kgc9AZ9KiPr1JuZjsNtyHzrsfLRrY0tk2H2aoFu6RANO1y1iPPUCDYWkb5g==, tarball: https://registry.npmjs.org/@esbuild/aix-ppc64/-/aix-ppc64-0.20.2.tgz}
     engines: {node: '>=12'}
@@ -497,6 +500,9 @@ packages:
 
   '@fastify/deepmerge@1.3.0':
     resolution: {integrity: sha512-J8TOSBq3SoZbDhM9+R/u77hP93gz/rajSA+K2kGyijPpORPWUXHUpTaleoj+92As0S9uPRP7Oi8IqMf0u+ro6A==, tarball: https://registry.npmjs.org/@fastify/deepmerge/-/deepmerge-1.3.0.tgz}
+
+  '@fastify/deepmerge@2.0.0':
+    resolution: {integrity: sha512-fsaybTGDyQ5KpPsplQqb9yKdCf2x/pbNpMNk8Tvp3rRz7lVcupKysH4b2ELMN2P4Hak1+UqTYdTj/u4FNV2p0g==, tarball: https://registry.npmjs.org/@fastify/deepmerge/-/deepmerge-2.0.0.tgz}
 
   '@gar/promisify@1.1.3':
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==, tarball: https://registry.npmjs.org/@gar/promisify/-/promisify-1.1.3.tgz}
@@ -804,6 +810,15 @@ packages:
 
   '@rollup/pluginutils@5.1.0':
     resolution: {integrity: sha512-XTIWOPPcpvyKI6L1NHo0lFlCyznUEyPmPY1mc3KpPVDYulHSTvyeLNVW00QTLIAFNhR3kYnJTQHeGqU4M3n09g==, tarball: https://registry.npmjs.org/@rollup/pluginutils/-/pluginutils-5.1.0.tgz}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+
+  '@rollup/pluginutils@5.1.3':
+    resolution: {integrity: sha512-Pnsb6f32CD2W3uCaLZIzDmeFyQ2b8UWMFI7xtwUezpcGBDVDW6y9XgAWIlARiGAo6eNF5FK5aQTr0LFyNyqq5A==, tarball: https://registry.npmjs.org/@rollup/pluginutils/-/pluginutils-5.1.3.tgz}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
@@ -2182,6 +2197,9 @@ packages:
   get-tsconfig@4.7.3:
     resolution: {integrity: sha512-ZvkrzoUA0PQZM6fy6+/Hce561s+faD1rsNwhnO5FelNjyy7EMGJ3Rz1AQ8GYDWjhRs/7dBLOEJvhK8MiEJOAFg==, tarball: https://registry.npmjs.org/get-tsconfig/-/get-tsconfig-4.7.3.tgz}
 
+  get-tsconfig@4.8.1:
+    resolution: {integrity: sha512-k9PN+cFBmaLWtVz29SkUoqU5O0slLuHJXt/2P+tMVFT+phsSGXGkp9t3rQIqdz0e+06EHNGs3oM6ZX1s2zHxRg==, tarball: https://registry.npmjs.org/get-tsconfig/-/get-tsconfig-4.8.1.tgz}
+
   glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==, tarball: https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz}
     engines: {node: '>= 6'}
@@ -3096,6 +3114,10 @@ packages:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==, tarball: https://registry.npmjs.org/picomatch/-/picomatch-2.3.1.tgz}
     engines: {node: '>=8.6'}
 
+  picomatch@4.0.2:
+    resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==, tarball: https://registry.npmjs.org/picomatch/-/picomatch-4.0.2.tgz}
+    engines: {node: '>=12'}
+
   pify@5.0.0:
     resolution: {integrity: sha512-eW/gHNMlxdSP6dmG6uJip6FXN0EQBwm2clYYd8Wul42Cwu/DK8HEftzsapcNdYe2MfLiIwZqsDk2RDEsTE79hA==, tarball: https://registry.npmjs.org/pify/-/pify-5.0.0.tgz}
     engines: {node: '>=10'}
@@ -3500,11 +3522,23 @@ packages:
       '@swc/core': '>=1.2.165'
       rollup: ^2.0.0 || ^3.0.0 || ^4.0.0
 
+  rollup-plugin-swc3@0.12.1:
+    resolution: {integrity: sha512-iNV1T432XvyejZ19/41C2gLbXxEOiiJynPPAFF0WzwwFT5FHx7SstAp0yjJRLyrbZjfIhoWJVl3hX3c3Stv/GQ==, tarball: https://registry.npmjs.org/rollup-plugin-swc3/-/rollup-plugin-swc3-0.12.1.tgz}
+    engines: {node: '>=16'}
+    peerDependencies:
+      '@swc/core': '>=1.2.165'
+      rollup: ^2.0.0 || ^3.0.0 || ^4.0.0
+
   rollup-pluginutils@2.8.2:
     resolution: {integrity: sha512-EEp9NhnUkwY8aif6bxgovPHMoMoNr2FulJziTndpt5H9RdwC47GSGuII9XxpSdzVGM0GWrNPHV6ie1LTNJPaLQ==, tarball: https://registry.npmjs.org/rollup-pluginutils/-/rollup-pluginutils-2.8.2.tgz}
 
   rollup-preserve-directives@1.1.1:
     resolution: {integrity: sha512-+eQafbuEfDPfxQ9hQPlwaROfin4yiVRxap8hnrvvvcSGoukv1tTiYpAW9mvm3uR8J+fe4xd8FdVd5rz9q7jZ+Q==, tarball: https://registry.npmjs.org/rollup-preserve-directives/-/rollup-preserve-directives-1.1.1.tgz}
+    peerDependencies:
+      rollup: ^2.0.0 || ^3.0.0 || ^4.0.0
+
+  rollup-preserve-directives@1.1.2:
+    resolution: {integrity: sha512-OOaYh4zO0Dcd/eVWGB8H69CgTiohl+jJqc2TLtjLENVIQaV2rxO3OW6RILzCQOdDvPT+/rzwRp+97OXhem895Q==, tarball: https://registry.npmjs.org/rollup-preserve-directives/-/rollup-preserve-directives-1.1.2.tgz}
     peerDependencies:
       rollup: ^2.0.0 || ^3.0.0 || ^4.0.0
 
@@ -4179,6 +4213,9 @@ snapshots:
   '@dprint/win32-x64@0.45.1':
     optional: true
 
+  '@dual-bundle/import-meta-resolve@4.1.0':
+    optional: true
+
   '@esbuild/aix-ppc64@0.20.2':
     optional: true
 
@@ -4272,6 +4309,9 @@ snapshots:
   '@eslint/js@8.57.0': {}
 
   '@fastify/deepmerge@1.3.0': {}
+
+  '@fastify/deepmerge@2.0.0':
+    optional: true
 
   '@gar/promisify@1.1.3': {}
 
@@ -4745,6 +4785,15 @@ snapshots:
       picomatch: 2.3.1
     optionalDependencies:
       rollup: 4.14.0
+
+  '@rollup/pluginutils@5.1.3(rollup@4.13.2)':
+    dependencies:
+      '@types/estree': 1.0.5
+      estree-walker: 2.0.2
+      picomatch: 4.0.2
+    optionalDependencies:
+      rollup: 4.13.2
+    optional: true
 
   '@rollup/rollup-android-arm-eabi@4.13.2':
     optional: true
@@ -5877,7 +5926,8 @@ snapshots:
       iterator.prototype: 1.1.2
       safe-array-concat: 1.1.2
 
-  es-module-lexer@1.5.0: {}
+  es-module-lexer@1.5.0:
+    optional: true
 
   es-object-atoms@1.0.0:
     dependencies:
@@ -6258,6 +6308,11 @@ snapshots:
   get-tsconfig@4.7.3:
     dependencies:
       resolve-pkg-maps: 1.0.0
+
+  get-tsconfig@4.8.1:
+    dependencies:
+      resolve-pkg-maps: 1.0.0
+    optional: true
 
   glob-parent@5.1.2:
     dependencies:
@@ -7211,6 +7266,9 @@ snapshots:
 
   picomatch@2.3.1: {}
 
+  picomatch@4.0.2:
+    optional: true
+
   pify@5.0.0:
     optional: true
 
@@ -7632,6 +7690,7 @@ snapshots:
       rollup: 4.13.2
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   rollup-plugin-postcss@4.0.2(postcss@8.4.47):
     dependencies:
@@ -7662,6 +7721,17 @@ snapshots:
       rollup: 4.14.0
       rollup-preserve-directives: 1.1.1(rollup@4.14.0)
 
+  rollup-plugin-swc3@0.12.1(@swc/core@1.4.12)(rollup@4.13.2):
+    dependencies:
+      '@dual-bundle/import-meta-resolve': 4.1.0
+      '@fastify/deepmerge': 2.0.0
+      '@rollup/pluginutils': 5.1.3(rollup@4.13.2)
+      '@swc/core': 1.4.12
+      get-tsconfig: 4.8.1
+      rollup: 4.13.2
+      rollup-preserve-directives: 1.1.2(rollup@4.13.2)
+    optional: true
+
   rollup-pluginutils@2.8.2:
     dependencies:
       estree-walker: 0.6.1
@@ -7671,6 +7741,12 @@ snapshots:
     dependencies:
       magic-string: 0.30.8
       rollup: 4.14.0
+
+  rollup-preserve-directives@1.1.2(rollup@4.13.2):
+    dependencies:
+      magic-string: 0.30.12
+      rollup: 4.13.2
+    optional: true
 
   rollup@4.13.2:
     dependencies:

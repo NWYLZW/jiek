@@ -7,6 +7,7 @@ import { program } from 'commander'
 import { execaCommand } from 'execa'
 
 import type { RollupProgressEvent, TemplateOptions } from '../rollup/base'
+import { BUILDER_TYPES } from '../rollup/base'
 import type { ProjectsGraph } from '../utils/filterSupport'
 import { filterPackagesGraph, getSelectedProjectsGraph } from '../utils/filterSupport'
 import { loadConfig } from '../utils/loadConfig'
@@ -39,6 +40,7 @@ e.g. \`jiek build -- --watch\`
 `.trim()
 
 interface BuildOptions extends Record<string, unknown> {
+  type?: string
   /**
    * The output directory of the build, which relative to the target subpackage root directory.
    * Support with variables: 'PKG_NAME',
@@ -61,11 +63,11 @@ interface BuildOptions extends Record<string, unknown> {
   noClean: boolean
   onlyMin: boolean
   /**
-   * The type of minify, support 'terser' and 'esbuild'.
+   * The type of minify, support 'esbuild', 'swc' and 'terser'.
    *
    * @default 'esbuild'
    */
-  minType?: NonNullable<NonNullable<TemplateOptions['output']>['minifyOptions']>['type']
+  minType?: Exclude<NonNullable<TemplateOptions['output']>['minifyOptions'], string | undefined>['type']
   /**
    * The path of the tsconfig file which is used to generate js and dts files.
    * If not specified, it will be loaded from:
@@ -91,6 +93,12 @@ function parseBoolean(v?: unknown) {
 program
   .command('build')
   .description(description)
+  .option('-t, --type <TYPE>', `The type of build, support ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')}.`, v => {
+    if (!BUILDER_TYPES.includes(v as any)) {
+      throw new Error(`The value of 'type' must be ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')}`)
+    }
+    return String(v)
+  })
   .option('-o, --outdir <OUTDIR>', outdirDescription, String, 'dist')
   .option(
     '-e, --entries <ENTRIES>',
@@ -100,12 +108,16 @@ program
   .option('-nj, --noJs', 'Do not output js files.', parseBoolean)
   .option('-nd, --noDts', 'Do not output dts files.', parseBoolean)
   .option('-nm, --noMin', 'Do not output minify files.', parseBoolean)
-  .option('--minType <MINTYPE>', "The type of minify, support 'terser' and 'esbuild'.", v => {
-    if (!['terser', 'esbuild'].includes(v)) {
-      throw new Error("The value of 'minType' must be 'terser' or 'esbuild'")
+  .option(
+    '--minType <MINTYPE>',
+    `The type of minify, support ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')} and "terser".`,
+    v => {
+      if (![BUILDER_TYPES, 'terser'].includes(v)) {
+        throw new Error(`The value of 'minType' must be ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')} and "terser"`)
+      }
+      return String(v)
     }
-    return String(v)
-  })
+  )
   .option('-nc, --noClean', 'Do not clean the output directory before building.', parseBoolean)
   .option(
     '-om, --onlyMin',
@@ -118,6 +130,7 @@ program
   .option('-s, --silent', "Don't display logs.", parseBoolean)
   .option('-v, --verbose', 'Display debug logs.', parseBoolean)
   .action(async ({
+    type,
     outdir,
     watch,
     silent,
@@ -133,6 +146,9 @@ program
     tsconfig,
     dtsconfig
   }: BuildOptions) => {
+    if (minifyType && minifyType !== 'terser' && minifyType !== type) {
+      throw new Error(`The value of 'minType' must be "${type}" or "terser"`)
+    }
     let shouldPassThrough = false
 
     const passThroughOptions = process.argv
@@ -160,6 +176,7 @@ program
 
     const env = {
       ...process.env,
+      JIEK_BUILDER: type,
       JIEK_OUT_DIR: outdir,
       JIEK_CLEAN: String(!noClean),
       JIEK_ENTRIES: entries,

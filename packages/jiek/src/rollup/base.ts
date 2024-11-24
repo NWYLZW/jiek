@@ -17,6 +17,8 @@ export interface ConfigGenerateContext {
 
 export type OutputControl = boolean | ((context: ConfigGenerateContext) => boolean)
 
+export const BUILDER_TYPES = ['esbuild', 'swc'] as const
+
 export interface TemplateOptions {
   /**
    * When the user configures type: module, the generated output from entry points that don't
@@ -27,6 +29,17 @@ export interface TemplateOptions {
    * @default true
    */
   crossModuleConvertor?: boolean
+  /**
+   * @default 'esbuild'
+   */
+  builder?:
+    | typeof BUILDER_TYPES[number]
+    | ({
+      type: 'esbuild'
+    } & import('rollup-plugin-esbuild').Options)
+    | ({
+      type: 'swc'
+    } & import('rollup-plugin-swc3').PluginOptions)
   output?: {
     /**
      * @default true
@@ -36,6 +49,8 @@ export interface TemplateOptions {
      */
     minify?: boolean | 'only-minify'
     minifyOptions?:
+      | typeof BUILDER_TYPES[number]
+      | 'terser'
       | (
         {
           type: 'terser'
@@ -45,6 +60,11 @@ export interface TemplateOptions {
         {
           type: 'esbuild'
         } & Parameters<typeof import('rollup-plugin-esbuild').minify>[0]
+      )
+      | (
+        {
+          type: 'swc'
+        } & Parameters<typeof import('rollup-plugin-swc3').minify>[0]
       )
     /**
      * @default 'dist'
