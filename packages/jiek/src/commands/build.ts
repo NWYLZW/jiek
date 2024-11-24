@@ -6,12 +6,14 @@ import { MultiBar, Presets } from 'cli-progress'
 import { program } from 'commander'
 import { execaCommand } from 'execa'
 
+import type { ProjectsGraph } from '#~/utils/filterSupport.ts'
+import { filterPackagesGraph, getSelectedProjectsGraph } from '#~/utils/filterSupport.ts'
+import { getWD } from '#~/utils/getWD.ts'
+import { loadConfig } from '#~/utils/loadConfig.ts'
+import { tsRegisterName } from '#~/utils/tsRegister.ts'
+
 import type { RollupProgressEvent, TemplateOptions } from '../rollup/base'
 import { BUILDER_TYPES } from '../rollup/base'
-import type { ProjectsGraph } from '../utils/filterSupport'
-import { filterPackagesGraph, getSelectedProjectsGraph } from '../utils/filterSupport'
-import { loadConfig } from '../utils/loadConfig'
-import { tsRegisterName } from '../utils/tsRegister'
 import { outdirDescription } from './descriptions'
 
 declare module 'jiek' {
@@ -63,9 +65,9 @@ interface BuildOptions extends Record<string, unknown> {
   noClean: boolean
   onlyMin: boolean
   /**
-   * The type of minify, support 'esbuild', 'swc' and 'terser'.
+   * The type of minify, support 'terser' and 'builder'.
    *
-   * @default 'esbuild'
+   * @default 'terser'
    */
   minType?: Exclude<NonNullable<TemplateOptions['output']>['minifyOptions'], string | undefined>['type']
   /**
@@ -83,6 +85,21 @@ interface BuildOptions extends Record<string, unknown> {
    * - ./tsconfig.dts.json
    */
   dtsconfig?: string
+}
+
+async function checkDependency(dependency: string) {
+  try {
+    require.resolve(dependency)
+  } catch (e) {
+    console.error(`The package '${dependency}' is not installed, please install it first.`)
+    const answer = prompt('Do you want to install it now? (Y/n)', 'Y')
+    const { notWorkspace } = getWD()
+    if (answer === 'Y') {
+      await execaCommand(`pnpm install -${notWorkspace ? '' : 'w'}D ${dependency}`)
+    } else {
+      return
+    }
+  }
 }
 
 function parseBoolean(v?: unknown) {
@@ -148,6 +165,24 @@ program
   }: BuildOptions) => {
     if (minifyType && minifyType !== 'terser' && minifyType !== type) {
       throw new Error(`The value of 'minType' must be "${type}" or "terser"`)
+    }
+    const resolvedType = type ?? 'esbuild'
+    if (!withoutJs) {
+      await checkDependency(
+        {
+          esbuild: 'rollup-plugin-esbuild',
+          swc: 'rollup-plugin-swc3'
+        }[resolvedType]!
+      )
+    }
+    if (!withoutMin) {
+      await checkDependency(
+        {
+          esbuild: 'rollup-plugin-esbuild',
+          swc: 'rollup-plugin-swc3',
+          terser: '@rollup/plugin-terser'
+        }[minifyType ?? resolvedType]!
+      )
     }
     let shouldPassThrough = false
 

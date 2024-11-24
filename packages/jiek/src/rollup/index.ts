@@ -174,7 +174,9 @@ const resolveBuilderOptions = (
     : builder ?? { type: 'esbuild' }
 
 const resolvedMinifyOptions = resolveMinifyOptions(build.output?.minifyOptions ?? MINIFY_OPTIONS)
+const { type: _resolvedMinifyOptionsType, ...noTypeResolvedMinifyOptions } = resolvedMinifyOptions
 const resolvedBuilderOptions = resolveBuilderOptions(build.builder ?? BUILDER_OPTIONS)
+const { type: _resolvedBuilderOptionsType, ...noTypeResolvedBuilderOptions } = resolvedBuilderOptions
 
 const withMinify = (
   output: OutputOptions & {
@@ -185,10 +187,10 @@ const withMinify = (
   if (minify === false) return [output]
 
   const minifyPlugin = resolvedMinifyOptions.type === 'esbuild'
-    ? import('rollup-plugin-esbuild').then(({ minify }) => minify(resolvedMinifyOptions))
+    ? import('rollup-plugin-esbuild').then(({ minify }) => minify(noTypeResolvedMinifyOptions as any))
     : resolvedMinifyOptions.type === 'swc'
-    ? import('rollup-plugin-swc3').then(({ minify }) => minify(resolvedMinifyOptions))
-    : import('@rollup/plugin-terser').then(({ default: minify }) => minify(resolvedMinifyOptions))
+    ? import('rollup-plugin-swc3').then(({ minify }) => minify(noTypeResolvedMinifyOptions as any))
+    : import('@rollup/plugin-terser').then(({ default: minify }) => minify(noTypeResolvedMinifyOptions as any))
   return minify === 'only-minify'
     ? [{
       ...output,
@@ -320,7 +322,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
         esbuild({
           sourceMap: sourcemap === 'hidden' ? false : !!sourcemap,
           tsconfig: buildTSConfigPath,
-          ...resolvedBuilderOptions
+          ...noTypeResolvedBuilderOptions
         })
       )
       : import('rollup-plugin-swc3').then(({ default: swc }) =>
@@ -334,7 +336,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
               inline: 'inline'
             } as const)[sourcemap] ?? undefined,
           tsconfig: buildTSConfigPath,
-          ...resolvedBuilderOptions
+          ...noTypeResolvedBuilderOptions
         })
       )
     rollupOptions.push({

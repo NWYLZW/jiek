@@ -6,8 +6,8 @@ import { filterPackagesFromDir } from '@pnpm/filter-workspace-packages'
 import { program } from 'commander'
 import { load } from 'js-yaml'
 
-import { getRoot } from './getRoot'
-import { getWD } from './getWD'
+import { getRoot } from '#~/utils/getRoot.ts'
+import { getWD } from '#~/utils/getWD.ts'
 
 export let type = ''
 

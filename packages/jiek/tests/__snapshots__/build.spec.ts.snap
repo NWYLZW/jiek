@@ -57,7 +57,7 @@ export { base };
 
 exports[`export self subpath > common 6`] = `
 "base.min.cjs:
-"use strict";exports.base=function(){return"base"};
+"use strict";function e(){return"base"}exports.base=e;
 "
 `;
 
@@ -159,13 +159,13 @@ export { foo };
 
 exports[`export self subpath > common 12`] = `
 "index.min.cjs:
-"use strict";var e=require("export-self-subpath/base"),t="export-self-subpath";exports.foo=function(){return t},Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})}));
+"use strict";var r=require("export-self-subpath/base"),t="module",a="export-self-subpath",n="0.1.0",s={"./package.json":"./package.json",".":"./src/index.ts","./base":"./src/base.ts"},o={"export-self-subpath":"file:."},p={type:t,name:a,version:n,exports:s,devDependencies:o};function c(){return p.name}exports.foo=c,Object.keys(r).forEach(function(e){e!=="default"&&!Object.prototype.hasOwnProperty.call(exports,e)&&Object.defineProperty(exports,e,{enumerable:!0,get:function(){return r[e]}})});
 "
 `;
 
 exports[`export self subpath > common 13`] = `
 "index.min.js:
-export*from"export-self-subpath/base";var e="export-self-subpath";function r(){return e}export{r as foo};
+export*from"export-self-subpath/base";var e="module",r="export-self-subpath",s="0.1.0",a={"./package.json":"./package.json",".":"./src/index.ts","./base":"./src/base.ts"},n={"export-self-subpath":"file:."},o={type:e,name:r,version:s,exports:a,devDependencies:n};function p(){return o.name}export{p as foo};
 "
 `;
 
@@ -252,7 +252,7 @@ export * from 'glob-exports/sub/foo';
 
 exports[`glob exports > common 6`] = `
 "index.min.cjs:
-"use strict";var e=require("glob-exports/sub/bar"),t=require("glob-exports/sub/foo");Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})})),Object.keys(t).forEach((function(e){"default"===e||Object.prototype.hasOwnProperty.call(exports,e)||Object.defineProperty(exports,e,{enumerable:!0,get:function(){return t[e]}})}));
+"use strict";var r=require("glob-exports/sub/bar"),t=require("glob-exports/sub/foo");Object.keys(r).forEach(function(e){e!=="default"&&!Object.prototype.hasOwnProperty.call(exports,e)&&Object.defineProperty(exports,e,{enumerable:!0,get:function(){return r[e]}})}),Object.keys(t).forEach(function(e){e!=="default"&&!Object.prototype.hasOwnProperty.call(exports,e)&&Object.defineProperty(exports,e,{enumerable:!0,get:function(){return t[e]}})});
 "
 `;
 
@@ -298,13 +298,13 @@ export { bar };
 
 exports[`glob exports > common 12`] = `
 "sub/bar.min.cjs:
-"use strict";exports.bar="bar";
+"use strict";const r="bar";exports.bar=r;
 "
 `;
 
 exports[`glob exports > common 13`] = `
 "sub/bar.min.js:
-const o="bar";export{o as bar};
+const r="bar";export{r as bar};
 "
 `;
 
@@ -344,7 +344,7 @@ export { bor };
 
 exports[`glob exports > common 18`] = `
 "sub/bor.min.cjs:
-"use strict";exports.bor="bor";
+"use strict";const o="bor";exports.bor=o;
 "
 `;
 
@@ -390,7 +390,7 @@ export { foo };
 
 exports[`glob exports > common 24`] = `
 "sub/foo.min.cjs:
-"use strict";exports.foo="foo";
+"use strict";const o="foo";exports.foo=o;
 "
 `;
 
@@ -436,7 +436,7 @@ export { fuo };
 
 exports[`glob exports > common 30`] = `
 "sub/fuo.min.cjs:
-"use strict";exports.fuo="fuo";
+"use strict";const o="fuo";exports.fuo=o;
 "
 `;
 
@@ -543,13 +543,13 @@ exports.bar = bar;
 
 exports[`monorepo > build bar 5`] = `
 "index.min.js:
-"use strict";exports.bar=function(r,t){return r-t};
+"use strict";function n(r,t){return r-t}exports.bar=n;
 "
 `;
 
 exports[`monorepo > build bar 6`] = `
 "index.min.mjs:
-function n(n,r){return n-r}export{n as bar};
+function t(r,n){return r-n}export{t as bar};
 "
 `;
 
@@ -618,13 +618,13 @@ Object.keys(testMonorepoBar).forEach(function (k) {
 
 exports[`monorepo > build foo 5`] = `
 "index.min.js:
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("@jiek/test-monorepo-bar");exports.default=function(e,t){return e+t},Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})}));
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var t=require("@jiek/test-monorepo-bar");function n(e,r){return e+r}exports.default=n,Object.keys(t).forEach(function(e){e!=="default"&&!Object.prototype.hasOwnProperty.call(exports,e)&&Object.defineProperty(exports,e,{enumerable:!0,get:function(){return t[e]}})});
 "
 `;
 
 exports[`monorepo > build foo 6`] = `
 "index.min.mjs:
-export*from"@jiek/test-monorepo-bar";function e(e,o){return e+o}export{e as default};
+export*from"@jiek/test-monorepo-bar";function t(e,r){return e+r}export{t as default};
 "
 `;
 
@@ -687,7 +687,7 @@ exports.foo = foo;
 
 exports[`multiple exports > common 5`] = `
 "foo.min.js:
-"use strict";exports.foo=function(){return"foo"};
+"use strict";function o(){return"foo"}exports.foo=o;
 "
 `;
 
@@ -737,7 +737,7 @@ exports.foo = foo;
 
 exports[`multiple exports > common 11`] = `
 "index.min.js:
-"use strict";exports.foo=function(){return"foo"};
+"use strict";function o(){return"foo"}exports.foo=o;
 "
 `;
 
@@ -798,7 +798,7 @@ exports.foo = foo;
 
 exports[`not dts tsconfig > common 5`] = `
 "index.min.js:
-"use strict";exports.foo=function(){return"foo"};
+"use strict";function o(){return"foo"}exports.foo=o;
 "
 `;
 
@@ -845,7 +845,7 @@ export { foo };
 
 exports[`only minify > common 4`] = `
 "index.js:
-"use strict";exports.foo=function(){return"foo"};
+"use strict";function o(){return"foo"}exports.foo=o;
 "
 `;
 
@@ -902,13 +902,13 @@ exports.bar = bar;
 
 exports[`project references > build bar 5`] = `
 "index.min.js:
-"use strict";exports.bar=function(r,t){return r-t};
+"use strict";function n(r,t){return r-t}exports.bar=n;
 "
 `;
 
 exports[`project references > build bar 6`] = `
 "index.min.mjs:
-function n(n,r){return n-r}export{n as bar};
+function t(r,n){return r-n}export{t as bar};
 "
 `;
 
@@ -952,13 +952,13 @@ exports.bar = bar;
 
 exports[`project references > build bar 11`] = `
 "index.special.min.js:
-"use strict";exports.bar=function(r,t){return r*t};
+"use strict";function n(r,t){return r*t}exports.bar=n;
 "
 `;
 
 exports[`project references > build bar 12`] = `
 "index.special.min.mjs:
-function n(n,r){return n*r}export{n as bar};
+function t(r,n){return r*n}export{t as bar};
 "
 `;
 
@@ -1027,13 +1027,13 @@ Object.keys(testMonorepoBar).forEach(function (k) {
 
 exports[`project references > build foo 5`] = `
 "index.min.js:
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("@jiek/test-monorepo-bar");exports.default=function(e,t){return e+t},Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})}));
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var t=require("@jiek/test-monorepo-bar");function n(e,r){return e+r}exports.default=n,Object.keys(t).forEach(function(e){e!=="default"&&!Object.prototype.hasOwnProperty.call(exports,e)&&Object.defineProperty(exports,e,{enumerable:!0,get:function(){return t[e]}})});
 "
 `;
 
 exports[`project references > build foo 6`] = `
 "index.min.mjs:
-export*from"@jiek/test-monorepo-bar";function e(e,o){return e+o}export{e as default};
+export*from"@jiek/test-monorepo-bar";function t(e,r){return e+r}export{t as default};
 "
 `;
 
@@ -1101,13 +1101,13 @@ exports.default = index;
 
 exports[`project references > build fuo 5`] = `
 "index.min.js:
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.bar=function(e,t){return e*t},exports.default=function(e,t){return e+t};
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});function t(e,r){return e*r}function u(e,r){return e+r}exports.bar=t,exports.default=u;
 "
 `;
 
 exports[`project references > build fuo 6`] = `
 "index.min.mjs:
-function n(n,t){return n*t}function t(n,t){return n+t}export{n as bar,t as default};
+function t(n,r){return n*r}function e(n,r){return n+r}export{t as bar,e as default};
 "
 `;
 
@@ -1177,13 +1177,13 @@ exports.default = index;
 
 exports[`project references > build fuu 5`] = `
 "index.min.js:
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.bar=function(e,t){return e-t},exports.default=function(e,t){return e+t};
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});function t(e,r){return e-r}function u(e,r){return e+r}exports.bar=t,exports.default=u;
 "
 `;
 
 exports[`project references > build fuu 6`] = `
 "index.min.mjs:
-function n(n,t){return n-t}function t(n,t){return n+t}export{n as bar,t as default};
+function t(n,r){return n-r}function e(n,r){return n+r}export{t as bar,e as default};
 "
 `;
 
@@ -1261,7 +1261,7 @@ export { bar, foo };
 
 exports[`resolve imports > common 6`] = `
 "index.min.cjs:
-"use strict";exports.bar="bar",exports.foo="foo";
+"use strict";const o="bar",r="foo";exports.bar=o,exports.foo=r;
 "
 `;
 
@@ -1331,13 +1331,13 @@ Object.keys(testMonorepoBar).forEach(function (k) {
 
 exports[`root-package > common 5`] = `
 "index.min.js:
-"use strict";var e=require("@jiek/test-monorepo-bar");exports.foo=function(e,t){return e+t},exports.name="root-package",Object.keys(e).forEach((function(t){"default"===t||Object.prototype.hasOwnProperty.call(exports,t)||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return e[t]}})}));
+"use strict";var t=require("@jiek/test-monorepo-bar");function o(e,r){return e+r}const n="root-package";exports.foo=o,exports.name=n,Object.keys(t).forEach(function(e){e!=="default"&&!Object.prototype.hasOwnProperty.call(exports,e)&&Object.defineProperty(exports,e,{enumerable:!0,get:function(){return t[e]}})});
 "
 `;
 
 exports[`root-package > common 6`] = `
 "index.min.mjs:
-export*from"@jiek/test-monorepo-bar";function o(o,r){return o+r}const r="root-package";export{o as foo,r as name};
+export*from"@jiek/test-monorepo-bar";function t(o,r){return o+r}const e="root-package";export{t as foo,e as name};
 "
 `;
 
@@ -1396,7 +1396,7 @@ exports.foo = foo;
 
 exports[`simple > common 5`] = `
 "index.min.js:
-"use strict";exports.foo=function(){return"foo"};
+"use strict";function o(){return"foo"}exports.foo=o;
 "
 `;
 
@@ -1467,7 +1467,7 @@ export { foo };
 
 exports[`simple mjs > common 6`] = `
 "index.min.cjs:
-"use strict";exports.foo=function(){return"foo"};
+"use strict";function o(){return"foo"}exports.foo=o;
 "
 `;
 
@@ -1625,7 +1625,7 @@ exports.foo = foo;
 
 exports[`with no resolve exports > common 5`] = `
 "index.min.js:
-"use strict";exports.foo=function(){return"foo"};
+"use strict";function o(){return"foo"}exports.foo=o;
 "
 `;
 
@@ -1754,13 +1754,13 @@ exports.bar = bar;
 
 exports[`with scss file import > common 13`] = `
 "index.min.js:
-"use strict";require("with-scss-file-import/index.css"),require("with-scss-file-import/foo"),exports.bar=function(){return"bar"};
+"use strict";require("with-scss-file-import/index.css"),require("with-scss-file-import/foo");function r(){return"bar"}exports.bar=r;
 "
 `;
 
 exports[`with scss file import > common 14`] = `
 "index.min.mjs:
-import"with-scss-file-import/index.css";import"with-scss-file-import/foo";function i(){return"bar"}export{i as bar};
+import"with-scss-file-import/index.css";import"with-scss-file-import/foo";function r(){return"bar"}export{r as bar};
 "
 `;
 
@@ -1809,13 +1809,13 @@ exports.bar = bar;
 
 exports[`with scss file import > common 19`] = `
 "index.styless.min.js:
-"use strict";require("with-scss-file-import/foo"),exports.bar=function(){return"bar"};
+"use strict";require("with-scss-file-import/foo");function r(){return"bar"}exports.bar=r;
 "
 `;
 
 exports[`with scss file import > common 20`] = `
 "index.styless.min.mjs:
-import"with-scss-file-import/foo";function o(){return"bar"}export{o as bar};
+import"with-scss-file-import/foo";function r(){return"bar"}export{r as bar};
 "
 `;
 
