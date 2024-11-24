@@ -56,11 +56,26 @@ yarn add -D jiek
 }
 ```
 
-- 假设你在工作空间下有一个包名字为 `@monorepo/utils` ，那么你可以运行 `jb utils` 来构建这个包。
+- 假设你在工作空间下有一个包名字为 `@monorepo/utils` ，那么你可以运行 `jk -f utils build` 来构建这个包。
 
-- 当你完成了开发的相关步骤后，在发布阶段你可以使用 `jk -f utils publish` 来发布你的包，本工具会自动转化并填充 `package.json` 对应的字段。
+- 当需要发布当前的包的时候，首先你可以通过 `jk -f utils prepublish` 来准备发布内容，然后再运行 `jk -f utils publish` 来发布，最后通过 `jk -f utils postpublish` 来清理发布内容。
 
-  你可以添加 `-p/--preview` 参数来预览待发布的 `package.json` 的内容。
+- 当然可能你会觉得上面的操作有点繁琐，你可以通过在对应包的 `package.json` 中添加 `scripts` 来简化操作。
+
+```json
+{
+  ...
+  "scripts": {
+    "prepublish": "jb && jk",
+    "postpublish": "jk"
+  },
+  ...
+}
+```
+
+> 在你的 dist 产物目录（可配置）下会生成一个 `package.json` 文件，如果你需要在发布前对要发布的内容进行检查，你可以通过 `prepublish` 子指令来生成发布内容并在对应的输出目录中进行检查。
+
+- 当配置好了上述的 hook 后，通过 `jk publish` 就可以一键完成构建发布动作了。
 
 ## CLI
 
