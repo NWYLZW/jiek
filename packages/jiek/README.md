@@ -24,6 +24,9 @@
 - [x] 监听模式：适配 rollup 的监听模式
 - [x] 发布适配：支持同构生成 `package.json` 等相关字段
 - [x] CommonJS：产物兼容正在使用 cjs 的用户
+- [ ] 插件化
+  - [ ] Dotenv：支持 dotenv 配置文件
+  - [ ] Replacer：支持替换文件内容
 
 ## 安装
 
