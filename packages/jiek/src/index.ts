@@ -1,6 +1,5 @@
 import type {} from './commands/base'
 import type {} from './commands/build'
-import type {} from './commands/init'
 import type {} from './commands/publish'
 
 export interface Config {}
