@@ -1,4 +1,6 @@
+import { Options } from '@rollup/plugin-terser'
 import type { InputPluginOption, OutputOptions } from 'rollup'
+import { minify } from 'rollup-plugin-esbuild'
 
 export type Mapping2ROO<K extends keyof OutputOptions> = OutputOptions[K] | {
   js?: OutputOptions[K]
@@ -35,6 +37,17 @@ export interface TemplateOptions {
      * When minify is set to 'only-minify', the output will direct output minified files.
      */
     minify?: boolean | 'only-minify'
+    minifyOptions?:
+      | (
+        {
+          type: 'terser'
+        } & import('@rollup/plugin-terser').Options
+      )
+      | (
+        {
+          type: 'esbuild'
+        } & Parameters<typeof import('rollup-plugin-esbuild').minify>[0]
+      )
     /**
      * @default 'dist'
      */

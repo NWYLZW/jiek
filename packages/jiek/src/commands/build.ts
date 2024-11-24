@@ -61,6 +61,12 @@ interface BuildOptions extends Record<string, unknown> {
   noClean: boolean
   onlyMin: boolean
   /**
+   * The type of minify, support 'terser' and 'esbuild'.
+   *
+   * @default 'esbuild'
+   */
+  minType?: NonNullable<NonNullable<TemplateOptions['output']>['minifyOptions']>['type']
+  /**
    * The path of the tsconfig file which is used to generate js and dts files.
    * If not specified, it will be loaded from:
    * - ./tsconfig.json
@@ -94,6 +100,12 @@ program
   .option('-nj, --noJs', 'Do not output js files.', parseBoolean)
   .option('-nd, --noDts', 'Do not output dts files.', parseBoolean)
   .option('-nm, --noMin', 'Do not output minify files.', parseBoolean)
+  .option('--minType <MINTYPE>', "The type of minify, support 'terser' and 'esbuild'.", v => {
+    if (!['terser', 'esbuild'].includes(v)) {
+      throw new Error("The value of 'minType' must be 'terser' or 'esbuild'")
+    }
+    return String(v)
+  })
   .option('-nc, --noClean', 'Do not clean the output directory before building.', parseBoolean)
   .option(
     '-om, --onlyMin',
@@ -115,6 +127,7 @@ program
     noJs: withoutJs,
     noDts: withoutDts,
     noMin: withoutMin,
+    minType: minifyType,
     noClean,
     onlyMin: onlyMin,
     tsconfig,
@@ -155,6 +168,7 @@ program
       JIEK_WITHOUT_DTS: String(withoutDts),
       JIEK_WITHOUT_MINIFY: String(withoutMin),
       JIEK_ONLY_MINIFY: String(onlyMin),
+      JIEK_MINIFY_TYPE: minifyType,
       JIEK_TSCONFIG: tsconfig,
       JIEK_DTSCONFIG: dtsconfig
     }

@@ -8,11 +8,10 @@ import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
-import terser from '@rollup/plugin-terser'
 import { sendMessage } from 'execa'
 import { isMatch } from 'micromatch'
 import type { InputPluginOption, OutputOptions, OutputPlugin, Plugin, RollupOptions } from 'rollup'
-import esbuild from 'rollup-plugin-esbuild'
+import esbuild, { minify as esbuildMinify } from 'rollup-plugin-esbuild'
 import ts from 'typescript'
 
 import { recusiveListFiles } from '#~/utils/recusiveListFiles.ts'
@@ -39,6 +38,7 @@ const {
   JIEK_WITHOUT_JS,
   JIEK_WITHOUT_DTS,
   JIEK_WITHOUT_MINIFY,
+  JIEK_MINIFY_TYPE,
   JIEK_NO_CLEAN,
   JIEK_ONLY_MINIFY,
   JIEK_TSCONFIG,
@@ -75,6 +75,12 @@ const MINIFY_DEFAULT_VALUE = WITHOUT_MINIFY
   : ONLY_MINIFY
   ? 'only-minify'
   : true
+
+type MinifyOptions = NonNullable<TemplateOptions['output']>['minifyOptions']
+
+const MINIFY_OPTIONS = {
+  type: JIEK_MINIFY_TYPE ?? 'esbuild'
+} as NonNullable<MinifyOptions>
 
 const config = loadConfig({
   root: WORKSPACE_ROOT
@@ -153,11 +159,16 @@ const withMinify = (
   output: OutputOptions & {
     plugins?: OutputPlugin[]
   },
-  minify = build?.output?.minify ?? MINIFY_DEFAULT_VALUE
-): OutputOptions[] =>
-  minify === false
-    ? [output]
-    : minify === 'only-minify'
+  minify = build?.output?.minify ?? MINIFY_DEFAULT_VALUE,
+  minifyOptions: NonNullable<TemplateOptions['output']>['minifyOptions'] = build?.output?.minifyOptions
+    ?? MINIFY_OPTIONS
+): OutputOptions[] => {
+  if (minify === false) return [output]
+
+  const minifyPlugin = minifyOptions.type === 'esbuild'
+    ? esbuildMinify(minifyOptions)
+    : import('@rollup/plugin-terser').then(({ default: terser }) => terser(minifyOptions))
+  return minify === 'only-minify'
     ? [{
       ...output,
       // TODO replace suffix when pubish to npm and the `build.output.minify` is 'only-minify'
@@ -170,7 +181,7 @@ const withMinify = (
           })(),
       plugins: [
         ...(output.plugins ?? []),
-        terser()
+        minifyPlugin
       ]
     }]
     : [
@@ -186,10 +197,11 @@ const withMinify = (
         file: output.file?.replace(/(\.[cm]?js)$/, '.min$1'),
         plugins: [
           ...(output.plugins ?? []),
-          terser()
+          minifyPlugin
         ]
       }
     ]
+}
 
 const generateConfigs = (context: ConfigGenerateContext, options: TemplateOptions = {}): RollupOptions[] => {
   const {
