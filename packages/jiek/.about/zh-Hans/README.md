@@ -243,4 +243,12 @@ jk publish -- --access public --no-git-checks
 - `monorepo` 的支持存在一定的问题，在依赖工作空间其他的包时必须重新编译相关依赖
 - 编写入口文件的规则过于繁琐，不够自然
 - 无法处理 `tsconfig.json` 中的 `Project Reference` 相关问题
-- 根据`conditions`
+- 无法充分利用 `conditional` 的特性
+- 无法自己选择需要的构建器，只能整个替换工具链
+
+## 谁正在使用 Jiek？
+
+- [nonzzz/vite-plugin-compression](https://github.com/nonzzz/vite-plugin-compression)
+- [nonzzz/vite-bundle-analyzer](https://github.com/nonzzz/vite-bundle-analyzer)
+- [nonzzz/squarified](https://github.com/nonzzz/squarified)
+- [typp-js/typp](https://github.com/typp-js/typp)
