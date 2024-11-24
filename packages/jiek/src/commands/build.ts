@@ -41,7 +41,7 @@ const isDefault = process.env.JIEK_IS_ONLY_BUILD === 'true'
 
 const description = `
 Build the package according to the 'exports' field from the package.json.
-If you want to rewrite the \`rollup\` command options, you can pass the options after '--'.
+If you want to through the options to the \`rollup\` command, you can pass the options after '--'.
 ${isDefault ? 'This command is the default command.' : ''}
 `.trim()
 
@@ -139,24 +139,19 @@ If you pass the --entries option, it will merge into the entries of the command.
 `.trim()
 
 const command = isDefault
-  ? program
-    .name('jb/jiek-build')
-    .helpCommand(false)
+  ? (() => {
+    const c = program
+      .name('jb/jiek-build')
+      .helpCommand(false)
+    if (IS_WORKSPACE) {
+      c.argument('[filters]', buildFilterDescription)
+    } else {
+      c.argument('[entries]', buildEntriesDescription)
+    }
+    return c
+  })()
   : program
-
-if (IS_WORKSPACE) {
-  if (isDefault) {
-    command.argument('[filters]', buildFilterDescription)
-  } else {
-    command.command('build [filters]')
-  }
-} else {
-  if (isDefault) {
-    command.argument('[entries]', buildEntriesDescription)
-  } else {
-    command.command('build [entries]')
-  }
-}
+    .command(`build [${IS_WORKSPACE ? 'filters' : 'entries'}]`)
 
 command
   .description(description)
