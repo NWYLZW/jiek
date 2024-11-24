@@ -129,6 +129,7 @@ export function getExports({
     filteredResolvedEntrypoints,
     entrypoints2Exports(filteredResolvedEntrypoints, {
       outdir,
+      sourceTag: pkgName,
       withSuffix: isPublish ? withSuffix : undefined,
       withSource: isPublish ? withSource : undefined,
       withConditional: {
