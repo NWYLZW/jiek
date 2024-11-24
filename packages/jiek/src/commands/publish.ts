@@ -28,8 +28,14 @@ declare module 'jiek' {
   }
 }
 
+const description = `
+Publish package to npm registry, and auto generate exports field and other fields in published package.json.
+If you want to through the options to the \`pnpm publish\` command, you can pass the options after '--'.
+`.trim()
+
 program
   .command('publish')
+  .description(description)
   .aliases(['pub', 'p'])
   .option('-b, --bumper <bumper>', 'bump version', 'patch')
   .option('-no-b, --no-bumper', 'no bump version')
@@ -42,6 +48,21 @@ program
     silent?: boolean
     bumper: false | BumperType
   }) => {
+    let shouldPassThrough = false
+
+    const passThroughOptions = process.argv
+      .reduce(
+        (acc, value) => {
+          if (shouldPassThrough) {
+            acc.push(value)
+          }
+          if (value === '--') {
+            shouldPassThrough = true
+          }
+          return acc
+        },
+        [] as string[]
+      )
     actionRestore()
 
     const { value = {} } = await getSelectedProjectsGraph() ?? {}
@@ -189,6 +210,7 @@ program
         if (bumper && TAGS.includes(bumper)) {
           args.push('--tag', bumper)
         }
+        args.push(...passThroughOptions)
         childProcess.execSync(args.join(' '), {
           cwd: dir,
           stdio: 'inherit'
