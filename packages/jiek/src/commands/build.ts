@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 
+import { confirm } from '@inquirer/prompts'
 import { MultiBar, Presets } from 'cli-progress'
 import { program } from 'commander'
 import { execaCommand } from 'execa'
@@ -100,12 +101,13 @@ async function checkDependency(dependency: string) {
     require.resolve(dependency)
   } catch (e) {
     console.error(`The package '${dependency}' is not installed, please install it first.`)
-    const answer = prompt('Do you want to install it now? (Y/n)', 'Y')
     const { notWorkspace } = getWD()
-    if (answer === 'Y') {
-      await execaCommand(`pnpm install -${notWorkspace ? '' : 'w'}D ${dependency}`)
+    const command = `pnpm install -${notWorkspace ? '' : 'w'}D ${dependency}`
+    if (await confirm({ message: 'Do you want to install it now?' })) {
+      await execaCommand(command)
     } else {
-      return
+      console.warn(`You can run the command '${command}' to install it manually.`)
+      process.exit(1)
     }
   }
 }
