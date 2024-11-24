@@ -10,7 +10,7 @@
 - 自动推断：基于 `package.json` 的相关字段自动推断出构建规则
   - `exports`：根据入口文件推断构建目标与类型
   - `imports`：定义路径别名，并在构建的时候自动 bundle 进来
-  - `type: module`：当开启时智能决定输出文件后缀，不需要考虑 `cjs` 与 `esm` 的适配问题
+  - `type: module`：根据选项智能决定输出文件后缀，不需要考虑 `cjs` 与 `esm` 的适配问题
   - `dependencies`、`peerDependencies`、`optionalDependencies`：自动将符合规则的依赖标记为 `external`
   - `devDependencies`：将标记为开发依赖的 bundle 进对应的最终产物之中
 - 工作空间友好：支持在 pnpm 下的工作空间
