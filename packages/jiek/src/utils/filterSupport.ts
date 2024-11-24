@@ -6,7 +6,6 @@ import { filterPackagesFromDir } from '@pnpm/filter-workspace-packages'
 import { program } from 'commander'
 import { load } from 'js-yaml'
 
-import { filterDescription } from '#~/commands/descriptions.ts'
 import { getRoot } from '#~/utils/getRoot.ts'
 import { getWD } from '#~/utils/getWD.ts'
 
@@ -17,10 +16,6 @@ try {
   require.resolve('@pnpm/filter-workspace-packages')
   type = 'pnpm'
 } catch { /* empty */ }
-if (type !== '') {
-  program
-    .option('-f, --filter <filter>', filterDescription)
-}
 
 export interface ProjectsGraph {
   wd: string

@@ -6,7 +6,8 @@ import { MultiBar, Presets } from 'cli-progress'
 import { program } from 'commander'
 import { execaCommand } from 'execa'
 
-import { filterDescription, outdirDescription } from '#~/commands/descriptions.ts'
+import { entriesDescription, filterDescription, outdirDescription } from '#~/commands/descriptions.ts'
+import { IS_WORKSPACE } from '#~/commands/meta.ts'
 import type { ProjectsGraph } from '#~/utils/filterSupport.ts'
 import { filterPackagesGraph, getSelectedProjectsGraph } from '#~/utils/filterSupport.ts'
 import { getWD } from '#~/utils/getWD.ts'
@@ -130,13 +131,30 @@ ${filterDescription}
 If you pass the --filter option, it will merge into the filters of the command.
 `.trim()
 
+const buildEntriesDescription = `
+${entriesDescription}
+If you pass the --entries option, it will merge into the entries of the command.
+`.trim()
+
 const command = isDefault
   ? program
     .name('jb/jiek-build')
     .helpCommand(false)
-    .argument('[filters]', buildFilterDescription)
   : program
-    .command('build [filters]')
+
+if (IS_WORKSPACE) {
+  if (isDefault) {
+    command.argument('[filters]', buildFilterDescription)
+  } else {
+    command.command('build [filters]')
+  }
+} else {
+  if (isDefault) {
+    command.argument('[entries]', buildEntriesDescription)
+  } else {
+    command.command('build [entries]')
+  }
+}
 
 command
   .description(description)
@@ -145,12 +163,9 @@ command
       throw new Error(`The value of 'type' must be ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')}`)
     }
     return String(v)
-  })
+  }, 'esbuild')
   .option('-o, --outdir <OUTDIR>', outdirDescription, String, 'dist')
-  .option(
-    '-e, --entries <ENTRIES>',
-    "Specify the build entry-points of the package.json's 'exports' field.(support glob)"
-  )
+  .option('-e, --entries <ENTRIES>', entriesDescription)
   .option('--external <EXTERNAL>', 'Specify the external dependencies of the package.', String)
   .option('-nj, --noJs', 'Do not output js files.', parseBoolean)
   .option('-nd, --noDts', 'Do not output dts files.', parseBoolean)
@@ -176,23 +191,26 @@ command
   .option('-w, --watch', 'Watch the file changes.', parseBoolean)
   .option('-s, --silent', "Don't display logs.", parseBoolean)
   .option('-v, --verbose', 'Display debug logs.', parseBoolean)
-  .action(async (commandFilters: string | undefined, {
-    type,
-    outdir,
-    watch,
-    silent,
-    verbose,
-    entries,
-    external,
-    noJs: withoutJs,
-    noDts: withoutDts,
-    noMin: withoutMin,
-    minType: minifyType,
-    noClean,
-    onlyMin: onlyMin,
-    tsconfig,
-    dtsconfig
-  }: BuildOptions) => {
+  .action(async (commandFiltersOrEntries: string | undefined, options: BuildOptions) => {
+    /* eslint-disable prefer-const */
+    let {
+      type,
+      outdir,
+      watch,
+      silent,
+      verbose,
+      entries: optionEntries,
+      external,
+      noJs: withoutJs,
+      noDts: withoutDts,
+      noMin: withoutMin,
+      minType: minifyType,
+      noClean,
+      onlyMin,
+      tsconfig,
+      dtsconfig
+    } = options
+    /* eslint-enable prefer-const */
     const resolvedType = type ?? DEFAULT_BUILDER_TYPE
     if (!withoutJs) {
       await checkDependency(BUILDER_TYPE_PACKAGE_NAME_MAP[resolvedType]!)
@@ -233,6 +251,13 @@ command
       throw new Error('Cannot use --without-js and --only-minify at the same time')
     }
 
+    let entries: string | undefined = [
+      optionEntries,
+      IS_WORKSPACE ? undefined : commandFiltersOrEntries
+    ].filter(Boolean).join(',')
+    if (entries.length === 0) {
+      entries = undefined
+    }
     const env = {
       ...process.env,
       JIEK_BUILDER: type,
@@ -409,6 +434,7 @@ command
         })
       )
     }
+    const commandFilters = IS_WORKSPACE ? commandFiltersOrEntries : undefined
     const filters = [
       ...new Set([
         ...(program.getOptionValue('filter') as string | undefined)

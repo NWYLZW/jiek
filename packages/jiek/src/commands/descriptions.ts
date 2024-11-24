@@ -1,3 +1,9 @@
+export const entriesDescription = `
+Specify the build entry-points of the package.json's 'exports' field.
+Support glob pattern and array.
+.e.g. '.', './*', './sub/*', './a,./b'.
+`.trim()
+
 export const filterDescription = `
 Filter the packages from the workspace.
 Support fuzzy match and array.

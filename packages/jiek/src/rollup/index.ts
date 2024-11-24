@@ -45,16 +45,22 @@ const {
   JIEK_DTSCONFIG
 } = process.env
 
-const entries = JIEK_ENTRIES
-  ?.split(',')
-  .map(e => e.trim())
-  .map(e => ({ 'index': '.' }[e] ?? e))
+const resolveArrayString = (str: string | undefined) => {
+  const arr = [
+    ...new Set(
+      str
+        ?.split(',')
+        .map(e => e.trim())
+        .filter(e => e.length > 0)
+        ?? []
+    )
+  ]
+  return arr?.length ? arr : undefined
+}
 
-const commandExternal = JIEK_EXTERNAL
-  ?.split(',')
-  .map(e => e.trim())
-  .map(e => new RegExp(`^${e}$`))
-  ?? []
+const entries = resolveArrayString(JIEK_ENTRIES)?.map(e => ({ 'index': '.' }[e] ?? e))
+
+const commandExternal = resolveArrayString(JIEK_EXTERNAL)?.map(e => new RegExp(`^${e}$`))
 
 const WORKSPACE_ROOT = JIEK_ROOT ?? getWorkspaceDir()
 const COMMON_OPTIONS = {} satisfies RollupOptions
@@ -236,7 +242,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
     pkgIsModule,
     conditionals
   } = context
-  const external = [...inputExternal, ...(options.external ?? []), ...commandExternal]
+  const external = [...inputExternal, ...(options.external ?? []), ...(commandExternal ?? [])]
   const isModule = conditionals.includes('import')
   const isCommonJS = conditionals.includes('require')
   const isBrowser = conditionals.includes('browser')
