@@ -3,6 +3,13 @@
   "type": "module",
   "version": "1.1.13",
   "description": "A lightweight toolkit for compiling and managing libraries based on `package.json` metadata and suitable for `Monorepo`.",
+  "author": "YiJie <yijie4188@gmail.com>",
+  "repository": {
+    "url": "nwylzw/jiek",
+    "directory": "packages/jiek"
+  },
+  "homepage": "https://github.com/NWYLZW/jiek/tree/master/packages/jiek#readme",
+  "bugs": "https://github.com/NWYLZW/jiek/issues?q=is%3Aissue+is%3Aopen+jiek",
   "bin": {
     "jiek": "bin/jiek.js",
     "jk": "bin/jiek.js",
