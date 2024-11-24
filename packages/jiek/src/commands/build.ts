@@ -35,10 +35,12 @@ module.exports = require('jiek/rollup').template(${JSON.stringify(manifest, null
 
 const require = createRequire(import.meta.url)
 
+const isDefault = process.env.JIEK_IS_ONLY_BUILD === 'true'
+
 const description = `
-Build the package according to the 'exports' field in the package.json.
-If you want to rewrite the rollup command options, you can pass the options after '--'.
-e.g. \`jiek build -- --watch\`
+Build the package according to the 'exports' field from the package.json.
+If you want to rewrite the \`rollup\` command options, you can pass the options after '--'.
+${isDefault ? 'This command is the default command.' : ''}
 `.trim()
 
 interface BuildOptions {
@@ -124,7 +126,7 @@ function parseBoolean(v?: unknown) {
 }
 
 program
-  .command('build')
+  .command('build', { isDefault })
   .description(description)
   .option('-t, --type <TYPE>', `The type of build, support ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')}.`, v => {
     if (!BUILDER_TYPES.includes(v as any)) {

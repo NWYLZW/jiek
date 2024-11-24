@@ -2,10 +2,12 @@
   "name": "jiek",
   "type": "module",
   "version": "1.1.13",
-  "description": "YiJie's personal kits.",
+  "description": "A lightweight toolkit for compiling and managing libraries based on `package.json` metadata and suitable for `Monorepo`.",
   "bin": {
     "jiek": "bin/jiek.js",
-    "jk": "bin/jiek.js"
+    "jk": "bin/jiek.js",
+    "jiek-build": "bin/jiek-build.js",
+    "jb": "bin/jiek-build.js"
   },
   "files": ["dist", "src", "bin", "LICENSE", "README.md"],
   "scripts": {
@@ -15,6 +17,7 @@
     "./package.json": "./package.json",
     ".": "./src/index.ts",
     "./cli": "./src/cli.ts",
+    "./cli-only-build": "./src/cli-only-build.ts",
     "./rollup": "./src/rollup/index.ts"
   },
   "imports": {

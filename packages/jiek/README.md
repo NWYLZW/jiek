@@ -1,6 +1,7 @@
 # Jiek
 
-| zh-Hans | [en](./.about/en/README.md) |
+| zh-Hans
+| [en](https://github.com/NWYLZW/jiek/blob/master/packages/jiek/.about/en/README.md)
 
 [![npm version](https://img.shields.io/npm/v/jiek)](https://npmjs.com/package/jiek)
 [![npm downloads](https://img.shields.io/npm/dm/jiek)](https://npm.chart.dev/jiek)
@@ -38,65 +39,37 @@ pnpm i -D jiek
 yarn add -D jiek
 ```
 
-## 使用
+## 快速起步
 
-### 构建
+通过一些简单的方式能又快又轻松的生成需要的产物。
 
-写构建脚本一直不是一件简单的事情，那么怎么把一个复杂的事情变简单呢？我们可以回到需求的本身，那就是「定义什么便构建什么」。在这里我们用自然的方式来定义构建产物，而不需要去多写一行多余的代码。
+- 在 `package.json` 中添加入口文件，这里需要设置为原文件路径。
 
-> 在这里你需要了解足够先进和现代的「[模块管理]()」以及「[导出策略]()」，在这里我们便是基于这俩点达成的一些自然而然的约定来实现的减轻负担。
-
-接下来我们可以一步步的来看看我们的构建工具是如何工作的。
-
-#### 定义入口
-
-在这里我们可以简单的对 exports 进行一定的扩展，在这里我们把我们定义在 `package.json` 中的 `exports` 字段可以看作为我们的入口文件。在这里我们简单定义一个入口：
+  你可以在 Node.js 文档中查看更多对于 [exports](https://nodejs.org/api/packages.html#exports) 的相关内容。
 
 ```json
 {
-  "exports": "./src/index.ts"
+  ...
+  "exports": "./src/index.ts",
+  ...
 }
 ```
 
-是不是很简单呢？没感觉？那你得试试其他的工具了，如果你不了解其他的工具，在这里我示范一段其他的工具你需要定义的：
+- 假设你在工作空间下有一个包名字为 `@monorepo/utils` ，那么你可以运行 `jb -f utils` 来构建这个包。
 
-<details>
+- 当你完成了开发的相关步骤后，在发布阶段你可以使用 `jk -f utils publish` 来发布你的包，本工具会自动转化并填充 `package.json` 对应的字段。
 
-```json
-{
-  "type": "module",
-  "exports": {
-    "import": {
-      "types": "./dist/es/index.d.mts",
-      "default": "./dist/es/index.mjs"
-    },
-    "require": {
-      "types": "./dist/cjs/index.d.ts",
-      "default": "./dist/cjs/index.js"
-    }
-  }
-}
+  你可以添加 `-p/--preview` 参数来预览待发布的 `package.json` 的内容。
+
+## CLI
+
+```text
+Usage: jk [options] [command]
 ```
-
-</details>
-
-> 在这里你肯定想问如果你有复杂的导出呢？或者说多个入口呢？在[这里](../pkger/README.md)你可以看到我们的工具的生成规则。
-
-#### 运行指令
-
-假设你有一个 pakcages 下面的包叫 `@monorepo/utils` ，那么你可以这样运行：
-
-```shell
-jiek build -f utils
-```
-
-是不是很简单呢？在这里我们只需要告诉工具我们的包名就可以了，其他的事情我们都不需要关心。
-
-### 发布
 
 ## 为什么不使用 X？
 
-在这里与 `jiek` 类似的工具有：[`tsup`](https://github.com/egoist/tsup)、[`unbuild`](https://github.com/unjs/unbuild)、[`bunchee`](https://github.com/huozhi/bunchee)、[`pkgroll`](https://github.com/privatenumber/pkgroll)、[`tsdown`](https://github.com/sxzz/tsdown)。但是他们都有着一些共同问题没有解决，我们来看看：
+在这里与 `jiek` 类似的工具有：[tsup](https://github.com/egoist/tsup)、[unbuild](https://github.com/unjs/unbuild)、[bunchee](https://github.com/huozhi/bunchee)、[pkgroll](https://github.com/privatenumber/pkgroll)、[tsdown](https://github.com/sxzz/tsdown)。但是他们都有着一些共同问题没有解决，我们来看看：
 
 - `monorepo` 的支持存在一定的问题，在依赖工作空间其他的包时必须重新编译相关依赖
 - 编写入口文件的规则过于繁琐，不够自然
