@@ -1,12 +1,21 @@
 {
   "name": "@jiek/pkger",
-  "version": "0.2.0",
+  "version": "0.2.1",
+  "author": "YiJie <yijie4188@gmail.com>",
+  "repository": {
+    "url": "nwylzw/jiek",
+    "directory": "packages/pkger"
+  },
+  "homepage": "https://github.com/NWYLZW/jiek/tree/master/packages/jiek#readme",
+  "bugs": "https://github.com/NWYLZW/jiek/issues?q=is%3Aissue+is%3Aopen+jiek",
   "dependencies": {
     "fast-glob": "^3.3.2"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist", "src", "LICENSE", "README.md"],
+  "scripts": {
+    "prepublish": "jb -nm && jk",
+    "postpublish": "jk"
+  },
   "exports": {
     ".": "./src/index.ts",
     "./entrypoints": "./src/entrypoints.ts"
