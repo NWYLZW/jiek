@@ -40,7 +40,9 @@ const {
   JIEK_WITHOUT_DTS,
   JIEK_WITHOUT_MINIFY,
   JIEK_NO_CLEAN,
-  JIEK_ONLY_MINIFY
+  JIEK_ONLY_MINIFY,
+  JIEK_TSCONFIG,
+  JIEK_DTSCONFIG
 } = process.env
 
 const entries = JIEK_ENTRIES
@@ -207,10 +209,15 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
     resolveWorkspacePath('tsconfig.json'),
     resolveWorkspacePath('tsconfig.dts.json')
   ]
+  JIEK_TSCONFIG && dtsTSConfigPaths.push(resolveWorkspacePath(JIEK_TSCONFIG))
+  JIEK_DTSCONFIG && dtsTSConfigPaths.push(resolveWorkspacePath(JIEK_DTSCONFIG))
   const buildTSConfigPaths = [
     ...dtsTSConfigPaths,
     resolveWorkspacePath('tsconfig.build.json')
   ]
+  // 这里重复写了俩次 JIEK_TSCONFIG 到 tsconfig 的加载列表中
+  // 目的是保证在 build 的时候，JIEK_TSCONFIG 的优先级高于 JIEK_DTSCONFIG
+  JIEK_TSCONFIG && buildTSConfigPaths.push(resolveWorkspacePath(JIEK_TSCONFIG))
   let dtsTSConfigPath: string | undefined
   dtsTSConfigPaths.forEach(p => {
     if (fs.existsSync(p) && fs.statSync(p).isFile()) {

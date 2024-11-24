@@ -59,6 +59,21 @@ interface BuildOptions extends Record<string, unknown> {
    */
   noClean: boolean
   onlyMin: boolean
+  /**
+   * The path of the tsconfig file which is used to generate js and dts files.
+   * If not specified, it will be loaded from:
+   * - ./tsconfig.json
+   * - ./tsconfig.dts.json
+   * - ./tsconfig.build.json
+   */
+  tsconfig?: string
+  /**
+   * The path of the tsconfig file which is used to generate dts files.
+   * If not specified, it will be loaded from:
+   * - ./tsconfig.json
+   * - ./tsconfig.dts.json
+   */
+  dtsconfig?: string
 }
 
 function parseBoolean(v?: unknown) {
@@ -86,6 +101,8 @@ program
   )
   .option('-s, --silent', "Don't display logs.", parseBoolean)
   .option('-v, --verbose', 'Display debug logs.', parseBoolean)
+  .option('--tsconfig <TSCONFIG>', 'The path of the tsconfig file which is used to generate js and dts files.', String)
+  .option('--dtsconfig <DTSCONFIG>', 'The path of the tsconfig file which is used to generate dts files.', String)
   .action(async ({
     outdir,
     silent,
@@ -96,7 +113,9 @@ program
     noDts: withoutDts,
     noMin: withoutMin,
     noClean,
-    onlyMin: onlyMin
+    onlyMin: onlyMin,
+    tsconfig,
+    dtsconfig
   }: BuildOptions) => {
     let shouldPassThrough = false
 
@@ -134,7 +153,9 @@ program
       JIEK_WITHOUT_JS: String(withoutJs),
       JIEK_WITHOUT_DTS: String(withoutDts),
       JIEK_WITHOUT_MINIFY: String(withoutMin),
-      JIEK_ONLY_MINIFY: String(onlyMin)
+      JIEK_ONLY_MINIFY: String(onlyMin),
+      JIEK_TSCONFIG: tsconfig,
+      JIEK_DTSCONFIG: dtsconfig
     }
 
     const multiBars = new MultiBar({
