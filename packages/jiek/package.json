@@ -11,7 +11,7 @@
   },
   "files": ["dist", "src", "bin", "LICENSE", "README.md"],
   "scripts": {
-    "prepublish": "jk build --noMin"
+    "prepublish": "jb --noMin"
   },
   "exports": {
     "./package.json": "./package.json",

@@ -3,7 +3,7 @@
   "version": "0.2.3",
   "license": "MIT",
   "scripts": {
-    "prepublish": "jk build"
+    "prepublish": "jb --noMin"
   },
   "exports": {
     "./bumper": "./src/bumper.ts",
