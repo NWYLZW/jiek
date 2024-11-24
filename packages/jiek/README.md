@@ -1,43 +1,44 @@
 # Jiek
 
-| zh-Hans
-| [en](https://github.com/NWYLZW/jiek/blob/master/packages/jiek/.about/en/README.md)
+| English
+| [简体中文](https://github.com/NWYLZW/jiek/blob/master/packages/jiek/.about/zh-Hans/README.md)
+| [繁体中文](https://github.com/NWYLZW/jiek/blob/master/packages/jiek/.about/zh-Hant/README.md)
 
 [![npm version](https://img.shields.io/npm/v/jiek)](https://npmjs.com/package/jiek)
 [![npm downloads](https://img.shields.io/npm/dm/jiek)](https://npm.chart.dev/jiek)
 
-> 基于 `package.json` 元数据并适用于 `Monorepo` 的**轻便**工具库编译管理套件。
+> A lightweight toolkit for compiling and managing libraries based on `package.json` metadata and suitable for `Monorepo`.
 
-- [x] 自动推断：基于 `package.json` 的相关字段自动推断出构建规则，减少配置文件的编写，更加轻便与符合标准
-  - `exports`：根据入口文件推断构建目标与类型
-  - `imports`：定义路径别名，并在构建的时候自动 bundle 进来
-  - `type: module`：根据选项智能决定输出文件后缀，不需要考虑 `cjs` 与 `esm` 的适配问题
-  - `dependencies`、`peerDependencies`、`optionalDependencies`：自动将符合规则的依赖标记为 `external`
-  - `devDependencies`：将标记为开发依赖的 bundle 进对应的最终产物之中
-- [ ] 构建工具：支持多种构建工具，无需纠结于用 swc 还是 esbuild 又或者是 tsc
+- [x] Automatic inference: Automatically infer build rules based on relevant fields in `package.json`, reducing the need for configuration files, making it more lightweight and standard-compliant
+  - `exports`: Infer build targets and types based on entry files
+  - `imports`: Define path aliases and automatically bundle them during the build
+  - `type: module`: Intelligently decide the output file suffix based on options, eliminating the need to consider `cjs` and `esm` compatibility issues
+  - `dependencies`, `peerDependencies`, `optionalDependencies`: Automatically mark dependencies that meet the rules as `external`
+  - `devDependencies`: Bundle dependencies marked as development dependencies into the corresponding final product
+- [ ] Build tools: Support multiple build tools, no need to struggle with using swc, esbuild, or tsc
   - [x] `esbuild`
   - [x] `swc`
   - [ ] `typescript`
-- [x] 工作空间友好：支持在 pnpm 下的工作空间开发范式
-  - [ ] 支持更多的 PM
-  - [ ] 更好的工作空间任务流
-- [x] 类型定义文件：支持聚合生成类型定义文件
-- [x] 监听模式：适配 rollup 的监听模式
-- [x] 发布适配：支持同构生成 `package.json` 等相关字段
-  - [ ] 根据 `package.json` 中的路径自动替换 README.md 中的相对路径链接为对应的网络链接
-  - [ ] 根据仓库、项目自动生成通用字段，如 `license`、`author`、`homepage`、`repository` 等
-- [x] CommonJS：产物兼容正在使用 cjs 的用户
-- [ ] 插件化
-  - [ ] Dotenv：支持 dotenv 配置文件
-  - [ ] Replacer：支持替换文件内容
-- [ ] 钩子：prepublish、postpublish
-  - [ ] 自动生成 changelog
-  - [ ] 自动决定下一个版本号
+- [x] Workspace-friendly: Support development paradigms in pnpm workspaces
+  - [ ] Support more PMs
+  - [ ] Better workspace task flow
+- [x] Type definition files: Support aggregated generation of type definition files
+- [x] Watch mode: Adapt to rollup's watch mode
+- [x] Publish adaptation: Support isomorphic generation of `package.json` and other related fields
+  - [ ] Automatically replace relative path links in README.md with corresponding network links based on paths in `package.json`
+  - [ ] Automatically generate common fields such as `license`, `author`, `homepage`, `repository`, etc. based on the repository and project
+- [x] CommonJS: Compatible with users who are still using cjs
+- [ ] Plugin system
+  - [ ] Dotenv: Support dotenv configuration files
+  - [ ] Replacer: Support replacing file content
+- [ ] Hooks: prepublish, postpublish
+  - [ ] Automatically generate changelog
+  - [ ] Automatically decide the next version number
     - [ ] `feat: xxx` -> `patch`
     - [ ] `feat!: xxx` -> `minor`
     - [ ] `feat!!: xxx` -> `major`
 
-## 安装
+## Installation
 
 ```bash
 npm i -D jiek
@@ -47,13 +48,13 @@ pnpm i -D jiek
 yarn add -D jiek
 ```
 
-## 快速起步
+## Quick Start
 
-通过一些简单的方式能又快又轻松的生成需要的产物。
+Generate the required products quickly and easily through some simple methods.
 
-- 在 `package.json` 中添加入口文件，这里需要设置为原文件路径。
+- Add entry files in `package.json`, here you need to set the original file path.
 
-  你可以在 Node.js 文档中查看更多对于 [exports](https://nodejs.org/api/packages.html#exports) 的相关内容。
+  You can see more about [exports](https://nodejs.org/api/packages.html#exports) in the Node.js documentation.
 
 ```json
 {
@@ -63,11 +64,11 @@ yarn add -D jiek
 }
 ```
 
-- 假设你在工作空间下有一个包名字为 `@monorepo/utils` ，那么你可以运行 `jk -f utils build` 来构建这个包。
+- Suppose you have a package named `@monorepo/utils` in the workspace, then you can run `jk -f utils build` to build this package.
 
-- 当需要发布当前的包的时候，首先你可以通过 `jk -f utils prepublish` 来准备发布内容，然后再运行 `jk -f utils publish` 来发布，最后通过 `jk -f utils postpublish` 来清理发布内容。
+- When you need to publish the current package, you can first run `jk -f utils prepublish` to prepare the publishing content, then run `jk -f utils publish` to publish, and finally run `jk -f utils postpublish` to clean up the publishing content.
 
-- 当然可能你会觉得上面的操作有点繁琐，你可以通过在对应包的 `package.json` 中添加 `scripts` 来简化操作。
+- Of course, you may find the above operations a bit cumbersome, you can simplify the operations by adding `scripts` in the corresponding package's `package.json`.
 
 ```json
 {
@@ -80,9 +81,9 @@ yarn add -D jiek
 }
 ```
 
-> 如果你需要在发布前对要发布的内容进行检查，你可以通过 `prepublish` 子指令来在你的 dist 产物目录（可配置）下会生成相关的 `package.json` 文件，你可以检阅相关生成的文件。
+> If you need to check the content to be published before publishing, you can use the `prepublish` subcommand to generate the relevant `package.json` file in your dist product directory (configurable), and you can review the generated files.
 
-- 当配置好了上述的 hook 后，通过 `jk publish` 就可以一键完成构建发布动作了。
+- After configuring the above hooks, you can complete the build and publish actions with one command `jk publish`.
 
 ## CLI
 
@@ -91,9 +92,9 @@ jk/jiek [options] [command]
 jb/jiek-build [options] [filters/entries]
 ```
 
-### 自定义构建入口
+### Custom Build Entry
 
-你可以通过 `--entries` 来指定构建入口，这里的入口定义是基于 `package.json` 中的 `exports` 字段来进行的。
+You can specify the build entry through `--entries`, the entry definition here is based on the `exports` field in `package.json`.
 
 ```bash
 jb -e .
@@ -102,7 +103,7 @@ jb --entries ./foo
 jb --entries ./foo,./bar
 ```
 
-当你的项目是一个非 `monorepo` 项目时，你可以直接通过 `jb [entries]` 来进行构建。
+When your project is a non-`monorepo` project, you can directly build through `jb [entries]`.
 
 ```bash
 jb .
@@ -110,9 +111,9 @@ jb ./foo
 jb ./foo,./bar
 ```
 
-### 过滤器
+### Filters
 
-你可以通过 `--filter` 来过滤需要构建的包，我们使用了和 pnpm 一样的过滤器规则，所以你可以在这里查阅 [pnpm 的过滤器规则](https://pnpm.io/filtering)
+You can filter the packages to be built through `--filter`, we use the same filter rules as pnpm, so you can check the [pnpm filter rules](https://pnpm.io/filtering) here.
 
 ```bash
 jb --filter @monorepo/*
@@ -120,7 +121,7 @@ jb --filter @monorepo/utils
 jb -f utils
 ```
 
-当你的项目是一个 `monorepo` 项目时，你可以直接通过 `jb [filters]` 来进行构建。
+When your project is a `monorepo` project, you can directly build through `jb [filters]`.
 
 ```bash
 jb @monorepo/*
@@ -128,94 +129,94 @@ jb @monorepo/utils
 jb utils
 ```
 
-### 自定义构建工具
+### Custom Build Tools
 
-我们支持多种构建工具，你可以通过 `--type <type: esbuild | swc>` 来指定构建工具。
+We support multiple build tools, you can specify the build tool through `--type <type: esbuild | swc>`.
 
-- 默认会使用 `esbuild`(`rollup-plugin-esbuild`)
-- 如果你的依赖空间中存在 `swc`(`rollup-plugin-swc3`) 依赖，那么我们会自动切换到 `swc`
-- 如果俩个都存在，默认会使用 `esbuild`
+- By default, `esbuild` (`rollup-plugin-esbuild`) will be used
+- If the `swc` (`rollup-plugin-swc3`) dependency exists in your dependency space, we will automatically switch to `swc`
+- If both exist, `esbuild` will be used by default
 
 ```bash
 jb --type swc
 ```
 
-> 如果使用类型的构建工具依赖没有安装，那我们会提示你安装对应的依赖。
+> If the build tool dependency is not installed, we will prompt you to install the corresponding dependency.
 
-### 最小化
+### Minification
 
-我们提供了多种方式来支持最小化的构建，默认会自动启用，同时我们默认会选择使用构建工具内置的最小化插件来进行最小化。
+We provide multiple ways to support minified builds, which are enabled by default, and we will use the build tool's built-in minification plugin for minification by default.
 
-- 你可以通过 `--minType` 选择使用 `terser`(`rollup-plugin-terser`) 来进行最小化，如果你没有安装 `terser`，我们会提示你安装。
-- 你可以通过 `--noMin` 来关闭生成最小化产物。
-- 你可以通过 `--onlyMinify` 来只生成最小化产物，这样我们会直接替换原产物路径，而不是添加一个 `.min` 后缀再进行输出。
+- You can choose to use `terser` (`rollup-plugin-terser`) for minification through `--minType`, if you have not installed `terser`, we will prompt you to install it.
+- You can disable the generation of minified products through `--noMin`.
+- You can generate only minified products through `--onlyMinify`, in this case, we will directly replace the original product path instead of adding a `.min` suffix before outputting.
 
 ```bash
 jb --minType terser
 jb --onlyMinify
 ```
 
-### 去除指定构建内容
+### Exclude Specific Build Content
 
-你可以通过 `--noJs` 来关闭 `js` 的构建，通过 `--noDts` 来关闭 `dts` 的构建。
+You can disable the build of `js` through `--noJs`, and disable the build of `dts` through `--noDts`.
 
 ```bash
 jb --noJs
 jb --noDts
 ```
 
-### 自定义产物目录
+### Custom Output Directory
 
-你可以通过 `--outdir` 来指定产物目录。
+You can specify the output directory through `--outdir`.
 
 ```bash
 jb --outdir lib
 ```
 
-### 监听模式
+### Watch Mode
 
-你可以通过 `--watch` 来开启监听模式。
+You can enable watch mode through `--watch`.
 
 ```bash
 jb --watch
 ```
 
-### 外部模块
+### External Modules
 
-除了通过 `package.json` 中的 `dependencies`、`peerDependencies`、`optionalDependencies` 来自动标记外部模块外，你还可以通过 `--external` 来手动标记外部模块。
+In addition to automatically marking external modules through `dependencies`, `peerDependencies`, `optionalDependencies` in `package.json`, you can also manually mark external modules through `--external`.
 
 ```bash
 jb --external react
 jb --external react,react-dom
 ```
 
-### 关闭产物的自动清理
+### Disable Automatic Cleanup of Products
 
-你可以通过 `--noClean` 来关闭产物的自动清理。
+You can disable the automatic cleanup of products through `--noClean`.
 
 ```bash
 jb --noClean
 ```
 
-### 自定义 tsconfig 路径
+### Custom tsconfig Path
 
-你可以通过 `--tsconfig` 来指定 `tsconfig` 的路径。
+You can specify the path of `tsconfig` through `--tsconfig`.
 
 ```bash
 jb --tsconfig ./tsconfig.custom-build.json
 ```
 
-同时你还可以通过 `--dtsconfig` 来指定 `dts` 插件使用的 `tsconfig` 的路径（当然我不建议你这么做）。
+You can also specify the path of `dtsconfig` used by the `dts` plugin through `--dtsconfig` (although I don't recommend doing this).
 
 ```bash
 jb --dtsconfig ./tsconfig.custom-dts.json
 ```
 
-## 为什么不使用 X？
+## Why not use X?
 
-在这里与 `jiek` 类似的工具有：[tsup](https://github.com/egoist/tsup)、[unbuild](https://github.com/unjs/unbuild)、[bunchee](https://github.com/huozhi/bunchee)、[pkgroll](https://github.com/privatenumber/pkgroll)、[tsdown](https://github.com/sxzz/tsdown)。但是他们都有着一些共同问题没有解决，比如说：
+Similar tools to `jiek` include: [tsup](https://github.com/egoist/tsup), [unbuild](https://github.com/unjs/unbuild), [bunchee](https://github.com/huozhi/bunchee), [pkgroll](https://github.com/privatenumber/pkgroll), [tsdown](https://github.com/sxzz/tsdown). However, they all have some common issues that have not been resolved, such as:
 
-- `monorepo` 的支持存在一定的问题，在依赖工作空间其他的包时必须重新编译相关依赖
-- 编写入口文件的规则过于繁琐，不够自然
-- 无法处理 `tsconfig.json` 中的 `Project Reference` 相关问题
-- 根据`conditions`
+- There are certain issues with `monorepo` support, and dependencies on other packages in the workspace must be recompiled
+- The rules for writing entry files are too cumbersome and not natural enough
+- Unable to handle issues related to `Project Reference` in `tsconfig.json`
+- According to `conditions`
