@@ -21,7 +21,7 @@ export function getWD() {
   } catch (e) {
     // @ts-ignore
     if ('message' in e && e.message === 'workspace root not found') {
-      wd = root
+      wd = root ?? process.cwd()
       notWorkspace = true
     } else {
       throw e

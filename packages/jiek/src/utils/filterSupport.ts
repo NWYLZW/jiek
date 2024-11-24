@@ -34,8 +34,8 @@ export function filterPackagesGraph(filters: string[]): Promise<ProjectsGraph[]>
 export async function getSelectedProjectsGraph(
   filter = program.getOptionValue('filter')
 ): Promise<ProjectsGraph> {
-  let root = getRoot()
   const { wd, notWorkspace } = getWD()
+  let root = getRoot() ?? wd
   if (notWorkspace) {
     return {
       wd,

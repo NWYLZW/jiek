@@ -4,8 +4,6 @@ import path from 'node:path'
 
 import { afterAll, beforeAll } from 'vitest'
 
-const commonPrefixes = ['node', 'jiek']
-
 const getROOT = (paths: string[]) => path.resolve(__dirname, 'fixtures', ...paths)
 
 export function prepareROOT(
@@ -45,5 +43,5 @@ export function prepareROOT(
         fs.rmSync(nodeModulesPath, { recursive: true })
       })
   })
-  return [ROOT, [...commonPrefixes, command, '--root', ROOT]] as [string, string[]]
+  return [ROOT, [command]] as [string, string[]]
 }
