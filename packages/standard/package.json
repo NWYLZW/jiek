@@ -1,5 +1,11 @@
 {
   "name": "@jiek/standard",
+  "exports": {
+    "./eslint": {
+      "import": "./eslint.config.mjs",
+      "require": "./eslint.config.js"
+    }
+  },
   "bin": {
     "dprint": "./bin/dprint.js",
     "eslint": "./bin/eslint.js"
