@@ -1,23 +1,23 @@
 {
-  "private": true,
   "name": "jiek-workspace",
-  "license": "MIT",
-  "repository": "https://github.com/NWYLZW/jiek",
+  "private": true,
   "author": {
     "name": "Yijie",
     "email": "yijie4188@gmail.com"
   },
-  "scripts": {
-    "postinstall": "dprint editor-info"
-  },
+  "license": "MIT",
+  "repository": "https://github.com/NWYLZW/jiek",
   "engines": {
     "node": ">= 18.0.0"
   },
+  "scripts": {
+    "postinstall": "dprint editor-info"
+  },
   "devDependencies": {
+    "@jiek/standard": "workspace:*",
+    "@pnpm/filter-workspace-packages": "^7.2.13",
     "@types/mock-fs": "^4.13.4",
     "@types/node": "^18.19.26",
-    "@pnpm/filter-workspace-packages": "^7.2.13",
-    "@jiek/standard": "workspace:*",
     "esbuild-register": "^3.5.0",
     "jiek": "workspace:*",
     "js-yaml": "^4.1.0",
