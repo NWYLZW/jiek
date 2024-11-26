@@ -13,26 +13,34 @@ if (!packageDir) {
 
 const resolveByPackageDir = (path: string) => resolve(packageDir, path)
 
+const logger = fs.createWriteStream(resolveByPackageDir('.eslint.log'), {
+  flags: 'a'
+})
+const log = (...args: any[]) => {
+  logger.write(`[${new Date().toLocaleString()}] ${
+    args.map(a => {
+      if (typeof a === 'object') {
+        return JSON.stringify(a)
+      }
+      return a
+    }).join(' ')
+  }\n`)
+}
+
 const args = process.argv.slice(2)
 
 const binPath = resolveByPackageDir('node_modules/.bin/eslint')
 
-// if (args.length > 0) {
-//   args.unshift('-c', resolveByPackageDir('.eslintrc.cjs'))
-// }
+log('args:', args)
+if (args.length > 0) {
+  args.unshift('-c', resolveByPackageDir('eslint.config.mjs'))
+}
 
 const command = [binPath, ...args].join(' ')
+log('command', command)
 
-fs.appendFileSync(resolveByPackageDir('.eslint.log'), `command: ${command}\n`, 'utf-8')
-
-try {
-  execSync(command, {
-    stdio: 'inherit',
-    env: {
-      ...process.env
-    }
-  })
-} catch (e) {
-  fs.appendFileSync(resolveByPackageDir('.eslint.error.log'), `${e}\n`, 'utf-8')
-  process.exit(1)
-}
+execSync(command, {
+  stdio: 'inherit',
+  cwd: process.cwd(),
+  env: process.env
+})
