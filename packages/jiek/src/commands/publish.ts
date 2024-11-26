@@ -216,6 +216,17 @@ async function prepublish() {
         }
       }
     }
+    if (oldJSON['devDependencies']) {
+      newJSONString = applyEdits(
+        newJSONString,
+        modify(
+          newJSONString,
+          ['devDependencies'],
+          undefined,
+          { formattingOptions }
+        )
+      )
+    }
     if (oldJSON['peerDependencies']) {
       const peerDependenciesMeta = Object.keys(oldJSON['peerDependencies']).reduce(
         (acc, key) => {
