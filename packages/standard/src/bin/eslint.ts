@@ -1,7 +1,7 @@
 /* eslint-disable node/prefer-global/process */
 import { execSync } from 'node:child_process'
-import { resolve } from 'node:path'
 import * as fs from 'node:fs'
+import { resolve } from 'node:path'
 
 const {
   JIEK_PACKAGE_DIR: packageDir
