@@ -50,7 +50,7 @@
   },
   "peerDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
-    "@pnpm/filter-workspace-packages": "^7.2.13",
+    "@pnpm/filter-workspace-packages": "^7.2.13||^8.0.0||^9.0.0||^10.0.0",
     "esbuild-register": "^3.5.0",
     "postcss": "^8.4.47",
     "rollup-plugin-postcss": "^4.0.2",

@@ -2,7 +2,6 @@ import fs from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 
-import { filterPackagesFromDir } from '@pnpm/filter-workspace-packages'
 import { program } from 'commander'
 import { load } from 'js-yaml'
 
@@ -69,6 +68,7 @@ export async function getSelectedProjectsGraph(
       }
       filter = packageJSON.name
     }
+    const { filterPackagesFromDir } = await import('@pnpm/filter-workspace-packages')
     const { selectedProjectsGraph } = await filterPackagesFromDir(wd, [{
       filter: filter ?? '',
       followProdDepsOnly: true
