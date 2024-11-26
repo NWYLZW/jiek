@@ -1,0 +1,21 @@
+{
+  "extends": ["./tsconfig.base.json"],
+  "compilerOptions": {
+    "composite": true,
+    "target": "esnext",
+    "lib": ["ES2019", "dom"],
+    "customConditions": ["browser"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "types": []
+  },
+  "references": [
+    { "path": "./tsconfig.default.json" }
+  ],
+  "include": [
+    "../apis/src/**/*.share.d.ts",
+    "../website/src/**/*",
+    "../website/tests/**/*",
+    "../packages/*/src/**/*.browser.ts"
+  ]
+}

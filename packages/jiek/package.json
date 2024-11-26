@@ -16,7 +16,15 @@
     "jiek-build": "bin/jiek-build.js",
     "jb": "bin/jiek-build.js"
   },
-  "files": ["dist", "src", "bin", "LICENSE", "README.md"],
+  "files": [
+    "dist",
+    "src",
+    "bin",
+    "bin-helper.js",
+    "bin-helper.cjs",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "prepublish": "jb -nm && jk",
     "postpublish": "jk",
@@ -25,6 +33,10 @@
   "exports": {
     "./package.json": "./package.json",
     ".": "./src/index.ts",
+    "./bin-helper": {
+      "require": "./bin-helper.cjs",
+      "default": "./bin-helper.js"
+    },
     "./cli": "./src/cli.ts",
     "./cli-only-build": "./src/cli-only-build.ts",
     "./rollup": "./src/rollup/index.ts"

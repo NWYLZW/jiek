@@ -1,17 +1,16 @@
 {
-  "private": true,
-  "name": "standard",
+  "name": "@jiek/standard",
   "bin": {
-    "dprint": "./node_modules/.bin/dprint"
+    "dprint": "./bin/dprint.js",
+    "eslint": "./bin/eslint.js"
   },
   "dependencies": {
-    "dprint": "^0.45.1",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0",
-    "eslint": "^8.52.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-simple-import-sort": "^10.0.0",
-    "eslint-plugin-unused-imports": "^2.0.0"
+    "@antfu/eslint-config": "^3.9.2",
+    "dprint": "^0.47.2",
+    "eslint": "^9.10.0"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "lodash-es": "^4.17.21"
   }
 }
