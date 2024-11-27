@@ -74,7 +74,7 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0
       execa:
-        specifier: 9.3.1
+        specifier: ~9.3.1
         version: 9.3.1
       js-yaml:
         specifier: ^4.1.0
@@ -6672,7 +6672,7 @@ snapshots:
 
   execa@8.0.1:
     dependencies:
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       get-stream: 8.0.1
       human-signals: 5.0.0
       is-stream: 3.0.0
@@ -6685,7 +6685,7 @@ snapshots:
   execa@9.3.1:
     dependencies:
       '@sindresorhus/merge-streams': 4.0.0
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       figures: 6.1.0
       get-stream: 9.0.1
       human-signals: 8.0.0
