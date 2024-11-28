@@ -21,6 +21,9 @@
     "./cli-only-build": "./src/cli-only-build.ts",
     "./rollup": "./src/rollup/index.ts"
   },
+  "imports": {
+    "#~/*": "./src/*"
+  },
   "bin": {
     "jiek": "bin/jiek.js",
     "jk": "bin/jiek.js",
@@ -40,9 +43,6 @@
     "prepublish": "jb -nm && jk",
     "postpublish": "jk",
     "test": "vitest run"
-  },
-  "imports": {
-    "#~/*": "./src/*"
   },
   "peerDependencies": {
     "@pnpm/filter-workspace-packages": "^7.2.13||^8.0.0||^9.0.0||^10.0.0",
