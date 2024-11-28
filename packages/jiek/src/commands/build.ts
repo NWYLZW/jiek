@@ -1,4 +1,4 @@
-import fs from 'node:fs'
+import fs, { existsSync, statSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 import process from 'node:process'
@@ -47,6 +47,21 @@ ${isDefault ? 'This command is the default command.' : ''}
 `.trim()
 
 interface BuildOptions {
+  ana?: boolean
+  /**
+   * @default '.jk-analyses'
+   */
+  'ana.dir': string
+  /**
+   * @default 'server'
+   */
+  'ana.mode': string
+  'ana.port'?: number
+  'ana.open'?: boolean
+  /**
+   * @default 'parsed'
+   */
+  'ana.size': string
   /**
    * Auto-detect the builder from the installed dependencies.
    * If the builder is not installed, it will prompt the user to install it.
@@ -139,7 +154,7 @@ ${entriesDescription}
 If you pass the --entries option, it will merge into the entries of the command.
 `.trim()
 
-const command = isDefault
+let command = isDefault
   ? (() => {
     const c = program
       .name('jb/jiek-build')
@@ -154,7 +169,7 @@ const command = isDefault
   : program
     .command(`build [${IS_WORKSPACE ? 'filters' : 'entries'}]`)
 
-command
+command = command
   .description(description)
   .option('-t, --type <TYPE>', `The type of build, support ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')}.`, v => {
     // eslint-disable-next-line ts/no-unsafe-argument
@@ -185,13 +200,32 @@ command
     'Only output minify files, but dts files will still be output, it only replaces the js files.',
     parseBoolean
   )
+
+command = command
   .option('--tsconfig <TSCONFIG>', 'The path of the tsconfig file which is used to generate js and dts files.', String)
   .option('--dtsconfig <DTSCONFIG>', 'The path of the tsconfig file which is used to generate dts files.', String)
+
+command = command
   .option('-w, --watch', 'Watch the file changes.', parseBoolean)
+
+command = command
+  .option('--ana', 'Enable the bundle analyzer.', parseBoolean)
+  .option('--ana.dir <DIR>', 'The directory of the bundle analyzer.', '.jk-analyses')
+  .option('--ana.mode <MODE>', 'The mode of the bundle analyzer, support "static", "json" and "server".', 'server')
+  .option('--ana.port <PORT>', 'The port of the bundle analyzer.', Number.parseInt)
+  .option('--ana.open', 'Open the bundle analyzer in the browser.', parseBoolean)
+  .option(
+    '--ana.size <SIZE>',
+    'The default size of the bundle analyzer, support "stat", "parsed" and "gzip".',
+    'parsed'
+  )
+
+command = command
   .option('-s, --silent', "Don't display logs.", parseBoolean)
   .option('-v, --verbose', 'Display debug logs.', parseBoolean)
+
+command
   .action(async (commandFiltersOrEntries: string | undefined, options: BuildOptions) => {
-    /* eslint-disable prefer-const */
     let {
       type,
       outdir,
@@ -209,7 +243,6 @@ command
       tsconfig,
       dtsconfig
     } = options
-    /* eslint-enable prefer-const */
     const resolvedType = type ?? DEFAULT_BUILDER_TYPE
     if (!withoutJs) {
       await checkDependency(BUILDER_TYPE_PACKAGE_NAME_MAP[resolvedType])
@@ -240,6 +273,21 @@ command
         },
         [] as string[]
       )
+
+    const analyzer = options.ana
+      ? {
+        dir: options['ana.dir'],
+        mode: options['ana.mode'],
+        port: options['ana.port'],
+        open: options['ana.open'],
+        size: options['ana.size']
+      }
+      : undefined
+
+    if (analyzer) {
+      await checkDependency('vite-bundle-analyzer')
+    }
+
     const { build } = loadConfig()
     silent = silent ?? build?.silent ?? false
 
@@ -259,6 +307,7 @@ command
     }
     const env = {
       ...process.env,
+      JIEK_ANALYZER: analyzer && JSON.stringify(analyzer),
       JIEK_BUILDER: type,
       JIEK_OUT_DIR: outdir,
       JIEK_CLEAN: String(!noClean),
@@ -302,6 +351,23 @@ command
         Object.entries(value).map(async ([dir, manifest]) => {
           if (manifest.name == null) {
             throw new Error('package.json must have a name field')
+          }
+          if (analyzer) {
+            const anaDir = path.resolve(dir, analyzer.dir)
+            if (!existsSync(anaDir)) {
+              fs.mkdirSync(anaDir, { recursive: true })
+            }
+            const gitIgnorePath = path.resolve(anaDir, '.gitignore')
+            if (!existsSync(gitIgnorePath)) {
+              fs.writeFileSync(gitIgnorePath, '*\n!.gitignore\n')
+            }
+            const npmIgnorePath = path.resolve(anaDir, '.npmignore')
+            if (!existsSync(npmIgnorePath)) {
+              fs.writeFileSync(npmIgnorePath, '*\n')
+            }
+            if (!statSync(anaDir).isDirectory()) {
+              throw new Error(`The directory '${anaDir}' is not a directory.`)
+            }
           }
 
           // TODO support auto build child packages in workspaces

@@ -1,6 +1,6 @@
 /* eslint-disable ts/strict-boolean-expressions */
 import fs from 'node:fs'
-import { dirname, extname, relative, resolve } from 'node:path'
+import { dirname, extname, join, relative, resolve } from 'node:path'
 import process from 'node:process'
 
 import type { RecursiveRecord } from '@jiek/pkger/entrypoints'
@@ -32,6 +32,7 @@ interface PackageJSON {
 }
 
 const {
+  JIEK_ANALYZER,
   JIEK_ROOT,
   JIEK_NAME,
   JIEK_BUILDER,
@@ -58,6 +59,14 @@ const resolveArrayString = (str: string | undefined) => {
     )
   ]
   return arr?.length ? arr : undefined
+}
+
+const ANALYZER = JIEK_ANALYZER && JSON.parse(JIEK_ANALYZER) as {
+  dir?: string
+  mode?: string
+  size?: string
+  port?: number
+  open?: boolean
 }
 
 const entries = resolveArrayString(JIEK_ENTRIES)?.map(e => ({ 'index': '.' }[e] ?? e))
@@ -195,7 +204,18 @@ const withMinify = (
   },
   minify = build?.output?.minify ?? MINIFY_DEFAULT_VALUE
 ): OutputOptions[] => {
-  if (minify === false) return [output]
+  output.plugins = output.plugins ?? []
+  const onlyOncePlugins: Plugin[] = [
+    // adapter(analyzer({
+    //   analyzerMode: 'server',
+    //   analyzerPort: 8888,
+    //   reportTitle: 'Bundle Analysis'
+    // }))
+  ]
+  if (minify === false) {
+    output.plugins.push(...onlyOncePlugins)
+    return [output]
+  }
 
   const minifyPlugin = resolvedMinifyOptions.type === 'esbuild'
     // eslint-disable-next-line ts/no-unsafe-argument
@@ -205,6 +225,7 @@ const withMinify = (
     ? import('rollup-plugin-swc3').then(({ minify }) => minify(noTypeResolvedMinifyOptions as any))
     // eslint-disable-next-line ts/no-unsafe-argument
     : import('@rollup/plugin-terser').then(({ default: minify }) => minify(noTypeResolvedMinifyOptions as any))
+  const notOnlyOncePlugins = output.plugins
   return minify === 'only-minify'
     ? [{
       ...output,
@@ -217,7 +238,7 @@ const withMinify = (
             throw new Error('entryFileNames must be a function')
           })(),
       plugins: [
-        ...(output.plugins ?? []),
+        ...notOnlyOncePlugins,
         minifyPlugin
       ]
     }]
@@ -233,7 +254,7 @@ const withMinify = (
             })(),
         file: output.file?.replace(/(\.[cm]?js)$/, '.min$1'),
         plugins: [
-          ...(output.plugins ?? []),
+          ...notOnlyOncePlugins,
           minifyPlugin
         ]
       }
@@ -355,6 +376,59 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           ...noTypeResolvedBuilderOptions
         })
       )
+    const ana = ANALYZER
+      ? import('vite-bundle-analyzer').then(({ adapter, analyzer }) => {
+        const defaultSizes = ({
+          parsed: 'parsed',
+          stat: 'stat',
+          gzip: 'gzip'
+        } as const)[ANALYZER.size ?? 'stat'] ?? 'parsed'
+        const title = `${join(context.name, context.path)} ${context.conditionals.join(',')}`
+        const filename = title
+          .replace('\/', '_')
+          .replace(' ', '_')
+        switch (ANALYZER.mode ?? 'server') {
+          case 'server':
+            return adapter(analyzer({
+              defaultSizes,
+              analyzerMode: 'server',
+              analyzerPort: ANALYZER.port ?? 'auto',
+              openAnalyzer: ANALYZER.open ?? false,
+              reportTitle: `Bundle Analysis ${title}`
+            }))
+          case 'json':
+            return adapter(analyzer({
+              defaultSizes,
+              analyzerMode: 'json',
+              fileName: ANALYZER.dir ? join(ANALYZER.dir, filename) : filename
+            }))
+          case 'static':
+            return adapter(analyzer({
+              defaultSizes,
+              analyzerMode: 'static',
+              analyzerPort: ANALYZER.port ?? 'auto',
+              openAnalyzer: ANALYZER.open ?? false,
+              reportTitle: `Bundle Analysis ${title}`,
+              fileName: ANALYZER.dir ? join(ANALYZER.dir, filename) : filename
+            }))
+          case undefined: {
+            throw new Error('Not implemented yet: undefined case')
+          }
+          default:
+            void sendMessage(
+              {
+                ...throughEventProps,
+                data: {
+                  ...throughEventProps.data,
+                  event: 'error',
+                  message: 'ANALYZER.mode not supported',
+                  tags: ['js']
+                }
+              } satisfies RollupProgressEvent
+            )
+        }
+      })
+      : undefined
     rollupOptions.push({
       input: inputObj,
       external,
@@ -395,6 +469,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           .catch(() => void 0),
         builder,
         commonjs(),
+        ana,
         progress({
           onEvent: (event, message) =>
             void sendMessage(
