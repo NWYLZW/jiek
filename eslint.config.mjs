@@ -1,1 +1,1 @@
-export * from '@jiek/standard/eslint'
+export * from '@jiek/standard/eslint.config'

@@ -1,14 +1,11 @@
 {
   "name": "@jiek/standard",
   "exports": {
-    "./eslint": {
-      "import": "./eslint.config.mjs",
-      "require": "./eslint.config.js"
-    }
+    "./eslint.config": "./src/eslint.config.ts"
   },
   "bin": {
     "dprint": "./bin/dprint.js",
-    "eslint": "./bin/eslint.js"
+    "eslint": "./node_modules/.bin/eslint"
   },
   "dependencies": {
     "@antfu/eslint-config": "^3.9.2",

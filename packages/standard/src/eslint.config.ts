@@ -1,6 +1,6 @@
-import config from '@antfu/eslint-config'
+import antfu from '@antfu/eslint-config'
 
-export default config(
+export default antfu(
   {
     stylistic: false,
     typescript: {
