@@ -9,6 +9,7 @@ const {
   JIEK_PACKAGE_DIR: packageDir
 } = process.env
 
+// eslint-disable-next-line ts/strict-boolean-expressions
 if (!packageDir) {
   throw new Error('JIEK_PACKAGE_DIR not found in env')
 }
@@ -24,6 +25,7 @@ const log = (...args: any[]) => {
       if (typeof a === 'object') {
         return JSON.stringify(a)
       }
+      // eslint-disable-next-line ts/no-unsafe-return
       return a
     }).join(' ')
   }\n`)
@@ -66,11 +68,13 @@ add_config_file_arg: if (args.length > 0) {
   if (config) {
     log('config', config)
     log('pkgConfigPath', pkgConfigPath)
+    // eslint-disable-next-line ts/no-unsafe-assignment
     const mergedConfig = mergeWith(
       config,
       JSON.parse(fs.readFileSync(pkgConfigPath, 'utf-8')),
       (objValue, srcValue) => {
         if (Array.isArray(objValue)) {
+          // eslint-disable-next-line ts/no-unsafe-call,ts/no-unsafe-member-access,ts/no-unsafe-return
           return srcValue.concat(objValue)
         }
       }
