@@ -1,5 +1,7 @@
+/* eslint-disable ts/strict-boolean-expressions */
 import fs from 'node:fs'
 import { dirname, extname, relative, resolve } from 'node:path'
+import process from 'node:process'
 
 import type { RecursiveRecord } from '@jiek/pkger/entrypoints'
 import { getAllLeafs } from '@jiek/pkger/entrypoints'
@@ -119,6 +121,7 @@ const resolveBuildPlugins = (context: ConfigGenerateContext, plugins: TemplateOp
   }
   let js: InputPluginOption = []
   let dts: InputPluginOption = []
+  // eslint-disable-next-line ts/switch-exhaustiveness-check
   switch (typeof plugins) {
     case 'function':
       js = plugins('js', context)
@@ -157,7 +160,9 @@ const resolveWorkspacePath = (p: string) => resolve(WORKSPACE_ROOT, p)
 
 const pascalCase = (str: string) =>
   str
+    // eslint-disable-next-line ts/no-unsafe-member-access,ts/no-unsafe-return,ts/no-unsafe-call
     .replace(/[@|/-](\w)/g, (_, $1) => $1.toUpperCase())
+    // eslint-disable-next-line ts/no-unsafe-member-access,ts/no-unsafe-return,ts/no-unsafe-call
     .replace(/(?:^|-)(\w)/g, (_, $1) => $1.toUpperCase())
 
 const reveal = (obj: string | Record<string, unknown>, keys: string[]) =>
@@ -193,9 +198,12 @@ const withMinify = (
   if (minify === false) return [output]
 
   const minifyPlugin = resolvedMinifyOptions.type === 'esbuild'
+    // eslint-disable-next-line ts/no-unsafe-argument
     ? import('rollup-plugin-esbuild').then(({ minify }) => minify(noTypeResolvedMinifyOptions as any))
     : resolvedMinifyOptions.type === 'swc'
+    // eslint-disable-next-line ts/no-unsafe-argument
     ? import('rollup-plugin-swc3').then(({ minify }) => minify(noTypeResolvedMinifyOptions as any))
+    // eslint-disable-next-line ts/no-unsafe-argument
     : import('@rollup/plugin-terser').then(({ default: minify }) => minify(noTypeResolvedMinifyOptions as any))
   return minify === 'only-minify'
     ? [{
@@ -389,7 +397,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
         commonjs(),
         progress({
           onEvent: (event, message) =>
-            sendMessage(
+            void sendMessage(
               {
                 ...throughEventProps,
                 data: { ...throughEventProps.data, event, message, tags: ['js'] }
@@ -445,7 +453,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
         }),
         progress({
           onEvent: (event, message) =>
-            sendMessage(
+            void sendMessage(
               {
                 ...throughEventProps,
                 data: { ...throughEventProps.data, event, message, tags: ['dts'] }
@@ -462,14 +470,14 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
       {
         name: 'jiek-plugin-watcher',
         watchChange: (id) =>
-          sendMessage(
+          void sendMessage(
             {
               type: 'watchChange',
               data: { id, name: JIEK_NAME!, path, input }
             } satisfies RollupProgressEvent
           )
       },
-      ...(rollupOptions[0].plugins as any)
+      ...(rollupOptions[0].plugins as Plugin[])
     ]
   }
   return rollupOptions
@@ -519,6 +527,7 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
         pkgIsModule
       }
 
+      // eslint-disable-next-line ts/switch-exhaustiveness-check
       switch (typeof keyExports) {
         case 'string': {
           configs.push(...generateConfigs({
@@ -545,7 +554,7 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
       }
     })
   )
-  sendMessage(
+  void sendMessage(
     {
       type: 'init',
       data: {
