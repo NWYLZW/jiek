@@ -146,6 +146,16 @@ jb --type swc
 
 > 如果使用类型的构建工具依赖没有安装，那我们会提示你安装对应的依赖。
 
+### ESM 与 CJS
+
+我们会根据你在 `package.json` 中的 `type` 字段来决定输出文件的后缀。
+
+### 在 ESM 中使用 `require()`
+
+默认我们会将在 ESM 产物中的 `require()` 替换为 [`createRequire(import.meta.url)`](https://nodejs.org/api/esm.html#esm_create_require_filename)，这样可以让你在 ESM 中使用 `require()`。
+
+- [ ] 你可以通过 `--noCreateRequire` 来关闭这个特性。
+
 ### 环境变量
 
 你可以通过 `--env.<name>=<value>` 来设置环境变量。

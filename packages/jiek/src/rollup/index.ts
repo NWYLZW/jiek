@@ -21,6 +21,7 @@ import { recusiveListFiles } from '#~/utils/recusiveListFiles.ts'
 import { getCompilerOptionsByFilePath } from '#~/utils/ts.ts'
 
 import type { ConfigGenerateContext, RollupProgressEvent, TemplateOptions } from './base'
+import createRequire, { isFormatEsm } from './plugins/create-require'
 import progress from './plugins/progress'
 import skip from './plugins/skip'
 import externalResolver from './utils/externalResolver'
@@ -454,7 +455,10 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           ),
           strict: typeof options?.output?.strict === 'object'
             ? options.output.strict.js
-            : options?.output?.strict
+            : options?.output?.strict,
+          plugins: [
+            isFormatEsm(isModule)
+          ]
         })
       ],
       plugins: [
@@ -467,6 +471,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
             })
           )
           .catch(() => void 0),
+        createRequire(),
         builder,
         commonjs(),
         ana,

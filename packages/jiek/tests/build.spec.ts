@@ -12,6 +12,10 @@ describe('simple mjs', () => {
   const [root, prefixes] = prepareRootWithSubCmd('simple-mjs')
   test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
 })
+describe('require in mjs', () => {
+  const [root, prefixes] = prepareRootWithSubCmd('require-in-mjs')
+  test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
+})
 describe('only minify', () => {
   const [root, prefixes] = prepareRootWithSubCmd('only-minify')
   test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))

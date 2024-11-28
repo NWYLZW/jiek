@@ -1201,6 +1201,93 @@ export { bar, index as default };
 "
 `;
 
+exports[`require in mjs > common 1`] = `
+[
+  "index.cjs",
+  "index.d.cts",
+  "index.d.ts",
+  "index.js",
+  "index.min.cjs",
+  "index.min.js",
+]
+`;
+
+exports[`require in mjs > common 2`] = `
+"index.cjs:
+'use strict';
+
+var node_module = require('node:module');
+
+var _documentCurrentScript = typeof document !== 'undefined' ? document.currentScript : null;
+var require$1 = (
+  false
+    ? /* @__PURE__ */ node_module.createRequire((typeof document === 'undefined' ? require('u' + 'rl').pathToFileURL(__filename).href : (_documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === 'SCRIPT' && _documentCurrentScript.src || new URL('index.cjs', document.baseURI).href)))
+    : require
+);
+
+function foo() {
+  return "foo";
+}
+function bar() {
+  return require$1("./bar").bar;
+}
+
+exports.bar = bar;
+exports.foo = foo;
+"
+`;
+
+exports[`require in mjs > common 3`] = `
+"index.d.cts:
+declare function foo(): string;
+declare function bar(): any;
+
+export { bar, foo };
+"
+`;
+
+exports[`require in mjs > common 4`] = `
+"index.d.ts:
+declare function foo(): string;
+declare function bar(): any;
+
+export { bar, foo };
+"
+`;
+
+exports[`require in mjs > common 5`] = `
+"index.js:
+import { createRequire } from 'node:module';
+
+var require$1 = (
+  false
+    ? /* @__PURE__ */ createRequire(import.meta.url)
+    : require
+);
+
+function foo() {
+  return "foo";
+}
+function bar() {
+  return require$1("./bar").bar;
+}
+
+export { bar, foo };
+"
+`;
+
+exports[`require in mjs > common 6`] = `
+"index.min.cjs:
+"use strict";var t=require("node:module"),u=typeof document<"u"?document.currentScript:null,e=require;function r(){return"foo"}function n(){return e("./bar").bar}exports.bar=n,exports.foo=r;
+"
+`;
+
+exports[`require in mjs > common 7`] = `
+"index.min.js:
+import"node:module";var r=require;function e(){return"foo"}function o(){return r("./bar").bar}export{o as bar,e as foo};
+"
+`;
+
 exports[`resolve imports > common 1`] = `
 [
   "index.cjs",
