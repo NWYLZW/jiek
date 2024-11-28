@@ -146,6 +146,15 @@ jb --type swc
 
 > 如果使用类型的构建工具依赖没有安装，那我们会提示你安装对应的依赖。
 
+### 环境变量
+
+你可以通过 `--env.<name>=<value>` 来设置环境变量。
+
+```bash
+jb --env.NODE_ENV=production
+jb --env.JIEK_BUILDER=swc --env.JIEK_OUT_DIR=lib
+```
+
 ### 最小化
 
 我们提供了多种方式来支持最小化的构建，默认会自动启用，同时我们默认会选择使用构建工具内置的最小化插件来进行最小化。
