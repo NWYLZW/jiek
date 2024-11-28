@@ -164,9 +164,15 @@ importers:
       dprint:
         specifier: ^0.47.2
         version: 0.47.5
+      esbuild-register:
+        specifier: latest
+        version: 3.6.0(esbuild@0.20.2)
       eslint:
         specifier: ^9.10.0
         version: 9.15.0
+      eslint-flat-config-utils:
+        specifier: ^0.4.0
+        version: 0.4.0
     devDependencies:
       '@types/lodash-es':
         specifier: ^4.17.12
@@ -2105,6 +2111,11 @@ packages:
 
   esbuild-register@3.5.0:
     resolution: {integrity: sha512-+4G/XmakeBAsvJuDugJvtyF1x+XJT4FMocynNpxrvEBViirpfUn2PgNpCHedfWhF4WokNsO/OvMKrmJOIJsI5A==, tarball: https://registry.npmjs.org/esbuild-register/-/esbuild-register-3.5.0.tgz}
+    peerDependencies:
+      esbuild: '>=0.12 <1'
+
+  esbuild-register@3.6.0:
+    resolution: {integrity: sha512-H2/S7Pm8a9CL1uhp9OvjwrBh5Pvx0H8qVOxNu8Wed9Y7qv56MPtq+GGM8RJpq6glYJn9Wspr8uw7l55uyinNeg==, tarball: https://registry.npmjs.org/esbuild-register/-/esbuild-register-3.6.0.tgz}
     peerDependencies:
       esbuild: '>=0.12 <1'
 
@@ -6323,6 +6334,13 @@ snapshots:
   esbuild-register@3.5.0(esbuild@0.20.2):
     dependencies:
       debug: 4.3.4
+      esbuild: 0.20.2
+    transitivePeerDependencies:
+      - supports-color
+
+  esbuild-register@3.6.0(esbuild@0.20.2):
+    dependencies:
+      debug: 4.3.7
       esbuild: 0.20.2
     transitivePeerDependencies:
       - supports-color

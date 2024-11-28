@@ -1,6 +1,8 @@
-import antfu from '@antfu/eslint-config'
+import process from 'node:process'
 
-export default antfu(
+import config from '@antfu/eslint-config'
+
+export default config(
   {
     stylistic: false,
     typescript: {

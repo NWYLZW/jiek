@@ -1,16 +1,31 @@
 {
   "name": "@jiek/standard",
   "exports": {
-    "./eslint.config": "./src/eslint.config.ts"
+    "./eslint.config": {
+      "require": "./eslint.config.ignore.js",
+      "default": "./eslint.config.ignore.mjs"
+    }
+  },
+  "imports": {
+    "#eslint.config": "./src/eslint.config.ignore.ts"
   },
   "bin": {
     "dprint": "./bin/dprint.js",
     "eslint": "./node_modules/.bin/eslint"
   },
+  "files": [
+    "bin",
+    "dist",
+    "dprint.json",
+    "eslint.config.ignore.js",
+    "eslint.config.ignore.mjs"
+  ],
   "dependencies": {
     "@antfu/eslint-config": "^3.9.2",
     "dprint": "^0.47.2",
-    "eslint": "^9.10.0"
+    "esbuild-register": "latest",
+    "eslint": "^9.10.0",
+    "eslint-flat-config-utils": "^0.4.0"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
