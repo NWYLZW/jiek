@@ -1,9 +1,14 @@
 {
   "name": "@jiek/standard",
   "exports": {
+    "./eslint-helper": "./src/eslint-helper.ts",
     "./eslint.config": {
       "require": "./eslint.config.ignore.js",
       "default": "./eslint.config.ignore.mjs"
+    },
+    "./eslint.config.store": {
+      "require": "./eslint.config.store.js",
+      "default": "./eslint.config.store.mjs"
     }
   },
   "imports": {
