@@ -471,9 +471,9 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
             })
           )
           .catch(() => void 0),
+        commonjs(),
         createRequire(),
         builder,
-        commonjs(),
         ana,
         progress({
           onEvent: (event, message) =>
