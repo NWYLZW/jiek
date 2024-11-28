@@ -131,7 +131,8 @@ export default async function(options?: {
         'scripts/**/*.{js,ts}'
       ],
       rules: {
-        'no-console': 'off'
+        'no-console': 'off',
+        'test/consistent-test-it': 'off'
       }
     })
   if (tsESLintConfig) {
