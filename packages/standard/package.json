@@ -1,6 +1,7 @@
 {
   "name": "@jiek/standard",
   "exports": {
+    "./package.json": "./package.json",
     "./eslint-helper": "./src/eslint-helper.ts",
     "./eslint.config": {
       "require": "./eslint.config.ignore.js",
@@ -19,11 +20,16 @@
     "eslint": "./node_modules/.bin/eslint"
   },
   "files": [
+    "README.md",
     "bin",
     "dist",
     "dprint.json",
     "eslint.config.ignore.js",
-    "eslint.config.ignore.mjs"
+    "eslint.config.ignore.mjs",
+    "eslint.config.store.d.mts",
+    "eslint.config.store.d.ts",
+    "eslint.config.store.js",
+    "eslint.config.store.mjs"
   ],
   "dependencies": {
     "@antfu/eslint-config": "^3.9.2",
