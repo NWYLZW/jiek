@@ -253,3 +253,8 @@ jk publish -- --access public --no-git-checks
 - [nonzzz/vite-bundle-analyzer](https://github.com/nonzzz/vite-bundle-analyzer)
 - [nonzzz/squarified](https://github.com/nonzzz/squarified)
 - [typp-js/typp](https://github.com/typp-js/typp)
+
+## Q&A
+
+- Q: postcss 插件无法正常启用
+- A: postcss 插件依赖 `"rollup": "4.13.2"` 版本，如果你被默认安装上了更高版本的 rollup，你可以通过包管理器的 override 来锁定 jiek 的 rollup 的版本。
