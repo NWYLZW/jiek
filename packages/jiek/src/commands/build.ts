@@ -306,7 +306,6 @@ command
       entries = undefined
     }
     const env = {
-      ...process.env,
       JIEK_ANALYZER: analyzer && JSON.stringify(analyzer),
       JIEK_BUILDER: type,
       JIEK_OUT_DIR: outdir,
@@ -319,7 +318,8 @@ command
       JIEK_ONLY_MINIFY: String(onlyMin),
       JIEK_MINIFY_TYPE: minifyType,
       JIEK_TSCONFIG: tsconfig,
-      JIEK_DTSCONFIG: dtsconfig
+      JIEK_DTSCONFIG: dtsconfig,
+      ...process.env
     }
 
     const multiBars = new MultiBar({

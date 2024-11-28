@@ -10,6 +10,7 @@ program
   .version(pkg.version)
   .description(`${pkg.description} - Version ${pkg.version}`)
   .option('-c, --config-path <configPath>', 'Custom jiek config path')
+  .option('--env.<name>=<value>', 'Set the environment variable.')
 
 if (type !== '' && IS_WORKSPACE) {
   program
