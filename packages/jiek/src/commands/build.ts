@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'
+import process from 'node:process'
 
 import { confirm } from '@inquirer/prompts'
 import { MultiBar, Presets } from 'cli-progress'
@@ -16,7 +17,7 @@ import { loadConfig } from '#~/utils/loadConfig.ts'
 import { tsRegisterName } from '#~/utils/tsRegister.ts'
 
 import type { RollupProgressEvent, TemplateOptions } from '../rollup/base'
-import { BUILDER_TYPE_PACKAGE_NAME_MAP, BUILDER_TYPES } from '../rollup/base'
+import { BUILDER_TYPES, BUILDER_TYPE_PACKAGE_NAME_MAP } from '../rollup/base'
 
 declare module 'jiek' {
   export interface Config {
@@ -99,7 +100,7 @@ interface BuildOptions {
 async function checkDependency(dependency: string) {
   try {
     require.resolve(dependency)
-  } catch (e) {
+  } catch {
     console.error(`The package '${dependency}' is not installed, please install it first.`)
     const { notWorkspace } = getWD()
     const command = `pnpm install -${notWorkspace ? '' : 'w'}D ${dependency}`
@@ -156,6 +157,7 @@ const command = isDefault
 command
   .description(description)
   .option('-t, --type <TYPE>', `The type of build, support ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')}.`, v => {
+    // eslint-disable-next-line ts/no-unsafe-argument
     if (!BUILDER_TYPES.includes(v as any)) {
       throw new Error(`The value of 'type' must be ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')}`)
     }
@@ -210,7 +212,7 @@ command
     /* eslint-enable prefer-const */
     const resolvedType = type ?? DEFAULT_BUILDER_TYPE
     if (!withoutJs) {
-      await checkDependency(BUILDER_TYPE_PACKAGE_NAME_MAP[resolvedType]!)
+      await checkDependency(BUILDER_TYPE_PACKAGE_NAME_MAP[resolvedType])
       if (minifyType === 'builder') {
         minifyType = resolvedType
       }
@@ -220,7 +222,7 @@ command
         {
           ...BUILDER_TYPE_PACKAGE_NAME_MAP,
           terser: '@rollup/plugin-terser'
-        }[resolvedType]!
+        }[resolvedType]
       )
     }
     let shouldPassThrough = false
@@ -298,7 +300,7 @@ command
       let i = 0
       await Promise.all(
         Object.entries(value).map(async ([dir, manifest]) => {
-          if (!manifest.name) {
+          if (manifest.name == null) {
             throw new Error('package.json must have a name field')
           }
 
@@ -309,7 +311,7 @@ command
           )
           fs.writeFileSync(configFile, FILE_TEMPLATE(manifest))
           const command = [rollupBinaryPath, '--silent', '-c', configFile]
-          if (tsRegisterName) {
+          if (tsRegisterName != null) {
             command.unshift(`node -r ${tsRegisterName}`)
           }
           if (watch) {
@@ -330,6 +332,7 @@ command
           const locks: Record<string, boolean> = {}
           let inputMaxLen = 10
           child.on('message', (e: RollupProgressEvent) => {
+            // eslint-disable-next-line no-console,ts/no-unsafe-argument
             if (e.type === 'debug') console.log(...(Array.isArray(e.data) ? e.data : [e.data]))
           })
           !silent && child.on('message', (e: RollupProgressEvent) => {
@@ -348,12 +351,14 @@ command
               if (watch) {
                 initMessage += ' and watching...'
               }
+              // eslint-disable-next-line no-console
               console.log(initMessage)
               leafs.forEach(({ input }) => {
                 inputMaxLen = Math.max(inputMaxLen, input.length)
               })
               leafs.forEach(({ input, path }) => {
                 const key = `${input}:${path}`
+                // eslint-disable-next-line ts/strict-boolean-expressions
                 if (bars[key]) return
                 bars[key] = multiBars.create(50, 0, {
                   pkgName: manifest.name,
@@ -374,6 +379,7 @@ command
                 message
               } = e.data
               const bar = bars[`${input}:${path}`]
+              // eslint-disable-next-line ts/strict-boolean-expressions
               if (!bar) return
               const time = times[`${input}:${path}`]
               bar.update(
@@ -400,6 +406,7 @@ command
               } = e.data
               const key = `${input}:${path}`
               const bar = bars[key]
+              // eslint-disable-next-line ts/strict-boolean-expressions
               if (!bar) return
               let time = times[key] ?? 1
               if (!locks[key]) {
