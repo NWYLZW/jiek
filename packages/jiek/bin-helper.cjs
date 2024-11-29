@@ -1,6 +1,24 @@
-const {
-  JIEK_BIN__FILEPATH: binFilePath
-} = process.env
+const process = require('node:process')
+
+/**
+ * @type {string | undefined}
+ */
+let binFilePath
+
+try {
+  // eslint-disable-next-line unicorn/error-message
+  throw new Error()
+} catch (e) {
+  const { stack } = e
+  const lines = stack.split('\n')
+  const caller = lines[lines.length - 1]
+  const match = caller.match(/\(([^)]+)\)$/)
+  if (match) {
+    binFilePath = match[1].replace(/:\d+:\d+$/, '')
+  }
+}
+
+binFilePath = binFilePath ?? process.env.JIEK_BIN__FILEPATH
 
 const {
   basename,
