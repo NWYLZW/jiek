@@ -225,7 +225,7 @@ command = command
   .option(
     '--ana.size <SIZE>',
     'The default size of the bundle analyzer, support "stat", "parsed" and "gzip".',
-    'stat'
+    'parsed'
   )
 
 command = command
