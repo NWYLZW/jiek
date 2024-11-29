@@ -10,6 +10,16 @@
     "directory": "packages/jiek"
   },
   "bugs": "https://github.com/NWYLZW/jiek/issues?q=is%3Aissue+is%3Aopen+jiek",
+  "keywords": [
+    "cli",
+    "zero-config",
+    "bundler",
+    "library",
+    "monorepo",
+    "builder",
+    "rollup",
+    "workspace"
+  ],
   "exports": {
     "./package.json": "./package.json",
     ".": "./src/index.ts",
