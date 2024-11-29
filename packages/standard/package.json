@@ -1,5 +1,6 @@
 {
   "name": "@jiek/standard",
+  "version": "0.1.0",
   "exports": {
     "./package.json": "./package.json",
     "./eslint-helper": "./src/eslint-helper.ts",
@@ -31,6 +32,10 @@
     "eslint.config.store.js",
     "eslint.config.store.mjs"
   ],
+  "scripts": {
+    "prepublish": "jb -nm && jk",
+    "postpublish": "jk"
+  },
   "dependencies": {
     "@antfu/eslint-config": "^3.9.2",
     "dprint": "^0.47.2",
