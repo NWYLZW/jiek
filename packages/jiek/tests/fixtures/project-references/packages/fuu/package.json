@@ -2,12 +2,12 @@
   "name": "@jiek/test-monorepo-fuu",
   "version": "0.1.0",
   "access": "public",
-  "devDependencies": {
-    "@jiek/test-monorepo-bar": "workspace:^*"
-  },
   "exports": {
     "./package.json": "./package.json",
     "./*.css": "./dist/*.css",
     ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@jiek/test-monorepo-bar": "workspace:^*"
   }
 }

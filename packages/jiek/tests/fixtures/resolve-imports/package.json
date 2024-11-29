@@ -1,6 +1,6 @@
 {
-  "type": "module",
   "name": "resolve-imports",
+  "type": "module",
   "version": "0.1.0",
   "exports": {
     "./package.json": "./package.json",
