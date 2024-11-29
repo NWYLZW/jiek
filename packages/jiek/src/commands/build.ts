@@ -285,7 +285,6 @@ command
     const modules: Module[] = []
     const cjsModules: Module[] = []
     const esmModules: Module[] = []
-    const server = createServer(options.port, 'localhost')
     let render: typeof renderView | undefined
     const analyzer = options.ana
       ? {
@@ -296,7 +295,8 @@ command
       }
       : undefined
     if (
-      ![
+      options.ana
+      && ![
         'stat',
         'parsed',
         'gzip'
@@ -304,23 +304,25 @@ command
     ) {
       throw new Error('The value of `ana.size` must be "stat", "parsed" or "gzip"')
     }
+    const server = analyzer && createServer(options.port, 'localhost')
 
     if (analyzer) {
       await checkDependency('vite-bundle-analyzer')
       const { renderView } = await import('vite-bundle-analyzer')
       render = renderView
     }
+    const anaPaths = new Set<string>()
     const refreshAnalyzer = async (subPath = '', renderModules = modules) => {
-      if (!(analyzer && render)) return
+      if (!(analyzer && server && render)) return
+      const p = `/ana${subPath}`
+      anaPaths.add(p)
       void server.renderTo(
-        `/ana${subPath}`,
+        p,
         await render(renderModules, {
           title: `Jiek Analyzer - ${subPath}`,
           mode: analyzer.size as 'stat' | 'parsed' | 'gzip'
         })
       )
-      // eslint-disable-next-line no-console
-      console.log(`Bundle analyzer is updated, you can visit ${server.rootUrl}/ana${subPath} to view it.`)
     }
 
     const { build } = loadConfig()
@@ -619,5 +621,20 @@ command
       }
     } finally {
       multiBars.stop()
+      let message = 'The build is complete'
+      if (analyzer) {
+        message += ` and the analyzer is running at http://localhost:${options.port}/ana in ${analyzer.mode} mode.\n`
+        message += analyzer.open ? ' The browser will open automatically.\n' : ''
+        if (anaPaths.size > 0) {
+          message += `The analyzer has ${anaPaths.size} pages:\n${
+            Array
+              .from(anaPaths)
+              .map(p => `http://localhost:${options.port}${p}`)
+              .join('\n')
+          }`
+        }
+      }
+      // eslint-disable-next-line no-console
+      !silent && console.log(message)
     }
   })
