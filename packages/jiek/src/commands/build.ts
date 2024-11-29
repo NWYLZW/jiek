@@ -1,4 +1,4 @@
-import fs, { existsSync, statSync } from 'node:fs'
+import { existsSync, mkdirSync, statSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 import process from 'node:process'
@@ -7,17 +7,20 @@ import { confirm } from '@inquirer/prompts'
 import { MultiBar, Presets } from 'cli-progress'
 import { program } from 'commander'
 import { execaCommand } from 'execa'
+import type { renderView } from 'vite-bundle-analyzer'
 
+import type { RollupBuildEvent } from '#~/bridge.ts'
 import { entriesDescription, filterDescription, outdirDescription } from '#~/commands/descriptions.ts'
 import { IS_WORKSPACE } from '#~/commands/meta.ts'
+import type { TemplateOptions } from '#~/rollup/base.ts'
+import { BUILDER_TYPES, BUILDER_TYPE_PACKAGE_NAME_MAP } from '#~/rollup/base.ts'
+import type { Module } from '#~/rollup/bundle-analyzer.ts'
+import { createServer } from '#~/server.ts'
 import type { ProjectsGraph } from '#~/utils/filterSupport.ts'
 import { filterPackagesGraph, getSelectedProjectsGraph } from '#~/utils/filterSupport.ts'
 import { getWD } from '#~/utils/getWD.ts'
 import { loadConfig } from '#~/utils/loadConfig.ts'
 import { tsRegisterName } from '#~/utils/tsRegister.ts'
-
-import type { RollupProgressEvent, TemplateOptions } from '../rollup/base'
-import { BUILDER_TYPES, BUILDER_TYPE_PACKAGE_NAME_MAP } from '../rollup/base'
 
 declare module 'jiek' {
   export interface Config {
@@ -56,7 +59,6 @@ interface BuildOptions {
    * @default 'server'
    */
   'ana.mode': string
-  'ana.port'?: number
   'ana.open'?: boolean
   /**
    * @default 'parsed'
@@ -77,6 +79,12 @@ interface BuildOptions {
    */
   outdir: string
   watch: boolean
+  /**
+   * The port of the server.
+   *
+   * @default 8888
+   */
+  port: number
   silent: boolean
   verbose: boolean
   entries?: string
@@ -207,17 +215,17 @@ command = command
 
 command = command
   .option('-w, --watch', 'Watch the file changes.', parseBoolean)
+  .option('-p, --port <PORT>', 'The port of the server.', Number.parseInt, 8888)
 
 command = command
   .option('--ana', 'Enable the bundle analyzer.', parseBoolean)
   .option('--ana.dir <DIR>', 'The directory of the bundle analyzer.', '.jk-analyses')
   .option('--ana.mode <MODE>', 'The mode of the bundle analyzer, support "static", "json" and "server".', 'server')
-  .option('--ana.port <PORT>', 'The port of the bundle analyzer.', Number.parseInt)
   .option('--ana.open', 'Open the bundle analyzer in the browser.', parseBoolean)
   .option(
     '--ana.size <SIZE>',
     'The default size of the bundle analyzer, support "stat", "parsed" and "gzip".',
-    'parsed'
+    'stat'
   )
 
 command = command
@@ -274,18 +282,45 @@ command
         [] as string[]
       )
 
+    const modules: Module[] = []
+    const cjsModules: Module[] = []
+    const esmModules: Module[] = []
+    const server = createServer(options.port, 'localhost')
+    let render: typeof renderView | undefined
     const analyzer = options.ana
       ? {
         dir: options['ana.dir'],
         mode: options['ana.mode'],
-        port: options['ana.port'],
         open: options['ana.open'],
         size: options['ana.size']
       }
       : undefined
+    if (
+      ![
+        'stat',
+        'parsed',
+        'gzip'
+      ].includes(analyzer?.size ?? '')
+    ) {
+      throw new Error('The value of `ana.size` must be "stat", "parsed" or "gzip"')
+    }
 
     if (analyzer) {
       await checkDependency('vite-bundle-analyzer')
+      const { renderView } = await import('vite-bundle-analyzer')
+      render = renderView
+    }
+    const refreshAnalyzer = async (subPath = '', renderModules = modules) => {
+      if (!(analyzer && render)) return
+      void server.renderTo(
+        `/ana${subPath}`,
+        await render(renderModules, {
+          title: `Jiek Analyzer - ${subPath}`,
+          mode: analyzer.size as 'stat' | 'parsed' | 'gzip'
+        })
+      )
+      // eslint-disable-next-line no-console
+      console.log(`Bundle analyzer is updated, you can visit ${server.rootUrl}/ana${subPath} to view it.`)
     }
 
     const { build } = loadConfig()
@@ -336,12 +371,12 @@ command
         throw new Error('no package found')
       }
       const wdNodeModules = path.resolve(wd, 'node_modules')
-      if (!fs.existsSync(wdNodeModules)) {
-        fs.mkdirSync(wdNodeModules)
+      if (!existsSync(wdNodeModules)) {
+        mkdirSync(wdNodeModules)
       }
       const jiekTempDir = (...paths: string[]) => path.resolve(wdNodeModules, '.jiek', ...paths)
-      if (!fs.existsSync(jiekTempDir())) {
-        fs.mkdirSync(jiekTempDir())
+      if (!existsSync(jiekTempDir())) {
+        mkdirSync(jiekTempDir())
       }
 
       const rollupBinaryPath = require.resolve('rollup')
@@ -355,15 +390,15 @@ command
           if (analyzer) {
             const anaDir = path.resolve(dir, analyzer.dir)
             if (!existsSync(anaDir)) {
-              fs.mkdirSync(anaDir, { recursive: true })
+              mkdirSync(anaDir, { recursive: true })
             }
             const gitIgnorePath = path.resolve(anaDir, '.gitignore')
             if (!existsSync(gitIgnorePath)) {
-              fs.writeFileSync(gitIgnorePath, '*\n!.gitignore\n')
+              writeFileSync(gitIgnorePath, '*\n!.gitignore\n')
             }
             const npmIgnorePath = path.resolve(anaDir, '.npmignore')
             if (!existsSync(npmIgnorePath)) {
-              fs.writeFileSync(npmIgnorePath, '*\n')
+              writeFileSync(npmIgnorePath, '*\n')
             }
             if (!statSync(anaDir).isDirectory()) {
               throw new Error(`The directory '${anaDir}' is not a directory.`)
@@ -375,7 +410,7 @@ command
           const configFile = jiekTempDir(
             `${escapeManifestName ?? `anonymous-${i++}`}.rollup.config.js`
           )
-          fs.writeFileSync(configFile, FILE_TEMPLATE(manifest))
+          writeFileSync(configFile, FILE_TEMPLATE(manifest))
           const command = [rollupBinaryPath, '--silent', '-c', configFile]
           if (tsRegisterName != null) {
             command.unshift(`node -r ${tsRegisterName}`)
@@ -397,97 +432,152 @@ command
           const times: Record<string, number> = {}
           const locks: Record<string, boolean> = {}
           let inputMaxLen = 10
-          child.on('message', (e: RollupProgressEvent) => {
-            // eslint-disable-next-line no-console,ts/no-unsafe-argument
-            if (e.type === 'debug') console.log(...(Array.isArray(e.data) ? e.data : [e.data]))
-          })
-          !silent && child.on('message', (e: RollupProgressEvent) => {
-            if (e.type === 'init') {
-              const { leafMap, targetsLength } = e.data
-              const leafs = Array
-                .from(leafMap.entries())
-                .flatMap(([input, pathAndCondiions]) =>
-                  pathAndCondiions.map(([path, ...conditions]) => ({
-                    input,
-                    path,
-                    conditions
-                  }))
-                )
-              let initMessage = `Package '${manifest.name}' has ${targetsLength} targets to build`
-              if (watch) {
-                initMessage += ' and watching...'
-              }
-              // eslint-disable-next-line no-console
-              console.log(initMessage)
-              leafs.forEach(({ input }) => {
-                inputMaxLen = Math.max(inputMaxLen, input.length)
-              })
-              leafs.forEach(({ input, path }) => {
-                const key = `${input}:${path}`
-                // eslint-disable-next-line ts/strict-boolean-expressions
-                if (bars[key]) return
-                bars[key] = multiBars.create(50, 0, {
-                  pkgName: manifest.name,
-                  input: input.padEnd(inputMaxLen + 5),
-                  status: 'waiting'.padEnd(10)
-                }, {
-                  barsize: 20,
-                  linewrap: true
-                })
-              })
-            }
-            if (e.type === 'progress') {
-              const {
-                path,
-                tags,
-                input,
-                event,
-                message
-              } = e.data
-              const bar = bars[`${input}:${path}`]
-              // eslint-disable-next-line ts/strict-boolean-expressions
-              if (!bar) return
-              const time = times[`${input}:${path}`]
-              bar.update(
-                {
-                  start: 0,
-                  resolve: 20,
-                  end: 50
-                }[event ?? 'start'] ?? 0,
-                {
-                  input: (
-                    time
-                      ? `${input}(x${time.toString().padStart(2, '0')})`
-                      : input
-                  ).padEnd(inputMaxLen + 5),
-                  status: event?.padEnd(10),
-                  message: `${tags?.join(', ')}: ${message}`
+          child.on('message', (e: RollupBuildEvent) => {
+            if (
+              silent && [
+                'init',
+                'progress',
+                'watchChange'
+              ].includes(e.type)
+            ) return
+            switch (e.type) {
+              case 'init': {
+                const { leafMap, targetsLength } = e.data
+                const leafs = Array
+                  .from(leafMap.entries())
+                  .flatMap(([input, pathAndCondiions]) =>
+                    pathAndCondiions.map(([path, ...conditions]) => ({
+                      input,
+                      path,
+                      conditions
+                    }))
+                  )
+                let initMessage = `Package '${manifest.name}' has ${targetsLength} targets to build`
+                if (watch) {
+                  initMessage += ' and watching...'
                 }
-              )
-            }
-            if (e.type === 'watchChange') {
-              const {
-                path,
-                input
-              } = e.data
-              const key = `${input}:${path}`
-              const bar = bars[key]
-              // eslint-disable-next-line ts/strict-boolean-expressions
-              if (!bar) return
-              let time = times[key] ?? 1
-              if (!locks[key]) {
-                time += 1
-                times[key] = time
-                setTimeout(() => {
-                  locks[key] = false
-                }, 100)
-                bar.update(0, {
-                  input: `${input}(x${time.toString().padStart(2, '0')})`.padEnd(inputMaxLen + 5),
-                  status: 'watching'.padEnd(10),
-                  message: 'watching...'
+                // eslint-disable-next-line no-console
+                console.log(initMessage)
+                leafs.forEach(({ input }) => {
+                  inputMaxLen = Math.max(inputMaxLen, input.length)
                 })
+                leafs.forEach(({ input, path }) => {
+                  const key = `${input}:${path}`
+                  // eslint-disable-next-line ts/strict-boolean-expressions
+                  if (bars[key]) return
+                  bars[key] = multiBars.create(50, 0, {
+                    pkgName: manifest.name,
+                    input: input.padEnd(inputMaxLen + 5),
+                    status: 'waiting'.padEnd(10)
+                  }, {
+                    barsize: 20,
+                    linewrap: true
+                  })
+                })
+                break
               }
-              locks[key] = true
+              case 'progress': {
+                const {
+                  path,
+                  tags,
+                  input,
+                  event,
+                  message
+                } = e.data
+                const bar = bars[`${input}:${path}`]
+                // eslint-disable-next-line ts/strict-boolean-expressions
+                if (!bar) return
+                const time = times[`${input}:${path}`]
+                bar.update(
+                  {
+                    start: 0,
+                    resolve: 20,
+                    end: 50
+                  }[event ?? 'start'] ?? 0,
+                  {
+                    input: (
+                      time
+                        ? `${input}(x${time.toString().padStart(2, '0')})`
+                        : input
+                    ).padEnd(inputMaxLen + 5),
+                    status: event?.padEnd(10),
+                    message: `${tags?.join(', ')}: ${message}`
+                  }
+                )
+                break
+              }
+              case 'watchChange': {
+                const {
+                  path,
+                  input
+                } = e.data
+                const key = `${input}:${path}`
+                const bar = bars[key]
+                // eslint-disable-next-line ts/strict-boolean-expressions
+                if (!bar) return
+                let time = times[key] ?? 1
+                if (!locks[key]) {
+                  time += 1
+                  times[key] = time
+                  setTimeout(() => {
+                    locks[key] = false
+                  }, 100)
+                  bar.update(0, {
+                    input: `${input}(x${time.toString().padStart(2, '0')})`.padEnd(inputMaxLen + 5),
+                    status: 'watching'.padEnd(10),
+                    message: 'watching...'
+                  })
+                }
+                locks[key] = true
+                break
+              }
+              case 'modulesAnalyze': {
+                const {
+                  data: {
+                    type,
+                    path,
+                    modules: pkgModules
+                  }
+                } = e
+                pkgModules.forEach(m => {
+                  const newM = {
+                    ...m,
+                    filename: `${manifest.name}/${m.filename}`,
+                    label: `${manifest.name}/${m.label}`
+                  }
+                  const pushOrReplace = (arr: Module[]) => {
+                    const index = arr.findIndex(({ filename }) => filename === newM.filename)
+                    if (index === -1) {
+                      arr.push(newM)
+                    } else {
+                      arr[index] = newM
+                    }
+                  }
+                  pushOrReplace(modules)
+                  if (type === 'esm') {
+                    pushOrReplace(esmModules)
+                  }
+                  if (type === 'cjs') {
+                    pushOrReplace(cjsModules)
+                  }
+                })
+                void refreshAnalyzer()
+                void refreshAnalyzer(
+                  `/${type}`,
+                  {
+                    cjs: cjsModules,
+                    esm: esmModules
+                  }[type]
+                )
+                void refreshAnalyzer(`/${type}/${manifest.name}/${path.slice(2)}`, pkgModules)
+                break
+              }
+              case 'debug': {
+                // eslint-disable-next-line no-console,ts/no-unsafe-argument
+                console.log(...(Array.isArray(e.data) ? e.data : [e.data]))
+                break
+              }
+              default:
             }
           })
           await new Promise<void>((resolve, reject) => {
@@ -504,6 +594,7 @@ command
         })
       )
     }
+
     const commandFilters = IS_WORKSPACE ? commandFiltersOrEntries : undefined
     const filters = [
       ...new Set([

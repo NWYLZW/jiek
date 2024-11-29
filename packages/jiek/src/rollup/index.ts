@@ -1,6 +1,6 @@
 /* eslint-disable ts/strict-boolean-expressions */
 import fs from 'node:fs'
-import { dirname, extname, join, relative, resolve } from 'node:path'
+import { dirname, extname, relative, resolve } from 'node:path'
 import process from 'node:process'
 
 import type { RecursiveRecord } from '@jiek/pkger/entrypoints'
@@ -10,17 +10,19 @@ import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
-import { sendMessage } from 'execa'
 import { isMatch } from 'micromatch'
-import type { InputPluginOption, OutputOptions, OutputPlugin, Plugin, RollupOptions } from 'rollup'
+import type { InputPluginOption, OutputOptions, OutputPlugin, OutputPluginOption, Plugin, RollupOptions } from 'rollup'
 import ts from 'typescript'
 
+import type { RollupBuildEntryCtx, RollupBuildEventMap } from '#~/bridge.ts'
+import { publish } from '#~/bridge.ts'
+import { bundleAnalyzer } from '#~/rollup/bundle-analyzer.ts'
 import { getExports, getOutDirs } from '#~/utils/getExports.ts'
 import { loadConfig } from '#~/utils/loadConfig.ts'
 import { recusiveListFiles } from '#~/utils/recusiveListFiles.ts'
 import { getCompilerOptionsByFilePath } from '#~/utils/ts.ts'
 
-import type { ConfigGenerateContext, RollupProgressEvent, TemplateOptions } from './base'
+import type { ConfigGenerateContext, TemplateOptions } from './base'
 import createRequire, { isFormatEsm } from './plugins/create-require'
 import progress from './plugins/progress'
 import skip from './plugins/skip'
@@ -33,7 +35,6 @@ interface PackageJSON {
 }
 
 const {
-  JIEK_ANALYZER,
   JIEK_ROOT,
   JIEK_NAME,
   JIEK_BUILDER,
@@ -60,14 +61,6 @@ const resolveArrayString = (str: string | undefined) => {
     )
   ]
   return arr?.length ? arr : undefined
-}
-
-const ANALYZER = JIEK_ANALYZER && JSON.parse(JIEK_ANALYZER) as {
-  dir?: string
-  mode?: string
-  size?: string
-  port?: number
-  open?: boolean
 }
 
 const entries = resolveArrayString(JIEK_ENTRIES)?.map(e => ({ 'index': '.' }[e] ?? e))
@@ -203,16 +196,10 @@ const withMinify = (
   output: OutputOptions & {
     plugins?: OutputPlugin[]
   },
-  minify = build?.output?.minify ?? MINIFY_DEFAULT_VALUE
+  onlyOncePlugins: OutputPluginOption[] = []
 ): OutputOptions[] => {
+  const minify = build?.output?.minify ?? MINIFY_DEFAULT_VALUE
   output.plugins = output.plugins ?? []
-  const onlyOncePlugins: Plugin[] = [
-    // adapter(analyzer({
-    //   analyzerMode: 'server',
-    //   analyzerPort: 8888,
-    //   reportTitle: 'Bundle Analysis'
-    // }))
-  ]
   if (minify === false) {
     output.plugins.push(...onlyOncePlugins)
     return [output]
@@ -276,6 +263,14 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
   const isModule = conditionals.includes('import')
   const isCommonJS = conditionals.includes('require')
   const isBrowser = conditionals.includes('browser')
+  const format = isModule ? 'esm' : (
+    isCommonJS ? 'cjs' : (
+      isBrowser ? 'umd' : (
+        pkgIsModule ? 'esm' : 'cjs'
+      )
+    )
+  )
+
   const dtsTSConfigPaths = [
     resolveWorkspacePath('tsconfig.json'),
     resolveWorkspacePath('tsconfig.dts.json')
@@ -315,10 +310,22 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
     delete compilerOptions.composite
   }
   const exportConditions = [...conditionals, ...(compilerOptions.customConditions ?? [])]
-  const throughEventProps: RollupProgressEvent & { type: 'progress' } = {
-    type: 'progress',
-    data: { name, path, exportConditions, input }
-  }
+  const publishInEntry = <K extends keyof RollupBuildEventMap>(
+    type: K,
+    data: Omit<RollupBuildEventMap[K], keyof RollupBuildEntryCtx>
+  ) =>
+    // eslint-disable-next-line ts/no-unsafe-argument
+    void publish(type, {
+      ...{
+        type: format,
+        name,
+        path,
+        exportConditions,
+        input
+      } as RollupBuildEntryCtx,
+      ...data
+    } as any)
+
   const { js: jsPlugins, dts: dtsPlugins } = resolveBuildPlugins(context, build.plugins)
   if (input.includes('**')) {
     throw new Error(
@@ -377,59 +384,10 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           ...noTypeResolvedBuilderOptions
         })
       )
-    const ana = ANALYZER
-      ? import('vite-bundle-analyzer').then(({ adapter, analyzer }) => {
-        const defaultSizes = ({
-          parsed: 'parsed',
-          stat: 'stat',
-          gzip: 'gzip'
-        } as const)[ANALYZER.size ?? 'stat'] ?? 'parsed'
-        const title = `${join(context.name, context.path)} ${context.conditionals.join(',')}`
-        const filename = title
-          .replace('\/', '_')
-          .replace(' ', '_')
-        switch (ANALYZER.mode ?? 'server') {
-          case 'server':
-            return adapter(analyzer({
-              defaultSizes,
-              analyzerMode: 'server',
-              analyzerPort: ANALYZER.port ?? 'auto',
-              openAnalyzer: ANALYZER.open ?? false,
-              reportTitle: `Bundle Analysis ${title}`
-            }))
-          case 'json':
-            return adapter(analyzer({
-              defaultSizes,
-              analyzerMode: 'json',
-              fileName: ANALYZER.dir ? join(ANALYZER.dir, filename) : filename
-            }))
-          case 'static':
-            return adapter(analyzer({
-              defaultSizes,
-              analyzerMode: 'static',
-              analyzerPort: ANALYZER.port ?? 'auto',
-              openAnalyzer: ANALYZER.open ?? false,
-              reportTitle: `Bundle Analysis ${title}`,
-              fileName: ANALYZER.dir ? join(ANALYZER.dir, filename) : filename
-            }))
-          case undefined: {
-            throw new Error('Not implemented yet: undefined case')
-          }
-          default:
-            void sendMessage(
-              {
-                ...throughEventProps,
-                data: {
-                  ...throughEventProps.data,
-                  event: 'error',
-                  message: 'ANALYZER.mode not supported',
-                  tags: ['js']
-                }
-              } satisfies RollupProgressEvent
-            )
-        }
-      })
-      : undefined
+    const [ana, anaOutputPlugin] = bundleAnalyzer(modules => void publishInEntry('modulesAnalyze', { modules }))
+    const onlyOncePlugins = [
+      anaOutputPlugin
+    ]
     rollupOptions.push({
       input: inputObj,
       external,
@@ -446,20 +404,14 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
               : output.replace(`${jsOutdir}/`, '')
           ),
           sourcemap,
-          format: isModule ? 'esm' : (
-            isCommonJS ? 'cjs' : (
-              isBrowser ? 'umd' : (
-                pkgIsModule ? 'esm' : 'cjs'
-              )
-            )
-          ),
+          format,
           strict: typeof options?.output?.strict === 'object'
             ? options.output.strict.js
             : options?.output?.strict,
           plugins: [
-            isFormatEsm(isModule)
+            isFormatEsm(format === 'esm')
           ]
-        })
+        }, onlyOncePlugins)
       ],
       plugins: [
         ...commonPlugins,
@@ -476,13 +428,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
         builder,
         ana,
         progress({
-          onEvent: (event, message) =>
-            void sendMessage(
-              {
-                ...throughEventProps,
-                data: { ...throughEventProps.data, event, message, tags: ['js'] }
-              } satisfies RollupProgressEvent
-            )
+          onEvent: (event, message) => void publishInEntry('progress', { event, message, tags: ['js'] })
         }),
         jsPlugins
       ]
@@ -532,13 +478,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           tsconfig: dtsTSConfigPath
         }),
         progress({
-          onEvent: (event, message) =>
-            void sendMessage(
-              {
-                ...throughEventProps,
-                data: { ...throughEventProps.data, event, message, tags: ['dts'] }
-              } satisfies RollupProgressEvent
-            )
+          onEvent: (event, message) => void publishInEntry('progress', { event, message, tags: ['dts'] })
         }),
         dtsPlugins
       ]
@@ -549,13 +489,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
     rollupOptions[0].plugins = [
       {
         name: 'jiek-plugin-watcher',
-        watchChange: (id) =>
-          void sendMessage(
-            {
-              type: 'watchChange',
-              data: { id, name: JIEK_NAME!, path, input }
-            } satisfies RollupProgressEvent
-          )
+        watchChange: id => void publishInEntry('watchChange', { id })
       },
       ...(rollupOptions[0].plugins as Plugin[])
     ]
@@ -634,15 +568,7 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
       }
     })
   )
-  void sendMessage(
-    {
-      type: 'init',
-      data: {
-        leafMap,
-        targetsLength: configs.length
-      }
-    } satisfies RollupProgressEvent
-  )
+  void publish('init', { leafMap, targetsLength: configs.length })
   return configs.map(c => ({
     ...COMMON_OPTIONS,
     ...c,
