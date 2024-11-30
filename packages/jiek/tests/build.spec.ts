@@ -1,37 +1,17 @@
 import { createDescribe } from './useExec.ts'
 
-const describe = createDescribe({ cmd: 'build', cmdOptions: ['-s'] })
+const { describe, dflt } = createDescribe({ cmd: 'build', cmdOptions: ['-s'] })
 
-describe('simple', ({ test, dflt }) => {
-  test('common', dflt)
-})
-describe('simple mjs', ({ test, dflt }) => {
-  test('common', dflt)
-})
-describe('require in mjs', ({ test, dflt }) => {
-  test('common', dflt)
-})
-describe('only minify', ({ test, dflt }) => {
-  test('common', dflt)
-})
-describe('export self subpath', ({ test, dflt }) => {
-  test('common', dflt)
-})
-describe('multiple exports', ({ test, dflt }) => {
-  test('common', dflt)
-})
-describe('glob exports', ({ test, dflt }) => {
-  test('common', dflt)
-})
-describe('resolve imports', ({ test, dflt }) => {
-  test('common', dflt)
-})
-describe('unordered exports inputs', ({ test, dflt }) => {
-  test('common', dflt)
-})
-describe('with no resolve exports', ({ test, dflt }) => {
-  test('common', dflt)
-})
+describe('simple', ctx => dflt(ctx))
+describe('simple mjs', ctx => dflt(ctx))
+describe('require in mjs', ctx => dflt(ctx))
+describe('only minify', ctx => dflt(ctx))
+describe('export self subpath', ctx => dflt(ctx))
+describe('multiple exports', ctx => dflt(ctx))
+describe('glob exports', ctx => dflt(ctx))
+describe('resolve imports', ctx => dflt(ctx))
+describe('unordered exports inputs', ctx => dflt(ctx))
+describe('with no resolve exports', ctx => dflt(ctx))
 describe('monorepo', ({ test }) => {
   test('build foo', ({ exec }) =>
     exec({
@@ -44,12 +24,8 @@ describe('monorepo', ({ test }) => {
       autoSnapDist: 'packages/bar/dist'
     }))
 })
-describe('not dts tsconfig', ({ test, dflt }) => {
-  test('common', dflt)
-})
-describe('with scss file import', ({ test, dflt }) => {
-  test('common', dflt)
-})
+describe('not dts tsconfig', ctx => dflt(ctx))
+describe('with scss file import', ctx => dflt(ctx))
 describe('project references', ({ test }) => {
   test('build foo', ({ exec }) =>
     exec({
@@ -78,6 +54,4 @@ describe('root package', ({ test }) => {
       moreOptions: ['-f', 'root-package']
     }))
 })
-describe('import type from subpath', ({ test, dflt }) => {
-  test('common', dflt)
-})
+describe('import type from subpath', ctx => dflt(ctx))

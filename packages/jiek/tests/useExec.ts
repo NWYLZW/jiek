@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 
-import { afterAll, beforeAll, describe, expect, test as vitestTest } from 'vitest'
+import { afterAll, beforeAll, describe as vitestDescribe, expect, test as vitestTest } from 'vitest'
 
 const resolveByFixtures = (paths: string[]) => path.resolve(__dirname, 'fixtures', ...paths)
 
@@ -154,12 +154,16 @@ function createUseExec(options: CreateUseExecOptions) {
 
 export function createDescribe(options: CreateUseExecOptions) {
   const useExec = createUseExec(options)
-  return (
+  const describe = (
     title: string,
     func: (ctx: ReturnType<typeof useExec>) => any
   ) =>
-    describe(title, () => {
+    vitestDescribe(title, () => {
       const execRT = useExec(title.replaceAll(' ', '-'))
       func(execRT)
     })
+  return {
+    describe,
+    dflt: ({ test, dflt }: ReturnType<typeof useExec>) => test('common', dflt)
+  }
 }
