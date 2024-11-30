@@ -176,8 +176,7 @@ export function createDescribe(options: CreateUseExecOptions) {
     func: (ctx: ReturnType<typeof useExec>) => any
   ) =>
     vitestDescribe(title, () => {
-      const execRT = useExec(title.replaceAll(' ', '-'))
-      func(execRT)
+      func(useExec(title.replaceAll(' ', '-')))
     })
   return {
     describe,
