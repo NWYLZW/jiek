@@ -2,14 +2,14 @@
   "name": "@jiek/utils",
   "version": "0.2.3",
   "license": "MIT",
-  "scripts": {
-    "prepublish": "jb -nm && jk",
-    "postpublish": "jk"
-  },
   "exports": {
     "./bumper": "./src/bumper.ts",
     "./commondir": "./src/commondir.ts",
     "./getWorkspaceDir": "./src/getWorkspaceDir.ts"
   },
-  "files": ["dist", "src", "README.md"]
+  "files": [ "README.md","dist", "src"],
+  "scripts": {
+    "prepublish": "jb -nm && jk",
+    "postpublish": "jk"
+  }
 }

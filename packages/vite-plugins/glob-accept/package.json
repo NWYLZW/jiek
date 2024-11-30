@@ -2,17 +2,18 @@
   "name": "vite-plugin-glob-accept",
   "version": "0.1.0",
   "description": "",
-  "license": "MIT",
   "author": {
     "name": "Yijie",
     "email": "yijie4188@gmail.com"
   },
-  "files": [
-    "dist"
-  ],
-  "jiek": {
-    "noBrowser": true
+  "license": "MIT",
+  "homepage": "https://github.com/NWYLZW/jiek/blob/master/packages/vite-plugins/glob-accept/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NWYLZW/jiek",
+    "directory": "packages/vite-plugins/glob-accept"
   },
+  "bugs": "https://github.com/NWYLZW/jiek/issues/new?template=bug_report.yml&labels=bug,scope:vite-plugin-glob-accept",
   "keywords": [
     "vite",
     "vite-plugin",
@@ -24,14 +25,13 @@
     ".": "./src/index.ts",
     "./client": "./src/client.ts"
   },
-  "scripts": {},
-  "homepage": "https://github.com/NWYLZW/jiek/blob/master/packages/vite-plugins/glob-accept/README.md",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/NWYLZW/jiek",
-    "directory": "packages/vite-plugins/glob-accept"
+  "files": [
+    "dist"
+  ],
+  "jiek": {
+    "noBrowser": true
   },
-  "bugs": "https://github.com/NWYLZW/jiek/issues/new?template=bug_report.yml&labels=bug,scope:vite-plugin-glob-accept",
+  "scripts": {},
   "dependencies": {
     "acorn": "^8.11.3",
     "acorn-walk": "^8.3.2",
