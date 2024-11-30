@@ -4,25 +4,7 @@ const path = require('node:path')
 const process = require('node:process')
 
 const active = require('./scripts/utils/getActive')
-
-/* eslint-disable no-console */
-/**
- * @typedef {{ [K in 'log' | 'info' | 'debug' | 'warn' | 'error']: (...args: any[]) => void }} Logger
- */
-/**
- * @type {Logger}
- */
-const logger = [
-  'log',
-  'info',
-  'debug',
-  'warn',
-  'error'
-].reduce((logger, method) => {
-  logger[method] = (...args) => console[method]('[jiek]', ...args)
-  return logger
-}, {})
-/* eslint-enable no-console */
+const logger = require('./scripts/utils/logger')
 
 if (!active.includes('all')) {
   const lockfileDir = path.resolve(__dirname, '.jiek-locks')
