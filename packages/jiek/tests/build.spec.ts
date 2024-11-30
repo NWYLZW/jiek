@@ -88,14 +88,14 @@ describe('project references', () => {
       autoSnapDist: 'packages/bar/dist'
     }))
 })
-describe('root-package', () => {
+describe('root package', () => {
   const { test } = useExec('root-package')
   test('common', ({ exec }) =>
     exec({
       moreOptions: ['-f', 'root-package']
     }))
 })
-describe('import-type-from-subpath', () => {
+describe('import type from subpath', () => {
   const { test } = useExec('import-type-from-subpath')
   test('common', ({ exec }) => exec())
 })
