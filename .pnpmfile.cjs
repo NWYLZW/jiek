@@ -8,15 +8,20 @@ const logger = require('./scripts/utils/logger')
 
 if (!active.includes('all')) {
   const lockfileDir = path.resolve(__dirname, '.jiek-locks')
-
   if (!fs.existsSync(lockfileDir)) fs.mkdirSync(lockfileDir)
+
+  const tempDir = path.resolve(lockfileDir, '.tmp')
+  if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir)
 
   const lockfile = active.length === 0
     ? path.resolve(lockfileDir, 'pnpm-lock.base.yaml')
     : path.resolve(lockfileDir, `pnpm-lock.${active.join(',')}.yaml`)
 
   const defaultLockFile = path.resolve(__dirname, 'pnpm-lock.yaml')
-  const defaultLockFileTemp = path.resolve(__dirname, 'pnpm-lock.yaml.tmp')
+  const defaultLockFileTemp = path.resolve(
+    tempDir,
+    `pnpm-lock.${Math.random().toString(36).substring(7)}.tmp.yaml`
+  )
 
   fs.copyFileSync(defaultLockFile, defaultLockFileTemp)
   // cache default lockfile
@@ -34,6 +39,12 @@ if (!active.includes('all')) {
     // restore default lockfile
     fs.copyFileSync(defaultLockFileTemp, defaultLockFile)
     fs.unlinkSync(defaultLockFileTemp)
+    if (fs.readdirSync(tempDir).length === 0) {
+      fs.rmdirSync(tempDir)
+    }
+  })
+  process.on('SIGINT', () => {
+    process.exit(1)
   })
 }
 
