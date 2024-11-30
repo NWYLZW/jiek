@@ -26,12 +26,11 @@ if (!active.includes('all')) {
   }
 
   process.on('exit', code => {
-    if (code !== 0) return
-
-    // save lockfile to cache
-    logger.log('Saving lockfile:', lockfile)
-    fs.copyFileSync(defaultLockFile, lockfile)
-
+    if (code === 0) {
+      // save lockfile to cache
+      logger.log('Saving lockfile:', lockfile)
+      fs.copyFileSync(defaultLockFile, lockfile)
+    }
     // restore default lockfile
     fs.copyFileSync(defaultLockFileTemp, defaultLockFile)
     fs.unlinkSync(defaultLockFileTemp)
