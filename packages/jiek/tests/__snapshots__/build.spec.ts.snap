@@ -446,7 +446,7 @@ const o="fuo";export{o as fuo};
 "
 `;
 
-exports[`import-type-from-subpath > common 1`] = `
+exports[`import type from subpath > common 1`] = `
 [
   "index.d.mts",
   "index.d.ts",
@@ -457,7 +457,7 @@ exports[`import-type-from-subpath > common 1`] = `
 ]
 `;
 
-exports[`import-type-from-subpath > common 2`] = `
+exports[`import type from subpath > common 2`] = `
 "index.d.mts:
 interface Foo {
     name: string;
@@ -467,7 +467,7 @@ export type { Foo };
 "
 `;
 
-exports[`import-type-from-subpath > common 3`] = `
+exports[`import type from subpath > common 3`] = `
 "index.d.ts:
 interface Foo {
     name: string;
@@ -477,26 +477,26 @@ export type { Foo };
 "
 `;
 
-exports[`import-type-from-subpath > common 4`] = `
+exports[`import type from subpath > common 4`] = `
 "index.js:
 'use strict';
 
 "
 `;
 
-exports[`import-type-from-subpath > common 5`] = `
+exports[`import type from subpath > common 5`] = `
 "index.min.js:
 "use strict";
 "
 `;
 
-exports[`import-type-from-subpath > common 6`] = `
+exports[`import type from subpath > common 6`] = `
 "index.min.mjs:
 
 "
 `;
 
-exports[`import-type-from-subpath > common 7`] = `
+exports[`import type from subpath > common 7`] = `
 "index.mjs:
 
 "
@@ -1358,7 +1358,7 @@ const o="bar",r="foo";export{o as bar,r as foo};
 "
 `;
 
-exports[`root-package > common 1`] = `
+exports[`root package > common 1`] = `
 [
   "index.d.mts",
   "index.d.ts",
@@ -1369,7 +1369,7 @@ exports[`root-package > common 1`] = `
 ]
 `;
 
-exports[`root-package > common 2`] = `
+exports[`root package > common 2`] = `
 "index.d.mts:
 export * from '@jiek/test-monorepo-bar';
 
@@ -1381,7 +1381,7 @@ export { foo, name };
 "
 `;
 
-exports[`root-package > common 3`] = `
+exports[`root package > common 3`] = `
 "index.d.ts:
 export * from '@jiek/test-monorepo-bar';
 
@@ -1393,7 +1393,7 @@ export { foo, name };
 "
 `;
 
-exports[`root-package > common 4`] = `
+exports[`root package > common 4`] = `
 "index.js:
 'use strict';
 
@@ -1416,19 +1416,19 @@ Object.keys(testMonorepoBar).forEach(function (k) {
 "
 `;
 
-exports[`root-package > common 5`] = `
+exports[`root package > common 5`] = `
 "index.min.js:
 "use strict";var t=require("@jiek/test-monorepo-bar");function o(e,r){return e+r}const n="root-package";exports.foo=o,exports.name=n,Object.keys(t).forEach(function(e){e!=="default"&&!Object.prototype.hasOwnProperty.call(exports,e)&&Object.defineProperty(exports,e,{enumerable:!0,get:function(){return t[e]}})});
 "
 `;
 
-exports[`root-package > common 6`] = `
+exports[`root package > common 6`] = `
 "index.min.mjs:
 export*from"@jiek/test-monorepo-bar";function t(o,r){return o+r}const e="root-package";export{t as foo,e as name};
 "
 `;
 
-exports[`root-package > common 7`] = `
+exports[`root package > common 7`] = `
 "index.mjs:
 export * from '@jiek/test-monorepo-bar';
 
