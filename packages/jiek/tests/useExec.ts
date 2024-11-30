@@ -51,7 +51,7 @@ interface CreateUseExecOptions {
   cmdOptionsMap?: Record<string, string[]>
 }
 
-export function createUseExec(options: CreateUseExecOptions) {
+function createUseExec(options: CreateUseExecOptions) {
   return function useExec(...paths: string[]) {
     const root = resolveByFixtures(paths)
     const resolveByRoot = (...paths: string[]) => path.resolve(root, ...paths)
@@ -143,6 +143,7 @@ export function createUseExec(options: CreateUseExecOptions) {
     }
     return {
       test,
+      dflt: ({ exec }: Ctx) => exec(),
       setup,
       setupCmd,
       setupCmdOptionsMap,

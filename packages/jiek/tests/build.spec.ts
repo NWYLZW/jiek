@@ -2,35 +2,35 @@ import { createDescribe } from './useExec.ts'
 
 const describe = createDescribe({ cmd: 'build', cmdOptions: ['-s'] })
 
-describe('simple', ({ test }) => {
-  test('common', ({ exec }) => exec())
+describe('simple', ({ test, dflt }) => {
+  test('common', dflt)
 })
-describe('simple mjs', ({ test }) => {
-  test('common', ({ exec }) => exec())
+describe('simple mjs', ({ test, dflt }) => {
+  test('common', dflt)
 })
-describe('require in mjs', ({ test }) => {
-  test('common', ({ exec }) => exec())
+describe('require in mjs', ({ test, dflt }) => {
+  test('common', dflt)
 })
-describe('only minify', ({ test }) => {
-  test('common', ({ exec }) => exec())
+describe('only minify', ({ test, dflt }) => {
+  test('common', dflt)
 })
-describe('export self subpath', ({ test }) => {
-  test('common', ({ exec }) => exec())
+describe('export self subpath', ({ test, dflt }) => {
+  test('common', dflt)
 })
-describe('multiple exports', ({ test }) => {
-  test('common', ({ exec }) => exec())
+describe('multiple exports', ({ test, dflt }) => {
+  test('common', dflt)
 })
-describe('glob exports', ({ test }) => {
-  test('common', ({ exec }) => exec())
+describe('glob exports', ({ test, dflt }) => {
+  test('common', dflt)
 })
-describe('resolve imports', ({ test }) => {
-  test('common', ({ exec }) => exec())
+describe('resolve imports', ({ test, dflt }) => {
+  test('common', dflt)
 })
-describe('unordered exports inputs', ({ test }) => {
-  test('common', ({ exec }) => exec())
+describe('unordered exports inputs', ({ test, dflt }) => {
+  test('common', dflt)
 })
-describe('with no resolve exports', ({ test }) => {
-  test('common', ({ exec }) => exec())
+describe('with no resolve exports', ({ test, dflt }) => {
+  test('common', dflt)
 })
 describe('monorepo', ({ test }) => {
   test('build foo', ({ exec }) =>
@@ -44,11 +44,11 @@ describe('monorepo', ({ test }) => {
       autoSnapDist: 'packages/bar/dist'
     }))
 })
-describe('not dts tsconfig', ({ test }) => {
-  test('common', ({ exec }) => exec())
+describe('not dts tsconfig', ({ test, dflt }) => {
+  test('common', dflt)
 })
-describe('with scss file import', ({ test }) => {
-  test('common', ({ exec }) => exec())
+describe('with scss file import', ({ test, dflt }) => {
+  test('common', dflt)
 })
 describe('project references', ({ test }) => {
   test('build foo', ({ exec }) =>
@@ -78,6 +78,6 @@ describe('root package', ({ test }) => {
       moreOptions: ['-f', 'root-package']
     }))
 })
-describe('import type from subpath', ({ test }) => {
-  test('common', ({ exec }) => exec())
+describe('import type from subpath', ({ test, dflt }) => {
+  test('common', dflt)
 })
