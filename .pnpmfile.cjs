@@ -34,7 +34,9 @@ if (!active.includes('all')) {
     : path.resolve(lockfileDir, `pnpm-lock.${active.join(',')}.yaml`)
 
   const defaultLockFile = path.resolve(__dirname, 'pnpm-lock.yaml')
+  const defaultLockFileTemp = path.resolve(__dirname, 'pnpm-lock.yaml.tmp')
 
+  fs.copyFileSync(defaultLockFile, defaultLockFileTemp)
   // cache default lockfile
   if (fs.existsSync(lockfile)) {
     logger.log('Using lockfile:', lockfile)
@@ -47,6 +49,10 @@ if (!active.includes('all')) {
     // save lockfile to cache
     logger.log('Saving lockfile:', lockfile)
     fs.copyFileSync(defaultLockFile, lockfile)
+
+    // restore default lockfile
+    fs.copyFileSync(defaultLockFileTemp, defaultLockFile)
+    fs.unlinkSync(defaultLockFileTemp)
   })
 }
 
