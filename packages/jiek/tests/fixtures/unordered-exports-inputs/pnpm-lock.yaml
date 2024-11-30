@@ -8,15 +8,15 @@ importers:
 
   .:
     dependencies:
-      unordered-exports_input:
+      unordered-exports-inputs:
         specifier: file:.
         version: 'file:'
 
 packages:
 
-  'unordered-exports_input@file:':
+  'unordered-exports-inputs@file:':
     resolution: {directory: '', type: directory}
 
 snapshots:
 
-  'unordered-exports_input@file:': {}
+  'unordered-exports-inputs@file:': {}

@@ -1,4 +1,4 @@
-import type { } from 'unordered-exports_input/a'
+import type { } from 'unordered-exports-inputs/a'
 
 import type { BDep } from './b-dep'
 

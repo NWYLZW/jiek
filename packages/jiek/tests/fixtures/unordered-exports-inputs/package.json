@@ -1,11 +1,11 @@
 {
-  "name": "unordered-exports_input",
+  "name": "unordered-exports-inputs",
   "version": "0.1.0",
   "exports": {
     "./b": "./src/b.ts",
     "./a": "./src/a.ts"
   },
   "dependencies": {
-    "unordered-exports_input": "file:."
+    "unordered-exports-inputs": "file:."
   }
 }

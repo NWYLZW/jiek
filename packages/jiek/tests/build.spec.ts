@@ -1,51 +1,38 @@
-import { describe } from 'vitest'
+import { createDescribe } from './useExec.ts'
 
-import { createUseExec } from './useExec.ts'
+const describe = createDescribe({ cmd: 'build', cmdOptions: ['-s'] })
 
-const useExec = createUseExec({ cmd: 'build', cmdOptions: ['-s'] })
-
-describe('simple', () => {
-  const { test } = useExec('simple')
+describe('simple', ({ test }) => {
   test('common', ({ exec }) => exec())
 })
-describe('simple mjs', () => {
-  const { test } = useExec('simple-mjs')
+describe('simple mjs', ({ test }) => {
   test('common', ({ exec }) => exec())
 })
-describe('require in mjs', () => {
-  const { test } = useExec('require-in-mjs')
+describe('require in mjs', ({ test }) => {
   test('common', ({ exec }) => exec())
 })
-describe('only minify', () => {
-  const { test } = useExec('only-minify')
+describe('only minify', ({ test }) => {
   test('common', ({ exec }) => exec())
 })
-describe('export self subpath', () => {
-  const { test } = useExec('export-self-subpath')
+describe('export self subpath', ({ test }) => {
   test('common', ({ exec }) => exec())
 })
-describe('multiple exports', () => {
-  const { test } = useExec('multiple-exports')
+describe('multiple exports', ({ test }) => {
   test('common', ({ exec }) => exec())
 })
-describe('glob exports', () => {
-  const { test } = useExec('glob-exports')
+describe('glob exports', ({ test }) => {
   test('common', ({ exec }) => exec())
 })
-describe('resolve imports', () => {
-  const { test } = useExec('resolve-imports')
+describe('resolve imports', ({ test }) => {
   test('common', ({ exec }) => exec())
 })
-describe('unordered exports inputs', () => {
-  const { test } = useExec('unordered-exports_input')
+describe('unordered exports inputs', ({ test }) => {
   test('common', ({ exec }) => exec())
 })
-describe('with no resolve exports', () => {
-  const { test } = useExec('with-no-resolve-export')
+describe('with no resolve exports', ({ test }) => {
   test('common', ({ exec }) => exec())
 })
-describe('monorepo', () => {
-  const { test } = useExec('monorepo')
+describe('monorepo', ({ test }) => {
   test('build foo', ({ exec }) =>
     exec({
       moreOptions: ['-f', '@jiek/test-monorepo-foo'],
@@ -57,16 +44,13 @@ describe('monorepo', () => {
       autoSnapDist: 'packages/bar/dist'
     }))
 })
-describe('not dts tsconfig', () => {
-  const { test } = useExec('not-dts-tsconfig')
+describe('not dts tsconfig', ({ test }) => {
   test('common', ({ exec }) => exec())
 })
-describe('with scss file import', () => {
-  const { test } = useExec('with-scss-file-import')
+describe('with scss file import', ({ test }) => {
   test('common', ({ exec }) => exec())
 })
-describe('project references', () => {
-  const { test } = useExec('project-references')
+describe('project references', ({ test }) => {
   test('build foo', ({ exec }) =>
     exec({
       moreOptions: ['-f', '@jiek/test-monorepo-foo'],
@@ -88,14 +72,12 @@ describe('project references', () => {
       autoSnapDist: 'packages/bar/dist'
     }))
 })
-describe('root package', () => {
-  const { test } = useExec('root-package')
+describe('root package', ({ test }) => {
   test('common', ({ exec }) =>
     exec({
       moreOptions: ['-f', 'root-package']
     }))
 })
-describe('import type from subpath', () => {
-  const { test } = useExec('import-type-from-subpath')
+describe('import type from subpath', ({ test }) => {
   test('common', ({ exec }) => exec())
 })

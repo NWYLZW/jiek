@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 
-import { afterAll, beforeAll, expect, test as vitestTest } from 'vitest'
+import { afterAll, beforeAll, describe, expect, test as vitestTest } from 'vitest'
 
 const resolveByFixtures = (paths: string[]) => path.resolve(__dirname, 'fixtures', ...paths)
 
@@ -45,11 +45,13 @@ interface Ctx {
   snap: (target: string, remove: boolean) => Ctx
 }
 
-export function createUseExec(options: {
+interface CreateUseExecOptions {
   cmd?: string
   cmdOptions?: string[]
   cmdOptionsMap?: Record<string, string[]>
-}) {
+}
+
+export function createUseExec(options: CreateUseExecOptions) {
   return function useExec(...paths: string[]) {
     const root = resolveByFixtures(paths)
     const resolveByRoot = (...paths: string[]) => path.resolve(root, ...paths)
@@ -65,7 +67,10 @@ export function createUseExec(options: {
       })
     })
     afterAll(() => {
-      fs.rmSync(resolveByRoot('node_modules'), { recursive: true })
+      const nodeModulesPath = path.resolve(root, 'node_modules')
+      if (fs.existsSync(nodeModulesPath)) {
+        fs.rmSync(nodeModulesPath, { recursive: true })
+      }
 
       const packagesPath = path.resolve(root, 'packages')
       if (!fs.existsSync(packagesPath)) return
@@ -144,4 +149,16 @@ export function createUseExec(options: {
       setupCmdOptions
     }
   }
+}
+
+export function createDescribe(options: CreateUseExecOptions) {
+  const useExec = createUseExec(options)
+  return (
+    title: string,
+    func: (ctx: ReturnType<typeof useExec>) => any
+  ) =>
+    describe(title, () => {
+      const execRT = useExec(title.replaceAll(' ', '-'))
+      func(execRT)
+    })
 }
