@@ -39,7 +39,6 @@ export function prepareROOT(
   const ROOT = getROOT(paths)
   const notWorkspace = !fs.existsSync(path.resolve(ROOT, 'pnpm-workspace.yaml'))
   beforeAll(() => {
-    fs.mkdirSync(path.resolve(ROOT, 'node_modules/.jiek'), { recursive: true })
     const args = [
       'pnpm i',
       notWorkspace ? '--ignore-workspace' : null
