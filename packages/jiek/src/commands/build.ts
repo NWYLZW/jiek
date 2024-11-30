@@ -376,9 +376,12 @@ command
       if (!existsSync(wdNodeModules)) {
         mkdirSync(wdNodeModules)
       }
-      const jiekTempDir = (...paths: string[]) => path.resolve(wdNodeModules, '.jiek', ...paths)
-      if (!existsSync(jiekTempDir())) {
-        mkdirSync(jiekTempDir())
+      const resolveByJiekTemp = (...paths: string[]) => path.resolve(wdNodeModules, '.jiek', ...paths)
+      const jiekTemp = resolveByJiekTemp()
+      if (!existsSync(jiekTemp)) {
+        try {
+          mkdirSync(jiekTemp)
+        } catch {}
       }
 
       const rollupBinaryPath = require.resolve('rollup')
@@ -409,7 +412,7 @@ command
 
           // TODO support auto build child packages in workspaces
           const escapeManifestName = manifest.name.replace(/^@/g, '').replace(/\//g, '+')
-          const configFile = jiekTempDir(
+          const configFile = resolveByJiekTemp(
             `${escapeManifestName ?? `anonymous-${i++}`}.rollup.config.js`
           )
           writeFileSync(configFile, FILE_TEMPLATE(manifest))

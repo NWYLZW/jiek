@@ -3,11 +3,12 @@ import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 
-import { afterAll, beforeAll, describe as vitestDescribe, expect, test as vitestTest } from 'vitest'
+import type { TestContext } from 'vitest'
+import { afterAll, beforeAll, describe as vitestDescribe, test as vitestTest } from 'vitest'
 
 const resolveByFixtures = (paths: string[]) => path.resolve(__dirname, 'fixtures', ...paths)
 
-function snapshotDir(dir: string, remove = true) {
+function snapshotDir({ expect }: TestContext, dir: string, remove = true) {
   const files = fs.readdirSync(dir, { recursive: true })
   expect(files).toMatchSnapshot()
   files.forEach((file) => {
@@ -49,15 +50,17 @@ async function execWithRoot(root: string, cmd: string) {
   })
 }
 
+interface CtxExecOptions {
+  cmd?: string
+  moreOptions?: string[]
+  overrideOptions?: string[]
+  autoSnapDist?: boolean | string
+  remove?: boolean
+}
+
 interface Ctx {
   root: string
-  exec: (options?: {
-    cmd?: string
-    moreOptions?: string[]
-    overrideOptions?: string[]
-    autoSnapDist?: boolean | string
-    remove?: boolean
-  }) => Promise<void>
+  exec: (options?: CtxExecOptions) => Promise<void>
 }
 
 interface CreateUseExecOptions {
@@ -119,15 +122,15 @@ function createUseExec(options: CreateUseExecOptions) {
     const setupCmd = (cmd: string) => (defaultCmd = cmd)
     const setupCmdOptionsMap = (cmdOptionsMap: Record<string, string[]>) => (defaultCmdOptionsMap = cmdOptionsMap)
     const setupCmdOptions = (options: string[], cmd = defaultCmd) => defaultCmdOptionsMap[cmd] = options
-    const ctx: Ctx = {
+    const ctx = {
       root,
-      async exec({
+      async exec(t: TestContext, {
         cmd = defaultCmd,
         moreOptions = [],
         overrideOptions = [],
         autoSnapDist = true,
         remove = true
-      } = {}) {
+      }: CtxExecOptions = {}) {
         // noinspection JSMismatchedCollectionQueryUpdate
         const cmdWithOptions = [cmd]
         if (overrideOptions.length === 0) {
@@ -143,18 +146,21 @@ function createUseExec(options: CreateUseExecOptions) {
         // noinspection PointlessBooleanExpressionJS
         if (autoSnapDist !== false) {
           // noinspection PointlessBooleanExpressionJS
-          snapshotDir(path.resolve(root, autoSnapDist === true ? 'dist' : autoSnapDist), remove)
+          snapshotDir(t, path.resolve(root, autoSnapDist === true ? 'dist' : autoSnapDist), remove)
         }
       }
     }
-    const test = (title: string, func: (context: Ctx) => any) => {
-      vitestTest(title, async () => {
-        await func(ctx)
+    const test = (title: string, func: (context: Ctx & TestContext) => any) => {
+      vitestTest.concurrent(title, async t => {
+        await func(Object.assign({}, {
+          ...ctx,
+          exec: ctx.exec.bind(ctx, t)
+        }, t))
       })
     }
     return {
       test,
-      dflt: async ({ exec }: Ctx) => exec(),
+      dflt: async ({ exec }: Ctx & TestContext) => exec(),
       setup,
       setupCmd,
       setupCmdOptionsMap,
