@@ -73,8 +73,8 @@ exports[`export self subpath > common 8`] = `
 
 var base = require('export-self-subpath/base');
 
-var type = "module";
 var name = "export-self-subpath";
+var type = "module";
 var version = "0.1.0";
 var exports$1 = {
 	"./package.json": "./package.json",
@@ -85,8 +85,8 @@ var devDependencies = {
 	"export-self-subpath": "file:."
 };
 var pkg = {
-	type: type,
 	name: name,
+	type: type,
 	version: version,
 	exports: exports$1,
 	devDependencies: devDependencies
@@ -130,8 +130,8 @@ exports[`export self subpath > common 11`] = `
 "index.js:
 export * from 'export-self-subpath/base';
 
-var type = "module";
 var name = "export-self-subpath";
+var type = "module";
 var version = "0.1.0";
 var exports = {
 	"./package.json": "./package.json",
@@ -142,8 +142,8 @@ var devDependencies = {
 	"export-self-subpath": "file:."
 };
 var pkg = {
-	type: type,
 	name: name,
+	type: type,
 	version: version,
 	exports: exports,
 	devDependencies: devDependencies
@@ -159,13 +159,13 @@ export { foo };
 
 exports[`export self subpath > common 12`] = `
 "index.min.cjs:
-"use strict";var r=require("export-self-subpath/base"),t="module",a="export-self-subpath",n="0.1.0",s={"./package.json":"./package.json",".":"./src/index.ts","./base":"./src/base.ts"},o={"export-self-subpath":"file:."},p={type:t,name:a,version:n,exports:s,devDependencies:o};function c(){return p.name}exports.foo=c,Object.keys(r).forEach(function(e){e!=="default"&&!Object.prototype.hasOwnProperty.call(exports,e)&&Object.defineProperty(exports,e,{enumerable:!0,get:function(){return r[e]}})});
+"use strict";var r=require("export-self-subpath/base"),t="export-self-subpath",a="module",n="0.1.0",s={"./package.json":"./package.json",".":"./src/index.ts","./base":"./src/base.ts"},o={"export-self-subpath":"file:."},p={name:t,type:a,version:n,exports:s,devDependencies:o};function c(){return p.name}exports.foo=c,Object.keys(r).forEach(function(e){e!=="default"&&!Object.prototype.hasOwnProperty.call(exports,e)&&Object.defineProperty(exports,e,{enumerable:!0,get:function(){return r[e]}})});
 "
 `;
 
 exports[`export self subpath > common 13`] = `
 "index.min.js:
-export*from"export-self-subpath/base";var e="module",r="export-self-subpath",s="0.1.0",a={"./package.json":"./package.json",".":"./src/index.ts","./base":"./src/base.ts"},n={"export-self-subpath":"file:."},o={type:e,name:r,version:s,exports:a,devDependencies:n};function p(){return o.name}export{p as foo};
+export*from"export-self-subpath/base";var e="export-self-subpath",r="module",s="0.1.0",a={"./package.json":"./package.json",".":"./src/index.ts","./base":"./src/base.ts"},n={"export-self-subpath":"file:."},o={name:e,type:r,version:s,exports:a,devDependencies:n};function p(){return o.name}export{p as foo};
 "
 `;
 
@@ -1260,7 +1260,7 @@ exports[`require in mjs > common 5`] = `
 import { createRequire } from 'node:module';
 
 var require$1 = (
-  false
+  true
     ? /* @__PURE__ */ createRequire(import.meta.url)
     : require
 );
@@ -1284,7 +1284,7 @@ exports[`require in mjs > common 6`] = `
 
 exports[`require in mjs > common 7`] = `
 "index.min.js:
-import"node:module";var r=require;function e(){return"foo"}function o(){return r("./bar").bar}export{o as bar,e as foo};
+import{createRequire as r}from"node:module";var e=r(import.meta.url);function o(){return"foo"}function t(){return e("./bar").bar}export{t as bar,o as foo};
 "
 `;
 
