@@ -14,43 +14,42 @@ describe('unordered exports inputs', ctx => dflt(ctx))
 describe('with no resolve exports', ctx => dflt(ctx))
 describe('monorepo', ({ test }) => {
   test('build foo', ({ exec }) =>
-    exec({
+    void exec({
       moreOptions: ['-f', '@jiek/test-monorepo-foo'],
       autoSnapDist: 'packages/foo/dist'
     }))
   test('build bar', ({ exec }) =>
-    exec({
+    void exec({
       moreOptions: ['-f', '@jiek/test-monorepo-bar'],
       autoSnapDist: 'packages/bar/dist'
     }))
 })
-describe('not dts tsconfig', ctx => dflt(ctx))
 describe('with scss file import', ctx => dflt(ctx))
 describe('project references', ({ test }) => {
   test('build foo', ({ exec }) =>
-    exec({
+    void exec({
       moreOptions: ['-f', '@jiek/test-monorepo-foo'],
       autoSnapDist: 'packages/foo/dist'
     }))
   test('build fuo', ({ exec }) =>
-    exec({
+    void exec({
       moreOptions: ['-f', '@jiek/test-monorepo-fuo'],
       autoSnapDist: 'packages/fuo/dist'
     }))
   test('build fuu', ({ exec }) =>
-    exec({
+    void exec({
       moreOptions: ['-f', '@jiek/test-monorepo-fuu'],
       autoSnapDist: 'packages/fuu/dist'
     }))
   test('build bar', ({ exec }) =>
-    exec({
+    void exec({
       moreOptions: ['-f', '@jiek/test-monorepo-bar'],
       autoSnapDist: 'packages/bar/dist'
     }))
 })
 describe('root package', ({ test }) => {
   test('common', ({ exec }) =>
-    exec({
+    void exec({
       moreOptions: ['-f', 'root-package']
     }))
 })

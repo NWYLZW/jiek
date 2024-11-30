@@ -1,4 +1,4 @@
-import * as childProcess from 'node:child_process'
+import { execSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
@@ -16,14 +16,14 @@ function snapshotDir(dir: string, remove = true) {
     expect(`${file}:\n${fs.readFileSync(path.resolve(dir, file), 'utf-8')}`).toMatchSnapshot()
   })
   if (remove) {
-    fs.rmSync(dir, { recursive: true })
+    void fs.promises.rm(dir, { recursive: true })
   }
 }
 
-function execWithRoot(root: string, cmd: string) {
+async function execWithRoot(root: string, cmd: string) {
   const cliBinPath = path.resolve(__dirname, '../bin/jiek.js')
   const args = ['node', cliBinPath, cmd].join(' ')
-  childProcess.execSync(args, {
+  execSync(args, {
     cwd: root,
     stdio: 'inherit',
     env: {
@@ -41,8 +41,7 @@ interface Ctx {
     overrideOptions?: string[]
     autoSnapDist?: boolean | string
     remove?: boolean
-  }) => Ctx
-  snap: (target: string, remove: boolean) => Ctx
+  }) => Promise<void>
 }
 
 interface CreateUseExecOptions {
@@ -61,28 +60,29 @@ function createUseExec(options: CreateUseExecOptions) {
         'pnpm i',
         notWorkspace ? '--ignore-workspace' : null
       ].filter(Boolean).join(' ')
-      childProcess.execSync(args, {
+      execSync(args, {
         cwd: root,
         stdio: ['ignore', 'ignore', 'inherit']
       })
     })
-    afterAll(() => {
+    afterAll(async () => {
       const nodeModulesPath = path.resolve(root, 'node_modules')
       if (fs.existsSync(nodeModulesPath)) {
-        fs.rmSync(nodeModulesPath, { recursive: true })
+        void fs.promises.rm(nodeModulesPath, { recursive: true })
       }
 
       const packagesPath = path.resolve(root, 'packages')
       if (!fs.existsSync(packagesPath)) return
       if (!fs.statSync(packagesPath).isDirectory()) return
 
-      fs.readdirSync(packagesPath)
+      const files = await fs.promises.readdir(packagesPath)
+      files
         .forEach(pkg => {
           if (typeof pkg !== 'string') return
           const nodeModulesPath = resolveByRoot('packages', pkg, 'node_modules')
           if (!fs.existsSync(nodeModulesPath)) return
           if (!fs.statSync(nodeModulesPath).isDirectory()) return
-          fs.rmSync(nodeModulesPath, { recursive: true })
+          void fs.promises.rm(nodeModulesPath, { recursive: true })
         })
     })
     let defaultCmd = options.cmd ?? ''
@@ -105,7 +105,7 @@ function createUseExec(options: CreateUseExecOptions) {
     const setupCmdOptions = (options: string[], cmd = defaultCmd) => defaultCmdOptionsMap[cmd] = options
     const ctx: Ctx = {
       root,
-      exec({
+      async exec({
         cmd = defaultCmd,
         moreOptions = [],
         overrideOptions = [],
@@ -123,17 +123,12 @@ function createUseExec(options: CreateUseExecOptions) {
         } else {
           cmdWithOptions.push(...overrideOptions)
         }
-        execWithRoot(root, cmdWithOptions.join(' '))
+        await execWithRoot(root, cmdWithOptions.join(' '))
         // noinspection PointlessBooleanExpressionJS
         if (autoSnapDist !== false) {
           // noinspection PointlessBooleanExpressionJS
-          ctx.snap(autoSnapDist === true ? 'dist' : autoSnapDist, remove)
+          snapshotDir(path.resolve(root, autoSnapDist === true ? 'dist' : autoSnapDist), remove)
         }
-        return this
-      },
-      snap(target = 'dist', remove = true) {
-        snapshotDir(path.resolve(root, target), remove)
-        return this
       }
     }
     const test = (title: string, func: (context: Ctx) => any) => {
@@ -143,7 +138,7 @@ function createUseExec(options: CreateUseExecOptions) {
     }
     return {
       test,
-      dflt: ({ exec }: Ctx) => exec(),
+      dflt: async ({ exec }: Ctx) => exec(),
       setup,
       setupCmd,
       setupCmdOptionsMap,
