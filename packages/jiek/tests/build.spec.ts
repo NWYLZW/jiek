@@ -1,131 +1,101 @@
-import { describe, test } from 'vitest'
+import { describe } from 'vitest'
 
-import { prepareROOT, runCommandAndSnapshotDistFiles } from './prepareROOT'
+import { createUseExec } from './useExec.ts'
 
-const prepareRootWithSubCmd = prepareROOT.bind(null, 'build -s')
+const useExec = createUseExec({ cmd: 'build', cmdOptions: ['-s'] })
 
 describe('simple', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('simple')
-  test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
+  const { test } = useExec('simple')
+  test('common', ({ exec }) => exec())
 })
 describe('simple mjs', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('simple-mjs')
-  test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
+  const { test } = useExec('simple-mjs')
+  test('common', ({ exec }) => exec())
 })
 describe('require in mjs', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('require-in-mjs')
-  test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
+  const { test } = useExec('require-in-mjs')
+  test('common', ({ exec }) => exec())
 })
 describe('only minify', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('only-minify')
-  test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
+  const { test } = useExec('only-minify')
+  test('common', ({ exec }) => exec())
 })
 describe('export self subpath', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('export-self-subpath')
-  test(
-    'common',
-    runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist')
-  )
+  const { test } = useExec('export-self-subpath')
+  test('common', ({ exec }) => exec())
 })
 describe('multiple exports', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('multiple-exports')
-  test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
+  const { test } = useExec('multiple-exports')
+  test('common', ({ exec }) => exec())
 })
 describe('glob exports', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('glob-exports')
-  test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
+  const { test } = useExec('glob-exports')
+  test('common', ({ exec }) => exec())
 })
 describe('resolve imports', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('resolve-imports')
-  test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
+  const { test } = useExec('resolve-imports')
+  test('common', ({ exec }) => exec())
 })
 describe('unordered exports inputs', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('unordered-exports_input')
-  test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
+  const { test } = useExec('unordered-exports_input')
+  test('common', ({ exec }) => exec())
 })
 describe('with no resolve exports', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('with-no-resolve-export')
-  test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
+  const { test } = useExec('with-no-resolve-export')
+  test('common', ({ exec }) => exec())
 })
 describe('monorepo', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('monorepo')
-  test(
-    'build foo',
-    runCommandAndSnapshotDistFiles.bind(
-      null,
-      '-f @jiek/test-monorepo-foo',
-      root,
-      prefixes,
-      'packages/foo/dist'
-    )
-  )
-  test(
-    'build bar',
-    runCommandAndSnapshotDistFiles.bind(
-      null,
-      '-f @jiek/test-monorepo-bar',
-      root,
-      prefixes,
-      'packages/bar/dist'
-    )
-  )
+  const { test } = useExec('monorepo')
+  test('build foo', ({ exec }) =>
+    exec({
+      moreOptions: ['-f', '@jiek/test-monorepo-foo'],
+      autoSnapDist: 'packages/foo/dist'
+    }))
+  test('build bar', ({ exec }) =>
+    exec({
+      moreOptions: ['-f', '@jiek/test-monorepo-bar'],
+      autoSnapDist: 'packages/bar/dist'
+    }))
 })
 describe('not dts tsconfig', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('not-dts-tsconfig')
-  test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
+  const { test } = useExec('not-dts-tsconfig')
+  test('common', ({ exec }) => exec())
 })
 describe('with scss file import', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('with-scss-file-import')
-  test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
+  const { test } = useExec('with-scss-file-import')
+  test('common', ({ exec }) => exec())
 })
 describe('project references', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('project-references')
-  test(
-    'build foo',
-    runCommandAndSnapshotDistFiles.bind(
-      null,
-      '-f @jiek/test-monorepo-foo',
-      root,
-      prefixes,
-      'packages/foo/dist'
-    )
-  )
-  test(
-    'build fuo',
-    runCommandAndSnapshotDistFiles.bind(
-      null,
-      '-f @jiek/test-monorepo-fuo',
-      root,
-      prefixes,
-      'packages/fuo/dist'
-    )
-  )
-  test(
-    'build fuu',
-    runCommandAndSnapshotDistFiles.bind(
-      null,
-      '-f @jiek/test-monorepo-fuu',
-      root,
-      prefixes,
-      'packages/fuu/dist'
-    )
-  )
-  test(
-    'build bar',
-    runCommandAndSnapshotDistFiles.bind(
-      null,
-      '-f @jiek/test-monorepo-bar',
-      root,
-      prefixes,
-      'packages/bar/dist'
-    )
-  )
+  const { test } = useExec('project-references')
+  test('build foo', ({ exec }) =>
+    exec({
+      moreOptions: ['-f', '@jiek/test-monorepo-foo'],
+      autoSnapDist: 'packages/foo/dist'
+    }))
+  test('build fuo', ({ exec }) =>
+    exec({
+      moreOptions: ['-f', '@jiek/test-monorepo-fuo'],
+      autoSnapDist: 'packages/fuo/dist'
+    }))
+  test('build fuu', ({ exec }) =>
+    exec({
+      moreOptions: ['-f', '@jiek/test-monorepo-fuu'],
+      autoSnapDist: 'packages/fuu/dist'
+    }))
+  test('build bar', ({ exec }) =>
+    exec({
+      moreOptions: ['-f', '@jiek/test-monorepo-bar'],
+      autoSnapDist: 'packages/bar/dist'
+    }))
 })
 describe('root-package', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('root-package')
-  test('common', runCommandAndSnapshotDistFiles.bind(null, '-f root-package', root, prefixes, 'dist'))
+  const { test } = useExec('root-package')
+  test('common', ({ exec }) =>
+    exec({
+      moreOptions: ['-f', 'root-package']
+    }))
 })
 describe('import-type-from-subpath', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('import-type-from-subpath')
-  test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
+  const { test } = useExec('import-type-from-subpath')
+  test('common', ({ exec }) => exec())
 })
