@@ -1,4 +1,4 @@
-import { execSync } from 'node:child_process'
+import { exec, execSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
@@ -23,13 +23,29 @@ function snapshotDir(dir: string, remove = true) {
 async function execWithRoot(root: string, cmd: string) {
   const cliBinPath = path.resolve(__dirname, '../bin/jiek.js')
   const args = ['node', cliBinPath, cmd].join(' ')
-  execSync(args, {
+  const p = exec(args, {
     cwd: root,
-    stdio: 'inherit',
     env: {
       ...process.env,
       JIEK_ROOT: root
     }
+  })
+  let stdout = ''
+  p.stdout?.on('data', data => {
+    stdout += data
+  })
+  let stderr = ''
+  p.stderr?.on('data', data => {
+    stderr += data
+  })
+  return new Promise<void>((resolve, reject) => {
+    p.on('exit', code => {
+      if (code === 0) {
+        resolve()
+      } else {
+        reject(new Error(`exit code: ${code}\n${stdout}\n${stderr}`))
+      }
+    })
   })
 }
 
