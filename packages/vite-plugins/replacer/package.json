@@ -1,4 +1,5 @@
 {
+  ".jiek.active": ["vite-plugin"],
   "name": "vite-plugin-replacer",
   "version": "1.0.0",
   "description": "A vite plugin to replace string in files",
