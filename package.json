@@ -6,6 +6,7 @@
     "email": "yijie4188@gmail.com"
   },
   "license": "MIT",
+  "homepage": "https://github.com/NWYLZW/jiek",
   "repository": "https://github.com/NWYLZW/jiek",
   "engines": {
     "node": ">= 18.0.0"
