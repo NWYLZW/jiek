@@ -81,7 +81,9 @@ async function execWithRoot(root: string, cmd: string) {
   return new Promise<void>((resolve, reject) => {
     p.on('exit', code => {
       if (code === 0) {
-        console.log(stdout)
+        if (stdout.trim() !== '') {
+          console.log(stdout)
+        }
         resolve()
       } else {
         reject(new Error(`exit code: ${code}\n${stdout}\n${stderr}`))
