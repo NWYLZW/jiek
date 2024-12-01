@@ -94,13 +94,15 @@ program
   })
 
 async function prepublish({ bumper }: {
-  bumper: false | BumperType
-}) {
+  bumper?: boolean | BumperType
+} = {}) {
   const {
     JIEK_PUBLISH_OUTDIR: outdirEnv,
     JIEK_PUBLISH_BUMPER: bumperEnv
   } = process.env
-  const outdir = outdirEnv ?? 'dist'
+  const outdir = outdirEnv
+    ? JSON.parse(outdirEnv) as string
+    : 'dist'
   bumper = bumper ?? (
     bumperEnv ? JSON.parse(bumperEnv) as string | boolean : false
   )
@@ -414,6 +416,7 @@ async function postpublish() {
     if (fs.existsSync(jiekTempPackageJSON)) {
       fs.copyFileSync(jiekTempPackageJSON, packageJSON)
       fs.rmSync(jiekTempPackageJSON)
+      // eslint-disable-next-line no-console
       console.log(`${dir}/package.json has been restored`)
     } else {
       throw new Error(
