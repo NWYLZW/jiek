@@ -1,8 +1,10 @@
+/* eslint-disable ts/strict-boolean-expressions */
 import * as childProcess from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
+import process from 'node:process'
 
-import { bump, type BumperType, TAGS } from '@jiek/utils/bumper'
+import { type BumperType, TAGS, bump } from '@jiek/utils/bumper'
 import { program } from 'commander'
 import detectIndent from 'detect-indent'
 import { applyEdits, modify } from 'jsonc-parser'
@@ -96,8 +98,8 @@ async function prepublish() {
     JIEK_PUBLISH_OUTDIR: outdirEnv,
     JIEK_PUBLISH_BUMPER: bumperEnv
   } = process.env
-  const outdir = outdirEnv ? JSON.parse(outdirEnv) : 'dist'
-  const bumper = bumperEnv ? JSON.parse(bumperEnv) : false
+  const outdir = outdirEnv ?? 'dist'
+  const bumper = bumperEnv ? JSON.parse(bumperEnv) as string | boolean : false
 
   const generateNewManifest = (dir: string, manifest: NonNullable<ProjectsGraph['value']>[string]) => {
     const { name, type, exports: entrypoints = {} } = manifest
@@ -188,6 +190,7 @@ async function prepublish() {
         const index = exports?.['.']
         const indexPublishConfig: Record<string, string> = {}
         if (index) {
+          // eslint-disable-next-line ts/switch-exhaustiveness-check
           switch (typeof index) {
             case 'string':
               indexPublishConfig[
@@ -196,8 +199,8 @@ async function prepublish() {
               break
             case 'object': {
               const indexExports = index as Record<string, string>
-              indexPublishConfig.main = indexExports['require'] ?? indexExports['default']
-              indexPublishConfig.module = indexExports['import'] ?? indexExports['module'] ?? indexExports['default']
+              indexPublishConfig.main = indexExports.require ?? indexExports.default
+              indexPublishConfig.module = indexExports.import ?? indexExports.module ?? indexExports.default
               break
             }
           }
@@ -216,7 +219,7 @@ async function prepublish() {
         }
       }
     }
-    if (oldJSON['devDependencies']) {
+    if (oldJSON.devDependencies) {
       newJSONString = applyEdits(
         newJSONString,
         modify(
@@ -227,8 +230,8 @@ async function prepublish() {
         )
       )
     }
-    if (oldJSON['peerDependencies']) {
-      const peerDependenciesMeta = Object.keys(oldJSON['peerDependencies']).reduce(
+    if (oldJSON.peerDependencies) {
+      const peerDependenciesMeta = Object.keys(oldJSON.peerDependencies).reduce(
         (acc, key) => {
           acc[key] = { optional: true }
           return acc
@@ -245,7 +248,7 @@ async function prepublish() {
         )
       )
     }
-    if (oldJSON['files']) {
+    if (oldJSON.files) {
       newJSONString = applyEdits(
         newJSONString,
         modify(
@@ -264,9 +267,9 @@ async function prepublish() {
     const resolveByDir = (...paths: string[]) => path.resolve(dir, ...paths)
 
     const oldJSONString = fs.readFileSync(resolveByDir('package.json'), 'utf-8')
-    const oldJSON = JSON.parse(oldJSONString) ?? '0.0.0'
+    const oldJSON = JSON.parse(oldJSONString) as Record<string, unknown>
     if (typeof oldJSON.version !== 'string') {
-      throw new Error(`${dir}/package.json must have a version field with a string value`)
+      throw new TypeError(`${dir}/package.json must have a version field with a string value`)
     }
 
     // TODO detectIndent by editorconfig
@@ -276,7 +279,9 @@ async function prepublish() {
       insertSpaces: true
     }
 
-    const newVersion = bumper ? bump(oldJSON.version, bumper) : oldJSON.version
+    const newVersion = bumper
+      ? bump(oldJSON.version, bumper === true ? 'patch' : bumper)
+      : oldJSON.version
     const modifyVersionPackageJSON = applyEdits(
       oldJSONString,
       modify(oldJSONString, ['version'], newVersion, { formattingOptions })
@@ -357,17 +362,24 @@ async function prepublish() {
     }
 
     if (oldJSON.files) {
-      if (!Array.isArray(oldJSON.files)) {
-        throw new Error(`${dir}/package.json files field must be an array`)
-      }
-      if (Array.isArray(oldJSON.files) && oldJSON.files.every((file: unknown) => typeof file !== 'string')) {
-        throw new Error(`${dir}/package.json files field must be an array of string`)
+      if (Array.isArray(oldJSON.files)) {
+        if (oldJSON.files.every((file: unknown) => typeof file !== 'string')) {
+          throw new TypeError(`${dir}/package.json files field must be an array of string`)
+        }
+      } else {
+        throw new TypeError(`${dir}/package.json files field must be an array`)
       }
     }
     const resolvedOutdirAbs = resolveByDir(resolvedOutdir)
     const files = (
       (oldJSON.files as undefined | string[]) ?? fs.readdirSync(resolveByDir('.'))
-    ).filter(file => file === 'node_modules' || resolveByDir(file) !== resolvedOutdirAbs)
+    ).filter(file =>
+      ![
+        'node_modules',
+        'package.json',
+        'pnpm-lock.yaml'
+      ].includes(file) && resolveByDir(file) !== resolvedOutdirAbs
+    )
 
     for (const file of files) {
       const path = resolveByDir(file)
@@ -412,6 +424,7 @@ program
     const {
       npm_lifecycle_event: NPM_LIFECYCLE_EVENT
     } = process.env
+    // eslint-disable-next-line ts/switch-exhaustiveness-check
     switch (NPM_LIFECYCLE_EVENT) {
       case 'prepublish':
         await prepublish()

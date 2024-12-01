@@ -81,6 +81,7 @@ async function execWithRoot(root: string, cmd: string) {
   return new Promise<void>((resolve, reject) => {
     p.on('exit', code => {
       if (code === 0) {
+        console.log(stdout)
         resolve()
       } else {
         reject(new Error(`exit code: ${code}\n${stdout}\n${stderr}`))
@@ -91,6 +92,7 @@ async function execWithRoot(root: string, cmd: string) {
 
 type CreateUseExecOptions =
   & {
+    base?: string
     cmdOptions?: string[]
     cmdOptionsMap?: Record<string, string[]>
   }
@@ -108,7 +110,9 @@ type CreateUseExecOptions =
 function createUseExec(options: CreateUseExecOptions) {
   const snapshotTag = options.snapshotTag ?? options.cmd ?? 'default'
   return function useExec(title: string, noHook = false) {
-    const root = resolveByFixtures(title)
+    const root = (options.base != null)
+      ? resolveByFixtures(options.base, title)
+      : resolveByFixtures(title)
 
     const resolveByRoot = (...paths: string[]) => path.resolve(root, ...paths)
     const notWorkspace = !fs.existsSync(resolveByRoot('pnpm-workspace.yaml'))

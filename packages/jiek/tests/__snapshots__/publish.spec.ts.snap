@@ -1,0 +1,33 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`no mono > publish/simple 1`] = `
+[
+  "dist",
+  "package.json",
+  "src",
+  "tsconfig.json",
+  "dist/index.d.mts",
+  "dist/index.d.ts",
+  "dist/index.js",
+  "dist/index.min.js",
+  "dist/index.min.mjs",
+  "dist/index.mjs",
+  "src/index.ts",
+]
+`;
+
+exports[`no mono > simple 1`] = `
+[
+  "dist",
+  "package.json",
+  "src",
+  "tsconfig.json",
+  "dist/index.d.mts",
+  "dist/index.d.ts",
+  "dist/index.js",
+  "dist/index.min.js",
+  "dist/index.min.mjs",
+  "dist/index.mjs",
+  "src/index.ts",
+]
+`;
