@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`export self subpath > common 1`] = `
+exports[`no mono > export self subpath > common 1`] = `
 [
   "base.cjs",
   "base.d.cts",
@@ -17,7 +17,7 @@ exports[`export self subpath > common 1`] = `
 ]
 `;
 
-exports[`export self subpath > common 2`] = `
+exports[`no mono > export self subpath > common 2`] = `
 "base.cjs:
 'use strict';
 
@@ -29,7 +29,7 @@ exports.base = base;
 "
 `;
 
-exports[`export self subpath > common 3`] = `
+exports[`no mono > export self subpath > common 3`] = `
 "base.d.cts:
 declare function base(): string;
 
@@ -37,7 +37,7 @@ export { base };
 "
 `;
 
-exports[`export self subpath > common 4`] = `
+exports[`no mono > export self subpath > common 4`] = `
 "base.d.ts:
 declare function base(): string;
 
@@ -45,7 +45,7 @@ export { base };
 "
 `;
 
-exports[`export self subpath > common 5`] = `
+exports[`no mono > export self subpath > common 5`] = `
 "base.js:
 function base() {
   return "base";
@@ -55,19 +55,19 @@ export { base };
 "
 `;
 
-exports[`export self subpath > common 6`] = `
+exports[`no mono > export self subpath > common 6`] = `
 "base.min.cjs:
 "use strict";function e(){return"base"}exports.base=e;
 "
 `;
 
-exports[`export self subpath > common 7`] = `
+exports[`no mono > export self subpath > common 7`] = `
 "base.min.js:
 function e(){return"base"}export{e as base};
 "
 `;
 
-exports[`export self subpath > common 8`] = `
+exports[`no mono > export self subpath > common 8`] = `
 "index.cjs:
 'use strict';
 
@@ -106,7 +106,7 @@ Object.keys(base).forEach(function (k) {
 "
 `;
 
-exports[`export self subpath > common 9`] = `
+exports[`no mono > export self subpath > common 9`] = `
 "index.d.cts:
 export * from 'export-self-subpath/base';
 
@@ -116,7 +116,7 @@ export { foo };
 "
 `;
 
-exports[`export self subpath > common 10`] = `
+exports[`no mono > export self subpath > common 10`] = `
 "index.d.ts:
 export * from 'export-self-subpath/base';
 
@@ -126,7 +126,7 @@ export { foo };
 "
 `;
 
-exports[`export self subpath > common 11`] = `
+exports[`no mono > export self subpath > common 11`] = `
 "index.js:
 export * from 'export-self-subpath/base';
 
@@ -157,19 +157,19 @@ export { foo };
 "
 `;
 
-exports[`export self subpath > common 12`] = `
+exports[`no mono > export self subpath > common 12`] = `
 "index.min.cjs:
 "use strict";var r=require("export-self-subpath/base"),t="export-self-subpath",a="module",n="0.1.0",s={"./package.json":"./package.json",".":"./src/index.ts","./base":"./src/base.ts"},o={"export-self-subpath":"file:."},p={name:t,type:a,version:n,exports:s,devDependencies:o};function c(){return p.name}exports.foo=c,Object.keys(r).forEach(function(e){e!=="default"&&!Object.prototype.hasOwnProperty.call(exports,e)&&Object.defineProperty(exports,e,{enumerable:!0,get:function(){return r[e]}})});
 "
 `;
 
-exports[`export self subpath > common 13`] = `
+exports[`no mono > export self subpath > common 13`] = `
 "index.min.js:
 export*from"export-self-subpath/base";var e="export-self-subpath",r="module",s="0.1.0",a={"./package.json":"./package.json",".":"./src/index.ts","./base":"./src/base.ts"},n={"export-self-subpath":"file:."},o={name:e,type:r,version:s,exports:a,devDependencies:n};function p(){return o.name}export{p as foo};
 "
 `;
 
-exports[`glob exports > common 1`] = `
+exports[`no mono > glob exports > common 1`] = `
 [
   "index.cjs",
   "index.d.cts",
@@ -205,7 +205,7 @@ exports[`glob exports > common 1`] = `
 ]
 `;
 
-exports[`glob exports > common 2`] = `
+exports[`no mono > glob exports > common 2`] = `
 "index.cjs:
 'use strict';
 
@@ -229,40 +229,40 @@ Object.keys(foo).forEach(function (k) {
 "
 `;
 
-exports[`glob exports > common 3`] = `
+exports[`no mono > glob exports > common 3`] = `
 "index.d.cts:
 export * from 'glob-exports/sub/bar';
 export * from 'glob-exports/sub/foo';
 "
 `;
 
-exports[`glob exports > common 4`] = `
+exports[`no mono > glob exports > common 4`] = `
 "index.d.ts:
 export * from 'glob-exports/sub/bar';
 export * from 'glob-exports/sub/foo';
 "
 `;
 
-exports[`glob exports > common 5`] = `
+exports[`no mono > glob exports > common 5`] = `
 "index.js:
 export * from 'glob-exports/sub/bar';
 export * from 'glob-exports/sub/foo';
 "
 `;
 
-exports[`glob exports > common 6`] = `
+exports[`no mono > glob exports > common 6`] = `
 "index.min.cjs:
 "use strict";var r=require("glob-exports/sub/bar"),t=require("glob-exports/sub/foo");Object.keys(r).forEach(function(e){e!=="default"&&!Object.prototype.hasOwnProperty.call(exports,e)&&Object.defineProperty(exports,e,{enumerable:!0,get:function(){return r[e]}})}),Object.keys(t).forEach(function(e){e!=="default"&&!Object.prototype.hasOwnProperty.call(exports,e)&&Object.defineProperty(exports,e,{enumerable:!0,get:function(){return t[e]}})});
 "
 `;
 
-exports[`glob exports > common 7`] = `
+exports[`no mono > glob exports > common 7`] = `
 "index.min.js:
 export*from"glob-exports/sub/bar";export*from"glob-exports/sub/foo";
 "
 `;
 
-exports[`glob exports > common 8`] = `
+exports[`no mono > glob exports > common 8`] = `
 "sub/bar.cjs:
 'use strict';
 
@@ -272,7 +272,7 @@ exports.bar = bar;
 "
 `;
 
-exports[`glob exports > common 9`] = `
+exports[`no mono > glob exports > common 9`] = `
 "sub/bar.d.cts:
 declare const bar = "bar";
 
@@ -280,7 +280,7 @@ export { bar };
 "
 `;
 
-exports[`glob exports > common 10`] = `
+exports[`no mono > glob exports > common 10`] = `
 "sub/bar.d.ts:
 declare const bar = "bar";
 
@@ -288,7 +288,7 @@ export { bar };
 "
 `;
 
-exports[`glob exports > common 11`] = `
+exports[`no mono > glob exports > common 11`] = `
 "sub/bar.js:
 const bar = "bar";
 
@@ -296,19 +296,19 @@ export { bar };
 "
 `;
 
-exports[`glob exports > common 12`] = `
+exports[`no mono > glob exports > common 12`] = `
 "sub/bar.min.cjs:
 "use strict";const r="bar";exports.bar=r;
 "
 `;
 
-exports[`glob exports > common 13`] = `
+exports[`no mono > glob exports > common 13`] = `
 "sub/bar.min.js:
 const r="bar";export{r as bar};
 "
 `;
 
-exports[`glob exports > common 14`] = `
+exports[`no mono > glob exports > common 14`] = `
 "sub/bor.cjs:
 'use strict';
 
@@ -318,7 +318,7 @@ exports.bor = bor;
 "
 `;
 
-exports[`glob exports > common 15`] = `
+exports[`no mono > glob exports > common 15`] = `
 "sub/bor.d.cts:
 declare const bor = "bor";
 
@@ -326,7 +326,7 @@ export { bor };
 "
 `;
 
-exports[`glob exports > common 16`] = `
+exports[`no mono > glob exports > common 16`] = `
 "sub/bor.d.ts:
 declare const bor = "bor";
 
@@ -334,7 +334,7 @@ export { bor };
 "
 `;
 
-exports[`glob exports > common 17`] = `
+exports[`no mono > glob exports > common 17`] = `
 "sub/bor.js:
 const bor = "bor";
 
@@ -342,19 +342,19 @@ export { bor };
 "
 `;
 
-exports[`glob exports > common 18`] = `
+exports[`no mono > glob exports > common 18`] = `
 "sub/bor.min.cjs:
 "use strict";const o="bor";exports.bor=o;
 "
 `;
 
-exports[`glob exports > common 19`] = `
+exports[`no mono > glob exports > common 19`] = `
 "sub/bor.min.js:
 const o="bor";export{o as bor};
 "
 `;
 
-exports[`glob exports > common 20`] = `
+exports[`no mono > glob exports > common 20`] = `
 "sub/foo.cjs:
 'use strict';
 
@@ -364,7 +364,7 @@ exports.foo = foo;
 "
 `;
 
-exports[`glob exports > common 21`] = `
+exports[`no mono > glob exports > common 21`] = `
 "sub/foo.d.cts:
 declare const foo = "foo";
 
@@ -372,7 +372,7 @@ export { foo };
 "
 `;
 
-exports[`glob exports > common 22`] = `
+exports[`no mono > glob exports > common 22`] = `
 "sub/foo.d.ts:
 declare const foo = "foo";
 
@@ -380,7 +380,7 @@ export { foo };
 "
 `;
 
-exports[`glob exports > common 23`] = `
+exports[`no mono > glob exports > common 23`] = `
 "sub/foo.js:
 const foo = "foo";
 
@@ -388,19 +388,19 @@ export { foo };
 "
 `;
 
-exports[`glob exports > common 24`] = `
+exports[`no mono > glob exports > common 24`] = `
 "sub/foo.min.cjs:
 "use strict";const o="foo";exports.foo=o;
 "
 `;
 
-exports[`glob exports > common 25`] = `
+exports[`no mono > glob exports > common 25`] = `
 "sub/foo.min.js:
 const o="foo";export{o as foo};
 "
 `;
 
-exports[`glob exports > common 26`] = `
+exports[`no mono > glob exports > common 26`] = `
 "sub/fuo.cjs:
 'use strict';
 
@@ -410,7 +410,7 @@ exports.fuo = fuo;
 "
 `;
 
-exports[`glob exports > common 27`] = `
+exports[`no mono > glob exports > common 27`] = `
 "sub/fuo.d.cts:
 declare const fuo = "fuo";
 
@@ -418,7 +418,7 @@ export { fuo };
 "
 `;
 
-exports[`glob exports > common 28`] = `
+exports[`no mono > glob exports > common 28`] = `
 "sub/fuo.d.ts:
 declare const fuo = "fuo";
 
@@ -426,7 +426,7 @@ export { fuo };
 "
 `;
 
-exports[`glob exports > common 29`] = `
+exports[`no mono > glob exports > common 29`] = `
 "sub/fuo.js:
 const fuo = "fuo";
 
@@ -434,19 +434,19 @@ export { fuo };
 "
 `;
 
-exports[`glob exports > common 30`] = `
+exports[`no mono > glob exports > common 30`] = `
 "sub/fuo.min.cjs:
 "use strict";const o="fuo";exports.fuo=o;
 "
 `;
 
-exports[`glob exports > common 31`] = `
+exports[`no mono > glob exports > common 31`] = `
 "sub/fuo.min.js:
 const o="fuo";export{o as fuo};
 "
 `;
 
-exports[`import type from subpath > common 1`] = `
+exports[`no mono > import type from subpath > common 1`] = `
 [
   "index.d.mts",
   "index.d.ts",
@@ -457,7 +457,7 @@ exports[`import type from subpath > common 1`] = `
 ]
 `;
 
-exports[`import type from subpath > common 2`] = `
+exports[`no mono > import type from subpath > common 2`] = `
 "index.d.mts:
 interface Foo {
     name: string;
@@ -467,7 +467,7 @@ export type { Foo };
 "
 `;
 
-exports[`import type from subpath > common 3`] = `
+exports[`no mono > import type from subpath > common 3`] = `
 "index.d.ts:
 interface Foo {
     name: string;
@@ -477,26 +477,26 @@ export type { Foo };
 "
 `;
 
-exports[`import type from subpath > common 4`] = `
+exports[`no mono > import type from subpath > common 4`] = `
 "index.js:
 'use strict';
 
 "
 `;
 
-exports[`import type from subpath > common 5`] = `
+exports[`no mono > import type from subpath > common 5`] = `
 "index.min.js:
 "use strict";
 "
 `;
 
-exports[`import type from subpath > common 6`] = `
+exports[`no mono > import type from subpath > common 6`] = `
 "index.min.mjs:
 
 "
 `;
 
-exports[`import type from subpath > common 7`] = `
+exports[`no mono > import type from subpath > common 7`] = `
 "index.mjs:
 
 "
@@ -640,7 +640,7 @@ export { index as default };
 "
 `;
 
-exports[`multiple exports > common 1`] = `
+exports[`no mono > multiple exports > common 1`] = `
 [
   "foo.d.mts",
   "foo.d.ts",
@@ -657,7 +657,7 @@ exports[`multiple exports > common 1`] = `
 ]
 `;
 
-exports[`multiple exports > common 2`] = `
+exports[`no mono > multiple exports > common 2`] = `
 "foo.d.mts:
 declare function foo(): string;
 
@@ -665,7 +665,7 @@ export { foo };
 "
 `;
 
-exports[`multiple exports > common 3`] = `
+exports[`no mono > multiple exports > common 3`] = `
 "foo.d.ts:
 declare function foo(): string;
 
@@ -673,7 +673,7 @@ export { foo };
 "
 `;
 
-exports[`multiple exports > common 4`] = `
+exports[`no mono > multiple exports > common 4`] = `
 "foo.js:
 'use strict';
 
@@ -685,19 +685,19 @@ exports.foo = foo;
 "
 `;
 
-exports[`multiple exports > common 5`] = `
+exports[`no mono > multiple exports > common 5`] = `
 "foo.min.js:
 "use strict";function o(){return"foo"}exports.foo=o;
 "
 `;
 
-exports[`multiple exports > common 6`] = `
+exports[`no mono > multiple exports > common 6`] = `
 "foo.min.mjs:
 function o(){return"foo"}export{o as foo};
 "
 `;
 
-exports[`multiple exports > common 7`] = `
+exports[`no mono > multiple exports > common 7`] = `
 "foo.mjs:
 function foo() {
   return "foo";
@@ -707,7 +707,7 @@ export { foo };
 "
 `;
 
-exports[`multiple exports > common 8`] = `
+exports[`no mono > multiple exports > common 8`] = `
 "index.d.mts:
 declare function foo(): string;
 
@@ -715,7 +715,7 @@ export { foo };
 "
 `;
 
-exports[`multiple exports > common 9`] = `
+exports[`no mono > multiple exports > common 9`] = `
 "index.d.ts:
 declare function foo(): string;
 
@@ -723,7 +723,7 @@ export { foo };
 "
 `;
 
-exports[`multiple exports > common 10`] = `
+exports[`no mono > multiple exports > common 10`] = `
 "index.js:
 'use strict';
 
@@ -735,19 +735,19 @@ exports.foo = foo;
 "
 `;
 
-exports[`multiple exports > common 11`] = `
+exports[`no mono > multiple exports > common 11`] = `
 "index.min.js:
 "use strict";function o(){return"foo"}exports.foo=o;
 "
 `;
 
-exports[`multiple exports > common 12`] = `
+exports[`no mono > multiple exports > common 12`] = `
 "index.min.mjs:
 function o(){return"foo"}export{o as foo};
 "
 `;
 
-exports[`multiple exports > common 13`] = `
+exports[`no mono > multiple exports > common 13`] = `
 "index.mjs:
 function foo() {
   return "foo";
@@ -757,7 +757,7 @@ export { foo };
 "
 `;
 
-exports[`only minify > common 1`] = `
+exports[`no mono > only minify > common 1`] = `
 [
   "index.d.mts",
   "index.d.ts",
@@ -766,7 +766,7 @@ exports[`only minify > common 1`] = `
 ]
 `;
 
-exports[`only minify > common 2`] = `
+exports[`no mono > only minify > common 2`] = `
 "index.d.mts:
 declare function foo(): string;
 
@@ -774,7 +774,7 @@ export { foo };
 "
 `;
 
-exports[`only minify > common 3`] = `
+exports[`no mono > only minify > common 3`] = `
 "index.d.ts:
 declare function foo(): string;
 
@@ -782,13 +782,13 @@ export { foo };
 "
 `;
 
-exports[`only minify > common 4`] = `
+exports[`no mono > only minify > common 4`] = `
 "index.js:
 "use strict";function o(){return"foo"}exports.foo=o;
 "
 `;
 
-exports[`only minify > common 5`] = `
+exports[`no mono > only minify > common 5`] = `
 "index.mjs:
 function o(){return"foo"}export{o as foo};
 "
@@ -1140,7 +1140,7 @@ export { bar, index as default };
 "
 `;
 
-exports[`require in mjs > common 1`] = `
+exports[`no mono > require in mjs > common 1`] = `
 [
   "index.cjs",
   "index.d.cts",
@@ -1151,7 +1151,7 @@ exports[`require in mjs > common 1`] = `
 ]
 `;
 
-exports[`require in mjs > common 2`] = `
+exports[`no mono > require in mjs > common 2`] = `
 "index.cjs:
 'use strict';
 
@@ -1176,7 +1176,7 @@ exports.foo = foo;
 "
 `;
 
-exports[`require in mjs > common 3`] = `
+exports[`no mono > require in mjs > common 3`] = `
 "index.d.cts:
 declare function foo(): string;
 declare function bar(): any;
@@ -1185,7 +1185,7 @@ export { bar, foo };
 "
 `;
 
-exports[`require in mjs > common 4`] = `
+exports[`no mono > require in mjs > common 4`] = `
 "index.d.ts:
 declare function foo(): string;
 declare function bar(): any;
@@ -1194,7 +1194,7 @@ export { bar, foo };
 "
 `;
 
-exports[`require in mjs > common 5`] = `
+exports[`no mono > require in mjs > common 5`] = `
 "index.js:
 import { createRequire } from 'node:module';
 
@@ -1215,19 +1215,19 @@ export { bar, foo };
 "
 `;
 
-exports[`require in mjs > common 6`] = `
+exports[`no mono > require in mjs > common 6`] = `
 "index.min.cjs:
 "use strict";var t=require("node:module"),u=typeof document<"u"?document.currentScript:null,e=require;function r(){return"foo"}function n(){return e("./bar").bar}exports.bar=n,exports.foo=r;
 "
 `;
 
-exports[`require in mjs > common 7`] = `
+exports[`no mono > require in mjs > common 7`] = `
 "index.min.js:
 import{createRequire as r}from"node:module";var e=r(import.meta.url);function o(){return"foo"}function t(){return e("./bar").bar}export{t as bar,o as foo};
 "
 `;
 
-exports[`resolve imports > common 1`] = `
+exports[`no mono > resolve imports > common 1`] = `
 [
   "index.cjs",
   "index.d.cts",
@@ -1238,7 +1238,7 @@ exports[`resolve imports > common 1`] = `
 ]
 `;
 
-exports[`resolve imports > common 2`] = `
+exports[`no mono > resolve imports > common 2`] = `
 "index.cjs:
 'use strict';
 
@@ -1251,7 +1251,7 @@ exports.foo = foo;
 "
 `;
 
-exports[`resolve imports > common 3`] = `
+exports[`no mono > resolve imports > common 3`] = `
 "index.d.cts:
 type Bar = 'bar';
 declare const bar = "bar";
@@ -1263,7 +1263,7 @@ export { type Bar, type Foo, bar, foo };
 "
 `;
 
-exports[`resolve imports > common 4`] = `
+exports[`no mono > resolve imports > common 4`] = `
 "index.d.ts:
 type Bar = 'bar';
 declare const bar = "bar";
@@ -1275,7 +1275,7 @@ export { type Bar, type Foo, bar, foo };
 "
 `;
 
-exports[`resolve imports > common 5`] = `
+exports[`no mono > resolve imports > common 5`] = `
 "index.js:
 const bar = "bar";
 
@@ -1285,13 +1285,13 @@ export { bar, foo };
 "
 `;
 
-exports[`resolve imports > common 6`] = `
+exports[`no mono > resolve imports > common 6`] = `
 "index.min.cjs:
 "use strict";const o="bar",r="foo";exports.bar=o,exports.foo=r;
 "
 `;
 
-exports[`resolve imports > common 7`] = `
+exports[`no mono > resolve imports > common 7`] = `
 "index.min.js:
 const o="bar",r="foo";export{o as bar,r as foo};
 "
@@ -1381,7 +1381,7 @@ export { foo, name };
 "
 `;
 
-exports[`simple > common 1`] = `
+exports[`no mono > simple > common 1`] = `
 [
   "index.d.mts",
   "index.d.ts",
@@ -1392,7 +1392,7 @@ exports[`simple > common 1`] = `
 ]
 `;
 
-exports[`simple > common 2`] = `
+exports[`no mono > simple > common 2`] = `
 "index.d.mts:
 declare function foo(): string;
 
@@ -1400,7 +1400,7 @@ export { foo };
 "
 `;
 
-exports[`simple > common 3`] = `
+exports[`no mono > simple > common 3`] = `
 "index.d.ts:
 declare function foo(): string;
 
@@ -1408,7 +1408,7 @@ export { foo };
 "
 `;
 
-exports[`simple > common 4`] = `
+exports[`no mono > simple > common 4`] = `
 "index.js:
 'use strict';
 
@@ -1420,19 +1420,19 @@ exports.foo = foo;
 "
 `;
 
-exports[`simple > common 5`] = `
+exports[`no mono > simple > common 5`] = `
 "index.min.js:
 "use strict";function o(){return"foo"}exports.foo=o;
 "
 `;
 
-exports[`simple > common 6`] = `
+exports[`no mono > simple > common 6`] = `
 "index.min.mjs:
 function o(){return"foo"}export{o as foo};
 "
 `;
 
-exports[`simple > common 7`] = `
+exports[`no mono > simple > common 7`] = `
 "index.mjs:
 function foo() {
   return "foo";
@@ -1442,7 +1442,7 @@ export { foo };
 "
 `;
 
-exports[`simple mjs > common 1`] = `
+exports[`no mono > simple mjs > common 1`] = `
 [
   "index.cjs",
   "index.d.cts",
@@ -1453,7 +1453,7 @@ exports[`simple mjs > common 1`] = `
 ]
 `;
 
-exports[`simple mjs > common 2`] = `
+exports[`no mono > simple mjs > common 2`] = `
 "index.cjs:
 'use strict';
 
@@ -1465,7 +1465,7 @@ exports.foo = foo;
 "
 `;
 
-exports[`simple mjs > common 3`] = `
+exports[`no mono > simple mjs > common 3`] = `
 "index.d.cts:
 declare function foo(): string;
 
@@ -1473,7 +1473,7 @@ export { foo };
 "
 `;
 
-exports[`simple mjs > common 4`] = `
+exports[`no mono > simple mjs > common 4`] = `
 "index.d.ts:
 declare function foo(): string;
 
@@ -1481,7 +1481,7 @@ export { foo };
 "
 `;
 
-exports[`simple mjs > common 5`] = `
+exports[`no mono > simple mjs > common 5`] = `
 "index.js:
 function foo() {
   return "foo";
@@ -1491,19 +1491,19 @@ export { foo };
 "
 `;
 
-exports[`simple mjs > common 6`] = `
+exports[`no mono > simple mjs > common 6`] = `
 "index.min.cjs:
 "use strict";function o(){return"foo"}exports.foo=o;
 "
 `;
 
-exports[`simple mjs > common 7`] = `
+exports[`no mono > simple mjs > common 7`] = `
 "index.min.js:
 function o(){return"foo"}export{o as foo};
 "
 `;
 
-exports[`unordered exports inputs > common 1`] = `
+exports[`no mono > unordered exports inputs > common 1`] = `
 [
   "a.d.mts",
   "a.d.ts",
@@ -1520,7 +1520,7 @@ exports[`unordered exports inputs > common 1`] = `
 ]
 `;
 
-exports[`unordered exports inputs > common 2`] = `
+exports[`no mono > unordered exports inputs > common 2`] = `
 "a.d.mts:
 type A = 'a';
 
@@ -1528,7 +1528,7 @@ export type { A };
 "
 `;
 
-exports[`unordered exports inputs > common 3`] = `
+exports[`no mono > unordered exports inputs > common 3`] = `
 "a.d.ts:
 type A = 'a';
 
@@ -1536,32 +1536,32 @@ export type { A };
 "
 `;
 
-exports[`unordered exports inputs > common 4`] = `
+exports[`no mono > unordered exports inputs > common 4`] = `
 "a.js:
 'use strict';
 
 "
 `;
 
-exports[`unordered exports inputs > common 5`] = `
+exports[`no mono > unordered exports inputs > common 5`] = `
 "a.min.js:
 "use strict";
 "
 `;
 
-exports[`unordered exports inputs > common 6`] = `
+exports[`no mono > unordered exports inputs > common 6`] = `
 "a.min.mjs:
 
 "
 `;
 
-exports[`unordered exports inputs > common 7`] = `
+exports[`no mono > unordered exports inputs > common 7`] = `
 "a.mjs:
 
 "
 `;
 
-exports[`unordered exports inputs > common 8`] = `
+exports[`no mono > unordered exports inputs > common 8`] = `
 "b.d.mts:
 type BDepDep = 1;
 
@@ -1573,7 +1573,7 @@ export type { B };
 "
 `;
 
-exports[`unordered exports inputs > common 9`] = `
+exports[`no mono > unordered exports inputs > common 9`] = `
 "b.d.ts:
 type BDepDep = 1;
 
@@ -1585,32 +1585,32 @@ export type { B };
 "
 `;
 
-exports[`unordered exports inputs > common 10`] = `
+exports[`no mono > unordered exports inputs > common 10`] = `
 "b.js:
 'use strict';
 
 "
 `;
 
-exports[`unordered exports inputs > common 11`] = `
+exports[`no mono > unordered exports inputs > common 11`] = `
 "b.min.js:
 "use strict";
 "
 `;
 
-exports[`unordered exports inputs > common 12`] = `
+exports[`no mono > unordered exports inputs > common 12`] = `
 "b.min.mjs:
 
 "
 `;
 
-exports[`unordered exports inputs > common 13`] = `
+exports[`no mono > unordered exports inputs > common 13`] = `
 "b.mjs:
 
 "
 `;
 
-exports[`with no resolve exports > common 1`] = `
+exports[`no mono > with no resolve exports > common 1`] = `
 [
   "index.d.mts",
   "index.d.ts",
@@ -1621,7 +1621,7 @@ exports[`with no resolve exports > common 1`] = `
 ]
 `;
 
-exports[`with no resolve exports > common 2`] = `
+exports[`no mono > with no resolve exports > common 2`] = `
 "index.d.mts:
 declare function foo(): string;
 
@@ -1629,7 +1629,7 @@ export { foo };
 "
 `;
 
-exports[`with no resolve exports > common 3`] = `
+exports[`no mono > with no resolve exports > common 3`] = `
 "index.d.ts:
 declare function foo(): string;
 
@@ -1637,7 +1637,7 @@ export { foo };
 "
 `;
 
-exports[`with no resolve exports > common 4`] = `
+exports[`no mono > with no resolve exports > common 4`] = `
 "index.js:
 'use strict';
 
@@ -1649,19 +1649,19 @@ exports.foo = foo;
 "
 `;
 
-exports[`with no resolve exports > common 5`] = `
+exports[`no mono > with no resolve exports > common 5`] = `
 "index.min.js:
 "use strict";function o(){return"foo"}exports.foo=o;
 "
 `;
 
-exports[`with no resolve exports > common 6`] = `
+exports[`no mono > with no resolve exports > common 6`] = `
 "index.min.mjs:
 function o(){return"foo"}export{o as foo};
 "
 `;
 
-exports[`with no resolve exports > common 7`] = `
+exports[`no mono > with no resolve exports > common 7`] = `
 "index.mjs:
 function foo() {
   return "foo";
@@ -1671,7 +1671,7 @@ export { foo };
 "
 `;
 
-exports[`with scss file import > common 1`] = `
+exports[`no mono > with scss file import > common 1`] = `
 [
   "foo.css",
   "foo.d.mts",
@@ -1696,26 +1696,26 @@ exports[`with scss file import > common 1`] = `
 ]
 `;
 
-exports[`with scss file import > common 2`] = `
+exports[`no mono > with scss file import > common 2`] = `
 "foo.css:
 .foo{display:none}.foo--bar{display:block}"
 `;
 
-exports[`with scss file import > common 3`] = `
+exports[`no mono > with scss file import > common 3`] = `
 "foo.d.mts:
 
 export {  }
 "
 `;
 
-exports[`with scss file import > common 4`] = `
+exports[`no mono > with scss file import > common 4`] = `
 "foo.d.ts:
 
 export {  }
 "
 `;
 
-exports[`with scss file import > common 5`] = `
+exports[`no mono > with scss file import > common 5`] = `
 "foo.js:
 'use strict';
 
@@ -1724,30 +1724,30 @@ require('with-scss-file-import/foo.css');
 "
 `;
 
-exports[`with scss file import > common 6`] = `
+exports[`no mono > with scss file import > common 6`] = `
 "foo.min.js:
 "use strict";require("with-scss-file-import/foo.css");
 "
 `;
 
-exports[`with scss file import > common 7`] = `
+exports[`no mono > with scss file import > common 7`] = `
 "foo.min.mjs:
 import"with-scss-file-import/foo.css";
 "
 `;
 
-exports[`with scss file import > common 8`] = `
+exports[`no mono > with scss file import > common 8`] = `
 "foo.mjs:
 import 'with-scss-file-import/foo.css';
 "
 `;
 
-exports[`with scss file import > common 9`] = `
+exports[`no mono > with scss file import > common 9`] = `
 "index.css:
 #app{color:red}"
 `;
 
-exports[`with scss file import > common 10`] = `
+exports[`no mono > with scss file import > common 10`] = `
 "index.d.mts:
 declare function bar(): string;
 
@@ -1755,7 +1755,7 @@ export { bar };
 "
 `;
 
-exports[`with scss file import > common 11`] = `
+exports[`no mono > with scss file import > common 11`] = `
 "index.d.ts:
 declare function bar(): string;
 
@@ -1763,7 +1763,7 @@ export { bar };
 "
 `;
 
-exports[`with scss file import > common 12`] = `
+exports[`no mono > with scss file import > common 12`] = `
 "index.js:
 'use strict';
 
@@ -1778,19 +1778,19 @@ exports.bar = bar;
 "
 `;
 
-exports[`with scss file import > common 13`] = `
+exports[`no mono > with scss file import > common 13`] = `
 "index.min.js:
 "use strict";require("with-scss-file-import/index.css"),require("with-scss-file-import/foo");function r(){return"bar"}exports.bar=r;
 "
 `;
 
-exports[`with scss file import > common 14`] = `
+exports[`no mono > with scss file import > common 14`] = `
 "index.min.mjs:
 import"with-scss-file-import/index.css";import"with-scss-file-import/foo";function r(){return"bar"}export{r as bar};
 "
 `;
 
-exports[`with scss file import > common 15`] = `
+exports[`no mono > with scss file import > common 15`] = `
 "index.mjs:
 import 'with-scss-file-import/index.css';
 import 'with-scss-file-import/foo';
@@ -1803,7 +1803,7 @@ export { bar };
 "
 `;
 
-exports[`with scss file import > common 16`] = `
+exports[`no mono > with scss file import > common 16`] = `
 "index.styless.d.mts:
 declare function bar(): string;
 
@@ -1811,7 +1811,7 @@ export { bar };
 "
 `;
 
-exports[`with scss file import > common 17`] = `
+exports[`no mono > with scss file import > common 17`] = `
 "index.styless.d.ts:
 declare function bar(): string;
 
@@ -1819,7 +1819,7 @@ export { bar };
 "
 `;
 
-exports[`with scss file import > common 18`] = `
+exports[`no mono > with scss file import > common 18`] = `
 "index.styless.js:
 'use strict';
 
@@ -1833,19 +1833,19 @@ exports.bar = bar;
 "
 `;
 
-exports[`with scss file import > common 19`] = `
+exports[`no mono > with scss file import > common 19`] = `
 "index.styless.min.js:
 "use strict";require("with-scss-file-import/foo");function r(){return"bar"}exports.bar=r;
 "
 `;
 
-exports[`with scss file import > common 20`] = `
+exports[`no mono > with scss file import > common 20`] = `
 "index.styless.min.mjs:
 import"with-scss-file-import/foo";function r(){return"bar"}export{r as bar};
 "
 `;
 
-exports[`with scss file import > common 21`] = `
+exports[`no mono > with scss file import > common 21`] = `
 "index.styless.mjs:
 import 'with-scss-file-import/foo';
 
