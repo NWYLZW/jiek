@@ -93,13 +93,17 @@ program
     })
   })
 
-async function prepublish() {
+async function prepublish({ bumper }: {
+  bumper: false | BumperType
+}) {
   const {
     JIEK_PUBLISH_OUTDIR: outdirEnv,
     JIEK_PUBLISH_BUMPER: bumperEnv
   } = process.env
   const outdir = outdirEnv ?? 'dist'
-  const bumper = bumperEnv ? JSON.parse(bumperEnv) as string | boolean : false
+  bumper = bumper ?? (
+    bumperEnv ? JSON.parse(bumperEnv) as string | boolean : false
+  )
 
   const generateNewManifest = (dir: string, manifest: NonNullable<ProjectsGraph['value']>[string]) => {
     const { name, type, exports: entrypoints = {} } = manifest
@@ -449,6 +453,8 @@ Prepare package.json for publish, you can add \`jk\` to the \`prepublish\` scrip
 program
   .command('prepublish')
   .description(prepublishDescription)
+  .option('-b, --bumper <bumper>', 'bump version')
+  .option('-no-b, --no-bumper', 'no bump version')
   .action(prepublish)
 
 const postpublishDescription = `
