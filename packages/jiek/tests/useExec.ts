@@ -3,19 +3,58 @@ import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 
-import type { TestContext } from 'vitest'
+import type { TaskContext, Test, TestContext } from 'vitest'
 import { afterAll, beforeAll, describe as vitestDescribe, test as vitestTest } from 'vitest'
 
-const resolveByFixtures = (paths: string[]) => path.resolve(__dirname, 'fixtures', ...paths)
+interface CtxExecOptions {
+  cmd?: string
+  moreOptions?: string[]
+  overrideOptions?: string[]
+  autoSnapDist?: boolean | string
+  remove?: boolean
+}
 
-function snapshotDir({ expect }: TestContext, dir: string, remove = true) {
+interface Ctx {
+  root: string
+  exec: (options?: CtxExecOptions) => Promise<void>
+}
+
+type CustomTestContext = Ctx & TaskContext<Test> & TestContext
+
+const resolveByFixtures = (...paths: string[]) => path.resolve(__dirname, 'fixtures', ...paths)
+
+async function snapshotDir(
+  { root, expect }: CustomTestContext,
+  dir: string,
+  {
+    tag,
+    title,
+    remove = true
+  }: {
+    tag: string
+    title: string
+    remove?: boolean
+  }
+) {
   const files = fs.readdirSync(dir, { recursive: true })
   expect(files).toMatchSnapshot()
-  files.forEach((file) => {
+  const resolveBySnapshotDir = (...paths: string[]) =>
+    path.resolve(
+      __dirname,
+      '__snapshots__',
+      tag,
+      title,
+      (path.relative(root, dir)).replaceAll('/', '__'),
+      ...paths
+    )
+  const tasks = files.map(async (file) => {
     if (typeof file !== 'string') return
     if (fs.statSync(path.resolve(dir, file)).isDirectory()) return
-    expect(`${file}:\n${fs.readFileSync(path.resolve(dir, file), 'utf-8')}`).toMatchSnapshot()
+    await expect(
+      fs.readFileSync(path.resolve(dir, file), 'utf-8')
+    ).toMatchFileSnapshot(resolveBySnapshotDir(file))
   })
+  await Promise.all(tasks)
   if (remove) {
     void fs.promises.rm(dir, { recursive: true })
   }
@@ -50,31 +89,21 @@ async function execWithRoot(root: string, cmd: string) {
   })
 }
 
-interface CtxExecOptions {
-  cmd?: string
-  moreOptions?: string[]
-  overrideOptions?: string[]
-  autoSnapDist?: boolean | string
-  remove?: boolean
-}
-
-interface Ctx {
-  root: string
-  exec: (options?: CtxExecOptions) => Promise<void>
-}
-
 interface CreateUseExecOptions {
+  snapshotTag: string
   cmd?: string
   cmdOptions?: string[]
   cmdOptionsMap?: Record<string, string[]>
 }
 
 function createUseExec(options: CreateUseExecOptions) {
-  return function useExec(...paths: string[]) {
-    const root = resolveByFixtures(paths)
+  return function useExec(title: string) {
+    const root = resolveByFixtures(title)
+
     const resolveByRoot = (...paths: string[]) => path.resolve(root, ...paths)
-    const notWorkspace = !fs.existsSync(path.resolve(root, 'pnpm-workspace.yaml'))
-    beforeAll(() => {
+    const notWorkspace = !fs.existsSync(resolveByRoot('pnpm-workspace.yaml'))
+
+    const before = async () => {
       const args = [
         'pnpm i',
         notWorkspace ? '--ignore-workspace' : null
@@ -83,8 +112,8 @@ function createUseExec(options: CreateUseExecOptions) {
         cwd: root,
         stdio: ['ignore', 'ignore', 'inherit']
       })
-    })
-    afterAll(async () => {
+    }
+    const after = async () => {
       const nodeModulesPath = path.resolve(root, 'node_modules')
       if (fs.existsSync(nodeModulesPath)) {
         void fs.promises.rm(nodeModulesPath, { recursive: true })
@@ -103,7 +132,10 @@ function createUseExec(options: CreateUseExecOptions) {
           if (!fs.statSync(nodeModulesPath).isDirectory()) return
           void fs.promises.rm(nodeModulesPath, { recursive: true })
         })
-    })
+    }
+    beforeAll(before)
+    afterAll(after)
+
     let defaultCmd = options.cmd ?? ''
     let defaultCmdOptionsMap: Record<string, string[]> = Object.assign(
       {},
@@ -122,42 +154,56 @@ function createUseExec(options: CreateUseExecOptions) {
     const setupCmd = (cmd: string) => (defaultCmd = cmd)
     const setupCmdOptionsMap = (cmdOptionsMap: Record<string, string[]>) => (defaultCmdOptionsMap = cmdOptionsMap)
     const setupCmdOptions = (options: string[], cmd = defaultCmd) => defaultCmdOptionsMap[cmd] = options
-    const ctx = {
-      root,
-      async exec(t: TestContext, {
+
+    const ctxExec = async (
+      t: CustomTestContext,
+      {
         cmd = defaultCmd,
         moreOptions = [],
         overrideOptions = [],
         autoSnapDist = true,
         remove = true
-      }: CtxExecOptions = {}) {
-        // noinspection JSMismatchedCollectionQueryUpdate
-        const cmdWithOptions = [cmd]
-        if (overrideOptions.length === 0) {
-          const options = defaultCmdOptionsMap[cmd]
-          if (options != null) {
-            cmdWithOptions.push(...options)
-          }
-          cmdWithOptions.push(...moreOptions)
-        } else {
-          cmdWithOptions.push(...overrideOptions)
+      }: CtxExecOptions = {}
+    ) => {
+      // noinspection JSMismatchedCollectionQueryUpdate
+      const cmdWithOptions = [cmd]
+      if (overrideOptions.length === 0) {
+        const options = defaultCmdOptionsMap[cmd]
+        if (options != null) {
+          cmdWithOptions.push(...options)
         }
-        await execWithRoot(root, cmdWithOptions.join(' '))
+        cmdWithOptions.push(...moreOptions)
+      } else {
+        cmdWithOptions.push(...overrideOptions)
+      }
+      await execWithRoot(root, cmdWithOptions.join(' '))
+      // noinspection PointlessBooleanExpressionJS
+      if (autoSnapDist !== false) {
         // noinspection PointlessBooleanExpressionJS
-        if (autoSnapDist !== false) {
-          // noinspection PointlessBooleanExpressionJS
-          snapshotDir(t, path.resolve(root, autoSnapDist === true ? 'dist' : autoSnapDist), remove)
-        }
+        await snapshotDir(
+          t,
+          path.resolve(root, autoSnapDist === true ? 'dist' : autoSnapDist),
+          {
+            tag: options.snapshotTag,
+            title,
+            remove
+          }
+        )
       }
     }
-    const test = (title: string, func: (context: Ctx & TestContext) => any) => {
+    const test = (title: string, func: (context: CustomTestContext) => any) =>
       vitestTest.concurrent(title, async t => {
-        await func(Object.assign({}, {
-          ...ctx,
-          exec: ctx.exec.bind(ctx, t)
-        }, t))
+        const ctx: CustomTestContext = {
+          root,
+          ...t,
+          // expect is not enumerable, so we need to assign it manually
+          expect: t.expect,
+          async exec(...args) {
+            return ctxExec(ctx, ...args)
+          }
+        }
+        await func(ctx)
       })
-    }
     return {
       test,
       dflt: async ({ exec }: Ctx & TestContext) => exec(),
@@ -169,14 +215,26 @@ function createUseExec(options: CreateUseExecOptions) {
   }
 }
 
+interface UserDescribe {
+  (
+    title: string,
+    func: (ctx: ReturnType<ReturnType<typeof createUseExec>>) => any,
+    notExec?: undefined | false
+  ): void
+  (
+    title: string,
+    func: () => any,
+    notExec: true
+  ): void
+}
 export function createDescribe(options: CreateUseExecOptions) {
   const useExec = createUseExec(options)
-  const describe = (
-    title: string,
-    func: (ctx: ReturnType<typeof useExec>) => any
-  ) =>
+  const describe: UserDescribe = (title, func, notExec = false) =>
     vitestDescribe(title, () => {
-      func(useExec(title.replaceAll(' ', '-')))
+      func(
+        // @ts-expect-error
+        notExec ? undefined : useExec(title.replaceAll(' ', '-'))
+      )
     })
   return {
     describe,
