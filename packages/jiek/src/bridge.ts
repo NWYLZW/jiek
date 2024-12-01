@@ -2,6 +2,8 @@ import type { Module } from '#~/rollup/bundle-analyzer.ts'
 
 import { sendMessage } from 'execa'
 
+export const bridgeDisabledRef = { value: false }
+
 export interface RollupBuildEntryCtx {
   type: 'esm' | 'cjs'
   name: string
@@ -38,5 +40,7 @@ export type RollupBuildEvent = keyof RollupBuildEventMap extends infer K
   : never
 
 export const publish = async <K extends keyof RollupBuildEventMap>(type: K, data: RollupBuildEventMap[K]) => {
+  if (bridgeDisabledRef.value) return Promise.resolve()
+
   return sendMessage({ type, data })
 }

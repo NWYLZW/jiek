@@ -1,5 +1,9 @@
-import { template } from 'jiek/rollup.v2'
+import { bridgeDisabledRef } from '#~/bridge.ts'
+
+import { template } from 'jiek/rollup'
 import { describe, expect, test } from 'vitest'
+
+bridgeDisabledRef.value = true
 
 describe('rollup - template', () => {
   test('base', () => {
