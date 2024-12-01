@@ -1,7 +1,6 @@
 import { createDescribe } from './useExec.ts'
 
 const { describe } = createDescribe({
-  snapshotTag: 'build',
   cmd: 'build',
   cmdOptions: ['-s']
 })

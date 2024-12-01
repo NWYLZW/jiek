@@ -89,14 +89,24 @@ async function execWithRoot(root: string, cmd: string) {
   })
 }
 
-interface CreateUseExecOptions {
-  snapshotTag: string
-  cmd?: string
-  cmdOptions?: string[]
-  cmdOptionsMap?: Record<string, string[]>
-}
+type CreateUseExecOptions =
+  & {
+    cmdOptions?: string[]
+    cmdOptionsMap?: Record<string, string[]>
+  }
+  & (
+    | {
+      snapshotTag?: string
+      cmd: string
+    }
+    | {
+      snapshotTag: string
+      cmd?: undefined
+    }
+  )
 
 function createUseExec(options: CreateUseExecOptions) {
+  const snapshotTag = options.snapshotTag ?? options.cmd ?? 'default'
   return function useExec(title: string, noHook = false) {
     const root = resolveByFixtures(title)
 
@@ -186,7 +196,7 @@ function createUseExec(options: CreateUseExecOptions) {
           t,
           path.resolve(root, autoSnapDist === true ? 'dist' : autoSnapDist),
           {
-            tag: options.snapshotTag,
+            tag: snapshotTag,
             title,
             remove
           }
@@ -256,7 +266,6 @@ export function createDescribe(options: CreateUseExecOptions) {
       }
     })
   return {
-    describe,
-    dflt: ({ test, dflt }: ReturnType<typeof useExec>) => test('common', dflt)
+    describe
   }
 }

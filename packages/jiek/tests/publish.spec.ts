@@ -1,10 +1,10 @@
-import { describe, test } from 'vitest'
+import { createDescribe } from './useExec.ts'
 
-import { prepareROOT, runCommandAndSnapshotDistFiles } from './prepareROOT'
-
-const prepareRootWithSubCmd = prepareROOT.bind(null, 'prepublish')
-
-describe('simple', () => {
-  const [root, prefixes] = prepareRootWithSubCmd('simple')
-  test('common', runCommandAndSnapshotDistFiles.bind(null, '', root, prefixes, 'dist'))
+const { describe } = createDescribe({
+  snapshotTag: 'publish',
+  cmdOptions: ['-s']
 })
+
+describe('no mono', ({ test }) => {
+  test('simple', async ({ exec }) => exec())
+}, true)
