@@ -97,7 +97,7 @@ interface CreateUseExecOptions {
 }
 
 function createUseExec(options: CreateUseExecOptions) {
-  return function useExec(title: string) {
+  return function useExec(title: string, noHook = false) {
     const root = resolveByFixtures(title)
 
     const resolveByRoot = (...paths: string[]) => path.resolve(root, ...paths)
@@ -133,8 +133,10 @@ function createUseExec(options: CreateUseExecOptions) {
           void fs.promises.rm(nodeModulesPath, { recursive: true })
         })
     }
-    beforeAll(before)
-    afterAll(after)
+    if (!noHook) {
+      beforeAll(before)
+      afterAll(after)
+    }
 
     let defaultCmd = options.cmd ?? ''
     let defaultCmdOptionsMap: Record<string, string[]> = Object.assign(
@@ -193,6 +195,7 @@ function createUseExec(options: CreateUseExecOptions) {
     }
     const test = (title: string, func: (context: CustomTestContext) => any) =>
       vitestTest.concurrent(title, async t => {
+        noHook && await before()
         const ctx: CustomTestContext = {
           root,
           ...t,
@@ -203,10 +206,11 @@ function createUseExec(options: CreateUseExecOptions) {
           }
         }
         await func(ctx)
+        noHook && await after()
       })
     return {
       test,
-      dflt: async ({ exec }: Ctx & TestContext) => exec(),
+      dflt: async ({ exec }: CustomTestContext) => exec(),
       setup,
       setupCmd,
       setupCmdOptionsMap,
@@ -215,26 +219,41 @@ function createUseExec(options: CreateUseExecOptions) {
   }
 }
 
-interface UserDescribe {
-  (
-    title: string,
-    func: (ctx: ReturnType<ReturnType<typeof createUseExec>>) => any,
-    notExec?: undefined | false
-  ): void
-  (
-    title: string,
-    func: () => any,
-    notExec: true
-  ): void
-}
+type UseExecRT = ReturnType<ReturnType<typeof createUseExec>>
+
+type ExecDescribe = (
+  title: string,
+  func: (ctx: UseExecRT) => any,
+  noExec?: undefined | false
+) => void
+type NoExecDescribe = (
+  title: string,
+  func: (ctx: {
+    test: (title: string, func: (context: CustomTestContext) => unknown) => void
+  }) => any,
+  noExec: true
+) => void
+
+type UserDescribe =
+  & ExecDescribe
+  & NoExecDescribe
+
 export function createDescribe(options: CreateUseExecOptions) {
   const useExec = createUseExec(options)
-  const describe: UserDescribe = (title, func, notExec = false) =>
+  const describe: UserDescribe = (title, func, noExec = false) =>
     vitestDescribe(title, () => {
-      func(
-        // @ts-expect-error
-        notExec ? undefined : useExec(title.replaceAll(' ', '-'))
-      )
+      if (noExec) {
+        ;(func as Parameters<NoExecDescribe>[1])({
+          test(title, f) {
+            useExec(
+              title.replaceAll(' ', '-'),
+              true
+            ).test(title, ctx => f(ctx))
+          }
+        })
+      } else {
+        func(useExec(title.replaceAll(' ', '-')))
+      }
     })
   return {
     describe,

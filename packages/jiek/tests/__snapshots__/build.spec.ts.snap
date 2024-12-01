@@ -83,7 +83,7 @@ exports[`mono > root package > common 1`] = `
 ]
 `;
 
-exports[`no mono > export self subpath > common 1`] = `
+exports[`no mono > export self subpath 1`] = `
 [
   "base.cjs",
   "base.d.cts",
@@ -100,7 +100,7 @@ exports[`no mono > export self subpath > common 1`] = `
 ]
 `;
 
-exports[`no mono > glob exports > common 1`] = `
+exports[`no mono > glob exports 1`] = `
 [
   "index.cjs",
   "index.d.cts",
@@ -136,7 +136,7 @@ exports[`no mono > glob exports > common 1`] = `
 ]
 `;
 
-exports[`no mono > import type from subpath > common 1`] = `
+exports[`no mono > import type from subpath 1`] = `
 [
   "index.d.mts",
   "index.d.ts",
@@ -147,7 +147,7 @@ exports[`no mono > import type from subpath > common 1`] = `
 ]
 `;
 
-exports[`no mono > multiple exports > common 1`] = `
+exports[`no mono > multiple exports 1`] = `
 [
   "foo.d.mts",
   "foo.d.ts",
@@ -164,7 +164,7 @@ exports[`no mono > multiple exports > common 1`] = `
 ]
 `;
 
-exports[`no mono > only minify > common 1`] = `
+exports[`no mono > only minify 1`] = `
 [
   "index.d.mts",
   "index.d.ts",
@@ -173,7 +173,7 @@ exports[`no mono > only minify > common 1`] = `
 ]
 `;
 
-exports[`no mono > require in mjs > common 1`] = `
+exports[`no mono > require in mjs 1`] = `
 [
   "index.cjs",
   "index.d.cts",
@@ -184,7 +184,7 @@ exports[`no mono > require in mjs > common 1`] = `
 ]
 `;
 
-exports[`no mono > resolve imports > common 1`] = `
+exports[`no mono > resolve imports 1`] = `
 [
   "index.cjs",
   "index.d.cts",
@@ -195,7 +195,7 @@ exports[`no mono > resolve imports > common 1`] = `
 ]
 `;
 
-exports[`no mono > simple > common 1`] = `
+exports[`no mono > simple 1`] = `
 [
   "index.d.mts",
   "index.d.ts",
@@ -206,7 +206,7 @@ exports[`no mono > simple > common 1`] = `
 ]
 `;
 
-exports[`no mono > simple mjs > common 1`] = `
+exports[`no mono > simple mjs 1`] = `
 [
   "index.cjs",
   "index.d.cts",
@@ -217,7 +217,7 @@ exports[`no mono > simple mjs > common 1`] = `
 ]
 `;
 
-exports[`no mono > unordered exports inputs > common 1`] = `
+exports[`no mono > unordered exports inputs 1`] = `
 [
   "a.d.mts",
   "a.d.ts",
@@ -234,7 +234,7 @@ exports[`no mono > unordered exports inputs > common 1`] = `
 ]
 `;
 
-exports[`no mono > with no resolve exports > common 1`] = `
+exports[`no mono > with no resolve exports 1`] = `
 [
   "index.d.mts",
   "index.d.ts",
@@ -245,7 +245,7 @@ exports[`no mono > with no resolve exports > common 1`] = `
 ]
 `;
 
-exports[`no mono > with scss file import > common 1`] = `
+exports[`no mono > with scss file import 1`] = `
 [
   "foo.css",
   "foo.d.mts",

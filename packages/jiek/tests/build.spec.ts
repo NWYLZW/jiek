@@ -1,24 +1,27 @@
 import { createDescribe } from './useExec.ts'
 
-const { describe, dflt } = createDescribe({
+const { describe } = createDescribe({
   snapshotTag: 'build',
   cmd: 'build',
   cmdOptions: ['-s']
 })
 
-describe('no mono', () => {
-  describe('simple', ctx => dflt(ctx))
-  describe('simple mjs', ctx => dflt(ctx))
-  describe('require in mjs', ctx => dflt(ctx))
-  describe('only minify', ctx => dflt(ctx))
-  describe('export self subpath', ctx => dflt(ctx))
-  describe('multiple exports', ctx => dflt(ctx))
-  describe('glob exports', ctx => dflt(ctx))
-  describe('resolve imports', ctx => dflt(ctx))
-  describe('unordered exports inputs', ctx => dflt(ctx))
-  describe('with no resolve exports', ctx => dflt(ctx))
-  describe('with scss file import', ctx => dflt(ctx))
-  describe('import type from subpath', ctx => dflt(ctx))
+describe('no mono', ({ test }) => {
+  const titles = [
+    'simple',
+    'simple mjs',
+    'require in mjs',
+    'only minify',
+    'export self subpath',
+    'multiple exports',
+    'glob exports',
+    'resolve imports',
+    'unordered exports inputs',
+    'with no resolve exports',
+    'with scss file import',
+    'import type from subpath'
+  ]
+  titles.forEach(title => test(title, async ({ exec }) => exec()))
 }, true)
 describe('mono', () => {
   describe('monorepo', ({ test }) => {
