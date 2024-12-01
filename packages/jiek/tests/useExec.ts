@@ -63,12 +63,19 @@ async function snapshotDir(
 async function execWithRoot(root: string, cmd: string) {
   const cliBinPath = path.resolve(__dirname, '../bin/jiek.js')
   const args = ['node', cliBinPath, cmd].join(' ')
+  const {
+    npm_lifecycle_event: NPM_LIFECYCLE_EVENT
+  } = process.env
+  const env: NodeJS.ProcessEnv = { ...process.env }
+  if (NPM_LIFECYCLE_EVENT != null) {
+    // remove all npm environment variables
+    for (const key in env) if (key.startsWith('npm_')) delete env[key]
+    for (const key in env) if (key.startsWith('JIEK_')) delete env[key]
+  }
+  env.JIEK_ROOT = root
   const p = exec(args, {
     cwd: root,
-    env: {
-      ...process.env,
-      JIEK_ROOT: root
-    }
+    env
   })
   let stdout = ''
   p.stdout?.on('data', data => {
