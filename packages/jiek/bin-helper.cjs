@@ -11,10 +11,15 @@ try {
 } catch (e) {
   const { stack } = e
   const lines = stack.split('\n')
-  const caller = lines[lines.length - 1]
-  const match = caller.match(/\(([^)]+)\)$/)
-  if (match) {
-    binFilePath = match[1].replace(/:\d+:\d+$/, '')
+  for (const line of lines) {
+    if (line === 'Error' || line.includes(' (node:internal') || line.includes(` (${__filename}`)) {
+      continue
+    }
+    const match = line.match(/\(([^)]+)\)$/)
+    if (match) {
+      binFilePath = match[1].replace(/:\d+:\d+$/, '')
+    }
+    break
   }
 }
 
