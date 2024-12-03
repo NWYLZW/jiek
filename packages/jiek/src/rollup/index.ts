@@ -199,9 +199,12 @@ const withMinify = (
   onlyOncePlugins: OutputPluginOption[] = []
 ): OutputOptions[] => {
   const minify = build?.output?.minify ?? MINIFY_DEFAULT_VALUE
+
   output.plugins = output.plugins ?? []
+  const notOnlyOncePlugins = [...output.plugins]
+  output.plugins.push(...onlyOncePlugins)
+
   if (minify === false) {
-    output.plugins.push(...onlyOncePlugins)
     return [output]
   }
 
@@ -213,7 +216,6 @@ const withMinify = (
     ? import('rollup-plugin-swc3').then(({ minify }) => minify(noTypeResolvedMinifyOptions as any))
     // eslint-disable-next-line ts/no-unsafe-argument
     : import('@rollup/plugin-terser').then(({ default: minify }) => minify(noTypeResolvedMinifyOptions as any))
-  const notOnlyOncePlugins = output.plugins
   return minify === 'only-minify'
     ? [{
       ...output,
@@ -226,6 +228,7 @@ const withMinify = (
             throw new Error('entryFileNames must be a function')
           })(),
       plugins: [
+        ...output.plugins,
         ...notOnlyOncePlugins,
         minifyPlugin
       ]
