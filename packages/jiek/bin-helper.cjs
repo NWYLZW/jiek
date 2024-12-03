@@ -12,7 +12,9 @@ try {
   const { stack } = e
   const lines = stack.split('\n')
   for (const line of lines) {
-    if (line === 'Error' || line.includes(' (node:internal') || line.includes(` (${__filename}`)) {
+    if (
+      line === 'Error' || line.includes(' (node:') || line.includes(` (${__filename}`)
+    ) {
       continue
     }
     const match = line.match(/\(([^)]+)\)$/)
