@@ -131,3 +131,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# snapshots dist
+!packages/*/tests/__snapshots__/**/*
