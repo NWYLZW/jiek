@@ -312,6 +312,22 @@ command
       render = renderView
     }
     const anaPaths = new Set<string>()
+
+    const script = `<script>
+function getRoot(node) {
+  if (node.parent == null) return node
+  return getRoot(node.parent)
+}
+window.addEventListener('client:ready', () => console.log('client:ready'))
+window.addEventListener('graph:click', ({ detail: { node } = {} }) => {
+  if (node == null) return
+
+  const { filename } = getRoot(node)
+  const [path, suffix] = filename.split('.')
+  const url = \`http://localhost:${options.port}/ana\${suffix !== 'js' ? \`/\${suffix}\` : ''}/\${path}\`
+  history.pushState(null, null, url)
+})
+</script>`
     const refreshAnalyzer = async (subPath = '', renderModules = modules) => {
       if (!(analyzer && server && render)) return
       const p = `/ana${subPath}`
@@ -321,7 +337,7 @@ command
         await render(renderModules, {
           title: `Jiek Analyzer - ${subPath}`,
           mode: analyzer.size as 'stat' | 'parsed' | 'gzip'
-        })
+        }) + script
       )
     }
 
