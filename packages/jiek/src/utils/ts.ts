@@ -4,7 +4,7 @@ import { dirname, resolve } from 'node:path'
 import { parse } from 'jsonc-parser'
 import { isMatch } from 'micromatch'
 
-type TSConfig = {
+interface TSConfig {
   extends?: string | string[]
   compilerOptions?: Record<string, unknown>
   references?: { path: string }[]
@@ -16,7 +16,7 @@ type TSConfig = {
 const getTSConfig = (p: string): TSConfig =>
   !fs.existsSync(p) || !fs.statSync(p).isFile()
     ? {}
-    : parse(fs.readFileSync(p, 'utf-8'), [], { allowTrailingComma: true, allowEmptyContent: true })
+    : parse(fs.readFileSync(p, 'utf-8'), [], { allowTrailingComma: true, allowEmptyContent: true }) as TSConfig
 
 const getExtendTSConfig = (tsconfigPath: string): TSConfig => {
   tsconfigPath = resolve(tsconfigPath)
@@ -25,7 +25,7 @@ const getExtendTSConfig = (tsconfigPath: string): TSConfig => {
   const resolvePaths = (paths: string[] | undefined) => paths?.map(p => resolve(tsconfigPathDirname, p)) ?? []
 
   const extendsPaths = resolvePaths(
-    exts ? Array.isArray(exts) ? exts : [exts] : []
+    exts !== undefined ? Array.isArray(exts) ? exts : [exts] : []
   )
   if (extendsPaths.length === 0) return tsconfig
   return extendsPaths
