@@ -3,7 +3,11 @@
   "compilerOptions": {
     "composite": true,
     "target": "esnext",
-    "lib": ["ES2019", "dom"],
+    "jsx": "react-jsx",
+    "lib": [
+      "ES2019",
+      "dom"
+    ],
     "customConditions": ["browser"],
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -16,6 +20,10 @@
     "../apis/src/**/*.share.d.ts",
     "../website/src/**/*",
     "../website/tests/**/*",
-    "../packages/*/src/**/*.browser.ts"
+    "../packages/*/src/**/*.browser.ts",
+
+    // jiek client
+    "../packages/jiek/src/commands/build/client/**/*.ts",
+    "../packages/jiek/src/commands/build/client/**/*.tsx"
   ]
 }

@@ -5,7 +5,15 @@ export const createServer = (port: number, host: string) => {
   app.listen(port, host)
   const streams = new Map<string, string>()
   app.use(async (ctx) => {
-    const stream = streams.get(ctx.path)
+    let stream = streams.get(ctx.path)
+    if (stream == null) {
+      const maybeKey = streams
+        .keys()
+        .find(p => ctx.path.startsWith(p))
+      stream = maybeKey != null
+        ? streams.get(maybeKey)
+        : undefined
+    }
     if (stream != null) {
       ctx.body = stream
     }

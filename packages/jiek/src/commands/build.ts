@@ -1,24 +1,24 @@
-import { existsSync, mkdirSync, statSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 import process from 'node:process'
 
-import { confirm } from '@inquirer/prompts'
 import { MultiBar, Presets } from 'cli-progress'
 import { program } from 'commander'
 import { execaCommand } from 'execa'
-import type { renderView } from 'vite-bundle-analyzer'
 
 import type { RollupBuildEvent } from '#~/bridge.ts'
+import type { AnalyzerBuildOptions } from '#~/commands/build/analyzer.ts'
+import { registerAnalyzerCommandOptions, useAnalyzer } from '#~/commands/build/analyzer.ts'
 import { entriesDescription, filterDescription, outdirDescription } from '#~/commands/descriptions.ts'
 import { IS_WORKSPACE } from '#~/commands/meta.ts'
+import { parseBoolean } from '#~/commands/utils/optionParser.ts'
 import type { TemplateOptions } from '#~/rollup/base.ts'
 import { BUILDER_TYPES, BUILDER_TYPE_PACKAGE_NAME_MAP } from '#~/rollup/base.ts'
-import type { Module } from '#~/rollup/bundle-analyzer.ts'
 import { createServer } from '#~/server.ts'
+import { checkDependency } from '#~/utils/checkDependency.ts'
 import type { ProjectsGraph } from '#~/utils/filterSupport.ts'
 import { filterPackagesGraph, getSelectedProjectsGraph } from '#~/utils/filterSupport.ts'
-import { getWD } from '#~/utils/getWD.ts'
 import { loadConfig } from '#~/utils/loadConfig.ts'
 import { tsRegisterName } from '#~/utils/tsRegister.ts'
 
@@ -49,21 +49,7 @@ If you want to through the options to the \`rollup\` command, you can pass the o
 ${isDefault ? 'This command is the default command.' : ''}
 `.trim()
 
-interface BuildOptions {
-  ana?: boolean
-  /**
-   * @default '.jk-analyses'
-   */
-  'ana.dir': string
-  /**
-   * @default 'server'
-   */
-  'ana.mode': string
-  'ana.open'?: boolean
-  /**
-   * @default 'parsed'
-   */
-  'ana.size': string
+interface BuildOptions extends AnalyzerBuildOptions {
   /**
    * Auto-detect the builder from the installed dependencies.
    * If the builder is not installed, it will prompt the user to install it.
@@ -120,22 +106,6 @@ interface BuildOptions {
   dtsconfig?: string
 }
 
-async function checkDependency(dependency: string) {
-  try {
-    require.resolve(dependency)
-  } catch {
-    console.error(`The package '${dependency}' is not installed, please install it first.`)
-    const { notWorkspace } = getWD()
-    const command = `pnpm install -${notWorkspace ? '' : 'w'}D ${dependency}`
-    if (await confirm({ message: 'Do you want to install it now?' })) {
-      await execaCommand(command)
-    } else {
-      console.warn(`You can run the command '${command}' to install it manually.`)
-      process.exit(1)
-    }
-  }
-}
-
 let DEFAULT_BUILDER_TYPE: typeof BUILDER_TYPES[number]
 Object.entries(BUILDER_TYPE_PACKAGE_NAME_MAP).forEach(([type, packageName]) => {
   try {
@@ -145,11 +115,6 @@ Object.entries(BUILDER_TYPE_PACKAGE_NAME_MAP).forEach(([type, packageName]) => {
 })
 if (!DEFAULT_BUILDER_TYPE!) {
   DEFAULT_BUILDER_TYPE = 'esbuild'
-}
-
-function parseBoolean(v?: unknown) {
-  if (v === undefined) return true
-  return Boolean(v)
 }
 
 const buildFilterDescription = `
@@ -217,16 +182,7 @@ command = command
   .option('-w, --watch', 'Watch the file changes.', parseBoolean)
   .option('-p, --port <PORT>', 'The port of the server.', Number.parseInt, 8888)
 
-command = command
-  .option('--ana', 'Enable the bundle analyzer.', parseBoolean)
-  .option('--ana.dir <DIR>', 'The directory of the bundle analyzer.', '.jk-analyses')
-  .option('--ana.mode <MODE>', 'The mode of the bundle analyzer, support "static", "json" and "server".', 'server')
-  .option('--ana.open', 'Open the bundle analyzer in the browser.', parseBoolean)
-  .option(
-    '--ana.size <SIZE>',
-    'The default size of the bundle analyzer, support "stat", "parsed" and "gzip".',
-    'parsed'
-  )
+command = registerAnalyzerCommandOptions(command)
 
 command = command
   .option('-s, --silent', "Don't display logs.", parseBoolean)
@@ -282,64 +238,17 @@ command
         [] as string[]
       )
 
-    const modules: Module[] = []
-    const cjsModules: Module[] = []
-    const esmModules: Module[] = []
-    let render: typeof renderView | undefined
-    const analyzer = options.ana
-      ? {
-        dir: options['ana.dir'],
-        mode: options['ana.mode'],
-        open: options['ana.open'],
-        size: options['ana.size']
-      }
+    const shouldCreateServer = [
+      options.ana === true && options['ana.mode'] === 'server'
+    ].some(Boolean)
+    const server = shouldCreateServer
+      ? createServer(options.port, 'localhost')
       : undefined
-    if (
-      options.ana
-      && ![
-        'stat',
-        'parsed',
-        'gzip'
-      ].includes(analyzer?.size ?? '')
-    ) {
-      throw new Error('The value of `ana.size` must be "stat", "parsed" or "gzip"')
-    }
-    const server = analyzer && createServer(options.port, 'localhost')
 
-    if (analyzer) {
-      await checkDependency('vite-bundle-analyzer')
-      const { renderView } = await import('vite-bundle-analyzer')
-      render = renderView
-    }
-    const anaPaths = new Set<string>()
-
-    const script = `<script>
-function getRoot(node) {
-  if (node.parent == null) return node
-  return getRoot(node.parent)
-}
-window.addEventListener('client:ready', () => console.log('client:ready'))
-window.addEventListener('graph:click', ({ detail: { node } = {} }) => {
-  if (node == null) return
-
-  const { filename } = getRoot(node)
-  const [path, suffix] = filename.split('.')
-  const url = \`http://localhost:${options.port}/ana\${suffix !== 'js' ? \`/\${suffix}\` : ''}/\${path}\`
-  history.pushState(null, null, url)
-})
-</script>`
-    const refreshAnalyzer = async (subPath = '', renderModules = modules) => {
-      if (!(analyzer && server && render)) return
-      const p = `/ana${subPath}`
-      anaPaths.add(p)
-      void server.renderTo(
-        p,
-        await render(renderModules, {
-          title: `Jiek Analyzer - ${subPath}`,
-          mode: analyzer.size as 'stat' | 'parsed' | 'gzip'
-        }) + script
-      )
-    }
+    const {
+      ANALYZER_ENV,
+      refreshAnalyzer
+    } = await useAnalyzer(options, server)
 
     const { build } = loadConfig()
     silent = silent ?? build?.silent ?? false
@@ -359,7 +268,7 @@ window.addEventListener('graph:click', ({ detail: { node } = {} }) => {
       entries = undefined
     }
     const env = {
-      JIEK_ANALYZER: analyzer && JSON.stringify(analyzer),
+      ...ANALYZER_ENV,
       JIEK_BUILDER: type,
       JIEK_OUT_DIR: outdir,
       JIEK_CLEAN: String(!noClean),
@@ -404,26 +313,9 @@ window.addEventListener('graph:click', ({ detail: { node } = {} }) => {
         .replace(/dist\/rollup.js$/, 'dist/bin/rollup')
       let i = 0
       await Promise.all(
-        Object.entries(value).map(async ([dir, manifest]) => {
+        Object.entries(value).map(async ([pkgCWD, manifest]) => {
           if (manifest.name == null) {
             throw new Error('package.json must have a name field')
-          }
-          if (analyzer) {
-            const anaDir = path.resolve(dir, analyzer.dir)
-            if (!existsSync(anaDir)) {
-              mkdirSync(anaDir, { recursive: true })
-            }
-            const gitIgnorePath = path.resolve(anaDir, '.gitignore')
-            if (!existsSync(gitIgnorePath)) {
-              writeFileSync(gitIgnorePath, '*\n!.gitignore\n')
-            }
-            const npmIgnorePath = path.resolve(anaDir, '.npmignore')
-            if (!existsSync(npmIgnorePath)) {
-              writeFileSync(npmIgnorePath, '*\n')
-            }
-            if (!statSync(anaDir).isDirectory()) {
-              throw new Error(`The directory '${anaDir}' is not a directory.`)
-            }
           }
 
           // TODO support auto build child packages in workspaces
@@ -442,7 +334,7 @@ window.addEventListener('graph:click', ({ detail: { node } = {} }) => {
           command.push(...passThroughOptions)
           const child = execaCommand(command.join(' '), {
             ipc: true,
-            cwd: dir,
+            cwd: pkgCWD,
             env: {
               ...env,
               JIEK_NAME: manifest.name,
@@ -556,41 +448,18 @@ window.addEventListener('graph:click', ({ detail: { node } = {} }) => {
                 const {
                   data: {
                     type,
-                    path,
                     modules: pkgModules
                   }
                 } = e
-                pkgModules.forEach(m => {
-                  const newM = {
+                void refreshAnalyzer(
+                  pkgCWD,
+                  pkgModules.map(m => ({
                     ...m,
+                    type,
                     filename: `${manifest.name}/${m.filename}`,
                     label: `${manifest.name}/${m.label}`
-                  }
-                  const pushOrReplace = (arr: Module[]) => {
-                    const index = arr.findIndex(({ filename }) => filename === newM.filename)
-                    if (index === -1) {
-                      arr.push(newM)
-                    } else {
-                      arr[index] = newM
-                    }
-                  }
-                  pushOrReplace(modules)
-                  if (type === 'esm') {
-                    pushOrReplace(esmModules)
-                  }
-                  if (type === 'cjs') {
-                    pushOrReplace(cjsModules)
-                  }
-                })
-                void refreshAnalyzer()
-                void refreshAnalyzer(
-                  `/${type}`,
-                  {
-                    cjs: cjsModules,
-                    esm: esmModules
-                  }[type]
+                  }))
                 )
-                void refreshAnalyzer(`/${type}/${manifest.name}/${path.slice(2)}`, pkgModules)
                 break
               }
               case 'debug': {
@@ -640,20 +509,7 @@ window.addEventListener('graph:click', ({ detail: { node } = {} }) => {
       }
     } finally {
       multiBars.stop()
-      let message = 'The build is complete'
-      if (analyzer) {
-        message += ` and the analyzer is running at http://localhost:${options.port}/ana in ${analyzer.mode} mode.\n`
-        message += analyzer.open ? ' The browser will open automatically.\n' : ''
-        if (anaPaths.size > 0) {
-          message += `The analyzer has ${anaPaths.size} pages:\n${
-            Array
-              .from(anaPaths)
-              .map(p => `http://localhost:${options.port}${p}`)
-              .join('\n')
-          }`
-        }
-      }
       // eslint-disable-next-line no-console
-      !silent && console.log(message)
+      !silent && console.log('Build complete')
     }
   })
