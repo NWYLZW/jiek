@@ -8,6 +8,9 @@
   ],
   "include": [
     "../packages/*/tests/**/*.node.ts",
-    "../packages/*/tests/**/*.node.spec.ts"
+    "../packages/*/tests/**/*.node.spec.ts",
+
+    "../packages/jiek/tests/**/*.ts",
+    "../packages/jiek/tests/**/*.spec.ts"
   ]
 }

@@ -14,6 +14,8 @@
     "../packages/*/tests/**/*.browser.ts",
     "../packages/*/tests/**/*.browser.spec.ts",
     "../packages/*/tests/**/*.node.ts",
-    "../packages/*/tests/**/*.node.spec.ts"
+    "../packages/*/tests/**/*.node.spec.ts",
+
+    "../packages/jiek/tests/**/*.ts"
   ]
 }

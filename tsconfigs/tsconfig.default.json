@@ -8,7 +8,7 @@
     "../packages/*/src/**/*.ts"
   ],
   "exclude": [
-    // jiek cli client
-    "../packages/jiek/src/commands/build/client/**/*.ts"
+    // jiek cli
+    "../packages/jiek/src/**/*.ts"
   ]
 }
