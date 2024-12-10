@@ -359,7 +359,23 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
   const rollupOptions: RollupOptions[] = []
 
   const commonPlugins: Plugin[] = [
-    nodeResolve({ exportConditions })
+    nodeResolve({
+      exportConditions,
+      extensions: [
+        '.js',
+        '.cjs',
+        '.mjs',
+        '.jsx',
+        '.cjsx',
+        '.mjsx',
+        '.ts',
+        '.cts',
+        '.mts',
+        '.tsx',
+        '.ctsx',
+        '.mtsx'
+      ]
+    })
   ]
   if (jsOutput && !WITHOUT_JS) {
     const sourcemap = typeof options?.output?.sourcemap === 'object'

@@ -1,0 +1,1 @@
+"use strict";var t=require("simple-cts/foo");Object.keys(t).forEach(function(e){e!=="default"&&!Object.prototype.hasOwnProperty.call(exports,e)&&Object.defineProperty(exports,e,{enumerable:!0,get:function(){return t[e]}})});
