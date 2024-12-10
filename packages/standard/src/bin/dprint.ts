@@ -61,7 +61,7 @@ add_config_file_arg: if (args.length > 0) {
       break setConfig
     }
     if (configFile && fs.existsSync(configFile) && fs.statSync(configFile).isFile() && !configFile.startsWith('-')) {
-      config = JSON.parse(fs.readFileSync(configFile, 'utf-8'))
+      config = JSON.parse(fs.readFileSync(configFile, 'utf-8')) as Record<string, any>
     }
     args.splice(configFileIndex, 2)
   }
