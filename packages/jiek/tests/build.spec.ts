@@ -20,7 +20,8 @@ describe('no mono', ({ test }) => {
     'unordered exports inputs',
     'with no resolve exports',
     'with scss file import',
-    'import type from subpath'
+    'import type from subpath',
+    'import type from external'
   ]
   titles.forEach(title => test(title, async ({ exec }) => exec()))
 }, true)

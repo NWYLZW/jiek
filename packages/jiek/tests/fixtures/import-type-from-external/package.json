@@ -1,0 +1,8 @@
+{
+  "name": "import-type-from-external",
+  "version": "0.1.0",
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "foo": "./foo"
+  }
+}
