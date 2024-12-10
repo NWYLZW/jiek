@@ -214,12 +214,11 @@ const withMinify = (
     : resolvedMinifyOptions.type === 'swc'
     // eslint-disable-next-line ts/no-unsafe-argument
     ? import('rollup-plugin-swc3').then(({ minify }) => minify(noTypeResolvedMinifyOptions as any))
-    // eslint-disable-next-line ts/no-unsafe-argument
     : import('@rollup/plugin-terser').then(({ default: minify }) => minify(noTypeResolvedMinifyOptions as any))
   return minify === 'only-minify'
     ? [{
       ...output,
-      // TODO replace suffix when pubish to npm and the `build.output.minify` is 'only-minify'
+      // TODO replace suffix when publish to npm and the `build.output.minify` is 'only-minify'
       // TODO resolve dts output file name
       entryFileNames: chunkInfo =>
         typeof output.entryFileNames === 'function'
