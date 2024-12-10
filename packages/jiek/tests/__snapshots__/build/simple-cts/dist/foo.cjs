@@ -7,5 +7,5 @@ function foo() {
 }
 
 exports.CJSFooSub = FooSub;
-exports.FooSub = FooSub;
+exports.CTSFooSub = FooSub;
 exports.foo = foo;

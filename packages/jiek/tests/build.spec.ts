@@ -7,19 +7,19 @@ const { describe } = createDescribe({
 
 describe('no mono', ({ test }) => {
   const titles = [
-    // 'simple',
-    // 'simple mjs',
-    'simple cts'
-    // 'require in mjs',
-    // 'only minify',
-    // 'export self subpath',
-    // 'multiple exports',
-    // 'glob exports',
-    // 'resolve imports',
-    // 'unordered exports inputs',
-    // 'with no resolve exports',
-    // 'with scss file import',
-    // 'import type from subpath'
+    'simple',
+    'simple mjs',
+    'simple cts',
+    'require in mjs',
+    'only minify',
+    'export self subpath',
+    'multiple exports',
+    'glob exports',
+    'resolve imports',
+    'unordered exports inputs',
+    'with no resolve exports',
+    'with scss file import',
+    'import type from subpath'
   ]
   titles.forEach(title => test(title, async ({ exec }) => exec()))
 }, true)

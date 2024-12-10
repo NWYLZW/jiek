@@ -2,4 +2,4 @@ declare const FooSub = "foo-sub";
 
 declare function foo(): string;
 
-export { FooSub as CJSFooSub, FooSub, foo };
+export { FooSub as CJSFooSub, FooSub as CTSFooSub, foo };

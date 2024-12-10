@@ -2,8 +2,8 @@
   "compilerOptions": {
     "target": "ESNext",
     "rootDir": "./src",
-    "module": "CommonJS",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "allowImportingTsExtensions": true,
     "strict": true,
     "strictNullChecks": true,
