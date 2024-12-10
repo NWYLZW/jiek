@@ -8,7 +8,8 @@
     "types": ["node"]
   },
   "references": [
-    { "path": "./tsconfig.default.json" }
+    { "path": "./tsconfig.default.json" },
+    { "path": "./tsconfig.browser.jiek.client.json" }
   ],
   "include": [
     "../scripts/**/*.ts",

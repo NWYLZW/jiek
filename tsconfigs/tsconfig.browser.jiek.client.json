@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.browser.json",
+  "include": [
+    "../packages/jiek/src/commands/build/client/**/*.ts",
+    "../packages/jiek/src/commands/build/client/**/*.tsx"
+  ]
+}
