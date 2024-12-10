@@ -1,7 +1,10 @@
 {
   "name": "import-type-from-external",
   "version": "0.1.0",
-  "exports": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./commonjs": "./src/commonjs.cts"
+  },
   "dependencies": {
     "foo": "./foo"
   }
