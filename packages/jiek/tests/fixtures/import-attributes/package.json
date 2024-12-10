@@ -1,0 +1,14 @@
+{
+  "name": "import-attributes",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "foo": "./foo"
+  },
+  "devDependencies": {
+    "bar": "./bar"
+  }
+}

@@ -1,0 +1,17 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      foo:
+        specifier: ./foo
+        version: link:foo
+    devDependencies:
+      bar:
+        specifier: ./bar
+        version: link:bar

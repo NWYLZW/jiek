@@ -136,6 +136,17 @@ exports[`no mono > glob exports 1`] = `
 ]
 `;
 
+exports[`no mono > import attributes 1`] = `
+[
+  "index.d.mts",
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+  "index.min.mjs",
+  "index.mjs",
+]
+`;
+
 exports[`no mono > import type from subpath 1`] = `
 [
   "index.d.mts",

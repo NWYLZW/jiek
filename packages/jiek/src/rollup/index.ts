@@ -381,12 +381,20 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
     const sourcemap = typeof options?.output?.sourcemap === 'object'
       ? options.output.sourcemap.js
       : options?.output?.sourcemap
+    const features = Object.assign({
+      keepImportAttributes: true
+    }, build.features)
     const builder = resolvedBuilderOptions.type === 'esbuild'
       ? import('rollup-plugin-esbuild').then(({ default: esbuild }) =>
         esbuild({
           sourceMap: sourcemap === 'hidden' ? false : !!sourcemap,
           tsconfig: buildTSConfigPath,
-          ...noTypeResolvedBuilderOptions
+          target: 'node22',
+          ...noTypeResolvedBuilderOptions,
+          supported: {
+            'import-attributes': features.keepImportAttributes !== false,
+            ...resolvedBuilderOptions.supported
+          }
         })
       )
       : import('rollup-plugin-swc3').then(({ default: swc }) =>
@@ -400,7 +408,14 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
               inline: 'inline'
             } as const)[sourcemap] ?? undefined,
           tsconfig: buildTSConfigPath,
-          ...noTypeResolvedBuilderOptions
+          ...noTypeResolvedBuilderOptions,
+          jsc: {
+            ...resolvedBuilderOptions.jsc,
+            experimental: {
+              ...resolvedBuilderOptions.jsc?.experimental,
+              keepImportAttributes: features.keepImportAttributes !== false
+            }
+          }
         })
       )
     const [ana, anaOutputPlugin] = bundleAnalyzer(modules => void publishInEntry('modulesAnalyze', { modules }))
@@ -427,6 +442,15 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           strict: typeof options?.output?.strict === 'object'
             ? options.output.strict.js
             : options?.output?.strict,
+          externalImportAttributes: features.keepImportAttributes !== false,
+          importAttributesKey: (
+              features.keepImportAttributes === false
+              || features.keepImportAttributes === undefined
+            )
+            ? undefined
+            : features.keepImportAttributes === true
+            ? 'with'
+            : features.keepImportAttributes,
           plugins: [
             isFormatEsm(format === 'esm')
           ]

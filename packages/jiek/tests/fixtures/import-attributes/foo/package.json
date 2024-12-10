@@ -1,0 +1,8 @@
+{
+  "name": "foo",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  }
+}
