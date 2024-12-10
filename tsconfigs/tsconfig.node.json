@@ -1,11 +1,9 @@
 {
-  "extends": ["./tsconfig.base.json"],
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
-    "target": "ESNext",
     "customConditions": ["node"],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "types": ["node"]
   },

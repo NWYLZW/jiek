@@ -6,7 +6,7 @@
     "allowImportingTsExtensions": true,
     "strict": true,
     "strictNullChecks": true,
-    "noEmit": true,
+    "emitDeclarationOnly": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
