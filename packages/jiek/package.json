@@ -32,7 +32,11 @@
     "./rollup": "./src/rollup/index.ts"
   },
   "imports": {
-    "#~/*": "./src/*"
+    "#~/*": [
+      "./src/*",
+      "./src/*/index.ts",
+      "./src/*/index.tsx"
+    ]
   },
   "bin": {
     "jiek": "bin/jiek.js",
