@@ -80,7 +80,9 @@ exports[`rollup - template > base 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "format": "esm",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -99,8 +101,10 @@ exports[`rollup - template > base 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "file": undefined,
         "format": "esm",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -393,7 +397,9 @@ exports[`rollup - template > base 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "format": "cjs",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -412,8 +418,10 @@ exports[`rollup - template > base 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "file": undefined,
         "format": "cjs",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -711,7 +719,9 @@ exports[`rollup - template > base 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "format": "cjs",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -730,8 +740,10 @@ exports[`rollup - template > base 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "file": undefined,
         "format": "cjs",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1024,7 +1036,9 @@ exports[`rollup - template > base 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "format": "esm",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1043,8 +1057,10 @@ exports[`rollup - template > base 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "file": undefined,
         "format": "esm",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1342,7 +1358,9 @@ exports[`rollup - template > with import or require conditional 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "format": "esm",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1361,8 +1379,10 @@ exports[`rollup - template > with import or require conditional 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "file": undefined,
         "format": "esm",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1655,7 +1675,9 @@ exports[`rollup - template > with import or require conditional 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "format": "esm",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1674,8 +1696,10 @@ exports[`rollup - template > with import or require conditional 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "file": undefined,
         "format": "esm",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1968,7 +1992,9 @@ exports[`rollup - template > with import or require conditional 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "format": "cjs",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1987,8 +2013,10 @@ exports[`rollup - template > with import or require conditional 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "file": undefined,
         "format": "cjs",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -2286,7 +2314,9 @@ exports[`rollup - template > with import or require conditional 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "format": "cjs",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -2305,8 +2335,10 @@ exports[`rollup - template > with import or require conditional 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "file": undefined,
         "format": "cjs",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -2599,7 +2631,9 @@ exports[`rollup - template > with import or require conditional 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "format": "cjs",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -2618,8 +2652,10 @@ exports[`rollup - template > with import or require conditional 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "file": undefined,
         "format": "cjs",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -2912,7 +2948,9 @@ exports[`rollup - template > with import or require conditional 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "format": "esm",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -2931,8 +2969,10 @@ exports[`rollup - template > with import or require conditional 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "file": undefined,
         "format": "esm",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -3232,7 +3272,9 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "format": "esm",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -3251,8 +3293,10 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "file": undefined,
         "format": "esm",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -3545,7 +3589,9 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "format": "cjs",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -3564,8 +3610,10 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "file": undefined,
         "format": "cjs",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -3863,7 +3911,9 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "format": "esm",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -3882,8 +3932,10 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "file": undefined,
         "format": "esm",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -4176,7 +4228,9 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "format": "cjs",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -4195,8 +4249,10 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": true,
         "file": undefined,
         "format": "cjs",
+        "importAttributesKey": "with",
         "interop": "auto",
         "name": "Foo",
         "plugins": [
