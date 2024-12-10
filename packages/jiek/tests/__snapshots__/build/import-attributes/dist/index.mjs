@@ -1,4 +1,4 @@
-export { name as fooName } from 'foo/package.json' with { type: 'json' };
+export { name as aExportFooName, name as bExportFooName, name as exportFooName, name as fooName } from 'foo/package.json' with { type: 'json' };
 
 var name$1 = "bar";
 var version = "0.1.0";
@@ -32,4 +32,4 @@ function foo() {
   return "foo";
 }
 
-export { name$1 as barName, foo, name };
+export { name$1 as barName, name$1 as exportBarName, foo, name };
