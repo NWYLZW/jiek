@@ -214,6 +214,7 @@ const withMinify = (
     : resolvedMinifyOptions.type === 'swc'
     // eslint-disable-next-line ts/no-unsafe-argument
     ? import('rollup-plugin-swc3').then(({ minify }) => minify(noTypeResolvedMinifyOptions as any))
+    // eslint-disable-next-line ts/no-unsafe-argument
     : import('@rollup/plugin-terser').then(({ default: minify }) => minify(noTypeResolvedMinifyOptions as any))
   return minify === 'only-minify'
     ? [{
