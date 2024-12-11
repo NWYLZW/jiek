@@ -12,12 +12,13 @@
     ".": "./src/index.ts",
     "./entrypoints": "./src/entrypoints.ts"
   },
-  "files": [ "LICENSE", "README.md","dist", "src"],
+  "files": ["LICENSE", "README.md", "dist", "src"],
   "scripts": {
     "prepublish": "jb -nm && jk",
     "postpublish": "jk"
   },
   "dependencies": {
+    "@jiek/utils": "workspace:^",
     "fast-glob": "^3.3.2"
   },
   "imports": {
