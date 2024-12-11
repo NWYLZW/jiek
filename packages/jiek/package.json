@@ -59,7 +59,7 @@
     "test": "vitest run"
   },
   "peerDependencies": {
-    "@pnpm/filter-workspace-packages": "^7.2.13||^8.0.0||^9.0.0||^10.0.0",
+    "@pnpm/filter-workspace-packages": "^7.2.13||^8.0.0||^9.0.0||^10.0.0||>=1000.0.0",
     "@rollup/plugin-terser": "^0.4.4",
     "esbuild-register": "^3.5.0",
     "postcss": "^8.4.47",
