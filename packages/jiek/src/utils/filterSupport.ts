@@ -1,5 +1,4 @@
 import fs from 'node:fs'
-import { createRequire } from 'node:module'
 import path from 'node:path'
 
 import { program } from 'commander'
@@ -11,7 +10,6 @@ import { getWD } from '#~/utils/getWD.ts'
 export let type = ''
 
 try {
-  const require = createRequire(import.meta.url)
   require.resolve('@pnpm/filter-workspace-packages')
   type = 'pnpm'
 } catch { /* empty */ }

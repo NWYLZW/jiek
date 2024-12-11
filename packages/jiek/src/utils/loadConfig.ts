@@ -1,5 +1,4 @@
 import fs from 'node:fs'
-import { createRequire } from 'node:module'
 import path from 'node:path'
 
 import { program } from 'commander'
@@ -8,8 +7,6 @@ import { load } from 'js-yaml'
 
 import { getWD } from './getWD'
 import { tsRegisterName } from './tsRegister'
-
-const require = createRequire(import.meta.url)
 
 let configName = 'jiek.config'
 

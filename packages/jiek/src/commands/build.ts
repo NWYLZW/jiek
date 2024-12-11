@@ -1,5 +1,4 @@
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
-import { createRequire } from 'node:module'
 import path from 'node:path'
 import process from 'node:process'
 
@@ -38,8 +37,6 @@ declare module 'jiek' {
 const FILE_TEMPLATE = (manifest: unknown) => (`
 module.exports = require('jiek/rollup').template(${JSON.stringify(manifest, null, 2)})
 `.trimStart())
-
-const require = createRequire(import.meta.url)
 
 const isDefault = process.env.JIEK_IS_ONLY_BUILD === 'true'
 
