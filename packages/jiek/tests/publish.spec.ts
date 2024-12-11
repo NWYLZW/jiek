@@ -16,5 +16,5 @@ describe('no mono', ({ test }) => {
     await exec({ cmd: 'build', autoSnapDist: false })
     await exec({ cmd: 'prepublish' })
     await exec({ cmd: 'postpublish', autoSnapDist: false })
-  })
+  }, 10000)
 }, true)

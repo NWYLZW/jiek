@@ -216,7 +216,7 @@ function createUseExec(options: CreateUseExecOptions) {
         )
       }
     }
-    const test = (title: string, func: (context: CustomTestContext) => any) =>
+    const test = (title: string, func: (context: CustomTestContext) => any, timeout?: number) =>
       vitestTest.concurrent(title, async t => {
         noHook && await before()
         const ctx: CustomTestContext = {
@@ -230,7 +230,7 @@ function createUseExec(options: CreateUseExecOptions) {
         }
         await func(ctx)
         noHook && await after()
-      })
+      }, timeout)
     return {
       test,
       dflt: async ({ exec }: CustomTestContext) => exec(),
@@ -252,7 +252,7 @@ type ExecDescribe = (
 type NoExecDescribe = (
   title: string,
   func: (ctx: {
-    test: (title: string, func: (context: CustomTestContext) => unknown) => void
+    test: (title: string, func: (context: CustomTestContext) => unknown, timeout?: number) => void
   }) => any,
   noExec: true
 ) => void
@@ -267,11 +267,11 @@ export function createDescribe(options: CreateUseExecOptions) {
     vitestDescribe(title, () => {
       if (noExec) {
         ;(func as Parameters<NoExecDescribe>[1])({
-          test(title, f) {
+          test(title, f, timeout) {
             useExec(
               title.replaceAll(' ', '-'),
               true
-            ).test(title, ctx => f(ctx))
+            ).test(title, ctx => f(ctx), timeout)
           }
         })
       } else {
