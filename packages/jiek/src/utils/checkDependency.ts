@@ -12,7 +12,7 @@ export async function checkDependency(dependency: string) {
     console.error(`The package '${dependency}' is not installed, please install it first.`)
     const { notWorkspace } = getWD()
     const command = `pnpm install -${notWorkspace ? '' : 'w'}D ${dependency}`
-    if (await confirm({ message: 'Do you want to install it now?' })) {
+    if (await confirm({ message: `Do you want to install it now? (${command})` })) {
       execSync(command, {
         stdio: 'inherit',
         cwd: process.cwd(),
