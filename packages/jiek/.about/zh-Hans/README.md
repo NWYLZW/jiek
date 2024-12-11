@@ -24,6 +24,7 @@
 - [x] 工作空间友好：支持在 pnpm 下的工作空间开发范式
   - [ ] 支持更多的 PM
   - [ ] 更好的工作空间任务流
+- [x] 构建产物[兼容性极强](https://arethetypeswrong.github.io/?p=jiek)
 - [x] 类型定义文件：支持聚合生成类型定义文件
 - [x] 监听模式：适配 rollup 的监听模式
 - [x] 发布适配：支持同构生成 `package.json` 等相关字段
