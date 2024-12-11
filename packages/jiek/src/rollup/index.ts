@@ -420,6 +420,14 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           ...noTypeResolvedBuilderOptions,
           jsc: {
             ...resolvedBuilderOptions.jsc,
+            parser: resolvedBuilderOptions.jsc?.parser
+              ? resolvedBuilderOptions.jsc?.parser
+              : {
+                syntax: 'typescript',
+                tsx: true,
+                decorators: true,
+                dynamicImport: true
+              },
             experimental: {
               ...resolvedBuilderOptions.jsc?.experimental,
               keepImportAttributes: features.keepImportAttributes !== false
