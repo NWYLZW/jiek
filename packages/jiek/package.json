@@ -1,7 +1,7 @@
 {
   "name": "jiek",
   "type": "module",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "A lightweight toolkit for compiling and managing libraries based on `package.json` metadata and suitable for `Monorepo`.",
   "author": "YiJie <yijie4188@gmail.com>",
   "homepage": "https://github.com/NWYLZW/jiek/tree/master/packages/jiek#readme",
@@ -70,7 +70,7 @@
     "vite-bundle-analyzer": "0.16.0-beta.1"
   },
   "dependencies": {
-    "@inquirer/prompts": "^7.1.0",
+    "@inquirer/prompts": "^7.2.0",
     "@jiek/pkger": "workspace:^",
     "@jiek/rollup-plugin-dts": "^6.2.1",
     "@jiek/utils": "workspace:^",
@@ -78,7 +78,6 @@
     "@rollup/plugin-inject": "^5.0.5",
     "@rollup/plugin-json": "^6.0.1",
     "@rollup/plugin-node-resolve": "^15.3.0",
-    "@rollup/plugin-replace": "^6.0.1",
     "cli-progress": "^3.12.0",
     "commander": "^12.0.0",
     "detect-indent": "^6.1.0",
