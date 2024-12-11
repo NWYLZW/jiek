@@ -440,13 +440,21 @@ async function prepublish({ bumper }: {
 async function postpublish() {
   await forEachSelectedProjectsGraphEntries(dir => {
     const jiekTempDir = path.resolve(dir, 'node_modules/.jiek/.tmp')
-    const packageJSON = path.resolve(dir, 'package.json')
-    const jiekTempPackageJSON = path.resolve(jiekTempDir, 'package.json')
-    if (fs.existsSync(jiekTempPackageJSON)) {
-      fs.copyFileSync(jiekTempPackageJSON, packageJSON)
-      fs.rmSync(jiekTempPackageJSON)
-      // eslint-disable-next-line no-console
+    const packageJSONPath = path.resolve(dir, 'package.json')
+    const { name, version } = JSON.parse(fs.readFileSync(packageJSONPath, 'utf-8')) as {
+      name: string
+      version: string
+    }
+    const jiekTempPackageJSONPath = path.resolve(jiekTempDir, 'package.json')
+    if (fs.existsSync(jiekTempPackageJSONPath)) {
+      fs.copyFileSync(jiekTempPackageJSONPath, packageJSONPath)
+      fs.rmSync(jiekTempPackageJSONPath)
+      /* eslint-disable no-console */
       console.log(`${dir}/package.json has been restored`)
+      console.log(
+        `if you want to check the compatibility of the package, you can visit: https://arethetypeswrong.github.io/?p=${name}%40${version}`
+      )
+      /* eslint-enable no-console */
     } else {
       throw new Error(
         `jiek temp \`${dir}/package.json\` not found, please confirm the jiek pre-publish command has been executed`
