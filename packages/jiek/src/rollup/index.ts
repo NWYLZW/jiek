@@ -389,7 +389,6 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
         esbuild({
           sourceMap: sourcemap === 'hidden' ? false : !!sourcemap,
           tsconfig: buildTSConfigPath,
-          target: 'node22',
           ...noTypeResolvedBuilderOptions,
           supported: {
             'import-attributes': features.keepImportAttributes !== false,
