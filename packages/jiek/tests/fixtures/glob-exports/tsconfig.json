@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
     "target": "ESNext",
+    "rootDir": "./src",
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "strict": true,
+    "strictNullChecks": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true
+    "skipLibCheck": true
   }
 }
