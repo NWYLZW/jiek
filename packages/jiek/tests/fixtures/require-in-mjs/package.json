@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "exports": {
     ".": "./src/index.ts",
-    "./require-resolve": "./src/require-resolve.ts"
+    "./require-resolve": "./src/require-resolve.ts",
+    "./import-type": "./src/import-type.ts"
   }
 }

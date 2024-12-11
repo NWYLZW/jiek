@@ -8,6 +8,7 @@ import { getAllLeafs } from '@jiek/pkger/entrypoints'
 import { dts } from '@jiek/rollup-plugin-dts'
 import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import commonjs from '@rollup/plugin-commonjs'
+import inject from '@rollup/plugin-inject'
 import json from '@rollup/plugin-json'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import { isMatch } from 'micromatch'
@@ -23,7 +24,7 @@ import { recusiveListFiles } from '#~/utils/recusiveListFiles.ts'
 import { getCompilerOptionsByFilePath } from '#~/utils/ts.ts'
 
 import type { ConfigGenerateContext, TemplateOptions } from './base'
-import createRequire from './plugins/create-require'
+import createRequire, { CREATE_REQUIRE_VIRTUAL_MODULE_NAME } from './plugins/create-require'
 import progress from './plugins/progress'
 import skip from './plugins/skip'
 import externalResolver from './utils/externalResolver'
@@ -482,8 +483,12 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           )
           .catch(() => void 0),
         commonjs(),
-        createRequire(format === 'esm'),
         builder,
+        // inject plugin can't resolve `import type`, so we should register it after the builder plugin
+        inject({
+          require: CREATE_REQUIRE_VIRTUAL_MODULE_NAME
+        }),
+        createRequire(format === 'esm'),
         ana,
         progress({
           onEvent: (event, message) => void publishInEntry('progress', { event, message, tags: ['js'] })

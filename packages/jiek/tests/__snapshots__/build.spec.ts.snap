@@ -203,6 +203,12 @@ exports[`no mono > only minify 1`] = `
 
 exports[`no mono > require in mjs 1`] = `
 [
+  "import-type.cjs",
+  "import-type.d.cts",
+  "import-type.d.ts",
+  "import-type.js",
+  "import-type.min.cjs",
+  "import-type.min.js",
   "index.cjs",
   "index.d.cts",
   "index.d.ts",
