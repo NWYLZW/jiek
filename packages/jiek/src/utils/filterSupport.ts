@@ -24,7 +24,7 @@ export interface ProjectsGraph {
   }>
 }
 
-export function filterPackagesGraph(filters: string[]): Promise<ProjectsGraph[]> {
+export async function filterPackagesGraph(filters: string[]): Promise<ProjectsGraph[]> {
   return Promise.all(filters.map(async filter => getSelectedProjectsGraph(filter)))
 }
 
