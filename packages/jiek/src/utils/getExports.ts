@@ -1,4 +1,5 @@
 import { isAbsolute, relative, resolve } from 'node:path'
+import process from 'node:process'
 
 import {
   type Entrypoints2ExportsOptions,
