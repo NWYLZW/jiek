@@ -214,13 +214,8 @@ command
         minifyType = resolvedType
       }
     }
-    if (!withoutMin) {
-      await checkDependency(
-        {
-          ...BUILDER_TYPE_PACKAGE_NAME_MAP,
-          terser: '@rollup/plugin-terser'
-        }[resolvedType]
-      )
+    if (!withoutMin && minifyType === 'terser') {
+      await checkDependency('@rollup/plugin-terser')
     }
     let shouldPassThrough = false
 
