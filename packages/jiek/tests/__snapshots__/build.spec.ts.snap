@@ -209,6 +209,12 @@ exports[`no mono > require in mjs 1`] = `
   "index.js",
   "index.min.cjs",
   "index.min.js",
+  "require-resolve.cjs",
+  "require-resolve.d.cts",
+  "require-resolve.d.ts",
+  "require-resolve.js",
+  "require-resolve.min.cjs",
+  "require-resolve.min.js",
 ]
 `;
 

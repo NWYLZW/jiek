@@ -2,5 +2,8 @@
   "name": "require-in-mjs",
   "type": "module",
   "version": "0.1.0",
-  "exports": "./src/index.ts"
+  "exports": {
+    ".": "./src/index.ts",
+    "./require-resolve": "./src/require-resolve.ts"
+  }
 }
