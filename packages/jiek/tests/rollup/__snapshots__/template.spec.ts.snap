@@ -86,13 +86,6 @@ exports[`rollup - template > base 1`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           undefined,
         ],
         "sourcemap": undefined,
@@ -108,13 +101,6 @@ exports[`rollup - template > base 1`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           Promise {},
         ],
         "sourcemap": undefined,
@@ -154,13 +140,16 @@ exports[`rollup - template > base 1`] = `
           "transform": [Function],
           "version": "28.0.0",
         },
+        Promise {},
+        {
+          "name": "inject",
+          "transform": [Function],
+        },
         {
           "load": [Function],
           "name": "create-require",
           "resolveId": [Function],
-          "transform": [Function],
         },
-        Promise {},
         undefined,
         {
           "buildEnd": [Function],
@@ -403,13 +392,6 @@ exports[`rollup - template > base 1`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           undefined,
         ],
         "sourcemap": undefined,
@@ -425,13 +407,6 @@ exports[`rollup - template > base 1`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           Promise {},
         ],
         "sourcemap": undefined,
@@ -471,13 +446,16 @@ exports[`rollup - template > base 1`] = `
           "transform": [Function],
           "version": "28.0.0",
         },
+        Promise {},
+        {
+          "name": "inject",
+          "transform": [Function],
+        },
         {
           "load": [Function],
           "name": "create-require",
           "resolveId": [Function],
-          "transform": [Function],
         },
-        Promise {},
         undefined,
         {
           "buildEnd": [Function],
@@ -725,13 +703,6 @@ exports[`rollup - template > base 2`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           undefined,
         ],
         "sourcemap": undefined,
@@ -747,13 +718,6 @@ exports[`rollup - template > base 2`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           Promise {},
         ],
         "sourcemap": undefined,
@@ -793,13 +757,16 @@ exports[`rollup - template > base 2`] = `
           "transform": [Function],
           "version": "28.0.0",
         },
+        Promise {},
+        {
+          "name": "inject",
+          "transform": [Function],
+        },
         {
           "load": [Function],
           "name": "create-require",
           "resolveId": [Function],
-          "transform": [Function],
         },
-        Promise {},
         undefined,
         {
           "buildEnd": [Function],
@@ -1042,13 +1009,6 @@ exports[`rollup - template > base 2`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           undefined,
         ],
         "sourcemap": undefined,
@@ -1064,13 +1024,6 @@ exports[`rollup - template > base 2`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           Promise {},
         ],
         "sourcemap": undefined,
@@ -1110,13 +1063,16 @@ exports[`rollup - template > base 2`] = `
           "transform": [Function],
           "version": "28.0.0",
         },
+        Promise {},
+        {
+          "name": "inject",
+          "transform": [Function],
+        },
         {
           "load": [Function],
           "name": "create-require",
           "resolveId": [Function],
-          "transform": [Function],
         },
-        Promise {},
         undefined,
         {
           "buildEnd": [Function],
@@ -1364,13 +1320,6 @@ exports[`rollup - template > with import or require conditional 1`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           undefined,
         ],
         "sourcemap": undefined,
@@ -1386,13 +1335,6 @@ exports[`rollup - template > with import or require conditional 1`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           Promise {},
         ],
         "sourcemap": undefined,
@@ -1432,13 +1374,16 @@ exports[`rollup - template > with import or require conditional 1`] = `
           "transform": [Function],
           "version": "28.0.0",
         },
+        Promise {},
+        {
+          "name": "inject",
+          "transform": [Function],
+        },
         {
           "load": [Function],
           "name": "create-require",
           "resolveId": [Function],
-          "transform": [Function],
         },
-        Promise {},
         undefined,
         {
           "buildEnd": [Function],
@@ -1681,13 +1626,6 @@ exports[`rollup - template > with import or require conditional 1`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           undefined,
         ],
         "sourcemap": undefined,
@@ -1703,13 +1641,6 @@ exports[`rollup - template > with import or require conditional 1`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           Promise {},
         ],
         "sourcemap": undefined,
@@ -1749,13 +1680,16 @@ exports[`rollup - template > with import or require conditional 1`] = `
           "transform": [Function],
           "version": "28.0.0",
         },
+        Promise {},
+        {
+          "name": "inject",
+          "transform": [Function],
+        },
         {
           "load": [Function],
           "name": "create-require",
           "resolveId": [Function],
-          "transform": [Function],
         },
-        Promise {},
         undefined,
         {
           "buildEnd": [Function],
@@ -1998,13 +1932,6 @@ exports[`rollup - template > with import or require conditional 1`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           undefined,
         ],
         "sourcemap": undefined,
@@ -2020,13 +1947,6 @@ exports[`rollup - template > with import or require conditional 1`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           Promise {},
         ],
         "sourcemap": undefined,
@@ -2066,13 +1986,16 @@ exports[`rollup - template > with import or require conditional 1`] = `
           "transform": [Function],
           "version": "28.0.0",
         },
+        Promise {},
+        {
+          "name": "inject",
+          "transform": [Function],
+        },
         {
           "load": [Function],
           "name": "create-require",
           "resolveId": [Function],
-          "transform": [Function],
         },
-        Promise {},
         undefined,
         {
           "buildEnd": [Function],
@@ -2320,13 +2243,6 @@ exports[`rollup - template > with import or require conditional 2`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           undefined,
         ],
         "sourcemap": undefined,
@@ -2342,13 +2258,6 @@ exports[`rollup - template > with import or require conditional 2`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           Promise {},
         ],
         "sourcemap": undefined,
@@ -2388,13 +2297,16 @@ exports[`rollup - template > with import or require conditional 2`] = `
           "transform": [Function],
           "version": "28.0.0",
         },
+        Promise {},
+        {
+          "name": "inject",
+          "transform": [Function],
+        },
         {
           "load": [Function],
           "name": "create-require",
           "resolveId": [Function],
-          "transform": [Function],
         },
-        Promise {},
         undefined,
         {
           "buildEnd": [Function],
@@ -2637,13 +2549,6 @@ exports[`rollup - template > with import or require conditional 2`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           undefined,
         ],
         "sourcemap": undefined,
@@ -2659,13 +2564,6 @@ exports[`rollup - template > with import or require conditional 2`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           Promise {},
         ],
         "sourcemap": undefined,
@@ -2705,13 +2603,16 @@ exports[`rollup - template > with import or require conditional 2`] = `
           "transform": [Function],
           "version": "28.0.0",
         },
+        Promise {},
+        {
+          "name": "inject",
+          "transform": [Function],
+        },
         {
           "load": [Function],
           "name": "create-require",
           "resolveId": [Function],
-          "transform": [Function],
         },
-        Promise {},
         undefined,
         {
           "buildEnd": [Function],
@@ -2954,13 +2855,6 @@ exports[`rollup - template > with import or require conditional 2`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           undefined,
         ],
         "sourcemap": undefined,
@@ -2976,13 +2870,6 @@ exports[`rollup - template > with import or require conditional 2`] = `
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           Promise {},
         ],
         "sourcemap": undefined,
@@ -3022,13 +2909,16 @@ exports[`rollup - template > with import or require conditional 2`] = `
           "transform": [Function],
           "version": "28.0.0",
         },
+        Promise {},
+        {
+          "name": "inject",
+          "transform": [Function],
+        },
         {
           "load": [Function],
           "name": "create-require",
           "resolveId": [Function],
-          "transform": [Function],
         },
-        Promise {},
         undefined,
         {
           "buildEnd": [Function],
@@ -3278,13 +3168,6 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           undefined,
         ],
         "sourcemap": undefined,
@@ -3300,13 +3183,6 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           Promise {},
         ],
         "sourcemap": undefined,
@@ -3346,13 +3222,16 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
           "transform": [Function],
           "version": "28.0.0",
         },
+        Promise {},
+        {
+          "name": "inject",
+          "transform": [Function],
+        },
         {
           "load": [Function],
           "name": "create-require",
           "resolveId": [Function],
-          "transform": [Function],
         },
-        Promise {},
         undefined,
         {
           "buildEnd": [Function],
@@ -3595,13 +3474,6 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           undefined,
         ],
         "sourcemap": undefined,
@@ -3617,13 +3489,6 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           Promise {},
         ],
         "sourcemap": undefined,
@@ -3663,13 +3528,16 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
           "transform": [Function],
           "version": "28.0.0",
         },
+        Promise {},
+        {
+          "name": "inject",
+          "transform": [Function],
+        },
         {
           "load": [Function],
           "name": "create-require",
           "resolveId": [Function],
-          "transform": [Function],
         },
-        Promise {},
         undefined,
         {
           "buildEnd": [Function],
@@ -3917,13 +3785,6 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           undefined,
         ],
         "sourcemap": undefined,
@@ -3939,13 +3800,6 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           Promise {},
         ],
         "sourcemap": undefined,
@@ -3985,13 +3839,16 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
           "transform": [Function],
           "version": "28.0.0",
         },
+        Promise {},
+        {
+          "name": "inject",
+          "transform": [Function],
+        },
         {
           "load": [Function],
           "name": "create-require",
           "resolveId": [Function],
-          "transform": [Function],
         },
-        Promise {},
         undefined,
         {
           "buildEnd": [Function],
@@ -4234,13 +4091,6 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           undefined,
         ],
         "sourcemap": undefined,
@@ -4256,13 +4106,6 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         "interop": "auto",
         "name": "Foo",
         "plugins": [
-          {
-            "name": "create-require-insert-format",
-            "renderChunk": {
-              "handler": [Function],
-              "order": "pre",
-            },
-          },
           Promise {},
         ],
         "sourcemap": undefined,
@@ -4302,13 +4145,16 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
           "transform": [Function],
           "version": "28.0.0",
         },
+        Promise {},
+        {
+          "name": "inject",
+          "transform": [Function],
+        },
         {
           "load": [Function],
           "name": "create-require",
           "resolveId": [Function],
-          "transform": [Function],
         },
-        Promise {},
         undefined,
         {
           "buildEnd": [Function],
