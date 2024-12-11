@@ -1,0 +1,14 @@
+{
+  "name": "subpath",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./src/index.ts",
+    "./foo": "./src/foo.ts",
+    "./sub/foo": "./src/foo.ts",
+    "./sub": "./src/sub/index.ts",
+    "./sub/sub": "./src/sub/sub/index.ts"
+  },
+  "publishConfig": {
+    "directory": "./dist"
+  }
+}

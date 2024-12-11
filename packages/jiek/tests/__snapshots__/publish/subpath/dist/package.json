@@ -1,0 +1,54 @@
+{
+  "name": "subpath",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./src/index.ts",
+    "./foo": "./src/foo.ts",
+    "./sub/foo": "./src/foo.ts",
+    "./sub": "./src/sub/index.ts",
+    "./sub/sub": "./src/sub/sub/index.ts"
+  },
+  "publishConfig": {
+    "directory": "./dist",
+    "typesVersions": {
+      "<5.0": {
+        "*": [
+          "*",
+          "./*",
+          "./*/index.d.ts",
+          "./*/index.d.mts",
+          "./*/index.d.cts"
+        ]
+      }
+    },
+    "exports": {
+      ".": {
+        "subpath/__source__": "./src/index.ts",
+        "import": "./dist/index.mjs",
+        "default": "./dist/index.js"
+      },
+      "./foo": {
+        "subpath/__source__": "./src/foo.ts",
+        "import": "./dist/foo.mjs",
+        "default": "./dist/foo.js"
+      },
+      "./sub/foo": {
+        "subpath/__source__": "./src/foo.ts",
+        "import": "./dist/foo.mjs",
+        "default": "./dist/foo.js"
+      },
+      "./sub": {
+        "subpath/__source__": "./src/sub/index.ts",
+        "import": "./dist/sub/index.mjs",
+        "default": "./dist/sub/index.js"
+      },
+      "./sub/sub": {
+        "subpath/__source__": "./src/sub/sub/index.ts",
+        "import": "./dist/sub/sub/index.mjs",
+        "default": "./dist/sub/sub/index.js"
+      }
+    },
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs"
+  }
+}

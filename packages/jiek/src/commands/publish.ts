@@ -324,34 +324,63 @@ async function prepublish({ bumper }: {
       .readdirSync(resolveByDir(resolvedOutdir), { recursive: true })
       .filter(file => typeof file === 'string')
       .filter(file => file !== 'package.json')
-    for (const file of allBuildFiles) {
-      const filepath = resolveByDir(resolvedOutdir, file)
-      const stat = fs.statSync(filepath)
-      if (stat.isDirectory()) {
-        const existsIndexFile = allBuildFiles
-          .some(f =>
-            [
-              path.join(file, 'index.js'),
-              path.join(file, 'index.mjs'),
-              path.join(file, 'index.cjs')
-            ].includes(f)
-          )
-        if (existsIndexFile) {
-          const cpDistPath = resolveByDir(resolvedOutdir, resolvedOutdir, file)
-          const pkgJSONPath = resolveByDir(resolvedOutdir, file, 'package.json')
-          const relativePath = path.relative(filepath, cpDistPath)
-          const { type } = manifest
-          fs.writeFileSync(
-            pkgJSONPath,
-            JSON.stringify({
-              type,
-              main: [relativePath, `index.${type === 'module' ? 'c' : ''}js`].join('/'),
-              module: [relativePath, `index.${type === 'module' ? '' : 'm'}js`].join('/')
-            })
-          )
+    const resolvedExports = manifest.exports as Record<string, unknown>
+    Object
+      .keys(resolvedExports)
+      .forEach(key => {
+        if (key === '.') return
+        if (/\.[cm]?js$/.test(key)) return
+        // resource file suffix
+        const resourceFileSuffixes = [
+          '.d.ts',
+          '.d.mts',
+          '.d.cts',
+          '.css',
+          '.scss',
+          '.sass',
+          '.less',
+          '.styl',
+          '.stylus',
+          '.json',
+          '.json5'
+        ]
+        if (resourceFileSuffixes.find(suffix => key.endsWith(suffix))) return
+
+        const value = resolvedExports[key] as {
+          import?: string
+          require?: string
+          default?: string
         }
-      }
-    }
+
+        const filepath = resolveByDir(resolvedOutdir, key)
+
+        fs.mkdirSync(filepath, { recursive: true })
+        const pkgJSONPath = resolveByDir(resolvedOutdir, key, 'package.json')
+        const relativePath = Array.from({ length: key.split('/').length - 1 }, () => '..').join('/')
+        const { type } = manifest
+        const pkgJSON: Record<string, unknown> = { type }
+        if ('default' in value) {
+          pkgJSON[
+            type === 'module' ? 'module' : 'main'
+          ] = [
+            relativePath,
+            value.default?.replace(/^\.\//, '')
+          ].join('/')
+        }
+        if ('import' in value) {
+          pkgJSON.module = [
+            relativePath,
+            value.import?.replace(/^\.\//, '')
+          ].join('/')
+        }
+        if ('require' in value) {
+          pkgJSON.main = [
+            relativePath,
+            value.require?.replace(/^\.\//, '')
+          ].join('/')
+        }
+        fs.writeFileSync(pkgJSONPath, JSON.stringify(pkgJSON))
+      })
     fs.mkdirSync(resolveByDir(resolvedOutdir, resolvedOutdir))
     for (const file of allBuildFiles) {
       const filepath = resolveByDir(resolvedOutdir, file)
