@@ -149,12 +149,18 @@ exports[`no mono > import attributes 1`] = `
 
 exports[`no mono > import type from external 1`] = `
 [
+  "commonjs.cjs",
+  "commonjs.d.cts",
+  "commonjs.min.cjs",
   "index.d.mts",
   "index.d.ts",
   "index.js",
   "index.min.js",
   "index.min.mjs",
   "index.mjs",
+  "modulejs.d.mts",
+  "modulejs.min.mjs",
+  "modulejs.mjs",
 ]
 `;
 

@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "exports": {
     ".": "./src/index.ts",
-    "./commonjs": "./src/commonjs.cts"
+    "./commonjs": "./src/commonjs.cts",
+    "./modulejs": "./src/modulejs.mts"
   },
   "dependencies": {
     "foo": "./foo"

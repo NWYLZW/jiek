@@ -1,11 +1,11 @@
 import { isAbsolute, relative, resolve } from 'node:path'
 
 import {
+  type Entrypoints2ExportsOptions,
+  type RecursiveRecord,
   DEFAULT_SKIP_VALUES,
   entrypoints2Exports,
-  type Entrypoints2ExportsOptions,
   filterLeafs,
-  type RecursiveRecord,
   resolveEntrypoints
 } from '@jiek/pkger/entrypoints'
 import type { Config } from 'jiek'
@@ -109,20 +109,30 @@ export function getExports({
   )
   const crossModuleWithConditional: Entrypoints2ExportsOptions['withConditional'] = crossModuleConvertor
     ? {
-      import: opts =>
-        !pkgIsModule && intersection(
-              new Set(opts.conditionals),
-              new Set(['import', 'module'])
-            ).size === 0
-          ? opts.dist.replace(/\.js$/, '.mjs')
-          : false,
-      require: opts =>
-        pkgIsModule && intersection(
-              new Set(opts.conditionals),
-              new Set(['require', 'node'])
-            ).size === 0
-          ? opts.dist.replace(/\.js$/, '.cjs')
-          : false
+      import: opts => {
+        if (pkgIsModule) return false
+        if (opts.src.endsWith('.cts')) return false
+        if (
+          intersection(
+            new Set(opts.conditionals),
+            new Set(['import', 'module'])
+          ).size !== 0
+        ) return false
+
+        return opts.dist.replace(/\.js$/, '.mjs')
+      },
+      require: opts => {
+        if (!pkgIsModule) return false
+        if (opts.src.endsWith('.mts')) return false
+        if (
+          intersection(
+            new Set(opts.conditionals),
+            new Set(['require', 'node'])
+          ).size !== 0
+        ) return false
+
+        return opts.dist.replace(/\.js$/, '.cjs')
+      }
     }
     : {}
   return [

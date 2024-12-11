@@ -389,6 +389,16 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
         esbuild({
           sourceMap: sourcemap === 'hidden' ? false : !!sourcemap,
           tsconfig: buildTSConfigPath,
+          loaders: {
+            cts: 'ts',
+            ctsx: 'tsx',
+            mts: 'ts',
+            mtsx: 'tsx',
+            cjs: 'js',
+            cjsx: 'jsx',
+            mjs: 'js',
+            mjsx: 'jsx'
+          },
           ...noTypeResolvedBuilderOptions,
           supported: {
             'import-attributes': features.keepImportAttributes !== false,
@@ -568,6 +578,7 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
     return false
   })
 
+  console.log(exports)
   const configs: RollupOptions[] = []
   leafMap.forEach((keysArr, input) =>
     keysArr.forEach((keys) => {

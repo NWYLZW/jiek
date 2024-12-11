@@ -1,9 +1,9 @@
 'use strict';
 
-const FooSub = 'foo-sub';
+const FooSub = "foo-sub";
 
 function foo() {
-  return 'foo'
+  return "foo";
 }
 
 exports.CJSFooSub = FooSub;
