@@ -1,1 +1,1 @@
-"use strict";var t=require("node:module"),u=typeof document<"u"?document.currentScript:null,e=require;function r(){return"foo"}function n(){return e("./bar").bar}exports.bar=n,exports.foo=r;
+"use strict";var r=require;function o(){return"foo"}function e(){return r("./bar").bar}exports.bar=e,exports.foo=o;

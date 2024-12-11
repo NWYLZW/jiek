@@ -23,7 +23,7 @@ import { recusiveListFiles } from '#~/utils/recusiveListFiles.ts'
 import { getCompilerOptionsByFilePath } from '#~/utils/ts.ts'
 
 import type { ConfigGenerateContext, TemplateOptions } from './base'
-import createRequire, { isFormatEsm } from './plugins/create-require'
+import createRequire from './plugins/create-require'
 import progress from './plugins/progress'
 import skip from './plugins/skip'
 import externalResolver from './utils/externalResolver'
@@ -468,9 +468,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
             : features.keepImportAttributes === true
             ? 'with'
             : features.keepImportAttributes,
-          plugins: [
-            isFormatEsm(format === 'esm')
-          ]
+          plugins: []
         }, onlyOncePlugins)
       ],
       plugins: [
@@ -484,7 +482,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           )
           .catch(() => void 0),
         commonjs(),
-        createRequire(),
+        createRequire(format === 'esm'),
         builder,
         ana,
         progress({
