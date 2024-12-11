@@ -110,4 +110,28 @@ export interface TemplateOptions {
       js?: InputPluginOption
       dts: InputPluginOption
     }
+  /**
+   * https://www.npmjs.com/package/@rollup/plugin-inject#usage
+   *
+   * @example
+   * ```js
+   * {
+   *   // import { Promise } from 'es6-promise'
+   *   Promise: [ 'es6-promise', 'Promise' ],
+   *
+   *   // import { Promise as P } from 'es6-promise'
+   *   P: [ 'es6-promise', 'Promise' ],
+   *
+   *   // import $ from 'jquery'
+   *   $: 'jquery',
+   *
+   *   // import * as fs from 'fs'
+   *   fs: [ 'fs', '*' ],
+   *
+   *   // use a local module instead of a third-party one
+   *   'Object.assign': path.resolve( 'src/helpers/object-assign.js' ),
+   * }
+   * ```
+   */
+  injects?: Record<string, string | [string, string]>
 }

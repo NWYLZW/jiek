@@ -12,6 +12,7 @@ describe('no mono', ({ test }) => {
     'simple cts',
     'require in mjs',
     'import attributes',
+    'injects',
     'only minify',
     'export self subpath',
     'multiple exports',

@@ -486,7 +486,11 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
         builder,
         // inject plugin can't resolve `import type`, so we should register it after the builder plugin
         inject({
-          require: CREATE_REQUIRE_VIRTUAL_MODULE_NAME
+          sourceMap: sourcemap === 'hidden' ? false : !!sourcemap,
+          modules: {
+            ...build.injects ?? {},
+            require: CREATE_REQUIRE_VIRTUAL_MODULE_NAME
+          }
         }),
         createRequire(format === 'esm'),
         ana,
@@ -499,15 +503,16 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
   }
 
   if (dtsOutput && !WITHOUT_DTS) {
+    const sourcemap = typeof options?.output?.sourcemap === 'object'
+      ? options.output.sourcemap.dts
+      : options?.output?.sourcemap
     rollupOptions.push({
       input: inputObj,
       external,
       output: [
         {
           dir: dtsOutdir,
-          sourcemap: typeof options?.output?.sourcemap === 'object'
-            ? options.output.sourcemap.dts
-            : options?.output?.sourcemap,
+          sourcemap,
           entryFileNames: (chunkInfo) => (
             Array.isArray(inputObj)
               ? chunkInfo.facadeModuleId!.replace(`${process.cwd()}/`, '')
