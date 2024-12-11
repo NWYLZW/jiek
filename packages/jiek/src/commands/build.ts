@@ -471,14 +471,16 @@ command
             }
           })
           await new Promise<void>((resolve, reject) => {
-            let errorStr = ''
+            let errorStr = `rollup build failed\n`
+              + `package name: ${manifest.name}\n`
+              + `cwd: ${pkgCWD}\n\n`
             child.stderr?.on('data', (data) => {
               errorStr += data
             })
             child.once('exit', (code) =>
               code === 0
                 ? resolve()
-                : reject(new Error(`rollup build failed:\n${errorStr}`)))
+                : reject(new Error(errorStr)))
             verbose && child.stdout?.pipe(process.stdout)
           })
         })
