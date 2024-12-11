@@ -15,10 +15,14 @@ import { isMatch } from 'micromatch'
 const intersection = <T>(a: Set<T>, b: Set<T>) => new Set([...a].filter(i => b.has(i)))
 
 const {
-  JIEK_OUT_DIR
+  JIEK_OUT_DIR,
+  JIEK_CROSS_MODULE_CONVERTOR
 } = process.env
 
 const OUTDIR = JIEK_OUT_DIR ?? 'dist'
+const crossModuleConvertorDefault = JIEK_CROSS_MODULE_CONVERTOR === undefined
+  ? true
+  : JIEK_CROSS_MODULE_CONVERTOR === 'true'
 
 export function getOutDirs({
   cwd = process.cwd(),
@@ -86,7 +90,7 @@ export function getExports({
     } = {}
   } = config ?? {}
   const {
-    crossModuleConvertor = true
+    crossModuleConvertor = crossModuleConvertorDefault
   } = build
   const [, resolvedEntrypoints] = resolveEntrypoints(entrypoints)
   if (entries) {

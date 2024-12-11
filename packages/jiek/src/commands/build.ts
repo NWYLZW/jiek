@@ -72,6 +72,7 @@ interface BuildOptions extends AnalyzerBuildOptions {
   verbose: boolean
   entries?: string
   external?: string
+  noConvert: boolean
   noJs: boolean
   noDts: boolean
   noMin: boolean
@@ -151,6 +152,7 @@ command = command
   .option('-o, --outdir <OUTDIR>', outdirDescription, String, 'dist')
   .option('-e, --entries <ENTRIES>', entriesDescription)
   .option('--external <EXTERNAL>', 'Specify the external dependencies of the package.', String)
+  .option('--noConvert', 'Specify the `crossModuleConvertor` option to false.', parseBoolean)
   .option('-nj, --noJs', 'Do not output js files.', parseBoolean)
   .option('-nd, --noDts', 'Do not output dts files.', parseBoolean)
   .option('-nm, --noMin', 'Do not output minify files.', parseBoolean)
@@ -195,6 +197,7 @@ command
       verbose,
       entries: optionEntries,
       external,
+      noConvert,
       noJs: withoutJs,
       noDts: withoutDts,
       noMin: withoutMin,
@@ -266,6 +269,7 @@ command
       JIEK_CLEAN: String(!noClean),
       JIEK_ENTRIES: entries,
       JIEK_EXTERNAL: external,
+      JIEK_CROSS_MODULE_CONVERTOR: String(!noConvert),
       JIEK_WITHOUT_JS: String(withoutJs),
       JIEK_WITHOUT_DTS: String(withoutDts),
       JIEK_WITHOUT_MINIFY: String(withoutMin),
