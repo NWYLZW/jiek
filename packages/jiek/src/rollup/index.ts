@@ -584,7 +584,6 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
     return false
   })
 
-  console.log(exports)
   const configs: RollupOptions[] = []
   leafMap.forEach((keysArr, input) =>
     keysArr.forEach((keys) => {
