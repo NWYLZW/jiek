@@ -207,9 +207,13 @@ async function prepublish({ bumper }: {
               const indexExports = index as Record<string, string>
               indexPublishConfig.main = indexExports.require ?? indexExports.default
               indexPublishConfig.module = indexExports.import ?? indexExports.module ?? indexExports.default
+              indexPublishConfig.types = indexExports.types
               break
             }
           }
+          indexPublishConfig.types = indexPublishConfig[
+            manifest?.type === 'module' ? 'module' : 'main'
+          ].replace(/\.([cm]?)js$/, '.d.$1ts')
           for (const [k, v] of Object.entries(indexPublishConfig)) {
             if (v === undefined) continue
             newJSONString = applyEdits(
