@@ -11,6 +11,11 @@
     "../packages/*/tests/**/*.node.spec.ts",
 
     "../packages/jiek/tests/**/*.ts",
-    "../packages/jiek/tests/**/*.spec.ts"
+    "../packages/jiek/tests/**/*.spec.ts",
+
+    "../packages/rollup-plugins/*/tests/**/*.ts",
+    "../packages/rollup-plugins/*/tests/**/*.spec.ts",
+    "../packages/vite-plugins/*/tests/**/*.ts",
+    "../packages/vite-plugins/*/tests/**/*.spec.ts"
   ]
 }
