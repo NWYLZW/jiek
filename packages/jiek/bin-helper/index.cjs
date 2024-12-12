@@ -1,3 +1,7 @@
+const {
+  basename,
+  dirname
+} = require('node:path')
 const process = require('node:process')
 
 /**
@@ -27,17 +31,12 @@ try {
 
 binFilePath = binFilePath ?? process.env.JIEK_BIN__FILEPATH
 
-const {
-  basename,
-  dirname
-} = require('node:path')
-
 const packageDir = dirname(dirname(binFilePath))
-const binFilename = basename(binFilePath).replace(/(\.[cm]?)js$/, '$1ts')
+const binFilename = basename(binFilePath)
 
 process.env.JIEK_PACKAGE_DIR = packageDir
 process.env.JIEK_BIN__FILENAME = binFilename
 process.env.JIEK_BIN__FILEPATH = binFilePath
 
 require('esbuild-register')
-require(`${packageDir}/src/bin/${binFilename}`)
+require(`${packageDir}/src/bin/${binFilename.replace(/(\.[cm]?)js$/, '$1ts')}`)

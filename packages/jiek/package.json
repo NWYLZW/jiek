@@ -27,8 +27,6 @@
       "require": "./bin-helper/index.cjs",
       "default": "./bin-helper/index.js"
     },
-    "./cli": "./src/cli.ts",
-    "./cli-only-build": "./src/cli-only-build.ts",
     "./rollup": "./src/rollup/index.ts"
   },
   "imports": {
@@ -39,10 +37,10 @@
     ]
   },
   "bin": {
-    "jiek": "bin/jiek.js",
-    "jk": "bin/jiek.js",
-    "jiek-build": "bin/jiek-build.js",
-    "jb": "bin/jiek-build.js"
+    "jiek": "bin/index.cjs",
+    "jk": "bin/index.cjs",
+    "jiek-build": "bin/build.cjs",
+    "jb": "bin/build.cjs"
   },
   "files": [
     "LICENSE",
