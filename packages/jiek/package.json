@@ -24,8 +24,8 @@
     "./package.json": "./package.json",
     ".": "./src/index.ts",
     "./bin-helper": {
-      "require": "./bin-helper.cjs",
-      "default": "./bin-helper.js"
+      "require": "./bin-helper/index.cjs",
+      "default": "./bin-helper/index.js"
     },
     "./cli": "./src/cli.ts",
     "./cli-only-build": "./src/cli-only-build.ts",
@@ -48,8 +48,7 @@
     "LICENSE",
     "README.md",
     "bin",
-    "bin-helper.cjs",
-    "bin-helper.js",
+    "bin-helper",
     "dist",
     "src"
   ],
