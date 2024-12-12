@@ -31,6 +31,7 @@
     "../packages/*/src/**/*.node.ts",
 
     "../packages/jiek/src/**/*.ts",
+    "../packages/jiek/src/**/*.cts",
 
     "../packages/rollup-plugins/*/src/**/*.ts",
     "../packages/vite-plugins/*/src/**/*.ts"
