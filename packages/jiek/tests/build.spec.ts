@@ -22,14 +22,15 @@ describe('no mono', ({ test }) => {
     'with no resolve exports',
     'with scss file import',
     'import type from subpath',
-    'import type from external'
+    'import type from external',
+    'import with external'
   ].filter((t, _, arr) =>
     ([
       ...arr
       // 'import type from external'
     ] as string[]).includes(t)
   )
-  titles.forEach(title => test(title, async ({ exec }) => exec()))
+  titles.forEach(title => test(title, async ({ exec }) => exec({ moreOptions: ['-v -nm --noConvert'] })))
 }, true)
 describe('mono', () => {
   describe('monorepo', ({ test }) => {

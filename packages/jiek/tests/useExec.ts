@@ -61,7 +61,7 @@ async function snapshotDir(
 }
 
 async function execWithRoot(root: string, cmd: string) {
-  const cliBinPath = path.resolve(__dirname, '../bin/jiek.js')
+  const cliBinPath = path.resolve(__dirname, '../bin/index.cjs')
   const args = ['node', cliBinPath, cmd].join(' ')
   const {
     npm_lifecycle_event: NPM_LIFECYCLE_EVENT

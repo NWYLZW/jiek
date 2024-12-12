@@ -27,6 +27,7 @@ import type { ConfigGenerateContext, TemplateOptions } from './base'
 import createRequire, { CREATE_REQUIRE_VIRTUAL_MODULE_NAME } from './plugins/create-require'
 import progress from './plugins/progress'
 import skip from './plugins/skip'
+import withExternal from './plugins/with-external.ts'
 import externalResolver from './utils/externalResolver'
 
 interface PackageJSON {
@@ -360,6 +361,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
   const rollupOptions: RollupOptions[] = []
 
   const commonPlugins: Plugin[] = [
+    withExternal(),
     nodeResolve({
       exportConditions,
       extensions: [
