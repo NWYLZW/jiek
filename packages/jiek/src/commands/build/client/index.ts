@@ -10,13 +10,11 @@ declare global {
 function render() {
   CUSTOM_SIDE_BAR = true
   window.addEventListener('client:ready', () =>
-    setTimeout(() => {
-      window.dispatchEvent(
-        new CustomEvent('send:ui', {
-          detail: { type: 'Main', Component: __REPLACE_INJECT__ }
-        })
-      )
-    }, 0))
+    window.dispatchEvent(
+      new CustomEvent('send:ui', {
+        detail: { type: 'Main', Component: __REPLACE_INJECT__ }
+      })
+    ))
 }
 
 export const CLIENT_CUSTOM_RENDER_SCRIPT = [
