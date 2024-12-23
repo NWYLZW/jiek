@@ -5,10 +5,14 @@ export default (() => ({
   resolveId: {
     order: 'pre',
     handler: (source, _, { attributes }) => {
-      if (attributes.external === 'true') {
+      if (
+        'external' in attributes || 'bundle' in attributes
+      ) {
         return {
           id: source,
-          external: true
+          external: attributes.external === 'true'
+            ? true
+            : attributes.bundle !== 'true'
         }
       }
     }

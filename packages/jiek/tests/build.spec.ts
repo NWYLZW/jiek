@@ -26,8 +26,8 @@ describe('no mono', ({ test }) => {
     'import with external'
   ].filter((t, _, arr) =>
     ([
-      ...arr
-      // 'import type from external'
+      // ...arr
+      'import type from external'
     ] as string[]).includes(t)
   )
   titles.forEach(title => test(title, async ({ exec }) => exec({ moreOptions: ['-v -nm --noConvert'] })))

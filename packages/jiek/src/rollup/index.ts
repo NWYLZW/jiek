@@ -380,13 +380,21 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
       ]
     })
   ]
+  const features = Object.assign({
+    keepImportAttributes: true
+  }, build.features)
+  const importAttributesKey = (
+      features.keepImportAttributes === false
+      || features.keepImportAttributes === undefined
+    )
+    ? undefined
+    : features.keepImportAttributes === true
+    ? 'with'
+    : features.keepImportAttributes
   if (jsOutput && !WITHOUT_JS) {
     const sourcemap = typeof options?.output?.sourcemap === 'object'
       ? options.output.sourcemap.js
       : options?.output?.sourcemap
-    const features = Object.assign({
-      keepImportAttributes: true
-    }, build.features)
     const builder = resolvedBuilderOptions.type === 'esbuild'
       ? import('rollup-plugin-esbuild').then(({ default: esbuild }) =>
         esbuild({
@@ -463,14 +471,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
             ? options.output.strict.js
             : options?.output?.strict,
           externalImportAttributes: features.keepImportAttributes !== false,
-          importAttributesKey: (
-              features.keepImportAttributes === false
-              || features.keepImportAttributes === undefined
-            )
-            ? undefined
-            : features.keepImportAttributes === true
-            ? 'with'
-            : features.keepImportAttributes,
+          importAttributesKey,
           plugins: []
         }, onlyOncePlugins)
       ],
@@ -526,7 +527,9 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           ),
           strict: typeof options?.output?.strict === 'object'
             ? options.output.strict.dts
-            : options?.output?.strict
+            : options?.output?.strict,
+          externalImportAttributes: features.keepImportAttributes !== false,
+          importAttributesKey
         }
       ],
       plugins: [

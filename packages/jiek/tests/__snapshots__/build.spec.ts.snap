@@ -83,13 +83,13 @@ exports[`mono > root package > common 1`] = `
 ]
 `;
 
-exports[`no mono > import with external 1`] = `
+exports[`no mono > import type from external 1`] = `
 [
-  "index.d.mts",
+  "commonjs.cjs",
+  "commonjs.d.cts",
   "index.d.ts",
   "index.js",
-  "index.min.js",
-  "index.min.mjs",
-  "index.mjs",
+  "modulejs.d.mts",
+  "modulejs.mjs",
 ]
 `;

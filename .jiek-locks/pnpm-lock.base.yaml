@@ -50,8 +50,8 @@ importers:
         specifier: workspace:^
         version: link:../pkger
       '@jiek/rollup-plugin-dts':
-        specifier: ^6.2.1
-        version: 6.2.1(rollup@4.22.4)(typescript@5.7.2)
+        specifier: ^6.3.2
+        version: 6.3.2(rollup@4.22.4)(typescript@5.7.2)
       '@jiek/utils':
         specifier: workspace:^
         version: link:../utils
@@ -799,8 +799,8 @@ packages:
     resolution: {integrity: sha512-mo5j5X+jIZmJQveBKeS/clAueipV7KgiX1vMgCxam1RNYiqE1w62n0/tJJnHtjW8ZHcQco5gY85jA3mi0L+nSA==, tarball: https://registry.npmjs.org/@jest/schemas/-/schemas-29.6.3.tgz}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
 
-  '@jiek/rollup-plugin-dts@6.2.1':
-    resolution: {integrity: sha512-f+errG0Z0/IOYzf6VDgOos/STktokzhCXQrAln4KvBX2+ZZ8y2bGZTPzqkGFWWReclg+Cd8CR2FJ0lcEdlcZoA==, tarball: https://registry.npmjs.org/@jiek/rollup-plugin-dts/-/rollup-plugin-dts-6.2.1.tgz}
+  '@jiek/rollup-plugin-dts@6.3.2':
+    resolution: {integrity: sha512-bUdPtO8XrtQbamTkZNINm5hkh3SJ671w4GKmEBCyNPxNM3SAhZ4D4Po8lfNkqShOWH8qids9dIfqSMk0dllc2w==, tarball: https://registry.npmjs.org/@jiek/rollup-plugin-dts/-/rollup-plugin-dts-6.3.2.tgz}
     engines: {node: '>=16'}
     peerDependencies:
       rollup: ^3.29.4 || ^4
@@ -4571,7 +4571,7 @@ snapshots:
     dependencies:
       '@babel/helper-validator-identifier': 7.25.9
       js-tokens: 4.0.0
-      picocolors: 1.1.0
+      picocolors: 1.1.1
     optional: true
 
   '@babel/helper-string-parser@7.25.9': {}
@@ -4980,10 +4980,11 @@ snapshots:
     dependencies:
       '@sinclair/typebox': 0.27.8
 
-  '@jiek/rollup-plugin-dts@6.2.1(rollup@4.22.4)(typescript@5.7.2)':
+  '@jiek/rollup-plugin-dts@6.3.2(rollup@4.22.4)(typescript@5.7.2)':
     dependencies:
       magic-string: 0.30.12
       rollup: 4.22.4
+      source-map: 0.7.4
       typescript: 5.7.2
     optionalDependencies:
       '@babel/code-frame': 7.26.2
