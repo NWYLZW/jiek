@@ -7,7 +7,7 @@ settings:
 importers:
 
   .:
-    dependencies:
+    devDependencies:
       foo:
         specifier: ./foo
         version: link:foo

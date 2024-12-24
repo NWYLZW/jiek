@@ -6,7 +6,7 @@
     "./commonjs": "./src/commonjs.cts",
     "./modulejs": "./src/modulejs.mts"
   },
-  "dependencies": {
+  "devDependencies": {
     "foo": "./foo"
   }
 }

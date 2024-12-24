@@ -1,1 +1,1 @@
-export const Foo = 'foo'
+export const Foo = 'module-foo'
