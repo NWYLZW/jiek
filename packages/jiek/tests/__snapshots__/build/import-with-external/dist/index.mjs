@@ -1,5 +1,5 @@
-import { foo } from './foo' with { external: 'true' };
-export { foo } from './foo' with { external: 'true' };
+import { foo } from './foo';
+export { foo } from './foo';
 
 const foofoo = foo + foo;
 

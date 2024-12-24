@@ -8,11 +8,14 @@ export default (() => ({
       if (
         'external' in attributes || 'bundle' in attributes
       ) {
+        delete attributes.external
+        delete attributes.bundle
         return {
           id: source,
           external: attributes.external === 'true'
             ? true
-            : attributes.bundle !== 'true'
+            : attributes.bundle !== 'true',
+          attributes
         }
       }
     }

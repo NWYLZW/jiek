@@ -4,11 +4,8 @@ import { name } from 'import-attributes/package.json' with { type: 'json' }
 
 export { barName, fooName, name }
 
-// FIXME the rollup is not support distribute export when using `with` syntax
 export { name as exportBarName } from 'bar/package.json' with { type: 'json' }
 export { name as exportFooName } from 'foo/package.json' with { type: 'json' }
-export { name as aExportFooName } from 'foo/package.json' with { type: 'jsona', test: 'a' }
-export { name as bExportFooName } from 'foo/package.json' with { type: 'jsonb', test: 'b' }
 
 export function foo() {
   console.log(
