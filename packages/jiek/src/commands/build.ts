@@ -102,6 +102,8 @@ interface BuildOptions extends AnalyzerBuildOptions {
    * - ./tsconfig.dts.json
    */
   dtsconfig?: string
+
+  'features.keepImportAttributes'?: boolean | 'assert'
 }
 
 let DEFAULT_BUILDER_TYPE: typeof BUILDER_TYPES[number]
@@ -172,6 +174,14 @@ command = command
     'Only output minify files, but dts files will still be output, it only replaces the js files.',
     parseBoolean
   )
+
+command = command
+  .option('--features.keepImportAttributes', 'Keep the import attributes in the output.', input => {
+    if (input === 'assert') {
+      return input
+    }
+    return parseBoolean(input)
+  })
 
 command = command
   .option('--tsconfig <TSCONFIG>', 'The path of the tsconfig file which is used to generate js and dts files.', String)
@@ -277,6 +287,9 @@ command
       JIEK_MINIFY_TYPE: minifyType,
       JIEK_TSCONFIG: tsconfig,
       JIEK_DTSCONFIG: dtsconfig,
+      JIEK_FEATURES: JSON.stringify({
+        keepImportAttributes: options['features.keepImportAttributes']
+      }),
       ...process.env
     }
 

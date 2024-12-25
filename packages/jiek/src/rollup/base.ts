@@ -54,9 +54,9 @@ export interface TemplateOptions {
      * When use esbuild type builder, it will inject `supported.import-attributes` option.
      * When use swc type builder, it will inject `jsc.experimental.keepImportAttributes` option.
      *
-     * And it will auto set the rollup output externalImportAttributes and importAttributesKey options.
+     * And it will auto set the rollup output `externalImportAttributes` and `importAttributesKey` options.
      *
-     * @default true
+     * @default false
      */
     keepImportAttributes?: boolean | 'assert'
   }

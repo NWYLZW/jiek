@@ -49,7 +49,8 @@ const {
   JIEK_CLEAN,
   JIEK_ONLY_MINIFY,
   JIEK_TSCONFIG,
-  JIEK_DTSCONFIG
+  JIEK_DTSCONFIG,
+  JIEK_FEATURES
 } = process.env
 
 const resolveArrayString = (str: string | undefined) => {
@@ -82,6 +83,8 @@ const WITHOUT_MINIFY = JIEK_WITHOUT_MINIFY === 'true'
 const ONLY_MINIFY = JIEK_ONLY_MINIFY === 'true'
 
 const CLEAN = JIEK_CLEAN === 'true'
+
+const FEATURES = JSON.parse(JIEK_FEATURES ?? '{}')
 
 const MINIFY_DEFAULT_VALUE = WITHOUT_MINIFY
   ? false
@@ -363,9 +366,13 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
   const commonPlugins: Plugin[] = [
     withExternal()
   ]
-  const features = Object.assign({
-    keepImportAttributes: true
-  }, build.features)
+  const features = Object.assign(
+    {
+      keepImportAttributes: false
+    },
+    build.features,
+    {}
+  )
   const importAttributesKey = (
       features.keepImportAttributes === false
       || features.keepImportAttributes === undefined
