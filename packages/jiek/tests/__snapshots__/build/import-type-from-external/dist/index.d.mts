@@ -1,1 +1,3 @@
-export { Foo as ImportFoo, Foo as RequireFoo } from 'foo' with { "resolution-mode": 'require' };
+declare const Foo = 'cjs-foo'
+
+export { Foo as RequireFoo };

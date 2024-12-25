@@ -1,1 +1,1 @@
-export declare const Foo = 'module-foo'
+export declare const Foo = 'mjs-foo'

@@ -361,24 +361,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
   const rollupOptions: RollupOptions[] = []
 
   const commonPlugins: Plugin[] = [
-    withExternal(),
-    nodeResolve({
-      exportConditions,
-      extensions: [
-        '.js',
-        '.cjs',
-        '.mjs',
-        '.jsx',
-        '.cjsx',
-        '.mjsx',
-        '.ts',
-        '.cts',
-        '.mts',
-        '.tsx',
-        '.ctsx',
-        '.mtsx'
-      ]
-    })
+    withExternal()
   ]
   const features = Object.assign({
     keepImportAttributes: true
@@ -477,6 +460,23 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
       ],
       plugins: [
         ...commonPlugins,
+        nodeResolve({
+          exportConditions,
+          extensions: [
+            '.js',
+            '.cjs',
+            '.mjs',
+            '.jsx',
+            '.cjsx',
+            '.mjsx',
+            '.ts',
+            '.cts',
+            '.mts',
+            '.tsx',
+            '.ctsx',
+            '.mtsx'
+          ]
+        }),
         import('rollup-plugin-postcss')
           .then(({ default: postcss }) =>
             postcss({
