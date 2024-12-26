@@ -27,7 +27,7 @@ describe('no mono', ({ test }) => {
   ].filter((t, _, arr) =>
     ([
       ...arr
-      // 'import type from external'
+      // 'import attributes'
     ] as string[]).includes(t)
   )
   titles.forEach(title => test(title, async ({ exec }) => exec()))

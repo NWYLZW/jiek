@@ -69,7 +69,7 @@
   "dependencies": {
     "@inquirer/prompts": "^7.2.0",
     "@jiek/pkger": "workspace:^",
-    "@jiek/rollup-plugin-dts": "^6.3.3",
+    "@jiek/rollup-plugin-dts": "^6.3.4",
     "@jiek/utils": "workspace:^",
     "@rollup/plugin-commonjs": "^28.0.0",
     "@rollup/plugin-inject": "^5.0.5",

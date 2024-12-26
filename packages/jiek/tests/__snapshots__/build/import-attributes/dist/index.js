@@ -34,14 +34,6 @@ function foo() {
   return "foo";
 }
 
-Object.defineProperty(exports, "aExportFooName", {
-  enumerable: true,
-  get: function () { return package_json.name; }
-});
-Object.defineProperty(exports, "bExportFooName", {
-  enumerable: true,
-  get: function () { return package_json.name; }
-});
 Object.defineProperty(exports, "exportFooName", {
   enumerable: true,
   get: function () { return package_json.name; }

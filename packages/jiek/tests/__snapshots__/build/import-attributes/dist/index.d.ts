@@ -1,4 +1,4 @@
-export { name as aExportFooName, name as bExportFooName, name as exportFooName, name as fooName } from 'foo/package.json';
+export { name as exportFooName, name as fooName } from 'foo/package.json' with { type: 'json' };
 
 var name$1 = "bar";
 
