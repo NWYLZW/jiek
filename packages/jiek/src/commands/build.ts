@@ -176,12 +176,7 @@ command = command
   )
 
 command = command
-  .option('--features.keepImportAttributes', 'Keep the import attributes in the output.', input => {
-    if (input === 'assert') {
-      return input
-    }
-    return parseBoolean(input)
-  })
+  .option('--features.keepImportAttributes', 'Keep the import attributes in the output.')
 
 command = command
   .option('--tsconfig <TSCONFIG>', 'The path of the tsconfig file which is used to generate js and dts files.', String)

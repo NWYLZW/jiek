@@ -84,7 +84,7 @@ const ONLY_MINIFY = JIEK_ONLY_MINIFY === 'true'
 
 const CLEAN = JIEK_CLEAN === 'true'
 
-const FEATURES = JSON.parse(JIEK_FEATURES ?? '{}')
+const FEATURES = JSON.parse(JIEK_FEATURES ?? '{}') as Record<string, unknown>
 
 const MINIFY_DEFAULT_VALUE = WITHOUT_MINIFY
   ? false
@@ -371,7 +371,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
       keepImportAttributes: false
     },
     build.features,
-    {}
+    FEATURES
   )
   const importAttributesKey = (
       features.keepImportAttributes === false
@@ -402,8 +402,8 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           },
           ...noTypeResolvedBuilderOptions,
           supported: {
-            'import-attributes': features.keepImportAttributes !== false,
-            ...resolvedBuilderOptions.supported
+            ...resolvedBuilderOptions.supported,
+            'import-attributes': true
           }
         })
       )
@@ -431,7 +431,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
               },
             experimental: {
               ...resolvedBuilderOptions.jsc?.experimental,
-              keepImportAttributes: features.keepImportAttributes !== false
+              keepImportAttributes: true
             }
           }
         })
@@ -460,9 +460,10 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
           strict: typeof options?.output?.strict === 'object'
             ? options.output.strict.js
             : options?.output?.strict,
-          externalImportAttributes: features.keepImportAttributes !== false,
-          importAttributesKey,
-          plugins: []
+          externalImportAttributes: features.keepImportAttributes === true
+            ? true
+            : features.keepImportAttributes,
+          importAttributesKey
         }, onlyOncePlugins)
       ],
       plugins: [
