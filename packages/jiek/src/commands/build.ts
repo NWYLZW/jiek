@@ -38,6 +38,10 @@ const FILE_TEMPLATE = (manifest: unknown) => (`
 module.exports = require('jiek/rollup').template(${JSON.stringify(manifest, null, 2)})
 `.trimStart())
 
+const ROLLUP_BIN = require
+  .resolve('rollup')
+  .replace(/dist\/rollup.js$/, 'dist/bin/rollup')
+
 const isDefault = process.env.JIEK_IS_ONLY_BUILD === 'true'
 
 const description = `
@@ -308,15 +312,11 @@ command
       const resolveByJiekTemp = (...paths: string[]) => path.resolve(wdNodeModules, '.jiek', ...paths)
       const jiekTemp = resolveByJiekTemp()
       if (!existsSync(jiekTemp)) {
-        try {
-          mkdirSync(jiekTemp)
-        } catch {}
+        mkdirSync(jiekTemp)
       }
 
-      const rollupBinaryPath = require.resolve('rollup')
-        .replace(/dist\/rollup.js$/, 'dist/bin/rollup')
       let i = 0
-      await Promise.all(
+      return Promise.all(
         Object.entries(value).map(async ([pkgCWD, manifest]) => {
           if (manifest.name == null) {
             throw new Error('package.json must have a name field')
@@ -328,7 +328,7 @@ command
             `${escapeManifestName ?? `anonymous-${i++}`}.rollup.config.js`
           )
           writeFileSync(configFile, FILE_TEMPLATE(manifest))
-          const command = [rollupBinaryPath, '--silent', '-c', configFile]
+          const command = [ROLLUP_BIN, '--silent', '-c', configFile]
           if (tsRegisterName != null) {
             command.unshift(`node -r ${tsRegisterName}`)
           }
@@ -507,12 +507,10 @@ command
       ])
     ]
     try {
-      if (filters.length > 0) {
-        const packages = await filterPackagesGraph(filters)
-        await Promise.all(packages.map(buildPackage))
-      } else {
-        await buildPackage(await getSelectedProjectsGraph())
-      }
+      const packages = filters.length > 0
+        ? await filterPackagesGraph(filters)
+        : [await getSelectedProjectsGraph()]
+      await Promise.all(packages.map(buildPackage))
     } finally {
       multiBars.stop()
       // eslint-disable-next-line no-console
