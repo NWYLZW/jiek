@@ -9,10 +9,11 @@ import { program } from 'commander'
 import detectIndent from 'detect-indent'
 import { applyEdits, modify } from 'jsonc-parser'
 
-import type { ProjectsGraph } from '../utils/filterSupport'
-import { getSelectedProjectsGraph } from '../utils/filterSupport'
-import { getExports } from '../utils/getExports'
-import { loadConfig } from '../utils/loadConfig'
+import type { ProjectsGraph } from '#~/utils/filterSupport.ts'
+import { getSelectedProjectsGraph } from '#~/utils/filterSupport.ts'
+import { getExports } from '#~/utils/getExports.ts'
+import { loadConfig } from '#~/utils/loadConfig.ts'
+
 import { outdirDescription } from './descriptions'
 
 declare module 'jiek' {
