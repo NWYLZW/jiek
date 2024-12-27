@@ -16,8 +16,9 @@ import type { TemplateOptions } from '#~/rollup/base.ts'
 import { BUILDER_TYPES, BUILDER_TYPE_PACKAGE_NAME_MAP } from '#~/rollup/base.ts'
 import { createServer } from '#~/server.ts'
 import { checkDependency } from '#~/utils/checkDependency.ts'
-import type { ProjectsGraph } from '#~/utils/filterSupport.ts'
+import type { Manifest } from '#~/utils/filterSupport.ts'
 import { filterPackagesGraph, getSelectedProjectsGraph } from '#~/utils/filterSupport.ts'
+import { getWD } from '#~/utils/getWD.ts'
 import { loadConfig } from '#~/utils/loadConfig.ts'
 import { tsRegisterName } from '#~/utils/tsRegister.ts'
 
@@ -298,197 +299,195 @@ command
       format: '- {bar} | {status} | {pkgName} | {input} | {message}'
     }, Presets.shades_classic)
 
-    const buildPackage = async ({
-      wd,
-      value = {}
-    }: ProjectsGraph) => {
-      if (Object.keys(value).length === 0) {
-        throw new Error('no package found')
-      }
-      const wdNodeModules = path.resolve(wd, 'node_modules')
-      if (!existsSync(wdNodeModules)) {
-        mkdirSync(wdNodeModules)
-      }
-      const resolveByJiekTemp = (...paths: string[]) => path.resolve(wdNodeModules, '.jiek', ...paths)
-      const jiekTemp = resolveByJiekTemp()
-      if (!existsSync(jiekTemp)) {
-        mkdirSync(jiekTemp)
+    const { wd } = getWD()
+    const wdNodeModules = path.resolve(wd, 'node_modules')
+    if (!existsSync(wdNodeModules)) {
+      mkdirSync(wdNodeModules)
+    }
+    const resolveByJiekTemp = (...paths: string[]) => path.resolve(wdNodeModules, '.jiek', ...paths)
+    const jiekTemp = resolveByJiekTemp()
+    if (!existsSync(jiekTemp)) {
+      mkdirSync(jiekTemp)
+    }
+
+    let i = 0
+    const buildPackage = async ([pkgCWD, manifest]: [
+      string,
+      Manifest
+    ], {
+      resolveByJiekTemp
+    }: {
+      resolveByJiekTemp: (...paths: string[]) => string
+    }) => {
+      if (manifest.name == null) {
+        throw new Error('package.json must have a name field')
       }
 
-      let i = 0
-      return Promise.all(
-        Object.entries(value).map(async ([pkgCWD, manifest]) => {
-          if (manifest.name == null) {
-            throw new Error('package.json must have a name field')
-          }
-
-          // TODO support auto build child packages in workspaces
-          const escapeManifestName = manifest.name.replace(/^@/g, '').replace(/\//g, '+')
-          const configFile = resolveByJiekTemp(
-            `${escapeManifestName ?? `anonymous-${i++}`}.rollup.config.js`
-          )
-          writeFileSync(configFile, FILE_TEMPLATE(manifest))
-          const command = [ROLLUP_BIN, '--silent', '-c', configFile]
-          if (tsRegisterName != null) {
-            command.unshift(`node -r ${tsRegisterName}`)
-          }
-          if (watch) {
-            command.push('--watch')
-          }
-          command.push(...passThroughOptions)
-          const child = execaCommand(command.join(' '), {
-            ipc: true,
-            cwd: pkgCWD,
-            env: {
-              ...env,
-              JIEK_NAME: manifest.name,
-              JIEK_ROOT: wd
-            }
-          })
-          const bars: Record<string, ReturnType<typeof multiBars.create>> = {}
-          const times: Record<string, number> = {}
-          const locks: Record<string, boolean> = {}
-          let inputMaxLen = 10
-          child.on('message', (e: RollupBuildEvent) => {
-            if (
-              silent && [
-                'init',
-                'progress',
-                'watchChange'
-              ].includes(e.type)
-            ) return
-            switch (e.type) {
-              case 'init': {
-                const { leafMap, targetsLength } = e.data
-                const leafs = Array
-                  .from(leafMap.entries())
-                  .flatMap(([input, pathAndCondiions]) =>
-                    pathAndCondiions.map(([path, ...conditions]) => ({
-                      input,
-                      path,
-                      conditions
-                    }))
-                  )
-                let initMessage = `Package '${manifest.name}' has ${targetsLength} targets to build`
-                if (watch) {
-                  initMessage += ' and watching...'
-                }
-                // eslint-disable-next-line no-console
-                console.log(initMessage)
-                leafs.forEach(({ input }) => {
-                  inputMaxLen = Math.max(inputMaxLen, input.length)
-                })
-                leafs.forEach(({ input, path }) => {
-                  const key = `${input}:${path}`
-                  // eslint-disable-next-line ts/strict-boolean-expressions
-                  if (bars[key]) return
-                  bars[key] = multiBars.create(50, 0, {
-                    pkgName: manifest.name,
-                    input: input.padEnd(inputMaxLen + 5),
-                    status: 'waiting'.padEnd(10)
-                  }, {
-                    barsize: 20,
-                    linewrap: true
-                  })
-                })
-                break
-              }
-              case 'progress': {
-                const {
-                  path,
-                  tags,
-                  input,
-                  event,
-                  message
-                } = e.data
-                const bar = bars[`${input}:${path}`]
-                // eslint-disable-next-line ts/strict-boolean-expressions
-                if (!bar) return
-                const time = times[`${input}:${path}`]
-                bar.update(
-                  {
-                    start: 0,
-                    resolve: 20,
-                    end: 50
-                  }[event ?? 'start'] ?? 0,
-                  {
-                    input: (
-                      time
-                        ? `${input}(x${time.toString().padStart(2, '0')})`
-                        : input
-                    ).padEnd(inputMaxLen + 5),
-                    status: event?.padEnd(10),
-                    message: `${tags?.join(', ')}: ${message}`
-                  }
-                )
-                break
-              }
-              case 'watchChange': {
-                const {
-                  path,
-                  input
-                } = e.data
-                const key = `${input}:${path}`
-                const bar = bars[key]
-                // eslint-disable-next-line ts/strict-boolean-expressions
-                if (!bar) return
-                let time = times[key] ?? 1
-                if (!locks[key]) {
-                  time += 1
-                  times[key] = time
-                  setTimeout(() => {
-                    locks[key] = false
-                  }, 100)
-                  bar.update(0, {
-                    input: `${input}(x${time.toString().padStart(2, '0')})`.padEnd(inputMaxLen + 5),
-                    status: 'watching'.padEnd(10),
-                    message: 'watching...'
-                  })
-                }
-                locks[key] = true
-                break
-              }
-              case 'modulesAnalyze': {
-                const {
-                  data: {
-                    type,
-                    modules: pkgModules
-                  }
-                } = e
-                void refreshAnalyzer(
-                  pkgCWD,
-                  pkgModules.map(m => ({
-                    ...m,
-                    type,
-                    filename: `${manifest.name}/${m.filename}`,
-                    label: `${manifest.name}/${m.label}`
-                  }))
-                )
-                break
-              }
-              case 'debug': {
-                // eslint-disable-next-line no-console,ts/no-unsafe-argument
-                console.log(...(Array.isArray(e.data) ? e.data : [e.data]))
-                break
-              }
-              default:
-            }
-          })
-          await new Promise<void>((resolve, reject) => {
-            let errorStr = `rollup build failed\n`
-              + `package name: ${manifest.name}\n`
-              + `cwd: ${pkgCWD}\n\n`
-            child.stderr?.on('data', (data) => {
-              errorStr += data
-            })
-            child.once('exit', (code) =>
-              code === 0
-                ? resolve()
-                : reject(new Error(errorStr)))
-            verbose && child.stdout?.pipe(process.stdout)
-          })
-        })
+      // TODO support auto build child packages in workspaces
+      const escapeManifestName = manifest.name.replace(/^@/g, '').replace(/\//g, '+')
+      const configFile = resolveByJiekTemp(
+        `${escapeManifestName ?? `anonymous-${i++}`}.rollup.config.js`
       )
+      writeFileSync(configFile, FILE_TEMPLATE(manifest))
+      const command = [ROLLUP_BIN, '--silent', '-c', configFile]
+      if (tsRegisterName != null) {
+        command.unshift(`node -r ${tsRegisterName}`)
+      }
+      if (watch) {
+        command.push('--watch')
+      }
+      command.push(...passThroughOptions)
+      const child = execaCommand(command.join(' '), {
+        ipc: true,
+        cwd: pkgCWD,
+        env: {
+          ...env,
+          JIEK_NAME: manifest.name,
+          JIEK_ROOT: wd
+        }
+      })
+      const bars: Record<string, ReturnType<typeof multiBars.create>> = {}
+      const times: Record<string, number> = {}
+      const locks: Record<string, boolean> = {}
+      let inputMaxLen = 10
+      child.on('message', (e: RollupBuildEvent) => {
+        if (
+          silent && [
+            'init',
+            'progress',
+            'watchChange'
+          ].includes(e.type)
+        ) return
+        switch (e.type) {
+          case 'init': {
+            const { leafMap, targetsLength } = e.data
+            const leafs = Array
+              .from(leafMap.entries())
+              .flatMap(([input, pathAndCondiions]) =>
+                pathAndCondiions.map(([path, ...conditions]) => ({
+                  input,
+                  path,
+                  conditions
+                }))
+              )
+            let initMessage = `Package '${manifest.name}' has ${targetsLength} targets to build`
+            if (watch) {
+              initMessage += ' and watching...'
+            }
+            // eslint-disable-next-line no-console
+            console.log(initMessage)
+            leafs.forEach(({ input }) => {
+              inputMaxLen = Math.max(inputMaxLen, input.length)
+            })
+            leafs.forEach(({ input, path }) => {
+              const key = `${input}:${path}`
+              // eslint-disable-next-line ts/strict-boolean-expressions
+              if (bars[key]) return
+              bars[key] = multiBars.create(50, 0, {
+                pkgName: manifest.name,
+                input: input.padEnd(inputMaxLen + 5),
+                status: 'waiting'.padEnd(10)
+              }, {
+                barsize: 20,
+                linewrap: true
+              })
+            })
+            break
+          }
+          case 'progress': {
+            const {
+              path,
+              tags,
+              input,
+              event,
+              message
+            } = e.data
+            const bar = bars[`${input}:${path}`]
+            // eslint-disable-next-line ts/strict-boolean-expressions
+            if (!bar) return
+            const time = times[`${input}:${path}`]
+            bar.update(
+              {
+                start: 0,
+                resolve: 20,
+                end: 50
+              }[event ?? 'start'] ?? 0,
+              {
+                input: (
+                  time
+                    ? `${input}(x${time.toString().padStart(2, '0')})`
+                    : input
+                ).padEnd(inputMaxLen + 5),
+                status: event?.padEnd(10),
+                message: `${tags?.join(', ')}: ${message}`
+              }
+            )
+            break
+          }
+          case 'watchChange': {
+            const {
+              path,
+              input
+            } = e.data
+            const key = `${input}:${path}`
+            const bar = bars[key]
+            // eslint-disable-next-line ts/strict-boolean-expressions
+            if (!bar) return
+            let time = times[key] ?? 1
+            if (!locks[key]) {
+              time += 1
+              times[key] = time
+              setTimeout(() => {
+                locks[key] = false
+              }, 100)
+              bar.update(0, {
+                input: `${input}(x${time.toString().padStart(2, '0')})`.padEnd(inputMaxLen + 5),
+                status: 'watching'.padEnd(10),
+                message: 'watching...'
+              })
+            }
+            locks[key] = true
+            break
+          }
+          case 'modulesAnalyze': {
+            const {
+              data: {
+                type,
+                modules: pkgModules
+              }
+            } = e
+            void refreshAnalyzer(
+              pkgCWD,
+              pkgModules.map(m => ({
+                ...m,
+                type,
+                filename: `${manifest.name}/${m.filename}`,
+                label: `${manifest.name}/${m.label}`
+              }))
+            )
+            break
+          }
+          case 'debug': {
+            // eslint-disable-next-line no-console,ts/no-unsafe-argument
+            console.log(...(Array.isArray(e.data) ? e.data : [e.data]))
+            break
+          }
+          default:
+        }
+      })
+      await new Promise<void>((resolve, reject) => {
+        let errorStr = `rollup build failed\n`
+          + `package name: ${manifest.name}\n`
+          + `cwd: ${pkgCWD}\n\n`
+        child.stderr?.on('data', (data) => {
+          errorStr += data
+        })
+        child.once('exit', (code) =>
+          code === 0
+            ? resolve()
+            : reject(new Error(errorStr)))
+        verbose && child.stdout?.pipe(process.stdout)
+      })
     }
 
     const commandFilters = IS_WORKSPACE ? commandFiltersOrEntries : undefined
@@ -507,10 +506,14 @@ command
       ])
     ]
     try {
-      const packages = filters.length > 0
-        ? await filterPackagesGraph(filters)
-        : [await getSelectedProjectsGraph()]
-      await Promise.all(packages.map(buildPackage))
+      const packages = (
+        filters.length > 0
+          ? await filterPackagesGraph(filters)
+          : [await getSelectedProjectsGraph()]
+      ).flatMap(({ value }) => Object.entries(value ?? {}))
+      await Promise.allSettled(
+        packages.map(async ([cwd, manifest]) => buildPackage([cwd, manifest], { resolveByJiekTemp }))
+      )
     } finally {
       multiBars.stop()
       // eslint-disable-next-line no-console

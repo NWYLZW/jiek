@@ -22,7 +22,6 @@ export interface Manifest {
 }
 
 export interface ProjectsGraph {
-  wd: string
   root?: string
   value?: Record<string, Manifest>
 }
@@ -38,7 +37,6 @@ export async function getSelectedProjectsGraph(
   let root = getRoot()
   if (notWorkspace) {
     return {
-      wd,
       root,
       value: {
         [wd]: JSON.parse(fs.readFileSync(path.resolve(wd, 'package.json'), 'utf-8')) as Manifest
@@ -79,7 +77,6 @@ export async function getSelectedProjectsGraph(
       patterns: pnpmWorkspace.packages
     })
     return {
-      wd,
       root,
       value: Object.entries(selectedProjectsGraph)
         .reduce((acc, [key, value]) => {
