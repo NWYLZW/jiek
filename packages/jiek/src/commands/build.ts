@@ -363,8 +363,8 @@ command
             const { leafMap, targetsLength } = e.data
             const leafs = Array
               .from(leafMap.entries())
-              .flatMap(([input, pathAndCondiions]) =>
-                pathAndCondiions.map(([path, ...conditions]) => ({
+              .flatMap(([input, pathAndConditions]) =>
+                pathAndConditions.map(([path, ...conditions]) => ({
                   input,
                   path,
                   conditions
