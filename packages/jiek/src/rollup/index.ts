@@ -33,6 +33,7 @@ import externalResolver from './utils/externalResolver'
 interface PackageJSON {
   name?: string
   type?: string
+  bin?: string | Record<string, string>
   exports?: Record<string, unknown> | string | string[]
 }
 
@@ -201,9 +202,12 @@ const withMinify = (
   output: OutputOptions & {
     plugins?: OutputPlugin[]
   },
+  disableMinify?: boolean,
   onlyOncePlugins: OutputPluginOption[] = []
 ): OutputOptions[] => {
-  const minify = build?.output?.minify ?? MINIFY_DEFAULT_VALUE
+  const minify = disableMinify !== undefined
+    ? !disableMinify
+    : build?.output?.minify ?? MINIFY_DEFAULT_VALUE
 
   output.plugins = output.plugins ?? []
   const notOnlyOncePlugins = [...output.plugins]
@@ -257,7 +261,21 @@ const withMinify = (
     ]
 }
 
-const generateConfigs = (context: ConfigGenerateContext, options: TemplateOptions = {}): RollupOptions[] => {
+interface GenerateConfigsOptions {
+  internalModuleCollect?: (id: string) => void
+  disableDTS?: boolean
+  disableMinify?: boolean
+}
+
+const generateConfigs = (
+  context: ConfigGenerateContext,
+  {
+    internalModuleCollect,
+    disableDTS = false,
+    disableMinify
+  }: GenerateConfigsOptions = {}
+): RollupOptions[] => {
+  const buildOptions: TemplateOptions = build
   const {
     path,
     name,
@@ -267,7 +285,7 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
     pkgIsModule,
     conditionals
   } = context
-  const external = [...inputExternal, ...(options.external ?? []), ...(commandExternal ?? [])]
+  const external = [...inputExternal, ...(buildOptions.external ?? []), ...(commandExternal ?? [])]
   const isModule = conditionals.includes('import')
   const isCommonJS = conditionals.includes('require')
   const isBrowser = conditionals.includes('browser')
@@ -364,7 +382,19 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
   const rollupOptions: RollupOptions[] = []
 
   const commonPlugins: Plugin[] = [
-    withExternal()
+    withExternal(),
+    {
+      name: 'jiek:collect-internal-module',
+      resolveId: {
+        order: 'pre',
+        handler(source) {
+          if (!source.startsWith('#')) return
+
+          internalModuleCollect?.(source)
+          return { id: source, external: true }
+        }
+      }
+    }
   ]
   const features = Object.assign(
     {
@@ -382,9 +412,9 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
     ? 'with'
     : features.keepImportAttributes
   if (jsOutput && !WITHOUT_JS) {
-    const sourcemap = typeof options?.output?.sourcemap === 'object'
-      ? options.output.sourcemap.js
-      : options?.output?.sourcemap
+    const sourcemap = typeof buildOptions?.output?.sourcemap === 'object'
+      ? buildOptions.output.sourcemap.js
+      : buildOptions?.output?.sourcemap
     const builder = resolvedBuilderOptions.type === 'esbuild'
       ? import('rollup-plugin-esbuild').then(({ default: esbuild }) =>
         esbuild({
@@ -444,27 +474,31 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
       input: inputObj,
       external,
       output: [
-        ...withMinify({
-          dir: jsOutdir,
-          name,
-          interop: 'auto',
-          entryFileNames: (chunkInfo) => (
-            Array.isArray(inputObj)
-              ? chunkInfo.facadeModuleId!.replace(`${process.cwd()}/`, '')
-                .replace(globCommonDir, pathCommonDir)
-                .replace(/(\.[cm]?)ts$/, jsOutputSuffix)
-              : output.replace(`${jsOutdir}/`, '')
-          ),
-          sourcemap,
-          format,
-          strict: typeof options?.output?.strict === 'object'
-            ? options.output.strict.js
-            : options?.output?.strict,
-          externalImportAttributes: features.keepImportAttributes === true
-            ? true
-            : features.keepImportAttributes,
-          importAttributesKey
-        }, onlyOncePlugins)
+        ...withMinify(
+          {
+            dir: jsOutdir,
+            name,
+            interop: 'auto',
+            entryFileNames: (chunkInfo) => (
+              Array.isArray(inputObj)
+                ? chunkInfo.facadeModuleId!.replace(`${process.cwd()}/`, '')
+                  .replace(globCommonDir, pathCommonDir)
+                  .replace(/(\.[cm]?)ts$/, jsOutputSuffix)
+                : output.replace(`${jsOutdir}/`, '')
+            ),
+            sourcemap,
+            format,
+            strict: typeof buildOptions?.output?.strict === 'object'
+              ? buildOptions.output.strict.js
+              : buildOptions?.output?.strict,
+            externalImportAttributes: features.keepImportAttributes === true
+              ? true
+              : features.keepImportAttributes,
+            importAttributesKey
+          },
+          disableMinify,
+          onlyOncePlugins
+        )
       ],
       plugins: [
         ...commonPlugins,
@@ -513,10 +547,10 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
     })
   }
 
-  if (dtsOutput && !WITHOUT_DTS) {
-    const sourcemap = typeof options?.output?.sourcemap === 'object'
-      ? options.output.sourcemap.dts
-      : options?.output?.sourcemap
+  if (!disableDTS && dtsOutput && !WITHOUT_DTS) {
+    const sourcemap = typeof buildOptions?.output?.sourcemap === 'object'
+      ? buildOptions.output.sourcemap.dts
+      : buildOptions?.output?.sourcemap
     rollupOptions.push({
       input: inputObj,
       external,
@@ -533,9 +567,9 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
                 .replace(`${jsOutdir}/`, '')
                 .replace(/(\.[cm]?)js$/, tsOutputSuffix)
           ),
-          strict: typeof options?.output?.strict === 'object'
-            ? options.output.strict.dts
-            : options?.output?.strict,
+          strict: typeof buildOptions?.output?.strict === 'object'
+            ? buildOptions.output.strict.dts
+            : buildOptions?.output?.strict,
           externalImportAttributes: features.keepImportAttributes !== false,
           importAttributesKey
         }
@@ -579,14 +613,31 @@ const generateConfigs = (context: ConfigGenerateContext, options: TemplateOption
 }
 
 export function template(packageJSON: PackageJSON): RollupOptions[] {
-  const { name, type, exports: entrypoints } = packageJSON
+  const {
+    name,
+    type,
+    bin,
+    exports: entrypoints
+  } = packageJSON
   const pkgIsModule = type === 'module'
   if (!name) throw new Error('package.json name is required')
   if (!entrypoints) throw new Error('package.json exports is required')
+  const binFiles = [
+    ...new Set(
+      typeof bin === 'string'
+        ? [bin]
+        : (bin ? Object.values(bin) : [])
+    )
+  ]
+    .filter(binFile => binFile.startsWith('bin'))
+    .map(binFile => [
+      `./src/${binFile.replace(/(\.[cm]?)js$/, '$1ts')}`,
+      `./dist/${binFile}`
+    ])
 
   const packageName = pascalCase(name)
 
-  const external = externalResolver(packageJSON as Record<string, unknown>)
+  const external = externalResolver(packageJSON)
 
   const [filteredResolvedEntrypoints, exports] = getExports({
     entrypoints,
@@ -629,7 +680,7 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
             ...commonOptions,
             output: keyExports,
             conditionals
-          }, build))
+          }))
           break
         }
         case 'object': {
@@ -640,7 +691,7 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
                 ...commonOptions,
                 output: value,
                 conditionals: allConditionals
-              }, build))
+              }))
             }
             return false
           })
@@ -649,6 +700,22 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
       }
     })
   )
+  binFiles
+    .forEach(([input, output]) => {
+      configs.push(...generateConfigs({
+        path: output,
+        name,
+        input,
+        output,
+        external,
+        pkgIsModule,
+        conditionals: ['require']
+      }, {
+        disableDTS: true,
+        disableMinify: true
+      }))
+      leafMap.set(input, [[output]])
+    })
   void publish('init', { leafMap, targetsLength: configs.length })
   return configs.map(c => ({
     ...COMMON_OPTIONS,
