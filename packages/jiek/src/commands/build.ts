@@ -43,7 +43,7 @@ const ROLLUP_BIN = require
   .resolve('rollup')
   .replace(/dist\/rollup.js$/, 'dist/bin/rollup')
 
-const isDefault = process.env.JIEK_IS_ONLY_BUILD === 'true'
+const isDefault = process.env.JIEK_BIN__FILENAME === 'build.cjs'
 
 const description = `
 Build the package according to the 'exports' field from the package.json.
