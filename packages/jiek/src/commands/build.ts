@@ -6,21 +6,21 @@ import { MultiBar, Presets } from 'cli-progress'
 import { program } from 'commander'
 import { execaCommand } from 'execa'
 
-import type { RollupBuildEvent } from '#~/bridge.ts'
-import type { AnalyzerBuildOptions } from '#~/commands/build/analyzer.ts'
-import { registerAnalyzerCommandOptions, useAnalyzer } from '#~/commands/build/analyzer.ts'
-import { entriesDescription, filterDescription, outdirDescription } from '#~/commands/descriptions.ts'
-import { IS_WORKSPACE } from '#~/commands/meta.ts'
-import { parseBoolean } from '#~/commands/utils/optionParser.ts'
-import type { TemplateOptions } from '#~/rollup/base.ts'
-import { BUILDER_TYPES, BUILDER_TYPE_PACKAGE_NAME_MAP } from '#~/rollup/base.ts'
-import { createServer } from '#~/server.ts'
-import { checkDependency } from '#~/utils/checkDependency.ts'
-import type { Manifest } from '#~/utils/filterSupport.ts'
-import { filterPackagesGraph, getSelectedProjectsGraph } from '#~/utils/filterSupport.ts'
-import { getWD } from '#~/utils/getWD.ts'
-import { loadConfig } from '#~/utils/loadConfig.ts'
-import { tsRegisterName } from '#~/utils/tsRegister.ts'
+import type { RollupBuildEvent } from '#~/bridge'
+import type { AnalyzerBuildOptions } from '#~/commands/build/analyzer'
+import { registerAnalyzerCommandOptions, useAnalyzer } from '#~/commands/build/analyzer'
+import { entriesDescription, filterDescription, outdirDescription } from '#~/commands/descriptions'
+import { IS_WORKSPACE } from '#~/commands/meta'
+import { parseBoolean } from '#~/commands/utils/optionParser'
+import type { TemplateOptions } from '#~/rollup/base'
+import { BUILDER_TYPES, BUILDER_TYPE_PACKAGE_NAME_MAP } from '#~/rollup/base'
+import { createServer } from '#~/server'
+import { checkDependency } from '#~/utils/checkDependency'
+import type { Manifest } from '#~/utils/filterSupport'
+import { filterPackagesGraph, getSelectedProjectsGraph } from '#~/utils/filterSupport'
+import { getWD } from '#~/utils/getWD'
+import { loadConfig } from '#~/utils/loadConfig'
+import { tsRegisterName } from '#~/utils/tsRegister'
 
 declare module 'jiek' {
   export interface Config {
@@ -150,7 +150,6 @@ let command = isDefault
 command = command
   .description(description)
   .option('-t, --type <TYPE>', `The type of build, support ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')}.`, v => {
-    // eslint-disable-next-line ts/no-unsafe-argument
     if (!BUILDER_TYPES.includes(v as any)) {
       throw new Error(`The value of 'type' must be ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')}`)
     }

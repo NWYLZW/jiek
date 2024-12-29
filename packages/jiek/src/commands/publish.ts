@@ -7,13 +7,16 @@ import process from 'node:process'
 import { type BumperType, TAGS, bump } from '@jiek/utils/bumper'
 import { program } from 'commander'
 import detectIndent from 'detect-indent'
+import type { JSONPath } from 'jsonc-parser'
 import { applyEdits, modify } from 'jsonc-parser'
 
-import type { ProjectsGraph } from '#~/utils/filterSupport.ts'
-import { getSelectedProjectsGraph } from '#~/utils/filterSupport.ts'
-import { getExports } from '#~/utils/getExports.ts'
-import { loadConfig } from '#~/utils/loadConfig.ts'
+import type { ProjectsGraph } from '#~/utils/filterSupport'
+import { getSelectedProjectsGraph } from '#~/utils/filterSupport'
+import { loadConfig } from '#~/utils/loadConfig'
+import type { ResolveExportsOptions } from '#~/utils/resolveExports'
+import { resolveExports } from '#~/utils/resolveExports'
 
+import { getInternalModuleName } from '#~/utils/getInternalModuleName'
 import { outdirDescription } from './descriptions'
 
 declare module 'jiek' {
@@ -109,26 +112,43 @@ async function prepublish({ bumper }: {
   )
 
   const generateNewManifest = (dir: string, manifest: NonNullable<ProjectsGraph['value']>[string]) => {
-    const { name, type, exports: entrypoints = {} } = manifest
+    const {
+      name,
+      type,
+      exports: entrypoints = {},
+      imports: internalEntrypoints = {}
+    } = manifest
     if (!name) {
       throw new Error(`package.json in ${dir} must have a name field`)
     }
 
     const pkgIsModule = type === 'module'
     const newManifest = { ...manifest }
-    const [resolvedEntrypoints, exports, resolvedOutdir] = getExports({
-      entrypoints,
+    const commonOptions = {
       pkgIsModule,
       pkgName: name,
       config: loadConfig(dir),
       dir,
-      defaultOutdir: outdir,
       noFilter: true,
       isPublish: true
+    } satisfies Partial<ResolveExportsOptions>
+    const [resolvedEntrypoints, exports, resolvedOutdir] = resolveExports({
+      entrypoints,
+      defaultOutdir: outdir,
+      ...commonOptions
     })
     newManifest.exports = {
       ...resolvedEntrypoints,
       ...exports
+    }
+    const [resolvedInternalEntrypoints, imports] = resolveExports({
+      entrypoints: internalEntrypoints,
+      defaultOutdir: `${outdir}/.internal`,
+      ...commonOptions
+    })
+    newManifest.imports = {
+      ...resolvedInternalEntrypoints,
+      ...imports
     }
     return [newManifest, resolvedOutdir] as const
   }
@@ -147,26 +167,33 @@ async function prepublish({ bumper }: {
       insertSpaces: boolean
     }
   }) => {
+    const internalModuleName = getInternalModuleName(manifest.name!)
+
     let newJSONString = oldJSONString
-    newJSONString = applyEdits(
-      newJSONString,
-      modify(
+    const update = (path: JSONPath, value: unknown) => {
+      newJSONString = applyEdits(
         newJSONString,
-        ['publishConfig', 'typesVersions'],
-        {
-          '<5.0': {
-            '*': [
-              '*',
-              `./*`,
-              `./*/index.d.ts`,
-              `./*/index.d.mts`,
-              `./*/index.d.cts`
-            ]
-          }
-        },
-        { formattingOptions }
+        modify(newJSONString, path, value, { formattingOptions })
       )
-    )
+    }
+
+    update(['publishConfig', 'typesVersions'], {
+      '<5.0': {
+        '*': [
+          '*',
+          './*',
+          './*/index.d.ts',
+          './*/index.d.mts',
+          './*/index.d.cts'
+        ]
+      }
+    })
+    update(['dependencies', internalModuleName], `file:./${outdir}/.internal`)
+    update(['dependenciesMeta', internalModuleName], {
+      'injected': true
+    })
+    update(['imports'], undefined)
+
     for (const [key, value] of Object.entries(manifest)) {
       if (key === 'version') continue
       if (JSON.stringify(value) === JSON.stringify(oldJSON[key])) continue
@@ -438,6 +465,36 @@ async function prepublish({ bumper }: {
         continue
       }
       throw new Error(`file type of ${path} is not supported`)
+    }
+
+    if ('imports' in manifest && manifest.imports) {
+      Object
+        .entries(manifest.imports)
+        .forEach(([key, value]) => {
+          if (typeof value !== 'object') return
+          const [start] = key.split('*')
+          manifest.imports![key] = JSON.parse(
+            JSON
+              .stringify(value)
+              .replaceAll(`${resolvedOutdir}/.internal/`, start)
+          )
+        })
+      fs.writeFileSync(
+        resolveByDir(resolvedOutdir, resolvedOutdir, '.internal', 'package.json'),
+        JSON.stringify(
+          {
+            name: getInternalModuleName(manifest.name!),
+            exports: JSON.parse(
+              JSON
+                .stringify(manifest.imports)
+                .replaceAll('#', './')
+                .replaceAll('~', '+')
+            ) as Record<string, unknown>
+          },
+          null,
+          2
+        )
+      )
     }
   })
 }

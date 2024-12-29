@@ -12,7 +12,7 @@ import {
 import type { Config } from 'jiek'
 import { isMatch } from 'micromatch'
 
-const intersection = <T>(a: Set<T>, b: Set<T>) => new Set([...a].filter(i => b.has(i)))
+import { intersection } from '#~/utils/intersection'
 
 const {
   JIEK_OUT_DIR,
@@ -58,7 +58,20 @@ export function getOutDirs({
   }
 }
 
-export function getExports({
+export interface ResolveExportsOptions {
+  entrypoints: string | string[] | Record<string, unknown>
+  pkgName: string
+  pkgIsModule: boolean
+  entries?: string[]
+  config?: Config
+  dir?: string
+  outdir?: string
+  defaultOutdir?: string
+  noFilter?: boolean
+  isPublish?: boolean
+}
+
+export function resolveExports({
   entrypoints,
   pkgName,
   pkgIsModule,
@@ -70,18 +83,7 @@ export function getExports({
   outdir = getOutDirs({ pkgName, defaultOutdir, config, cwd: dir }).js,
   noFilter,
   isPublish
-}: {
-  entrypoints: string | string[] | Record<string, unknown>
-  pkgName: string
-  pkgIsModule: boolean
-  entries?: string[]
-  config?: Config
-  dir?: string
-  outdir?: string
-  defaultOutdir?: string
-  noFilter?: boolean
-  isPublish?: boolean
-}) {
+}: ResolveExportsOptions) {
   const {
     build = {},
     publish: {

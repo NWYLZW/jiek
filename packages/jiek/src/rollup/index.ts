@@ -11,31 +11,26 @@ import commonjs from '@rollup/plugin-commonjs'
 import inject from '@rollup/plugin-inject'
 import json from '@rollup/plugin-json'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
-import { isMatch } from 'micromatch'
 import type { InputPluginOption, OutputOptions, OutputPlugin, OutputPluginOption, Plugin, RollupOptions } from 'rollup'
 import ts from 'typescript'
 
-import type { RollupBuildEntryCtx, RollupBuildEventMap } from '#~/bridge.ts'
-import { publish } from '#~/bridge.ts'
-import { bundleAnalyzer } from '#~/rollup/bundle-analyzer.ts'
-import { getExports, getOutDirs } from '#~/utils/getExports.ts'
-import { loadConfig } from '#~/utils/loadConfig.ts'
-import { recusiveListFiles } from '#~/utils/recusiveListFiles.ts'
-import { getCompilerOptionsByFilePath } from '#~/utils/ts.ts'
+import type { RollupBuildEntryCtx, RollupBuildEventMap } from '#~/bridge'
+import { publish } from '#~/bridge'
+import { bundleAnalyzer } from '#~/rollup/bundle-analyzer'
+import { getInternalModuleName } from '#~/utils/getInternalModuleName'
+import { intersection } from '#~/utils/intersection'
+import { loadConfig } from '#~/utils/loadConfig'
+import { recursiveListFiles } from '#~/utils/recursiveListFiles'
+import { getOutDirs, resolveExports } from '#~/utils/resolveExports'
+import { getCompilerOptionsByFilePath } from '#~/utils/ts'
 
 import type { ConfigGenerateContext, TemplateOptions } from './base'
 import createRequire, { CREATE_REQUIRE_VIRTUAL_MODULE_NAME } from './plugins/create-require'
 import progress from './plugins/progress'
 import skip from './plugins/skip'
 import withExternal from './plugins/with-external.ts'
+import type { PackageJSON } from './utils/externalResolver'
 import externalResolver from './utils/externalResolver'
-
-interface PackageJSON {
-  name?: string
-  type?: string
-  bin?: string | Record<string, string>
-  exports?: Record<string, unknown> | string | string[]
-}
 
 const {
   JIEK_ROOT,
@@ -76,6 +71,8 @@ const COMMON_OPTIONS = {} satisfies RollupOptions
 const COMMON_PLUGINS = [
   json()
 ]
+
+const INTERNAL_MODULE_NAME = getInternalModuleName(JIEK_NAME!)
 
 const WITHOUT_JS = JIEK_WITHOUT_JS === 'true'
 const WITHOUT_DTS = JIEK_WITHOUT_DTS === 'true'
@@ -120,6 +117,10 @@ if (CLEAN) {
 }
 
 const STYLE_REGEXP = /\.(css|s[ac]ss|less|styl)$/
+
+const CWD_FILES = recursiveListFiles(process.cwd())
+  .filter(p => /(?<!\.d)\.[cm]?tsx?$/.test(p))
+  .map(p => relative(process.cwd(), p))
 
 const resolveBuildPlugins = (context: ConfigGenerateContext, plugins: TemplateOptions['plugins']): {
   js: InputPluginOption
@@ -234,7 +235,7 @@ const withMinify = (
         typeof output.entryFileNames === 'function'
           ? output.entryFileNames(chunkInfo)
           : (() => {
-            throw new Error('entryFileNames must be a function')
+            throw new TypeError('entryFileNames must be a function')
           })(),
       plugins: [
         ...output.plugins,
@@ -263,16 +264,20 @@ const withMinify = (
 
 interface GenerateConfigsOptions {
   internalModuleCollect?: (id: string) => void
+  commonPlugins?: InputPluginOption[]
   disableDTS?: boolean
   disableMinify?: boolean
+  disableCollectInternalModule?: boolean
 }
 
 const generateConfigs = (
   context: ConfigGenerateContext,
   {
     internalModuleCollect,
+    commonPlugins: inputCommonPlugins = [],
     disableDTS = false,
-    disableMinify
+    disableMinify,
+    disableCollectInternalModule
   }: GenerateConfigsOptions = {}
 ): RollupOptions[] => {
   const buildOptions: TemplateOptions = build
@@ -336,6 +341,23 @@ const generateConfigs = (
     delete compilerOptions.composite
   }
   const exportConditions = [...conditionals, ...(compilerOptions.customConditions ?? [])]
+  const nodeResolvePluginInstance = nodeResolve({
+    exportConditions,
+    extensions: [
+      '.js',
+      '.cjs',
+      '.mjs',
+      '.jsx',
+      '.cjsx',
+      '.mjsx',
+      '.ts',
+      '.cts',
+      '.mts',
+      '.tsx',
+      '.ctsx',
+      '.mtsx'
+    ]
+  })
   const publishInEntry = <K extends keyof RollupBuildEventMap>(
     type: K,
     data: Omit<RollupBuildEventMap[K], keyof RollupBuildEntryCtx>
@@ -358,12 +380,15 @@ const generateConfigs = (
       'input should not include "**", please read the [documentation](https://nodejs.org/api/packages.html#subpath-patterns).'
     )
   }
+  const reg = new RegExp(`^${
+    input
+      .slice(2)
+      .replace(/\./g, '\\.')
+      .replace(/\*/g, '.*')
+  }$`)
   const inputObj = !input.includes('*')
     ? input
-    : recusiveListFiles(process.cwd())
-      .filter(p => /(?<!\.d)\.[cm]?tsx?$/.test(p))
-      .map(p => relative(process.cwd(), p))
-      .filter(p => isMatch(p, input.slice(2)))
+    : CWD_FILES.filter(p => reg.test(p))
   const globCommonDir = input.includes('*')
     ? input.split('*')[0].replace('./', '')
     : ''
@@ -381,17 +406,36 @@ const generateConfigs = (
   const { js: jsOutput, dts: dtsOutput } = resolveOutputControls(context, build.output)
   const rollupOptions: RollupOptions[] = []
 
-  const commonPlugins: Plugin[] = [
+  const commonPlugins: InputPluginOption[] = [
+    ...inputCommonPlugins,
     withExternal(),
-    {
+    !disableCollectInternalModule && {
       name: 'jiek:collect-internal-module',
       resolveId: {
         order: 'pre',
-        handler(source) {
+        async handler(source, importer, options) {
           if (!source.startsWith('#')) return
 
-          internalModuleCollect?.(source)
-          return { id: source, external: true }
+          if (!nodeResolvePluginInstance.resolveId || !('handler' in nodeResolvePluginInstance.resolveId)) {
+            throw new Error('nodeResolvePluginInstance.resolveId is not a plugin instance')
+          }
+          let resolved = await nodeResolvePluginInstance
+            .resolveId
+            .handler
+            .call(this, source, importer, options)
+          if (typeof resolved === 'string') {
+            resolved = { id: resolved }
+          }
+          if (!resolved || !('id' in resolved)) {
+            throw new Error('nodeResolvePluginInstance.resolveId.handler did not return a resolved object')
+          }
+          internalModuleCollect?.(relative(process.cwd(), resolved.id))
+          return {
+            id: source
+              .replaceAll('#', `${INTERNAL_MODULE_NAME}/`)
+              .replaceAll('~', '+'),
+            external: true
+          }
         }
       }
     }
@@ -479,13 +523,14 @@ const generateConfigs = (
             dir: jsOutdir,
             name,
             interop: 'auto',
-            entryFileNames: (chunkInfo) => (
-              Array.isArray(inputObj)
-                ? chunkInfo.facadeModuleId!.replace(`${process.cwd()}/`, '')
+            entryFileNames: (chunkInfo) => {
+              return Array.isArray(inputObj)
+                ? chunkInfo.facadeModuleId!
+                  .replace(`${process.cwd()}/`, '')
                   .replace(globCommonDir, pathCommonDir)
                   .replace(/(\.[cm]?)ts$/, jsOutputSuffix)
                 : output.replace(`${jsOutdir}/`, '')
-            ),
+            },
             sourcemap,
             format,
             strict: typeof buildOptions?.output?.strict === 'object'
@@ -502,23 +547,7 @@ const generateConfigs = (
       ],
       plugins: [
         ...commonPlugins,
-        nodeResolve({
-          exportConditions,
-          extensions: [
-            '.js',
-            '.cjs',
-            '.mjs',
-            '.jsx',
-            '.cjsx',
-            '.mjsx',
-            '.ts',
-            '.cts',
-            '.mts',
-            '.tsx',
-            '.ctsx',
-            '.mtsx'
-          ]
-        }),
+        nodeResolvePluginInstance,
         import('rollup-plugin-postcss')
           .then(({ default: postcss }) =>
             postcss({
@@ -617,70 +646,170 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
     name,
     type,
     bin,
-    exports: entrypoints
+    exports: entrypoints,
+    imports: internalEntrypoints
   } = packageJSON
   const pkgIsModule = type === 'module'
-  if (!name) throw new Error('package.json name is required')
-  if (!entrypoints) throw new Error('package.json exports is required')
-  const binFiles = [
-    ...new Set(
-      typeof bin === 'string'
-        ? [bin]
-        : (bin ? Object.values(bin) : [])
-    )
-  ]
-    .filter(binFile => binFile.startsWith('bin'))
-    .map(binFile => [
-      `./src/${binFile.replace(/(\.[cm]?)js$/, '$1ts')}`,
-      `./dist/${binFile}`
-    ])
-
   const packageName = pascalCase(name)
-
+  const leafMap = new Map<string, string[][]>()
+  const inputTags = new Map<string, string>()
+  const inputExports = new Map<string, Record<string, unknown>>()
+  const configs: RollupOptions[] = []
   const external = externalResolver(packageJSON)
 
-  const [filteredResolvedEntrypoints, exports] = getExports({
-    entrypoints,
-    pkgIsModule,
-    entries,
-    pkgName: JIEK_NAME!,
-    outdir: jsOutdir,
-    config
-  })
-
-  const leafMap = new Map<string, string[][]>()
-  getAllLeafs(filteredResolvedEntrypoints as RecursiveRecord<string>, ({ keys, value }) => {
-    if (typeof value === 'string') {
-      const keysArr = leafMap.get(value) ?? []
-      leafMap.set(value, keysArr)
-      keysArr.push(keys)
+  let collectConfigTotal = 0
+  const collected = Promise.withResolvers<void>()
+  const internalModules = new Set<string>()
+  const internalModuleCollect = (id?: string) => {
+    if (!id) return
+    internalModules.add(id)
+  }
+  const collectPlugin: Plugin = {
+    name: 'jiek:collect',
+    buildStart() {
+      collectConfigTotal++
+    },
+    buildEnd() {
+      if (--collectConfigTotal === 0) {
+        collected.resolve()
+      }
     }
-    return false
-  })
+  }
 
-  const configs: RollupOptions[] = []
-  leafMap.forEach((keysArr, input) =>
+  if (entrypoints) {
+    const [filteredResolvedEntrypoints, exports] = resolveExports({
+      entrypoints,
+      pkgIsModule,
+      entries,
+      pkgName: JIEK_NAME!,
+      outdir: jsOutdir,
+      config
+    })
+    getAllLeafs(filteredResolvedEntrypoints as RecursiveRecord<string>, ({ keys, value }) => {
+      if (typeof value === 'string') {
+        const keysArr = leafMap.get(value) ?? []
+        leafMap.set(value, keysArr)
+        inputExports.set(value, exports)
+        keysArr.push(keys)
+      }
+      return false
+    })
+  }
+  if (bin) {
+    ;[...new Set(typeof bin === 'string' ? [bin] : Object.values(bin))]
+      .filter(binFile => binFile.startsWith('bin'))
+      .map(binFile => [
+        `./src/${binFile.replace(/(\.[cm]?)js$/, '$1ts')}`,
+        `./dist/${binFile}`
+      ])
+      .forEach(([input, output]) => {
+        configs.push(...generateConfigs({
+          path: output,
+          name,
+          input,
+          output,
+          external,
+          pkgIsModule,
+          conditionals: output.endsWith('.mjs')
+            ? ['import']
+            : output.endsWith('.cjs')
+            ? ['require']
+            : []
+        }, {
+          internalModuleCollect,
+          disableDTS: true,
+          disableMinify: true,
+          commonPlugins: [
+            collectPlugin
+          ]
+        }))
+        leafMap.set(input, [[output]])
+        inputTags.set(input, 'binary')
+      })
+  }
+  if (internalEntrypoints) {
+    const [filteredResolvedInternalEntrypoints, imports] = resolveExports({
+      entrypoints: internalEntrypoints,
+      pkgIsModule,
+      pkgName: JIEK_NAME!,
+      outdir: `${jsOutdir}/.internal`,
+      config
+    })
+    getAllLeafs(filteredResolvedInternalEntrypoints as RecursiveRecord<string>, ({ keys, value }) => {
+      if (typeof value === 'string') {
+        const keysArr = leafMap.get(value) ?? []
+        leafMap.set(value, keysArr)
+        inputExports.set(value, imports)
+        inputTags.set(value, 'internal')
+        keysArr.push(keys)
+      }
+      return false
+    })
+  }
+
+  leafMap.forEach((keysArr, input) => {
+    if (inputTags.get(input) === 'binary') return
+    const isInternal = inputTags.get(input) === 'internal'
+    const exports = inputExports.get(input)!
+
     keysArr.forEach((keys) => {
       const [path, ...conditionals] = keys
 
       const name = packageName + (path === '.' ? '' : pascalCase(path))
       const keyExports = reveal(exports, keys)
-      const commonOptions = {
+      const commonContext = {
         path,
         name,
         input,
         external,
         pkgIsModule
       }
+      const commonOptions: GenerateConfigsOptions = isInternal
+        ? {
+          commonPlugins: [
+            {
+              name: 'jiek:loadInternalModules',
+              async options(inputOptions) {
+                await collected.promise
+                inputOptions.input = [...intersection(
+                  inputOptions.input as string[],
+                  internalModules
+                )]
+                return inputOptions
+              },
+              outputOptions(outputOptions) {
+                outputOptions.dir = `${outputOptions.dir}/.internal`
+                const oldEntryFileNames = outputOptions.entryFileNames
+                outputOptions.entryFileNames = (chunkInfo) => {
+                  if (typeof oldEntryFileNames !== 'function') {
+                    throw new TypeError('entryFileNames must be a function')
+                  }
+                  const oldFileName = oldEntryFileNames(chunkInfo)
+                  return oldFileName
+                    .replaceAll('#', '')
+                    .replaceAll('~', '+')
+                }
+                return outputOptions
+              }
+            }
+          ],
+          disableCollectInternalModule: true
+        }
+        : {
+          internalModuleCollect,
+          commonPlugins: [
+            collectPlugin
+          ]
+        }
 
       // eslint-disable-next-line ts/switch-exhaustiveness-check
       switch (typeof keyExports) {
         case 'string': {
           configs.push(...generateConfigs({
-            ...commonOptions,
+            ...commonContext,
             output: keyExports,
             conditionals
-          }))
+          }, commonOptions))
           break
         }
         case 'object': {
@@ -688,10 +817,10 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
             const allConditionals = [...new Set([...conditionals, ...nextKeys])]
             if (typeof value === 'string') {
               configs.push(...generateConfigs({
-                ...commonOptions,
+                ...commonContext,
                 output: value,
                 conditionals: allConditionals
-              }))
+              }, commonOptions))
             }
             return false
           })
@@ -699,23 +828,8 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
         }
       }
     })
-  )
-  binFiles
-    .forEach(([input, output]) => {
-      configs.push(...generateConfigs({
-        path: output,
-        name,
-        input,
-        output,
-        external,
-        pkgIsModule,
-        conditionals: ['require']
-      }, {
-        disableDTS: true,
-        disableMinify: true
-      }))
-      leafMap.set(input, [[output]])
-    })
+  })
+
   void publish('init', { leafMap, targetsLength: configs.length })
   return configs.map(c => ({
     ...COMMON_OPTIONS,

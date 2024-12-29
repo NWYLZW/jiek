@@ -1,4 +1,4 @@
-import type { Module } from '#~/rollup/bundle-analyzer.ts'
+import type { Module } from '#~/rollup/bundle-analyzer'
 
 interface Node {
   id: string

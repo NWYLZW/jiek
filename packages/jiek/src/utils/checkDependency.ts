@@ -3,7 +3,7 @@ import process from 'node:process'
 
 import { confirm } from '@inquirer/prompts'
 
-import { getWD } from '#~/utils/getWD.ts'
+import { getWD } from '#~/utils/getWD'
 
 export async function checkDependency(dependency: string) {
   try {

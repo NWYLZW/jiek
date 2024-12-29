@@ -1,4 +1,4 @@
-import { bridgeDisabledRef } from '#~/bridge.ts'
+import { bridgeDisabledRef } from '#~/bridge'
 
 import { template } from 'jiek/rollup'
 import { describe, expect, test } from 'vitest'

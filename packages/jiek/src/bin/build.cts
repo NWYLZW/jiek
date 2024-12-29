@@ -4,7 +4,7 @@ import '../commands/build'
 
 import process from 'node:process'
 
-import parseArgv from '#~/bin/parseArgv.ts'
+import parseArgv from '#~/bin/parseArgv'
 
 if (process.env.JIEK_BIN__FILENAME === 'build.cjs') {
   parseArgv()

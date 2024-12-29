@@ -5,8 +5,8 @@ import process from 'node:process'
 import { program } from 'commander'
 import { load } from 'js-yaml'
 
-import { getRoot } from '#~/utils/getRoot.ts'
-import { getWD } from '#~/utils/getWD.ts'
+import { getRoot } from '#~/utils/getRoot'
+import { getWD } from '#~/utils/getWD'
 
 export let type = ''
 
@@ -19,6 +19,7 @@ export interface Manifest {
   name?: string
   type?: string
   exports?: string | string[] | Record<string, unknown>
+  imports?: Record<string, unknown>
 }
 
 export interface ProjectsGraph {

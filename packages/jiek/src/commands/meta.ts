@@ -1,4 +1,4 @@
-import { getWD } from '#~/utils/getWD.ts'
+import { getWD } from '#~/utils/getWD'
 
 const { notWorkspace } = getWD()
 

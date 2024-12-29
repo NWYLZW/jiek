@@ -1,10 +1,10 @@
 import type { Command } from 'commander'
 
-import { CLIENT_CUSTOM_RENDER_SCRIPT } from '#~/commands/build/client/index.ts'
-import { parseBoolean } from '#~/commands/utils/optionParser.ts'
-import type { Module } from '#~/rollup/bundle-analyzer.ts'
-import type { createServer } from '#~/server.ts'
-import { checkDependency } from '#~/utils/checkDependency.ts'
+import { CLIENT_CUSTOM_RENDER_SCRIPT } from '#~/commands/build/client/index'
+import { parseBoolean } from '#~/commands/utils/optionParser'
+import type { Module } from '#~/rollup/bundle-analyzer'
+import type { createServer } from '#~/server'
+import { checkDependency } from '#~/utils/checkDependency'
 import { existsSync, mkdirSync, statSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 

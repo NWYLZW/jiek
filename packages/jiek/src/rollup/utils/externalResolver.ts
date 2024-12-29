@@ -8,20 +8,24 @@ const EXCLUDE_SUFFIX = [
   '(css|s[ac]ss|less|styl)'
 ]
 
-interface Manifest {
-  name?: string
+export interface PackageJSON {
+  name: string
+  type?: string
+  bin?: string | Record<string, string>
+  exports?: Record<string, unknown> | string | string[]
+  imports?: Record<string, unknown>
   dependencies?: Record<string, unknown>
   peerDependencies?: Record<string, unknown>
   optionalDependencies?: Record<string, unknown>
 }
 
-export default function(json: Manifest): (string | RegExp)[]
+export default function(json: PackageJSON): (string | RegExp)[]
 export default function(path?: string): (string | RegExp)[]
-export default function(jsonOrPath: string | Manifest = process.cwd()): (string | RegExp)[] {
-  const pkg: Manifest = typeof jsonOrPath === 'string'
+export default function(jsonOrPath: string | PackageJSON = process.cwd()): (string | RegExp)[] {
+  const pkg: PackageJSON = typeof jsonOrPath === 'string'
     ? fs.existsSync(`${jsonOrPath}/package.json`)
-      ? JSON.parse(fs.readFileSync(`${jsonOrPath}/package.json`, 'utf-8')) as Manifest
-      : {} as Manifest
+      ? JSON.parse(fs.readFileSync(`${jsonOrPath}/package.json`, 'utf-8')) as PackageJSON
+      : {} as PackageJSON
     : jsonOrPath
   const { name, dependencies = {}, peerDependencies = {}, optionalDependencies = {} } = pkg
   if (name == null) {

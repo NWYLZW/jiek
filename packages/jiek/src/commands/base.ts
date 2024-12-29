@@ -1,9 +1,9 @@
 import { program } from 'commander'
 import pkg from 'jiek/package.json'
 
-import { filterDescription } from '#~/commands/descriptions.ts'
-import { IS_WORKSPACE } from '#~/commands/meta.ts'
-import { type } from '#~/utils/filterSupport.ts'
+import { filterDescription } from '#~/commands/descriptions'
+import { IS_WORKSPACE } from '#~/commands/meta'
+import { type } from '#~/utils/filterSupport'
 
 program
   .name('jk/jiek')
