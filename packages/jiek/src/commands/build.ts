@@ -340,6 +340,7 @@ command
       const child = execaCommand(command.join(' '), {
         ipc: true,
         cwd: pkgCWD,
+        windowsHide: true,
         env: {
           ...env,
           JIEK_NAME: manifest.name,
