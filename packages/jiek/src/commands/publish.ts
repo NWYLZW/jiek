@@ -514,6 +514,11 @@ async function prepublish({ bumper }: {
         )
       )
     }
+
+    const jiekProductionTag = path.resolve(resolvedOutdir, '.jiek-production-tag')
+    if (!fs.existsSync(jiekProductionTag)) {
+      fs.writeFileSync(jiekProductionTag, '')
+    }
   })
 }
 

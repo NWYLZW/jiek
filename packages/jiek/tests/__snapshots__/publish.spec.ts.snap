@@ -2,6 +2,7 @@
 
 exports[`no mono > simple 1`] = `
 [
+  ".jiek-production-tag",
   "dist",
   "package.json",
   "src",
@@ -18,6 +19,7 @@ exports[`no mono > simple 1`] = `
 
 exports[`no mono > subpath 1`] = `
 [
+  ".jiek-production-tag",
   "dist",
   "foo",
   "package.json",
