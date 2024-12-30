@@ -9,7 +9,7 @@ const process = require('node:process')
 /**
  * @type {string | undefined}
  */
-const binFilePath = process.env.JIEK_BIN__FILEPATH ?? module.parent.filename ?? require.main.filename
+const binFilePath = module.parent.filename ?? require.main.filename
 
 const packageDir = dirname(dirname(binFilePath))
 const binFilename = basename(binFilePath)
