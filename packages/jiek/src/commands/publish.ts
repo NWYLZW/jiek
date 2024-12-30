@@ -14,7 +14,7 @@ import { applyEdits, modify } from 'jsonc-parser'
 import type { ProjectsGraph } from '#~/utils/filterSupport'
 import { getSelectedProjectsGraph } from '#~/utils/filterSupport'
 import { loadConfig } from '#~/utils/loadConfig'
-import { ResolveExportsOptions, getOutDirs } from '#~/utils/resolveExports'
+import type { ResolveExportsOptions } from '#~/utils/resolveExports'
 import { resolveExports } from '#~/utils/resolveExports'
 
 import { getInternalModuleName } from '#~/utils/getInternalModuleName'
@@ -155,7 +155,9 @@ async function prepublish({ bumper }: {
         ...resolvedEntrypoints,
         ...exports
       }
-      resolvedOutdir = _resolvedOutdir
+      if (resolvedOutdir === outdir) {
+        resolvedOutdir = _resolvedOutdir
+      }
     }
     if (internalEntrypoints) {
       const [resolvedInternalEntrypoints, imports, _resolvedOutdir] = resolveExports({
@@ -167,7 +169,9 @@ async function prepublish({ bumper }: {
         ...resolvedInternalEntrypoints,
         ...imports
       }
-      resolvedOutdir = _resolvedOutdir
+      if (resolvedOutdir === outdir) {
+        resolvedOutdir = _resolvedOutdir
+      }
     }
     return [newManifest, resolvedOutdir] as const
   }
