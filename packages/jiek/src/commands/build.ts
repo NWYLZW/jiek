@@ -150,7 +150,7 @@ let command = isDefault
 command = command
   .description(description)
   .option('-t, --type <TYPE>', `The type of build, support ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')}.`, v => {
-    if (!BUILDER_TYPES.includes(v as any)) {
+    if (!BUILDER_TYPES.includes(v as typeof BUILDER_TYPES[number])) {
       throw new Error(`The value of 'type' must be ${BUILDER_TYPES.map(s => `"${s}"`).join(', ')}`)
     }
     return String(v)
