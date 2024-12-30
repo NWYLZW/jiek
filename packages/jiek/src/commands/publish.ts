@@ -7,19 +7,27 @@ import process from 'node:process'
 import { type BumperType, TAGS, bump } from '@jiek/utils/bumper'
 import { program } from 'commander'
 import detectIndent from 'detect-indent'
+import type { Config } from 'jiek'
 import type { JSONPath } from 'jsonc-parser'
 import { applyEdits, modify } from 'jsonc-parser'
 
 import type { ProjectsGraph } from '#~/utils/filterSupport'
 import { getSelectedProjectsGraph } from '#~/utils/filterSupport'
 import { loadConfig } from '#~/utils/loadConfig'
-import type { ResolveExportsOptions } from '#~/utils/resolveExports'
+import { ResolveExportsOptions, getOutDirs } from '#~/utils/resolveExports'
 import { resolveExports } from '#~/utils/resolveExports'
 
 import { getInternalModuleName } from '#~/utils/getInternalModuleName'
 import { outdirDescription } from './descriptions'
 
 declare module 'jiek' {
+  interface ConfigExperimental {
+    /**
+     * Polyfill `imports` fields in package.json to local dependencies and exports fields.
+     * @default false
+     */
+    importsDowngrade?: boolean
+  }
   export interface Config {
     publish?: {
       /**
@@ -111,12 +119,16 @@ async function prepublish({ bumper }: {
     bumperEnv ? JSON.parse(bumperEnv) as string | boolean : false
   )
 
-  const generateNewManifest = (dir: string, manifest: NonNullable<ProjectsGraph['value']>[string]) => {
+  const generateNewManifest = (
+    dir: string,
+    manifest: NonNullable<ProjectsGraph['value']>[string],
+    config: Config
+  ) => {
     const {
       name,
       type,
-      exports: entrypoints = {},
-      imports: internalEntrypoints = {}
+      exports: entrypoints,
+      imports: internalEntrypoints
     } = manifest
     if (!name) {
       throw new Error(`package.json in ${dir} must have a name field`)
@@ -127,38 +139,47 @@ async function prepublish({ bumper }: {
     const commonOptions = {
       pkgIsModule,
       pkgName: name,
-      config: loadConfig(dir),
+      config,
       dir,
       noFilter: true,
       isPublish: true
     } satisfies Partial<ResolveExportsOptions>
-    const [resolvedEntrypoints, exports, resolvedOutdir] = resolveExports({
-      entrypoints,
-      defaultOutdir: outdir,
-      ...commonOptions
-    })
-    newManifest.exports = {
-      ...resolvedEntrypoints,
-      ...exports
+    let resolvedOutdir = outdir
+    if (entrypoints) {
+      const [resolvedEntrypoints, exports, _resolvedOutdir] = resolveExports({
+        entrypoints,
+        defaultOutdir: outdir,
+        ...commonOptions
+      })
+      newManifest.exports = {
+        ...resolvedEntrypoints,
+        ...exports
+      }
+      resolvedOutdir = _resolvedOutdir
     }
-    const [resolvedInternalEntrypoints, imports] = resolveExports({
-      entrypoints: internalEntrypoints,
-      defaultOutdir: `${outdir}/.internal`,
-      ...commonOptions
-    })
-    newManifest.imports = {
-      ...resolvedInternalEntrypoints,
-      ...imports
+    if (internalEntrypoints) {
+      const [resolvedInternalEntrypoints, imports, _resolvedOutdir] = resolveExports({
+        entrypoints: internalEntrypoints,
+        defaultOutdir: `${outdir}/.internal`,
+        ...commonOptions
+      })
+      newManifest.imports = {
+        ...resolvedInternalEntrypoints,
+        ...imports
+      }
+      resolvedOutdir = _resolvedOutdir
     }
     return [newManifest, resolvedOutdir] as const
   }
 
   const generateNewPackageJSONString = ({
+    config,
     oldJSONString,
     oldJSON,
     manifest,
     formattingOptions
   }: {
+    config: Config
     oldJSONString: string
     oldJSON: Record<string, unknown>
     manifest: NonNullable<ProjectsGraph['value']>[string]
@@ -188,11 +209,13 @@ async function prepublish({ bumper }: {
         ]
       }
     })
-    update(['dependencies', internalModuleName], `file:./${outdir}/.internal`)
-    update(['dependenciesMeta', internalModuleName], {
-      'injected': true
-    })
-    update(['imports'], undefined)
+    if (config.experimental?.importsDowngrade) {
+      update(['dependencies', internalModuleName], `file:./${outdir}/.internal`)
+      update(['dependenciesMeta', internalModuleName], {
+        'injected': true
+      })
+      update(['imports'], undefined)
+    }
 
     for (const [key, value] of Object.entries(manifest)) {
       if (key === 'version') continue
@@ -301,7 +324,8 @@ async function prepublish({ bumper }: {
   }
 
   await forEachSelectedProjectsGraphEntries((dir, originalManifest) => {
-    const [manifest, resolvedOutdir] = generateNewManifest(dir, originalManifest)
+    const config = loadConfig(dir)
+    const [manifest, resolvedOutdir] = generateNewManifest(dir, originalManifest, config)
     const resolveByDir = (...paths: string[]) => path.resolve(dir, ...paths)
 
     const oldJSONString = fs.readFileSync(resolveByDir('package.json'), 'utf-8')
@@ -326,6 +350,7 @@ async function prepublish({ bumper }: {
     )
 
     const newJSONString = generateNewPackageJSONString({
+      config,
       oldJSONString: modifyVersionPackageJSON,
       oldJSON: {
         ...oldJSON,
@@ -467,18 +492,7 @@ async function prepublish({ bumper }: {
       throw new Error(`file type of ${path} is not supported`)
     }
 
-    if ('imports' in manifest && manifest.imports) {
-      Object
-        .entries(manifest.imports)
-        .forEach(([key, value]) => {
-          if (typeof value !== 'object') return
-          const [start] = key.split('*')
-          manifest.imports![key] = JSON.parse(
-            JSON
-              .stringify(value)
-              .replaceAll(`${resolvedOutdir}/.internal/`, start)
-          )
-        })
+    if (config.experimental?.importsDowngrade && 'imports' in manifest && manifest.imports) {
       fs.writeFileSync(
         resolveByDir(resolvedOutdir, resolvedOutdir, '.internal', 'package.json'),
         JSON.stringify(
@@ -488,7 +502,7 @@ async function prepublish({ bumper }: {
               JSON
                 .stringify(manifest.imports)
                 .replaceAll('#', './')
-                .replaceAll('~', '+')
+                .replaceAll('~', '')
             ) as Record<string, unknown>
           },
           null,

@@ -1,1 +1,1 @@
-"use strict";const o="bar",r="foo";exports.bar=o,exports.foo=r;
+"use strict";var r=require("#foo");const t="bar";exports.bar=t,Object.keys(r).forEach(function(e){e!=="default"&&!Object.prototype.hasOwnProperty.call(exports,e)&&Object.defineProperty(exports,e,{enumerable:!0,get:function(){return r[e]}})});

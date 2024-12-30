@@ -7,8 +7,5 @@
     "./sub/foo": "./src/foo.ts",
     "./sub": "./src/sub/index.ts",
     "./sub/sub": "./src/sub/sub/index.ts"
-  },
-  "publishConfig": {
-    "directory": "./dist"
   }
 }

@@ -1,5 +1,5 @@
+export * from '#foo';
+
 const bar = "bar";
 
-const foo = "foo";
-
-export { bar, foo };
+export { bar };

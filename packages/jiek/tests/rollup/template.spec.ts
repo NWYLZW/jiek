@@ -1,11 +1,15 @@
-import { bridgeDisabledRef } from '#~/bridge'
+import process from 'node:process'
 
-import { template } from 'jiek/rollup'
 import { describe, expect, test } from 'vitest'
+
+import { bridgeDisabledRef } from '#~/bridge'
 
 bridgeDisabledRef.value = true
 
-describe('rollup - template', () => {
+process.env.JIEK_NAME = 'foo'
+
+describe('rollup - template', async () => {
+  const { template } = await import('jiek/rollup')
   test('base', () => {
     expect(template({
       name: 'foo',

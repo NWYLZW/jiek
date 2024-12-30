@@ -27,10 +27,10 @@ describe('no mono', ({ test }) => {
   ].filter((t, _, arr) =>
     ([
       ...arr
-      // 'import attributes'
+      // 'resolve imports'
     ] as string[]).includes(t)
   )
-  titles.forEach(title => test(title, async ({ exec }) => exec()))
+  titles.forEach(title => test(title, async ({ exec }) => exec({ moreOptions: ['-v'] })))
 }, true)
 describe('mono', () => {
   describe('monorepo', ({ test }) => {

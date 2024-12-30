@@ -23,7 +23,7 @@ import { loadConfig } from '#~/utils/loadConfig'
 import { tsRegisterName } from '#~/utils/tsRegister'
 
 declare module 'jiek' {
-  export interface Config {
+  interface Config {
     build?: TemplateOptions & {
       /**
        * Whether to run in silent mode, only active when configured in the workspace root or cwd.
@@ -306,7 +306,13 @@ command
     const resolveByJiekTemp = (...paths: string[]) => path.resolve(wdNodeModules, '.jiek', ...paths)
     const jiekTemp = resolveByJiekTemp()
     if (!existsSync(jiekTemp)) {
-      mkdirSync(jiekTemp)
+      try {
+        mkdirSync(jiekTemp)
+      } catch (e) {
+        if ((e as { code: string }).code !== 'EEXIST') {
+          throw e
+        }
+      }
     }
 
     let i = 0

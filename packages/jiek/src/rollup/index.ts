@@ -105,7 +105,7 @@ const MINIFY_OPTIONS = {
 const config = loadConfig({
   root: WORKSPACE_ROOT
 }) ?? {}
-const { build = {} } = config
+const { experimental, build = {} } = config
 const { js: jsOutdir, dts: dtsOutdir } = getOutDirs({
   config,
   pkgName: JIEK_NAME
@@ -120,7 +120,7 @@ const STYLE_REGEXP = /\.(css|s[ac]ss|less|styl)$/
 
 const CWD_FILES = recursiveListFiles(process.cwd())
   .filter(p => /(?<!\.d)\.[cm]?tsx?$/.test(p))
-  .map(p => relative(process.cwd(), p))
+  .map(p => `./${relative(process.cwd(), p)}`)
 
 const resolveBuildPlugins = (context: ConfigGenerateContext, plugins: TemplateOptions['plugins']): {
   js: InputPluginOption
@@ -253,6 +253,12 @@ const withMinify = (
             : (() => {
               throw new Error('entryFileNames must be a function')
             })(),
+        chunkFileNames: chunkInfo =>
+          typeof output.chunkFileNames === 'function'
+            ? output.chunkFileNames(chunkInfo).replace(/(\.[cm]?js)$/, '.min$1')
+            : (() => {
+              throw new Error('chunkFileNames must be a function')
+            })(),
         file: output.file?.replace(/(\.[cm]?js)$/, '.min$1'),
         plugins: [
           ...notOnlyOncePlugins,
@@ -380,7 +386,7 @@ const generateConfigs = (
       'input should not include "**", please read the [documentation](https://nodejs.org/api/packages.html#subpath-patterns).'
     )
   }
-  const reg = new RegExp(`^${
+  const reg = new RegExp(`^\./${
     input
       .slice(2)
       .replace(/\./g, '\\.')
@@ -390,14 +396,14 @@ const generateConfigs = (
     ? input
     : CWD_FILES.filter(p => reg.test(p))
   const globCommonDir = input.includes('*')
-    ? input.split('*')[0].replace('./', '')
+    ? input.split('*')[0]
     : ''
-  const pathCommonDir = path.includes('*')
-    ? path.split('*')[0].replace('./', '')
+  const outputCommonDir = output.includes('*')
+    ? output.split('*')[0]
     : ''
   if (
-    (globCommonDir.length > 0 && pathCommonDir.length === 0)
-    || (globCommonDir.length === 0 && pathCommonDir.length > 0)
+    (globCommonDir.length > 0 && outputCommonDir.length === 0)
+    || (globCommonDir.length === 0 && outputCommonDir.length > 0)
   ) {
     throw new Error('input and path should both include "*" or not include "*"')
   }
@@ -429,11 +435,13 @@ const generateConfigs = (
           if (!resolved || !('id' in resolved)) {
             throw new Error('nodeResolvePluginInstance.resolveId.handler did not return a resolved object')
           }
-          internalModuleCollect?.(relative(process.cwd(), resolved.id))
+          internalModuleCollect?.(`./${relative(process.cwd(), resolved.id)}`)
           return {
-            id: source
-              .replaceAll('#', `${INTERNAL_MODULE_NAME}/`)
-              .replaceAll('~', '+'),
+            id: experimental?.importsDowngrade
+              ? source
+                .replaceAll('#', `${INTERNAL_MODULE_NAME}/`)
+                .replaceAll('~', '+')
+              : source,
             external: true
           }
         }
@@ -526,10 +534,15 @@ const generateConfigs = (
             entryFileNames: (chunkInfo) => {
               return Array.isArray(inputObj)
                 ? chunkInfo.facadeModuleId!
-                  .replace(`${process.cwd()}/`, '')
-                  .replace(globCommonDir, pathCommonDir)
+                  .replace(`${process.cwd()}/`, './')
+                  .replace(globCommonDir, outputCommonDir)
                   .replace(/(\.[cm]?)ts$/, jsOutputSuffix)
-                : output.replace(`${jsOutdir}/`, '')
+                  .replace(`${jsOutdir}/`, '')
+                : output
+                  .replace(`${jsOutdir}/`, '')
+            },
+            chunkFileNames: (chunkInfo) => {
+              return `.internal/.chunks/${chunkInfo.name}.[hash]${jsOutputSuffix}`
             },
             sourcemap,
             format,
@@ -589,12 +602,14 @@ const generateConfigs = (
           sourcemap,
           entryFileNames: (chunkInfo) => (
             Array.isArray(inputObj)
-              ? chunkInfo.facadeModuleId!.replace(`${process.cwd()}/`, '')
-                .replace(globCommonDir, pathCommonDir)
+              ? chunkInfo.facadeModuleId!
+                .replace(`${process.cwd()}/`, './')
+                .replace(globCommonDir, outputCommonDir)
                 .replace(/(\.[cm]?)ts$/, tsOutputSuffix)
-              : output
                 .replace(`${jsOutdir}/`, '')
+              : output
                 .replace(/(\.[cm]?)js$/, tsOutputSuffix)
+                .replace(`${jsOutdir}/`, '')
           ),
           strict: typeof buildOptions?.output?.strict === 'object'
             ? buildOptions.output.strict.dts
@@ -772,24 +787,12 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
               async options(inputOptions) {
                 await collected.promise
                 inputOptions.input = [...intersection(
-                  inputOptions.input as string[],
+                  Array.isArray(inputOptions.input)
+                    ? inputOptions.input
+                    : [inputOptions.input as string],
                   internalModules
                 )]
                 return inputOptions
-              },
-              outputOptions(outputOptions) {
-                outputOptions.dir = `${outputOptions.dir}/.internal`
-                const oldEntryFileNames = outputOptions.entryFileNames
-                outputOptions.entryFileNames = (chunkInfo) => {
-                  if (typeof oldEntryFileNames !== 'function') {
-                    throw new TypeError('entryFileNames must be a function')
-                  }
-                  const oldFileName = oldEntryFileNames(chunkInfo)
-                  return oldFileName
-                    .replaceAll('#', '')
-                    .replaceAll('~', '+')
-                }
-                return outputOptions
               }
             }
           ],

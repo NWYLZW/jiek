@@ -6,5 +6,4 @@ settings:
 
 importers:
 
-  .:
-    publishDirectory: ./dist
+  .: {}

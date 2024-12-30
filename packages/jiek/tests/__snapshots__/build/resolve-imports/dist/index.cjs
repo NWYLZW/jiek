@@ -1,8 +1,13 @@
 'use strict';
 
+var _foo = require('#foo');
+
 const bar = "bar";
 
-const foo = "foo";
-
 exports.bar = bar;
-exports.foo = foo;
+Object.keys(_foo).forEach(function (k) {
+	if (k !== 'default' && !Object.prototype.hasOwnProperty.call(exports, k)) Object.defineProperty(exports, k, {
+		enumerable: true,
+		get: function () { return _foo[k]; }
+	});
+});

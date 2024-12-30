@@ -9,7 +9,6 @@
     "./sub/sub": "./src/sub/sub/index.ts"
   },
   "publishConfig": {
-    "directory": "./dist",
     "typesVersions": {
       "<5.0": {
         "*": [

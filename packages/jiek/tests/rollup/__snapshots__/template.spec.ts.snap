@@ -78,11 +78,12 @@ exports[`rollup - template > base 1`] = `
     "input": "./src/index.ts",
     "output": [
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "format": "esm",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -92,12 +93,13 @@ exports[`rollup - template > base 1`] = `
         "strict": undefined,
       },
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "file": undefined,
         "format": "esm",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -116,6 +118,25 @@ exports[`rollup - template > base 1`] = `
         {
           "name": "jiek-plugin-watcher",
           "watchChange": [Function],
+        },
+        {
+          "buildEnd": [Function],
+          "buildStart": [Function],
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "buildStart": [Function],
@@ -250,6 +271,8 @@ exports[`rollup - template > base 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": false,
+        "importAttributesKey": undefined,
         "sourcemap": undefined,
         "strict": undefined,
       },
@@ -261,32 +284,69 @@ exports[`rollup - template > base 1`] = `
       },
       [
         {
+          "buildEnd": [Function],
           "buildStart": [Function],
-          "generateBundle": [Function],
-          "getPackageInfoForId": [Function],
-          "load": [Function],
-          "name": "node-resolve",
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
           "resolveId": {
             "handler": [Function],
-            "order": "post",
+            "order": "pre",
           },
-          "version": "15.3.0",
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "load": [Function],
           "name": "skip",
         },
-        {
-          "name": "dts",
-          "options": [Function],
-          "outputOptions": [Function],
-          "renderChunk": [Function],
-          "resolveId": {
-            "handler": [Function],
-            "order": "post",
+        [
+          {
+            "api": {
+              "ctx": {
+                "entries": [],
+                "programs": [],
+                "resolvedOptions": {
+                  "compilerOptions": {
+                    "declaration": true,
+                    "noEmit": false,
+                    "outDir": "dist",
+                    "preserveSymlinks": false,
+                  },
+                  "experimentalSourcemapSupport": false,
+                  "respectExternal": true,
+                  "tsconfig": "/Users/yijie/codes/nwylzw/jiek/tsconfig.json",
+                },
+              },
+              "id2Sourcemap": Map {},
+            },
+            "buildStart": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "name": "dts",
+            "options": [Function],
+            "resolveId": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "transform": [Function],
           },
-          "transform": [Function],
-        },
+          {
+            "buildStart": [Function],
+            "name": "dts:transform",
+            "options": [Function],
+            "outputOptions": [Function],
+            "renderChunk": [Function],
+            "transform": [Function],
+          },
+        ],
         {
           "buildEnd": [Function],
           "buildStart": [Function],
@@ -384,11 +444,12 @@ exports[`rollup - template > base 1`] = `
     "input": "./src/index.ts",
     "output": [
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "format": "cjs",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -398,12 +459,13 @@ exports[`rollup - template > base 1`] = `
         "strict": undefined,
       },
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "file": undefined,
         "format": "cjs",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -422,6 +484,25 @@ exports[`rollup - template > base 1`] = `
         {
           "name": "jiek-plugin-watcher",
           "watchChange": [Function],
+        },
+        {
+          "buildEnd": [Function],
+          "buildStart": [Function],
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "buildStart": [Function],
@@ -556,6 +637,8 @@ exports[`rollup - template > base 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": false,
+        "importAttributesKey": undefined,
         "sourcemap": undefined,
         "strict": undefined,
       },
@@ -567,32 +650,69 @@ exports[`rollup - template > base 1`] = `
       },
       [
         {
+          "buildEnd": [Function],
           "buildStart": [Function],
-          "generateBundle": [Function],
-          "getPackageInfoForId": [Function],
-          "load": [Function],
-          "name": "node-resolve",
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
           "resolveId": {
             "handler": [Function],
-            "order": "post",
+            "order": "pre",
           },
-          "version": "15.3.0",
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "load": [Function],
           "name": "skip",
         },
-        {
-          "name": "dts",
-          "options": [Function],
-          "outputOptions": [Function],
-          "renderChunk": [Function],
-          "resolveId": {
-            "handler": [Function],
-            "order": "post",
+        [
+          {
+            "api": {
+              "ctx": {
+                "entries": [],
+                "programs": [],
+                "resolvedOptions": {
+                  "compilerOptions": {
+                    "declaration": true,
+                    "noEmit": false,
+                    "outDir": "dist",
+                    "preserveSymlinks": false,
+                  },
+                  "experimentalSourcemapSupport": false,
+                  "respectExternal": true,
+                  "tsconfig": "/Users/yijie/codes/nwylzw/jiek/tsconfig.json",
+                },
+              },
+              "id2Sourcemap": Map {},
+            },
+            "buildStart": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "name": "dts",
+            "options": [Function],
+            "resolveId": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "transform": [Function],
           },
-          "transform": [Function],
-        },
+          {
+            "buildStart": [Function],
+            "name": "dts:transform",
+            "options": [Function],
+            "outputOptions": [Function],
+            "renderChunk": [Function],
+            "transform": [Function],
+          },
+        ],
         {
           "buildEnd": [Function],
           "buildStart": [Function],
@@ -695,11 +815,12 @@ exports[`rollup - template > base 2`] = `
     "input": "./src/index.ts",
     "output": [
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "format": "cjs",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -709,12 +830,13 @@ exports[`rollup - template > base 2`] = `
         "strict": undefined,
       },
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "file": undefined,
         "format": "cjs",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -733,6 +855,25 @@ exports[`rollup - template > base 2`] = `
         {
           "name": "jiek-plugin-watcher",
           "watchChange": [Function],
+        },
+        {
+          "buildEnd": [Function],
+          "buildStart": [Function],
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "buildStart": [Function],
@@ -867,6 +1008,8 @@ exports[`rollup - template > base 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": false,
+        "importAttributesKey": undefined,
         "sourcemap": undefined,
         "strict": undefined,
       },
@@ -878,32 +1021,69 @@ exports[`rollup - template > base 2`] = `
       },
       [
         {
+          "buildEnd": [Function],
           "buildStart": [Function],
-          "generateBundle": [Function],
-          "getPackageInfoForId": [Function],
-          "load": [Function],
-          "name": "node-resolve",
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
           "resolveId": {
             "handler": [Function],
-            "order": "post",
+            "order": "pre",
           },
-          "version": "15.3.0",
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "load": [Function],
           "name": "skip",
         },
-        {
-          "name": "dts",
-          "options": [Function],
-          "outputOptions": [Function],
-          "renderChunk": [Function],
-          "resolveId": {
-            "handler": [Function],
-            "order": "post",
+        [
+          {
+            "api": {
+              "ctx": {
+                "entries": [],
+                "programs": [],
+                "resolvedOptions": {
+                  "compilerOptions": {
+                    "declaration": true,
+                    "noEmit": false,
+                    "outDir": "dist",
+                    "preserveSymlinks": false,
+                  },
+                  "experimentalSourcemapSupport": false,
+                  "respectExternal": true,
+                  "tsconfig": "/Users/yijie/codes/nwylzw/jiek/tsconfig.json",
+                },
+              },
+              "id2Sourcemap": Map {},
+            },
+            "buildStart": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "name": "dts",
+            "options": [Function],
+            "resolveId": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "transform": [Function],
           },
-          "transform": [Function],
-        },
+          {
+            "buildStart": [Function],
+            "name": "dts:transform",
+            "options": [Function],
+            "outputOptions": [Function],
+            "renderChunk": [Function],
+            "transform": [Function],
+          },
+        ],
         {
           "buildEnd": [Function],
           "buildStart": [Function],
@@ -1001,11 +1181,12 @@ exports[`rollup - template > base 2`] = `
     "input": "./src/index.ts",
     "output": [
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "format": "esm",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1015,12 +1196,13 @@ exports[`rollup - template > base 2`] = `
         "strict": undefined,
       },
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "file": undefined,
         "format": "esm",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1039,6 +1221,25 @@ exports[`rollup - template > base 2`] = `
         {
           "name": "jiek-plugin-watcher",
           "watchChange": [Function],
+        },
+        {
+          "buildEnd": [Function],
+          "buildStart": [Function],
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "buildStart": [Function],
@@ -1173,6 +1374,8 @@ exports[`rollup - template > base 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": false,
+        "importAttributesKey": undefined,
         "sourcemap": undefined,
         "strict": undefined,
       },
@@ -1184,32 +1387,69 @@ exports[`rollup - template > base 2`] = `
       },
       [
         {
+          "buildEnd": [Function],
           "buildStart": [Function],
-          "generateBundle": [Function],
-          "getPackageInfoForId": [Function],
-          "load": [Function],
-          "name": "node-resolve",
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
           "resolveId": {
             "handler": [Function],
-            "order": "post",
+            "order": "pre",
           },
-          "version": "15.3.0",
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "load": [Function],
           "name": "skip",
         },
-        {
-          "name": "dts",
-          "options": [Function],
-          "outputOptions": [Function],
-          "renderChunk": [Function],
-          "resolveId": {
-            "handler": [Function],
-            "order": "post",
+        [
+          {
+            "api": {
+              "ctx": {
+                "entries": [],
+                "programs": [],
+                "resolvedOptions": {
+                  "compilerOptions": {
+                    "declaration": true,
+                    "noEmit": false,
+                    "outDir": "dist",
+                    "preserveSymlinks": false,
+                  },
+                  "experimentalSourcemapSupport": false,
+                  "respectExternal": true,
+                  "tsconfig": "/Users/yijie/codes/nwylzw/jiek/tsconfig.json",
+                },
+              },
+              "id2Sourcemap": Map {},
+            },
+            "buildStart": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "name": "dts",
+            "options": [Function],
+            "resolveId": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "transform": [Function],
           },
-          "transform": [Function],
-        },
+          {
+            "buildStart": [Function],
+            "name": "dts:transform",
+            "options": [Function],
+            "outputOptions": [Function],
+            "renderChunk": [Function],
+            "transform": [Function],
+          },
+        ],
         {
           "buildEnd": [Function],
           "buildStart": [Function],
@@ -1312,11 +1552,12 @@ exports[`rollup - template > with import or require conditional 1`] = `
     "input": "./src/index.mts",
     "output": [
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "format": "esm",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1326,12 +1567,13 @@ exports[`rollup - template > with import or require conditional 1`] = `
         "strict": undefined,
       },
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "file": undefined,
         "format": "esm",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1350,6 +1592,25 @@ exports[`rollup - template > with import or require conditional 1`] = `
         {
           "name": "jiek-plugin-watcher",
           "watchChange": [Function],
+        },
+        {
+          "buildEnd": [Function],
+          "buildStart": [Function],
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "buildStart": [Function],
@@ -1484,6 +1745,8 @@ exports[`rollup - template > with import or require conditional 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": false,
+        "importAttributesKey": undefined,
         "sourcemap": undefined,
         "strict": undefined,
       },
@@ -1495,32 +1758,69 @@ exports[`rollup - template > with import or require conditional 1`] = `
       },
       [
         {
+          "buildEnd": [Function],
           "buildStart": [Function],
-          "generateBundle": [Function],
-          "getPackageInfoForId": [Function],
-          "load": [Function],
-          "name": "node-resolve",
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
           "resolveId": {
             "handler": [Function],
-            "order": "post",
+            "order": "pre",
           },
-          "version": "15.3.0",
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "load": [Function],
           "name": "skip",
         },
-        {
-          "name": "dts",
-          "options": [Function],
-          "outputOptions": [Function],
-          "renderChunk": [Function],
-          "resolveId": {
-            "handler": [Function],
-            "order": "post",
+        [
+          {
+            "api": {
+              "ctx": {
+                "entries": [],
+                "programs": [],
+                "resolvedOptions": {
+                  "compilerOptions": {
+                    "declaration": true,
+                    "noEmit": false,
+                    "outDir": "dist",
+                    "preserveSymlinks": false,
+                  },
+                  "experimentalSourcemapSupport": false,
+                  "respectExternal": true,
+                  "tsconfig": "/Users/yijie/codes/nwylzw/jiek/tsconfig.json",
+                },
+              },
+              "id2Sourcemap": Map {},
+            },
+            "buildStart": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "name": "dts",
+            "options": [Function],
+            "resolveId": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "transform": [Function],
           },
-          "transform": [Function],
-        },
+          {
+            "buildStart": [Function],
+            "name": "dts:transform",
+            "options": [Function],
+            "outputOptions": [Function],
+            "renderChunk": [Function],
+            "transform": [Function],
+          },
+        ],
         {
           "buildEnd": [Function],
           "buildStart": [Function],
@@ -1618,11 +1918,12 @@ exports[`rollup - template > with import or require conditional 1`] = `
     "input": "./src/index.ts",
     "output": [
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "format": "esm",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1632,12 +1933,13 @@ exports[`rollup - template > with import or require conditional 1`] = `
         "strict": undefined,
       },
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "file": undefined,
         "format": "esm",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1656,6 +1958,25 @@ exports[`rollup - template > with import or require conditional 1`] = `
         {
           "name": "jiek-plugin-watcher",
           "watchChange": [Function],
+        },
+        {
+          "buildEnd": [Function],
+          "buildStart": [Function],
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "buildStart": [Function],
@@ -1790,6 +2111,8 @@ exports[`rollup - template > with import or require conditional 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": false,
+        "importAttributesKey": undefined,
         "sourcemap": undefined,
         "strict": undefined,
       },
@@ -1801,32 +2124,69 @@ exports[`rollup - template > with import or require conditional 1`] = `
       },
       [
         {
+          "buildEnd": [Function],
           "buildStart": [Function],
-          "generateBundle": [Function],
-          "getPackageInfoForId": [Function],
-          "load": [Function],
-          "name": "node-resolve",
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
           "resolveId": {
             "handler": [Function],
-            "order": "post",
+            "order": "pre",
           },
-          "version": "15.3.0",
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "load": [Function],
           "name": "skip",
         },
-        {
-          "name": "dts",
-          "options": [Function],
-          "outputOptions": [Function],
-          "renderChunk": [Function],
-          "resolveId": {
-            "handler": [Function],
-            "order": "post",
+        [
+          {
+            "api": {
+              "ctx": {
+                "entries": [],
+                "programs": [],
+                "resolvedOptions": {
+                  "compilerOptions": {
+                    "declaration": true,
+                    "noEmit": false,
+                    "outDir": "dist",
+                    "preserveSymlinks": false,
+                  },
+                  "experimentalSourcemapSupport": false,
+                  "respectExternal": true,
+                  "tsconfig": "/Users/yijie/codes/nwylzw/jiek/tsconfig.json",
+                },
+              },
+              "id2Sourcemap": Map {},
+            },
+            "buildStart": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "name": "dts",
+            "options": [Function],
+            "resolveId": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "transform": [Function],
           },
-          "transform": [Function],
-        },
+          {
+            "buildStart": [Function],
+            "name": "dts:transform",
+            "options": [Function],
+            "outputOptions": [Function],
+            "renderChunk": [Function],
+            "transform": [Function],
+          },
+        ],
         {
           "buildEnd": [Function],
           "buildStart": [Function],
@@ -1924,11 +2284,12 @@ exports[`rollup - template > with import or require conditional 1`] = `
     "input": "./src/index.ts",
     "output": [
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "format": "cjs",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1938,12 +2299,13 @@ exports[`rollup - template > with import or require conditional 1`] = `
         "strict": undefined,
       },
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "file": undefined,
         "format": "cjs",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -1962,6 +2324,25 @@ exports[`rollup - template > with import or require conditional 1`] = `
         {
           "name": "jiek-plugin-watcher",
           "watchChange": [Function],
+        },
+        {
+          "buildEnd": [Function],
+          "buildStart": [Function],
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "buildStart": [Function],
@@ -2096,6 +2477,8 @@ exports[`rollup - template > with import or require conditional 1`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": false,
+        "importAttributesKey": undefined,
         "sourcemap": undefined,
         "strict": undefined,
       },
@@ -2107,32 +2490,69 @@ exports[`rollup - template > with import or require conditional 1`] = `
       },
       [
         {
+          "buildEnd": [Function],
           "buildStart": [Function],
-          "generateBundle": [Function],
-          "getPackageInfoForId": [Function],
-          "load": [Function],
-          "name": "node-resolve",
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
           "resolveId": {
             "handler": [Function],
-            "order": "post",
+            "order": "pre",
           },
-          "version": "15.3.0",
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "load": [Function],
           "name": "skip",
         },
-        {
-          "name": "dts",
-          "options": [Function],
-          "outputOptions": [Function],
-          "renderChunk": [Function],
-          "resolveId": {
-            "handler": [Function],
-            "order": "post",
+        [
+          {
+            "api": {
+              "ctx": {
+                "entries": [],
+                "programs": [],
+                "resolvedOptions": {
+                  "compilerOptions": {
+                    "declaration": true,
+                    "noEmit": false,
+                    "outDir": "dist",
+                    "preserveSymlinks": false,
+                  },
+                  "experimentalSourcemapSupport": false,
+                  "respectExternal": true,
+                  "tsconfig": "/Users/yijie/codes/nwylzw/jiek/tsconfig.json",
+                },
+              },
+              "id2Sourcemap": Map {},
+            },
+            "buildStart": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "name": "dts",
+            "options": [Function],
+            "resolveId": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "transform": [Function],
           },
-          "transform": [Function],
-        },
+          {
+            "buildStart": [Function],
+            "name": "dts:transform",
+            "options": [Function],
+            "outputOptions": [Function],
+            "renderChunk": [Function],
+            "transform": [Function],
+          },
+        ],
         {
           "buildEnd": [Function],
           "buildStart": [Function],
@@ -2235,11 +2655,12 @@ exports[`rollup - template > with import or require conditional 2`] = `
     "input": "./src/index.cts",
     "output": [
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "format": "cjs",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -2249,12 +2670,13 @@ exports[`rollup - template > with import or require conditional 2`] = `
         "strict": undefined,
       },
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "file": undefined,
         "format": "cjs",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -2273,6 +2695,25 @@ exports[`rollup - template > with import or require conditional 2`] = `
         {
           "name": "jiek-plugin-watcher",
           "watchChange": [Function],
+        },
+        {
+          "buildEnd": [Function],
+          "buildStart": [Function],
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "buildStart": [Function],
@@ -2407,6 +2848,8 @@ exports[`rollup - template > with import or require conditional 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": false,
+        "importAttributesKey": undefined,
         "sourcemap": undefined,
         "strict": undefined,
       },
@@ -2418,32 +2861,69 @@ exports[`rollup - template > with import or require conditional 2`] = `
       },
       [
         {
+          "buildEnd": [Function],
           "buildStart": [Function],
-          "generateBundle": [Function],
-          "getPackageInfoForId": [Function],
-          "load": [Function],
-          "name": "node-resolve",
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
           "resolveId": {
             "handler": [Function],
-            "order": "post",
+            "order": "pre",
           },
-          "version": "15.3.0",
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "load": [Function],
           "name": "skip",
         },
-        {
-          "name": "dts",
-          "options": [Function],
-          "outputOptions": [Function],
-          "renderChunk": [Function],
-          "resolveId": {
-            "handler": [Function],
-            "order": "post",
+        [
+          {
+            "api": {
+              "ctx": {
+                "entries": [],
+                "programs": [],
+                "resolvedOptions": {
+                  "compilerOptions": {
+                    "declaration": true,
+                    "noEmit": false,
+                    "outDir": "dist",
+                    "preserveSymlinks": false,
+                  },
+                  "experimentalSourcemapSupport": false,
+                  "respectExternal": true,
+                  "tsconfig": "/Users/yijie/codes/nwylzw/jiek/tsconfig.json",
+                },
+              },
+              "id2Sourcemap": Map {},
+            },
+            "buildStart": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "name": "dts",
+            "options": [Function],
+            "resolveId": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "transform": [Function],
           },
-          "transform": [Function],
-        },
+          {
+            "buildStart": [Function],
+            "name": "dts:transform",
+            "options": [Function],
+            "outputOptions": [Function],
+            "renderChunk": [Function],
+            "transform": [Function],
+          },
+        ],
         {
           "buildEnd": [Function],
           "buildStart": [Function],
@@ -2541,11 +3021,12 @@ exports[`rollup - template > with import or require conditional 2`] = `
     "input": "./src/index.ts",
     "output": [
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "format": "cjs",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -2555,12 +3036,13 @@ exports[`rollup - template > with import or require conditional 2`] = `
         "strict": undefined,
       },
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "file": undefined,
         "format": "cjs",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -2579,6 +3061,25 @@ exports[`rollup - template > with import or require conditional 2`] = `
         {
           "name": "jiek-plugin-watcher",
           "watchChange": [Function],
+        },
+        {
+          "buildEnd": [Function],
+          "buildStart": [Function],
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "buildStart": [Function],
@@ -2713,6 +3214,8 @@ exports[`rollup - template > with import or require conditional 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": false,
+        "importAttributesKey": undefined,
         "sourcemap": undefined,
         "strict": undefined,
       },
@@ -2724,32 +3227,69 @@ exports[`rollup - template > with import or require conditional 2`] = `
       },
       [
         {
+          "buildEnd": [Function],
           "buildStart": [Function],
-          "generateBundle": [Function],
-          "getPackageInfoForId": [Function],
-          "load": [Function],
-          "name": "node-resolve",
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
           "resolveId": {
             "handler": [Function],
-            "order": "post",
+            "order": "pre",
           },
-          "version": "15.3.0",
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "load": [Function],
           "name": "skip",
         },
-        {
-          "name": "dts",
-          "options": [Function],
-          "outputOptions": [Function],
-          "renderChunk": [Function],
-          "resolveId": {
-            "handler": [Function],
-            "order": "post",
+        [
+          {
+            "api": {
+              "ctx": {
+                "entries": [],
+                "programs": [],
+                "resolvedOptions": {
+                  "compilerOptions": {
+                    "declaration": true,
+                    "noEmit": false,
+                    "outDir": "dist",
+                    "preserveSymlinks": false,
+                  },
+                  "experimentalSourcemapSupport": false,
+                  "respectExternal": true,
+                  "tsconfig": "/Users/yijie/codes/nwylzw/jiek/tsconfig.json",
+                },
+              },
+              "id2Sourcemap": Map {},
+            },
+            "buildStart": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "name": "dts",
+            "options": [Function],
+            "resolveId": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "transform": [Function],
           },
-          "transform": [Function],
-        },
+          {
+            "buildStart": [Function],
+            "name": "dts:transform",
+            "options": [Function],
+            "outputOptions": [Function],
+            "renderChunk": [Function],
+            "transform": [Function],
+          },
+        ],
         {
           "buildEnd": [Function],
           "buildStart": [Function],
@@ -2847,11 +3387,12 @@ exports[`rollup - template > with import or require conditional 2`] = `
     "input": "./src/index.ts",
     "output": [
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "format": "esm",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -2861,12 +3402,13 @@ exports[`rollup - template > with import or require conditional 2`] = `
         "strict": undefined,
       },
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "file": undefined,
         "format": "esm",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -2885,6 +3427,25 @@ exports[`rollup - template > with import or require conditional 2`] = `
         {
           "name": "jiek-plugin-watcher",
           "watchChange": [Function],
+        },
+        {
+          "buildEnd": [Function],
+          "buildStart": [Function],
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "buildStart": [Function],
@@ -3019,6 +3580,8 @@ exports[`rollup - template > with import or require conditional 2`] = `
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": false,
+        "importAttributesKey": undefined,
         "sourcemap": undefined,
         "strict": undefined,
       },
@@ -3030,32 +3593,69 @@ exports[`rollup - template > with import or require conditional 2`] = `
       },
       [
         {
+          "buildEnd": [Function],
           "buildStart": [Function],
-          "generateBundle": [Function],
-          "getPackageInfoForId": [Function],
-          "load": [Function],
-          "name": "node-resolve",
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
           "resolveId": {
             "handler": [Function],
-            "order": "post",
+            "order": "pre",
           },
-          "version": "15.3.0",
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "load": [Function],
           "name": "skip",
         },
-        {
-          "name": "dts",
-          "options": [Function],
-          "outputOptions": [Function],
-          "renderChunk": [Function],
-          "resolveId": {
-            "handler": [Function],
-            "order": "post",
+        [
+          {
+            "api": {
+              "ctx": {
+                "entries": [],
+                "programs": [],
+                "resolvedOptions": {
+                  "compilerOptions": {
+                    "declaration": true,
+                    "noEmit": false,
+                    "outDir": "dist",
+                    "preserveSymlinks": false,
+                  },
+                  "experimentalSourcemapSupport": false,
+                  "respectExternal": true,
+                  "tsconfig": "/Users/yijie/codes/nwylzw/jiek/tsconfig.json",
+                },
+              },
+              "id2Sourcemap": Map {},
+            },
+            "buildStart": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "name": "dts",
+            "options": [Function],
+            "resolveId": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "transform": [Function],
           },
-          "transform": [Function],
-        },
+          {
+            "buildStart": [Function],
+            "name": "dts:transform",
+            "options": [Function],
+            "outputOptions": [Function],
+            "renderChunk": [Function],
+            "transform": [Function],
+          },
+        ],
         {
           "buildEnd": [Function],
           "buildStart": [Function],
@@ -3160,11 +3760,12 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
     "input": "./src/index.ts",
     "output": [
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "format": "esm",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -3174,12 +3775,13 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         "strict": undefined,
       },
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "file": undefined,
         "format": "esm",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -3198,6 +3800,25 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         {
           "name": "jiek-plugin-watcher",
           "watchChange": [Function],
+        },
+        {
+          "buildEnd": [Function],
+          "buildStart": [Function],
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "buildStart": [Function],
@@ -3332,6 +3953,8 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": false,
+        "importAttributesKey": undefined,
         "sourcemap": undefined,
         "strict": undefined,
       },
@@ -3343,32 +3966,69 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       },
       [
         {
+          "buildEnd": [Function],
           "buildStart": [Function],
-          "generateBundle": [Function],
-          "getPackageInfoForId": [Function],
-          "load": [Function],
-          "name": "node-resolve",
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
           "resolveId": {
             "handler": [Function],
-            "order": "post",
+            "order": "pre",
           },
-          "version": "15.3.0",
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "load": [Function],
           "name": "skip",
         },
-        {
-          "name": "dts",
-          "options": [Function],
-          "outputOptions": [Function],
-          "renderChunk": [Function],
-          "resolveId": {
-            "handler": [Function],
-            "order": "post",
+        [
+          {
+            "api": {
+              "ctx": {
+                "entries": [],
+                "programs": [],
+                "resolvedOptions": {
+                  "compilerOptions": {
+                    "declaration": true,
+                    "noEmit": false,
+                    "outDir": "dist",
+                    "preserveSymlinks": false,
+                  },
+                  "experimentalSourcemapSupport": false,
+                  "respectExternal": true,
+                  "tsconfig": "/Users/yijie/codes/nwylzw/jiek/tsconfig.json",
+                },
+              },
+              "id2Sourcemap": Map {},
+            },
+            "buildStart": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "name": "dts",
+            "options": [Function],
+            "resolveId": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "transform": [Function],
           },
-          "transform": [Function],
-        },
+          {
+            "buildStart": [Function],
+            "name": "dts:transform",
+            "options": [Function],
+            "outputOptions": [Function],
+            "renderChunk": [Function],
+            "transform": [Function],
+          },
+        ],
         {
           "buildEnd": [Function],
           "buildStart": [Function],
@@ -3466,11 +4126,12 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
     "input": "./src/index.ts",
     "output": [
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "format": "cjs",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -3480,12 +4141,13 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         "strict": undefined,
       },
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "file": undefined,
         "format": "cjs",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -3504,6 +4166,25 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         {
           "name": "jiek-plugin-watcher",
           "watchChange": [Function],
+        },
+        {
+          "buildEnd": [Function],
+          "buildStart": [Function],
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "buildStart": [Function],
@@ -3638,6 +4319,8 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": false,
+        "importAttributesKey": undefined,
         "sourcemap": undefined,
         "strict": undefined,
       },
@@ -3649,32 +4332,69 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       },
       [
         {
+          "buildEnd": [Function],
           "buildStart": [Function],
-          "generateBundle": [Function],
-          "getPackageInfoForId": [Function],
-          "load": [Function],
-          "name": "node-resolve",
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
           "resolveId": {
             "handler": [Function],
-            "order": "post",
+            "order": "pre",
           },
-          "version": "15.3.0",
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "load": [Function],
           "name": "skip",
         },
-        {
-          "name": "dts",
-          "options": [Function],
-          "outputOptions": [Function],
-          "renderChunk": [Function],
-          "resolveId": {
-            "handler": [Function],
-            "order": "post",
+        [
+          {
+            "api": {
+              "ctx": {
+                "entries": [],
+                "programs": [],
+                "resolvedOptions": {
+                  "compilerOptions": {
+                    "declaration": true,
+                    "noEmit": false,
+                    "outDir": "dist",
+                    "preserveSymlinks": false,
+                  },
+                  "experimentalSourcemapSupport": false,
+                  "respectExternal": true,
+                  "tsconfig": "/Users/yijie/codes/nwylzw/jiek/tsconfig.json",
+                },
+              },
+              "id2Sourcemap": Map {},
+            },
+            "buildStart": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "name": "dts",
+            "options": [Function],
+            "resolveId": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "transform": [Function],
           },
-          "transform": [Function],
-        },
+          {
+            "buildStart": [Function],
+            "name": "dts:transform",
+            "options": [Function],
+            "outputOptions": [Function],
+            "renderChunk": [Function],
+            "transform": [Function],
+          },
+        ],
         {
           "buildEnd": [Function],
           "buildStart": [Function],
@@ -3777,11 +4497,12 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
     "input": "./src/index.ts",
     "output": [
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "format": "esm",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -3791,12 +4512,13 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         "strict": undefined,
       },
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "file": undefined,
         "format": "esm",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -3815,6 +4537,25 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         {
           "name": "jiek-plugin-watcher",
           "watchChange": [Function],
+        },
+        {
+          "buildEnd": [Function],
+          "buildStart": [Function],
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "buildStart": [Function],
@@ -3949,6 +4690,8 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": false,
+        "importAttributesKey": undefined,
         "sourcemap": undefined,
         "strict": undefined,
       },
@@ -3960,32 +4703,69 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       },
       [
         {
+          "buildEnd": [Function],
           "buildStart": [Function],
-          "generateBundle": [Function],
-          "getPackageInfoForId": [Function],
-          "load": [Function],
-          "name": "node-resolve",
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
           "resolveId": {
             "handler": [Function],
-            "order": "post",
+            "order": "pre",
           },
-          "version": "15.3.0",
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "load": [Function],
           "name": "skip",
         },
-        {
-          "name": "dts",
-          "options": [Function],
-          "outputOptions": [Function],
-          "renderChunk": [Function],
-          "resolveId": {
-            "handler": [Function],
-            "order": "post",
+        [
+          {
+            "api": {
+              "ctx": {
+                "entries": [],
+                "programs": [],
+                "resolvedOptions": {
+                  "compilerOptions": {
+                    "declaration": true,
+                    "noEmit": false,
+                    "outDir": "dist",
+                    "preserveSymlinks": false,
+                  },
+                  "experimentalSourcemapSupport": false,
+                  "respectExternal": true,
+                  "tsconfig": "/Users/yijie/codes/nwylzw/jiek/tsconfig.json",
+                },
+              },
+              "id2Sourcemap": Map {},
+            },
+            "buildStart": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "name": "dts",
+            "options": [Function],
+            "resolveId": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "transform": [Function],
           },
-          "transform": [Function],
-        },
+          {
+            "buildStart": [Function],
+            "name": "dts:transform",
+            "options": [Function],
+            "outputOptions": [Function],
+            "renderChunk": [Function],
+            "transform": [Function],
+          },
+        ],
         {
           "buildEnd": [Function],
           "buildStart": [Function],
@@ -4083,11 +4863,12 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
     "input": "./src/index.ts",
     "output": [
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "format": "cjs",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -4097,12 +4878,13 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         "strict": undefined,
       },
       {
+        "chunkFileNames": [Function],
         "dir": "./dist",
         "entryFileNames": [Function],
-        "externalImportAttributes": true,
+        "externalImportAttributes": false,
         "file": undefined,
         "format": "cjs",
-        "importAttributesKey": "with",
+        "importAttributesKey": undefined,
         "interop": "auto",
         "name": "Foo",
         "plugins": [
@@ -4121,6 +4903,25 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
         {
           "name": "jiek-plugin-watcher",
           "watchChange": [Function],
+        },
+        {
+          "buildEnd": [Function],
+          "buildStart": [Function],
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "buildStart": [Function],
@@ -4255,6 +5056,8 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       {
         "dir": "./dist",
         "entryFileNames": [Function],
+        "externalImportAttributes": false,
+        "importAttributesKey": undefined,
         "sourcemap": undefined,
         "strict": undefined,
       },
@@ -4266,32 +5069,69 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       },
       [
         {
+          "buildEnd": [Function],
           "buildStart": [Function],
-          "generateBundle": [Function],
-          "getPackageInfoForId": [Function],
-          "load": [Function],
-          "name": "node-resolve",
+          "name": "jiek:collect",
+        },
+        {
+          "name": "jiek:with-external",
           "resolveId": {
             "handler": [Function],
-            "order": "post",
+            "order": "pre",
           },
-          "version": "15.3.0",
+        },
+        {
+          "name": "jiek:collect-internal-module",
+          "resolveId": {
+            "handler": [Function],
+            "order": "pre",
+          },
         },
         {
           "load": [Function],
           "name": "skip",
         },
-        {
-          "name": "dts",
-          "options": [Function],
-          "outputOptions": [Function],
-          "renderChunk": [Function],
-          "resolveId": {
-            "handler": [Function],
-            "order": "post",
+        [
+          {
+            "api": {
+              "ctx": {
+                "entries": [],
+                "programs": [],
+                "resolvedOptions": {
+                  "compilerOptions": {
+                    "declaration": true,
+                    "noEmit": false,
+                    "outDir": "dist",
+                    "preserveSymlinks": false,
+                  },
+                  "experimentalSourcemapSupport": false,
+                  "respectExternal": true,
+                  "tsconfig": "/Users/yijie/codes/nwylzw/jiek/tsconfig.json",
+                },
+              },
+              "id2Sourcemap": Map {},
+            },
+            "buildStart": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "name": "dts",
+            "options": [Function],
+            "resolveId": {
+              "handler": [Function],
+              "order": "post",
+            },
+            "transform": [Function],
           },
-          "transform": [Function],
-        },
+          {
+            "buildStart": [Function],
+            "name": "dts:transform",
+            "options": [Function],
+            "outputOptions": [Function],
+            "renderChunk": [Function],
+            "transform": [Function],
+          },
+        ],
         {
           "buildEnd": [Function],
           "buildStart": [Function],
