@@ -1,11 +1,5 @@
-import '../utils/filterSupport'
-import '../commands/base'
-import '../commands/build'
-
-import process from 'node:process'
+import '#~/bin/common'
 
 import parseArgv from '#~/bin/parseArgv'
 
-if (process.env.JIEK_BIN__FILENAME === 'build.cjs') {
-  parseArgv()
-}
+parseArgv()
