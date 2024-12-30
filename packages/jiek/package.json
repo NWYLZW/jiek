@@ -1,7 +1,7 @@
 {
   "name": "jiek",
   "type": "module",
-  "version": "2.2.7-alpha.3",
+  "version": "2.2.7-alpha.4",
   "description": "A lightweight toolkit for compiling and managing libraries based on `package.json` metadata and suitable for `Monorepo`.",
   "author": "YiJie <yijie4188@gmail.com>",
   "homepage": "https://github.com/NWYLZW/jiek/tree/master/packages/jiek#readme",
