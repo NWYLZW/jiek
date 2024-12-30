@@ -47,7 +47,7 @@
     "src"
   ],
   "scripts": {
-    "prepublish": "jb -nm && jk",
+    "prepublish": "pnpm test && jb -nm && jk",
     "postpublish": "jk",
     "test": "vitest run"
   },
