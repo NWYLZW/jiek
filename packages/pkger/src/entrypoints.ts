@@ -1,4 +1,5 @@
 import path from 'node:path'
+import process from 'node:process'
 
 import { commondir } from '@jiek/utils/commondir'
 
@@ -26,7 +27,7 @@ export const deepClone = (
         return value
       })
     : Object
-      .entries(obj as Record<PropertyKey, unknown>)
+      .entries(obj)
       .reduce((acc, [key, value]) => {
         const newKeys = [...keys, key]
         if (filter && !filter(newKeys, value)) return acc
@@ -116,7 +117,7 @@ export function filterLeafs(
     filter: (keys, value) => {
       const key = keys[keys.length - 1]
       if (
-        keys.length === 1 && skipKey && skipKey.some(k => {
+        keys.length === 1 && skipKey !== false && skipKey.some(k => {
           if (typeof k === 'string') {
             return key === k
           }
@@ -129,7 +130,7 @@ export function filterLeafs(
         return false
       }
       // noinspection RedundantIfStatementJS
-      if (typeof value === 'string' && skipValue && skipValue.some(v => value.match(v))) {
+      if (typeof value === 'string' && skipValue !== false && skipValue.some(v => value.match(v))) {
         return false
       }
       return true
@@ -176,7 +177,7 @@ export function resolveEntrypoints(
     dir = path.dirname(entrypoints)
   }
   if (Array.isArray(entrypoints)) {
-    entrypoints = skipValue
+    entrypoints = skipValue !== false
       ? entrypoints.filter(entry => !skipValue.some(k => entry.match(k)))
       : entrypoints
     dir = entrypoints.length > 1
@@ -192,13 +193,14 @@ export function resolveEntrypoints(
       const trimmedCommonDirPath = point
         .replace(`${dir}/`, '')
       const isIndex = i === 0 && trimmedCommonDirPath.match(/index\.[cm]?[tj]sx?$/)?.length
+      // eslint-disable-next-line ts/strict-boolean-expressions
       if (isIndex) {
         entrypointMapping['.'] = point
       } else {
         entrypointMapping[
           `./${
             trimmedCommonDirPath
-              .replace(/\.([cm])?[tj]sx?$/, '')
+              .replace(/\.[cm]?[tj]sx?$/, '')
           }`
         ] = point
       }
@@ -239,17 +241,20 @@ export function entrypoints2Exports(
     skipKey = DEFAULT_SKIP_KEYS,
     skipValue = DEFAULT_SKIP_VALUES
   } = options
-  const sourceFieldName = sourceTag
+  const sourceFieldName = (sourceTag != null)
     ? `${sourceTag}/__source__`
     : 'source'
 
-  const [dir, entrypointMapping] = resolveEntrypoints(JSON.parse(JSON.stringify(entrypoints)), options)
+  const [dir, entrypointMapping] = resolveEntrypoints(
+    JSON.parse(JSON.stringify(entrypoints)) as typeof entrypoints,
+    options
+  )
   const withConditionalKeys = Object.keys(withConditional)
   function resolvePath(value: string, path: string, conditionalKeys: string[]) {
     let newValue = value as unknown
     if (typeof value === 'string') {
       const outfile = value
-        .replace(dir!, outdir)
+        .replace(dir, outdir)
         .replace(/\.([cm])?[tj]sx?$/, '.$1js')
       newValue = outfile
       const isCjs = outfile.endsWith('.cjs')
@@ -262,6 +267,7 @@ export function entrypoints2Exports(
         }
         withConditionalKeys.forEach(k => {
           const conditional = withConditional[k]
+          // eslint-disable-next-line ts/switch-exhaustiveness-check
           switch (typeof conditional) {
             case 'function': {
               const result = conditional({
@@ -296,11 +302,12 @@ export function entrypoints2Exports(
   Object
     .entries(entrypointMapping)
     .forEach(([key, value]) => {
-      if (skipKey && skipKey.some(k => key.match(k))) return
+      if (skipKey !== false && skipKey.some(k => key.match(k))) return
       let newValue = value
+      // eslint-disable-next-line ts/switch-exhaustiveness-check
       switch (typeof value) {
         case 'string':
-          if (skipValue && skipValue.some(v => value.match(v))) return
+          if (skipValue !== false && skipValue.some(v => value.match(v))) return
           newValue = resolvePath(value, key, [])
           break
         case 'object':
@@ -316,14 +323,14 @@ export function entrypoints2Exports(
             .entries(value)
             .reduce<Record<string, unknown>>((acc, [conditional, v]) => {
               if (typeof v !== 'string') {
-                throw new Error(`Not support nested conditional value: ${v}`)
+                throw new TypeError(`Not support nested conditional value: ${v}`)
               }
               // TODO skip by conditional
-              if (skipValue && skipValue.some(item => v.match(item))) {
+              if (skipValue !== false && skipValue.some(item => v.match(item))) {
                 acc[conditional] = v
                 return acc
               }
-              acc[conditional] = resolvePath(v as string, key, [conditional])
+              acc[conditional] = resolvePath(v, key, [conditional])
               if (withSource && typeof acc[conditional] === 'string') {
                 acc[conditional] = {
                   source: v,
@@ -337,13 +344,14 @@ export function entrypoints2Exports(
       entrypointMapping[key] = newValue
       if (typeof newValue === 'string') {
         const shouldNested = withSource || withConditionalKeys.length
-        if (shouldNested) {
+        if (shouldNested != null) {
           const v = {} as Record<string, unknown>
           if (withSource) {
             v[sourceFieldName] = value
           }
           withConditionalKeys.forEach(k => {
             const conditional = withConditional[k]
+            // eslint-disable-next-line ts/switch-exhaustiveness-check
             switch (typeof conditional) {
               case 'function': {
                 const result = conditional({
