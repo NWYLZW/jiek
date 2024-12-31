@@ -792,7 +792,34 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
                     : [inputOptions.input as string],
                   internalModules
                 )]
+                if (inputOptions.input.length === 0) {
+                  inputOptions.input = '__jiek_empty__'
+                  const plugins = await inputOptions.plugins
+                  if (!Array.isArray(plugins)) {
+                    throw new TypeError('plugins is not an array')
+                  }
+                  inputOptions.plugins = plugins.filter(
+                    p =>
+                      typeof p !== 'object'
+                        ? true
+                        : p === null
+                        ? true
+                        : 'name' in p && p.name === 'jiek:loadInternalModules'
+                  )
+                }
                 return inputOptions
+              },
+              resolveId: {
+                order: 'post',
+                handler(id) {
+                  if (id === '__jiek_empty__') return id
+                }
+              },
+              load: {
+                order: 'post',
+                handler(id) {
+                  if (id === '__jiek_empty__') return ''
+                }
               }
             }
           ],
