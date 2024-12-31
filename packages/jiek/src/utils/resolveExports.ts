@@ -4,9 +4,9 @@ import process from 'node:process'
 import {
   type Entrypoints2ExportsOptions,
   type RecursiveRecord,
-  DEFAULT_SKIP_VALUES,
   entrypoints2Exports,
   filterLeafs,
+  getDefaultSkipValues,
   resolveEntrypoints
 } from '@jiek/pkger/entrypoints'
 import type { Config } from 'jiek'
@@ -69,6 +69,7 @@ export interface ResolveExportsOptions {
   defaultOutdir?: string
   noFilter?: boolean
   isPublish?: boolean
+  skipJS?: boolean
 }
 
 export function resolveExports({
@@ -82,7 +83,8 @@ export function resolveExports({
   // FIXME dts support
   outdir = getOutDirs({ pkgName, defaultOutdir, config, cwd: dir }).js,
   noFilter,
-  isPublish
+  isPublish,
+  skipJS
 }: ResolveExportsOptions) {
   const {
     build = {},
@@ -94,7 +96,9 @@ export function resolveExports({
   const {
     crossModuleConvertor = crossModuleConvertorDefault
   } = build
-  const [, resolvedEntrypoints] = resolveEntrypoints(entrypoints)
+  const [, resolvedEntrypoints] = resolveEntrypoints(entrypoints, {
+    allowJS: !skipJS
+  })
   if (entries) {
     Object
       .entries(resolvedEntrypoints)
@@ -110,7 +114,9 @@ export function resolveExports({
       skipValue: [
         // ignore values that filename starts with `.jk-noentry`
         /(^|\/)\.jk-noentry/,
-        ...DEFAULT_SKIP_VALUES
+        ...getDefaultSkipValues({
+          allowJS: !skipJS
+        })
       ]
     }
   )
@@ -151,7 +157,8 @@ export function resolveExports({
       withSource: isPublish ? withSource : undefined,
       withConditional: {
         ...crossModuleWithConditional
-      }
+      },
+      allowJS: !skipJS
     }),
     outdir
   ] as const

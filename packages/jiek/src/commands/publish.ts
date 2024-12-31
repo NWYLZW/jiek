@@ -5,7 +5,7 @@ import path from 'node:path'
 import process from 'node:process'
 
 import { type BumperType, TAGS, bump } from '@jiek/utils/bumper'
-import { program } from 'commander'
+import { type Command, program } from 'commander'
 import detectIndent from 'detect-indent'
 import type { Config } from 'jiek'
 import type { JSONPath } from 'jsonc-parser'
@@ -60,17 +60,33 @@ async function forEachSelectedProjectsGraphEntries(
   }
 }
 
-program
-  .command('publish')
-  .description(description)
-  .aliases(['pub', 'p'])
-  .option('-b, --bumper <bumper>', 'bump version', 'patch')
-  .option('-no-b, --no-bumper', 'no bump version')
-  .option('-o, --outdir <OUTDIR>', outdirDescription, String, 'dist')
-  .action(async ({ outdir, bumper }: {
-    outdir?: string
-    bumper: false | BumperType
-  }) => {
+interface PublishOptions {
+  outdir?: string
+  bumper: false | BumperType
+  /**
+   * Skip entries which end with '.js'.
+   */
+  skipJS: boolean
+}
+
+const attachPublishOptions = (command: Command) =>
+  command
+    .option('-b, --bumper <bumper>', 'bump version', 'patch')
+    .option('-no-b, --no-bumper', 'no bump version')
+    .option('-o, --outdir <OUTDIR>', outdirDescription, String, 'dist')
+    .option('--skipJS', 'skip entries which end with ".js"', false)
+
+attachPublishOptions(
+  program
+    .command('publish')
+    .description(description)
+    .aliases(['pub', 'p'])
+)
+  .action(async ({
+    outdir,
+    bumper,
+    skipJS
+  }: PublishOptions) => {
     let shouldPassThrough = false
 
     const passThroughOptions = process.argv
@@ -99,24 +115,30 @@ program
         env: {
           ...process.env,
           JIEK_PUBLISH_OUTDIR: JSON.stringify(outdir),
-          JIEK_PUBLISH_BUMPER: JSON.stringify(bumper)
+          JIEK_PUBLISH_BUMPER: JSON.stringify(bumper),
+          JIEK_PUBLISH_SKIP_JS: JSON.stringify(skipJS)
         }
       })
     })
   })
 
-async function prepublish({ bumper }: {
-  bumper?: boolean | BumperType
-} = {}) {
+async function prepublish({
+  bumper,
+  skipJS
+}: PublishOptions) {
   const {
     JIEK_PUBLISH_OUTDIR: outdirEnv,
-    JIEK_PUBLISH_BUMPER: bumperEnv
+    JIEK_PUBLISH_BUMPER: bumperEnv,
+    JIEK_PUBLISH_SKIP_JS: skipJSEnv
   } = process.env
   const outdir = outdirEnv
     ? JSON.parse(outdirEnv) as string
     : 'dist'
   bumper = bumper ?? (
     bumperEnv ? JSON.parse(bumperEnv) as string | boolean : false
+  )
+  skipJS = skipJS ?? (
+    skipJSEnv ? JSON.parse(skipJSEnv) as boolean : false
   )
 
   const generateNewManifest = (
@@ -142,7 +164,8 @@ async function prepublish({ bumper }: {
       config,
       dir,
       noFilter: true,
-      isPublish: true
+      isPublish: true,
+      skipJS
     } satisfies Partial<ResolveExportsOptions>
     let resolvedOutdir = outdir
     if (entrypoints) {
@@ -346,7 +369,7 @@ async function prepublish({ bumper }: {
     }
 
     const newVersion = bumper
-      ? bump(oldJSON.version, bumper === true ? 'patch' : bumper)
+      ? bump(oldJSON.version, bumper)
       : oldJSON.version
     const modifyVersionPackageJSON = applyEdits(
       oldJSONString,
@@ -522,7 +545,8 @@ async function prepublish({ bumper }: {
   })
 }
 
-async function postpublish() {
+// eslint-disable-next-line no-empty-pattern
+async function postpublish({}: PublishOptions) {
   await forEachSelectedProjectsGraphEntries(dir => {
     const jiekTempDir = path.resolve(dir, 'node_modules/.jiek/.tmp')
     const packageJSONPath = path.resolve(dir, 'package.json')
@@ -548,24 +572,6 @@ async function postpublish() {
   })
 }
 
-program
-  .action(async () => {
-    const {
-      npm_lifecycle_event: NPM_LIFECYCLE_EVENT
-    } = process.env
-    // eslint-disable-next-line ts/switch-exhaustiveness-check
-    switch (NPM_LIFECYCLE_EVENT) {
-      case 'prepublish':
-        await prepublish()
-        break
-      case 'postpublish':
-        await postpublish()
-        break
-      default:
-        program.help()
-    }
-  })
-
 const prepublishDescription = `
 Prepare package.json for publish, you can add \`jk\` to the \`prepublish\` script in package.json, the command will automatically run \`jk prepublish\`.
 .e.g
@@ -575,11 +581,11 @@ Prepare package.json for publish, you can add \`jk\` to the \`prepublish\` scrip
   }
 }
 `.trim()
-program
-  .command('prepublish')
-  .description(prepublishDescription)
-  .option('-b, --bumper <bumper>', 'bump version')
-  .option('-no-b, --no-bumper', 'no bump version')
+attachPublishOptions(
+  program
+    .command('prepublish')
+    .description(prepublishDescription)
+)
   .action(prepublish)
 
 const postpublishDescription = `
@@ -591,7 +597,32 @@ Restore package.json after publish, you can add \`jk\` to the \`postpublish\` sc
   }
 }
 `.trim()
-program
-  .command('postpublish')
-  .description(postpublishDescription)
+attachPublishOptions(
+  program
+    .command('postpublish')
+    .description(postpublishDescription)
+)
   .action(postpublish)
+
+const {
+  npm_lifecycle_event: NPM_LIFECYCLE_EVENT
+} = process.env
+
+if (
+  NPM_LIFECYCLE_EVENT && [
+    'prepublish',
+    'postpublish'
+  ].includes(NPM_LIFECYCLE_EVENT)
+) {
+  attachPublishOptions(program)
+    .action(async (options: PublishOptions) => {
+      switch (NPM_LIFECYCLE_EVENT) {
+        case 'prepublish':
+          await prepublish(options)
+          break
+        case 'postpublish':
+          await postpublish(options)
+          break
+      }
+    })
+}

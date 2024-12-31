@@ -5,6 +5,7 @@ import process from 'node:process'
 import { MultiBar, Presets } from 'cli-progress'
 import { program } from 'commander'
 import { execaCommand } from 'execa'
+import type { Config } from 'jiek'
 
 import type { RollupBuildEvent } from '#~/bridge'
 import type { AnalyzerBuildOptions } from '#~/commands/build/analyzer'
@@ -24,6 +25,10 @@ import { tsRegisterName } from '#~/utils/tsRegister'
 
 declare module 'jiek' {
   interface Config {
+    /**
+     * Skip entries which end with '.js'.
+     */
+    skipJS?: boolean
     build?: TemplateOptions & {
       /**
        * Whether to run in silent mode, only active when configured in the workspace root or cwd.
@@ -51,7 +56,13 @@ If you want to through the options to the \`rollup\` command, you can pass the o
 ${isDefault ? 'This command is the default command.' : ''}
 `.trim()
 
-interface BuildOptions extends AnalyzerBuildOptions {
+interface BuildOptions extends
+  AnalyzerBuildOptions,
+  Pick<
+    Config,
+    'skipJS'
+  >
+{
   /**
    * Auto-detect the builder from the installed dependencies.
    * If the builder is not installed, it will prompt the user to install it.
@@ -180,6 +191,9 @@ command = command
   )
 
 command = command
+  .option('--skipJS', 'Skip entries which end with ".js".', parseBoolean)
+
+command = command
   .option('--features.keepImportAttributes', 'Keep the import attributes in the output.')
 
 command = command
@@ -214,7 +228,8 @@ command
       noClean,
       onlyMin,
       tsconfig,
-      dtsconfig
+      dtsconfig,
+      skipJS
     } = options
     const resolvedType = type ?? DEFAULT_BUILDER_TYPE
     if (!withoutJs) {
@@ -286,6 +301,7 @@ command
       JIEK_MINIFY_TYPE: minifyType,
       JIEK_TSCONFIG: tsconfig,
       JIEK_DTSCONFIG: dtsconfig,
+      JIEK_SKIP_JS: String(skipJS),
       JIEK_FEATURES: JSON.stringify({
         keepImportAttributes: options['features.keepImportAttributes']
       }),

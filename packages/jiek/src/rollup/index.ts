@@ -46,6 +46,7 @@ const {
   JIEK_ONLY_MINIFY,
   JIEK_TSCONFIG,
   JIEK_DTSCONFIG,
+  JIEK_SKIP_JS,
   JIEK_FEATURES
 } = process.env
 
@@ -82,6 +83,12 @@ const ONLY_MINIFY = JIEK_ONLY_MINIFY === 'true'
 
 const CLEAN = JIEK_CLEAN === 'true'
 
+const SKIP_JS = JIEK_SKIP_JS === 'false'
+  ? false
+  : JIEK_SKIP_JS === 'true'
+  ? true
+  : undefined
+
 const FEATURES = JSON.parse(JIEK_FEATURES ?? '{}') as Record<string, unknown>
 
 const MINIFY_DEFAULT_VALUE = WITHOUT_MINIFY
@@ -105,7 +112,11 @@ const MINIFY_OPTIONS = {
 const config = loadConfig({
   root: WORKSPACE_ROOT
 }) ?? {}
-const { experimental, build = {} } = config
+const {
+  experimental,
+  skipJS,
+  build = {}
+} = config
 const { js: jsOutdir, dts: dtsOutdir } = getOutDirs({
   config,
   pkgName: JIEK_NAME
@@ -698,7 +709,8 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
       entries,
       pkgName: JIEK_NAME!,
       outdir: jsOutdir,
-      config
+      config,
+      skipJS: skipJS ?? SKIP_JS
     })
     getAllLeafs(filteredResolvedEntrypoints as RecursiveRecord<string>, ({ keys, value }) => {
       if (typeof value === 'string') {
@@ -748,7 +760,8 @@ export function template(packageJSON: PackageJSON): RollupOptions[] {
       pkgIsModule,
       pkgName: JIEK_NAME!,
       outdir: `${jsOutdir}/.internal`,
-      config
+      config,
+      skipJS: SKIP_JS ?? skipJS
     })
     getAllLeafs(filteredResolvedInternalEntrypoints as RecursiveRecord<string>, ({ keys, value }) => {
       if (typeof value === 'string') {

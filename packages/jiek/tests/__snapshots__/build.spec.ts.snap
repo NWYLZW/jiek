@@ -289,6 +289,17 @@ exports[`no mono > simple cts 1`] = `
 ]
 `;
 
+exports[`no mono > simple js 1`] = `
+[
+  "index.d.mts",
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+  "index.min.mjs",
+  "index.mjs",
+]
+`;
+
 exports[`no mono > simple mjs 1`] = `
 [
   "index.cjs",

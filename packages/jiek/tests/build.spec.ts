@@ -8,6 +8,7 @@ const { describe } = createDescribe({
 describe('no mono', ({ test }) => {
   const titles = [
     'simple',
+    'simple js',
     'simple mjs',
     'simple cts',
     'require in mjs',
@@ -30,7 +31,7 @@ describe('no mono', ({ test }) => {
       // 'resolve imports'
     ] as string[]).includes(t)
   )
-  titles.forEach(title => test(title, async ({ exec }) => exec({ moreOptions: ['-v'] })))
+  titles.forEach(title => test(title, async ({ exec }) => exec()))
 }, true)
 describe('mono', () => {
   describe('monorepo', ({ test }) => {
