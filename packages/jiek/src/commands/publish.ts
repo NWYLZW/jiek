@@ -74,7 +74,7 @@ const attachPublishOptions = (command: Command) =>
     .option('-b, --bumper <bumper>', 'bump version', 'patch')
     .option('-no-b, --no-bumper', 'no bump version')
     .option('-o, --outdir <OUTDIR>', outdirDescription, String, 'dist')
-    .option('--skipJS', 'skip entries which end with ".js"', false)
+    .option('--skipJS', 'skip entries which end with ".js"')
 
 attachPublishOptions(
   program
@@ -138,7 +138,7 @@ async function prepublish({
     bumperEnv ? JSON.parse(bumperEnv) as string | boolean : false
   )
   skipJS = skipJS ?? (
-    skipJSEnv ? JSON.parse(skipJSEnv) as boolean : false
+    skipJSEnv ? JSON.parse(skipJSEnv) as boolean : undefined
   )
 
   const generateNewManifest = (
@@ -165,7 +165,7 @@ async function prepublish({
       dir,
       noFilter: true,
       isPublish: true,
-      skipJS
+      skipJS: skipJS ?? config.skipJS
     } satisfies Partial<ResolveExportsOptions>
     let resolvedOutdir = outdir
     if (entrypoints) {
