@@ -403,4 +403,29 @@ describe('entrypoints2Exports', () => {
       }
     })
   })
+  test('allow js', () => {
+    expect(entrypoints2Exports('./src/index.js', { allowJS: true })).toStrictEqual({
+      '.': './dist/index.js'
+    })
+    expect(entrypoints2Exports({
+      '.': './src/index.ts',
+      './foo': './src/foo.js'
+    }, {
+      allowJS: true
+    })).toStrictEqual({
+      '.': './dist/index.js',
+      './foo': './dist/foo.js'
+    })
+    expect(entrypoints2Exports({
+      '.': './src/index.ts',
+      './foo': './src/foo.js'
+    }, {
+      allowJS: true,
+      withSuffix: true
+    })).toStrictEqual({
+      '.': './dist/index.js',
+      './foo': './dist/foo.js',
+      './foo.js': './dist/foo.js'
+    })
+  })
 })

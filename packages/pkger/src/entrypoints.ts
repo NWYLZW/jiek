@@ -49,8 +49,8 @@ export const DEFAULT_SKIP_KEYS = [
   /\.css$/
 ]
 
-export const DEFAULT_SKIP_VALUES = [
-  /\.[cm]?js$/,
+export const getDefaultSkipValues = (options: Pick<Entrypoints2ExportsOptions, 'allowJS'>) => [
+  ...(options.allowJS === true ? [] : [/\.[cm]?js$/]),
   ...DEFAULT_SKIP_KEYS
 ]
 
@@ -93,6 +93,10 @@ export interface Entrypoints2ExportsOptions {
    * @default DEFAULT_SKIP_KEYS
    */
   skipValue?: false | (string | RegExp)[]
+  /**
+   * @default false
+   */
+  allowJS?: boolean
 }
 
 export type RecursiveRecord<T> = {
@@ -108,11 +112,17 @@ type GetAllLeafsShouldSkip = (context: {
 
 export function filterLeafs(
   obj: RecursiveRecord<string>,
-  {
-    skipKey = DEFAULT_SKIP_KEYS,
-    skipValue = DEFAULT_SKIP_VALUES
-  }: Pick<Entrypoints2ExportsOptions, 'skipKey' | 'skipValue'> = {}
+  options: Pick<
+    Entrypoints2ExportsOptions,
+    | 'skipKey'
+    | 'skipValue'
+    | 'allowJS'
+  > = {}
 ): RecursiveRecord<string> {
+  const {
+    skipKey = DEFAULT_SKIP_KEYS,
+    skipValue = getDefaultSkipValues(options)
+  } = options
   return deepClone(obj, {
     filter: (keys, value) => {
       const key = keys[keys.length - 1]
@@ -162,13 +172,16 @@ export function resolveEntrypoints(
   entrypoints: string | string[] | Record<string, unknown>,
   options: Pick<
     Entrypoints2ExportsOptions,
-    'cwd' | 'skipKey' | 'skipValue'
+    | 'cwd'
+    | 'skipKey'
+    | 'skipValue'
+    | 'allowJS'
   > = {}
 ) {
   const {
     cwd = process.cwd(),
     skipKey = DEFAULT_SKIP_KEYS,
-    skipValue = DEFAULT_SKIP_VALUES
+    skipValue = getDefaultSkipValues(options)
   } = options
   let entrypointMapping: Record<string, unknown> = {}
   let dir: string | undefined
@@ -239,7 +252,7 @@ export function entrypoints2Exports(
     withSource = false,
     withSuffix = false,
     skipKey = DEFAULT_SKIP_KEYS,
-    skipValue = DEFAULT_SKIP_VALUES
+    skipValue = getDefaultSkipValues(options)
   } = options
   const sourceFieldName = (sourceTag != null)
     ? `${sourceTag}/__source__`
@@ -369,8 +382,12 @@ export function entrypoints2Exports(
                 break
             }
           })
-          v.default = newValue
-          entrypointMapping[key] = v
+          if (Object.keys(v).length > 0) {
+            v.default = newValue
+            entrypointMapping[key] = v
+          } else {
+            entrypointMapping[key] = newValue
+          }
         }
       }
       if (withSuffix && key !== '.' && !key.match(/\.[cm]?jsx?$/)) {
