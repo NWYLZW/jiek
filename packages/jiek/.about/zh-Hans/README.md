@@ -14,6 +14,8 @@
 - [x] 自动推断：基于 `package.json` 的相关字段自动推断出构建规则，减少配置文件的编写，更加轻便与符合标准
   - `exports`：根据入口文件推断构建目标与类型
   - `imports`：定义路径别名，并在构建的时候自动生成通用 chunk 片段产物
+    - 支持 glob 表达式来进行多构建目标
+  - `bin`：自动推断二进制文件的构建目标，并支持在开发时无需编译直接调试
   - `type: module`：根据选项智能决定输出文件后缀，不需要考虑 `cjs` 与 `esm` 的适配问题
   - `dependencies`、`peerDependencies`、`optionalDependencies`：自动将符合规则的依赖标记为 `external`
   - `devDependencies`：将标记为开发依赖的 bundle 进对应的最终产物之中
