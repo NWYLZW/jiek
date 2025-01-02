@@ -37,7 +37,7 @@
 - [ ] 插件化
   - [ ] Dotenv：支持 dotenv 配置文件
   - [x] Replace：通过字符串来替换代码内容
-    - [ ] 支持 ast-grep
+    - [x] 支持 ast-grep 模式来进行精确度更高的代码替换
 - [ ] 钩子：prepublish、postpublish
   - [ ] 自动生成 changelog
   - [ ] 自动决定下一个版本号

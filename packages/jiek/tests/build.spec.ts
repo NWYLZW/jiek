@@ -26,11 +26,12 @@ describe('no mono', ({ test }) => {
     'import type from external',
     'import with external',
 
-    'plugin replacements'
+    'plugin replacements',
+    'plugin replacements with ast grep'
   ].filter((t, _, arr) =>
     ([
       ...arr
-      // 'plugin replacements'
+      // 'plugin replacements with ast grep'
     ] as string[]).includes(t)
   )
   titles.forEach(title => test(title, async ({ exec }) => exec({ moreOptions: ['-v'] })))

@@ -1,5 +1,5 @@
 import type { InputPluginOption, OutputOptions } from 'rollup'
-import { Replacements } from './plugins/replace'
+import { ReplaceOptions, Replacements } from './plugins/replace'
 
 export type Mapping2ROO<K extends keyof OutputOptions> = OutputOptions[K] | {
   js?: OutputOptions[K]
@@ -148,4 +148,5 @@ export interface TemplateOptions {
    * ```
    */
   replacements?: Replacements
+  replacementsOptions?: Pick<ReplaceOptions, 'mode' | 'include' | 'exclude'>
 }

@@ -428,6 +428,7 @@ const generateConfigs = (
     { sourcemap }: { sourcemap?: string | boolean }
   ): InputPluginOption[] => [
     replace({
+      ...build.replacementsOptions,
       sourcemap: sourcemap === 'hidden' ? false : !!sourcemap,
       values: build.replacements
     }),

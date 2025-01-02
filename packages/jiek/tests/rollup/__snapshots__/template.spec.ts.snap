@@ -120,6 +120,7 @@ exports[`rollup - template > base 1`] = `
           "watchChange": [Function],
         },
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -295,6 +296,7 @@ exports[`rollup - template > base 1`] = `
       },
       [
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -508,6 +510,7 @@ exports[`rollup - template > base 1`] = `
           "watchChange": [Function],
         },
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -683,6 +686,7 @@ exports[`rollup - template > base 1`] = `
       },
       [
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -901,6 +905,7 @@ exports[`rollup - template > base 2`] = `
           "watchChange": [Function],
         },
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -1076,6 +1081,7 @@ exports[`rollup - template > base 2`] = `
       },
       [
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -1289,6 +1295,7 @@ exports[`rollup - template > base 2`] = `
           "watchChange": [Function],
         },
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -1464,6 +1471,7 @@ exports[`rollup - template > base 2`] = `
       },
       [
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -1682,6 +1690,7 @@ exports[`rollup - template > with import or require conditional 1`] = `
           "watchChange": [Function],
         },
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -1857,6 +1866,7 @@ exports[`rollup - template > with import or require conditional 1`] = `
       },
       [
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -2070,6 +2080,7 @@ exports[`rollup - template > with import or require conditional 1`] = `
           "watchChange": [Function],
         },
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -2245,6 +2256,7 @@ exports[`rollup - template > with import or require conditional 1`] = `
       },
       [
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -2458,6 +2470,7 @@ exports[`rollup - template > with import or require conditional 1`] = `
           "watchChange": [Function],
         },
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -2633,6 +2646,7 @@ exports[`rollup - template > with import or require conditional 1`] = `
       },
       [
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -2851,6 +2865,7 @@ exports[`rollup - template > with import or require conditional 2`] = `
           "watchChange": [Function],
         },
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -3026,6 +3041,7 @@ exports[`rollup - template > with import or require conditional 2`] = `
       },
       [
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -3239,6 +3255,7 @@ exports[`rollup - template > with import or require conditional 2`] = `
           "watchChange": [Function],
         },
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -3414,6 +3431,7 @@ exports[`rollup - template > with import or require conditional 2`] = `
       },
       [
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -3627,6 +3645,7 @@ exports[`rollup - template > with import or require conditional 2`] = `
           "watchChange": [Function],
         },
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -3802,6 +3821,7 @@ exports[`rollup - template > with import or require conditional 2`] = `
       },
       [
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -4022,6 +4042,7 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
           "watchChange": [Function],
         },
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -4197,6 +4218,7 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       },
       [
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -4410,6 +4432,7 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
           "watchChange": [Function],
         },
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -4585,6 +4608,7 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       },
       [
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -4803,6 +4827,7 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
           "watchChange": [Function],
         },
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -4978,6 +5003,7 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       },
       [
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -5191,6 +5217,7 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
           "watchChange": [Function],
         },
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
@@ -5366,6 +5393,7 @@ exports[`rollup - template > with package.json and *.d.ts export files and shoul
       },
       [
         {
+          "buildStart": [Function],
           "name": "jiek:replace",
           "renderChunk": {
             "handler": [Function],
