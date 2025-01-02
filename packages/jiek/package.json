@@ -99,8 +99,5 @@
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-swc3": "^0.12.1",
     "vite-bundle-analyzer": "0.16.0-beta.3"
-  },
-  "publishConfig": {
-    "directory": "./dist/.internal"
   }
 }
