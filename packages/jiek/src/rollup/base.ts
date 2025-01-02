@@ -1,4 +1,5 @@
 import type { InputPluginOption, OutputOptions } from 'rollup'
+import { Replacements } from './plugins/replace'
 
 export type Mapping2ROO<K extends keyof OutputOptions> = OutputOptions[K] | {
   js?: OutputOptions[K]
@@ -134,4 +135,17 @@ export interface TemplateOptions {
    * ```
    */
   injects?: Record<string, string | [string, string]>
+  /**
+   * Replace the specified content in the code.
+   *
+   * @example
+   * ```js
+   * {
+   *   'process.env.DEBUG': 'false',
+   *   'process.env.NODE_ENV': JSON.stringify('production'),
+   *   'process.env.BUILD_PATH': ctx => JSON.stringify(ctx.id)
+   * }
+   * ```
+   */
+  replacements?: Replacements
 }

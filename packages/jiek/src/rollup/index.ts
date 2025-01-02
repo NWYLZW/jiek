@@ -27,6 +27,7 @@ import { getCompilerOptionsByFilePath } from '#~/utils/ts'
 import type { ConfigGenerateContext, TemplateOptions } from './base'
 import createRequire, { CREATE_REQUIRE_VIRTUAL_MODULE_NAME } from './plugins/create-require'
 import progress from './plugins/progress'
+import replace from './plugins/replace'
 import skip from './plugins/skip'
 import withExternal from './plugins/with-external.ts'
 import type { PackageJSON } from './utils/externalResolver'
@@ -423,7 +424,13 @@ const generateConfigs = (
   const { js: jsOutput, dts: dtsOutput } = resolveOutputControls(context, build.output)
   const rollupOptions: RollupOptions[] = []
 
-  const commonPlugins: InputPluginOption[] = [
+  const commonPlugins = (
+    { sourcemap }: { sourcemap?: string | boolean }
+  ): InputPluginOption[] => [
+    replace({
+      sourcemap: sourcemap === 'hidden' ? false : !!sourcemap,
+      values: build.replacements
+    }),
     ...inputCommonPlugins,
     withExternal(),
     !disableCollectInternalModule && {
@@ -570,7 +577,7 @@ const generateConfigs = (
         )
       ],
       plugins: [
-        ...commonPlugins,
+        ...commonPlugins({ sourcemap }),
         nodeResolvePluginInstance,
         import('rollup-plugin-postcss')
           .then(({ default: postcss }) =>
@@ -630,7 +637,7 @@ const generateConfigs = (
         }
       ],
       plugins: [
-        ...commonPlugins,
+        ...commonPlugins({ sourcemap }),
         skip({ patterns: [STYLE_REGEXP] }),
         dts({
           respectExternal: true,

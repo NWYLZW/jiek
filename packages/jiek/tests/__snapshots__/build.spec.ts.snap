@@ -223,6 +223,17 @@ exports[`no mono > only minify 1`] = `
 ]
 `;
 
+exports[`no mono > plugin replacements 1`] = `
+[
+  "index.d.mts",
+  "index.d.ts",
+  "index.js",
+  "index.min.js",
+  "index.min.mjs",
+  "index.mjs",
+]
+`;
+
 exports[`no mono > require in mjs 1`] = `
 [
   "import-type.cjs",

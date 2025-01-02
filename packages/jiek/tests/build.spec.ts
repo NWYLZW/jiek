@@ -24,14 +24,16 @@ describe('no mono', ({ test }) => {
     'with scss file import',
     'import type from subpath',
     'import type from external',
-    'import with external'
+    'import with external',
+
+    'plugin replacements'
   ].filter((t, _, arr) =>
     ([
       ...arr
-      // 'resolve imports'
+      // 'plugin replacements'
     ] as string[]).includes(t)
   )
-  titles.forEach(title => test(title, async ({ exec }) => exec()))
+  titles.forEach(title => test(title, async ({ exec }) => exec({ moreOptions: ['-v'] })))
 }, true)
 describe('mono', () => {
   describe('monorepo', ({ test }) => {

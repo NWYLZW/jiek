@@ -36,7 +36,8 @@
 - [x] CommonJS：产物兼容正在使用 cjs 的用户
 - [ ] 插件化
   - [ ] Dotenv：支持 dotenv 配置文件
-  - [ ] Replacer：支持替换文件内容
+  - [x] Replace：通过字符串来替换代码内容
+    - [ ] 支持 ast-grep
 - [ ] 钩子：prepublish、postpublish
   - [ ] 自动生成 changelog
   - [ ] 自动决定下一个版本号
