@@ -1,5 +1,7 @@
+/* eslint-disable ts/no-require-imports */
 import fs from 'node:fs'
 import path from 'node:path'
+import process from 'node:process'
 
 import { program } from 'commander'
 import type { Config } from 'jiek'
@@ -11,7 +13,7 @@ import { tsRegisterName } from './tsRegister'
 let configName = 'jiek.config'
 
 function getConfigPath(root: string, dir?: string) {
-  const isSupportTsLoader = !!tsRegisterName
+  const isSupportTsLoader = tsRegisterName != null
   function configWithExtIsExist(ext: string) {
     const filenames = [
       path.resolve(process.cwd(), `${configName}.${ext}`),
@@ -19,7 +21,7 @@ function getConfigPath(root: string, dir?: string) {
       path.resolve(root, `${configName}.${ext}`),
       path.resolve(root, `.${configName}.${ext}`)
     ]
-    if (dir) {
+    if (dir != null) {
       filenames.unshift(...[
         path.resolve(dir, `${configName}.${ext}`),
         path.resolve(dir, `.${configName}.${ext}`)
@@ -34,7 +36,6 @@ function getConfigPath(root: string, dir?: string) {
         return filename
       }
     }
-    return
   }
   configName = configWithExtIsExist('js') ?? configName
   configName = configWithExtIsExist('json') ?? configName
@@ -63,7 +64,7 @@ export function loadConfig(dirOrOptions?: string | LoadConfigOptions): Config {
     root = getWD().wd
   }
 
-  let configPath = program.getOptionValue('configPath')
+  let configPath = program.getOptionValue('configPath') as string
 
   if (!configPath) {
     configPath = getConfigPath(root, dir)
@@ -77,19 +78,21 @@ export function loadConfig(dirOrOptions?: string | LoadConfigOptions): Config {
   }
   const ext = path.extname(configPath)
 
-  let module: any
+  let module: Config | {
+    default?: Config
+  }
   switch (ext) {
     case '.js':
-      module = require(configPath)
+      module = require(configPath) as Config
       break
     case '.json':
-      return require(configPath)
+      return require(configPath) as Config
     case '.yaml':
       return load(fs.readFileSync(configPath, 'utf-8')) as Config
     case '.ts':
-      if (tsRegisterName) {
+      if (tsRegisterName != null) {
         require(tsRegisterName)
-        module = require(configPath)
+        module = require(configPath) as Config
         break
       }
       throw new Error(
@@ -102,7 +105,14 @@ export function loadConfig(dirOrOptions?: string | LoadConfigOptions): Config {
     default:
       throw new Error(`unsupported config file type: ${ext}`)
   }
-  if (!module) throw new Error('config file is empty')
-
-  return module.default ?? module
+  if (module == null) {
+    throw new Error('config file is empty')
+  }
+  if ('default' in module) {
+    if (module.default == null) {
+      throw new Error('config file is empty')
+    }
+    return module.default
+  }
+  return module as Config
 }

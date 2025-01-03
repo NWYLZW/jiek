@@ -1,3 +1,5 @@
+import process from 'node:process'
+
 import { getWorkspaceDir, isWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 
 import { type } from './filterSupport'
