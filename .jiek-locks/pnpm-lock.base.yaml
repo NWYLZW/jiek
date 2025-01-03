@@ -41,8 +41,6 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0(@types/node@18.19.26)(terser@5.29.2)
 
-  packages/aroll: {}
-
   packages/jiek:
     dependencies:
       '@inquirer/prompts':
@@ -155,8 +153,8 @@ importers:
         specifier: ^0.12.1
         version: 0.12.1(@swc/core@1.4.12)(rollup@4.22.4)
       vite-bundle-analyzer:
-        specifier: 0.16.0-beta.3
-        version: 0.16.0-beta.3
+        specifier: ^0.16.0-beta.4
+        version: 0.16.0-beta.4
 
   packages/pkger:
     dependencies:
@@ -4396,8 +4394,8 @@ packages:
     resolution: {integrity: sha512-PSvMIZS7C1MuVNBXl/CDG2pZq8EXy/NW2dHIdm3bVP5N0PC8utDK8ttXLXj44Gn3J0lQE3U7Mpm1estAOd+eiA==, tarball: https://registry.npmjs.org/version-selector-type/-/version-selector-type-3.0.0.tgz}
     engines: {node: '>=10.13'}
 
-  vite-bundle-analyzer@0.16.0-beta.3:
-    resolution: {integrity: sha512-xnlz+yTHFGPwIoL86VSrrbdelzg1+M+hg+ksxLPW2vCYeib611623jUVJpPe8Dc+OlOPF3n67W6NJ3dVSnQ+kw==, tarball: https://registry.npmjs.org/vite-bundle-analyzer/-/vite-bundle-analyzer-0.16.0-beta.3.tgz}
+  vite-bundle-analyzer@0.16.0-beta.4:
+    resolution: {integrity: sha512-DatK6/CDC8B0f1Tlm5V76c/+Ie4Cone09VuBFessR6SGeiQnyGg9yU2b4By2lTHnzuXMmdLtg/ezv1uXv23qjw==, tarball: https://registry.npmjs.org/vite-bundle-analyzer/-/vite-bundle-analyzer-0.16.0-beta.4.tgz}
     hasBin: true
 
   vite-node@1.4.0:
@@ -9077,7 +9075,7 @@ snapshots:
     dependencies:
       semver: 7.6.0
 
-  vite-bundle-analyzer@0.16.0-beta.3: {}
+  vite-bundle-analyzer@0.16.0-beta.4: {}
 
   vite-node@1.4.0(@types/node@18.19.26)(terser@5.29.2):
     dependencies:
