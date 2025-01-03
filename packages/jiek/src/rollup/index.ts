@@ -22,8 +22,10 @@ import { bundleAnalyzer } from '#~/rollup/bundle-analyzer'
 import { getInternalModuleName } from '#~/utils/getInternalModuleName'
 import { intersection } from '#~/utils/intersection'
 import { loadConfig } from '#~/utils/loadConfig'
+import { pascalCase } from '#~/utils/pascalCase'
 import { recursiveListFiles } from '#~/utils/recursiveListFiles'
 import { getOutDirs, resolveExports } from '#~/utils/resolveExports'
+import { reveal } from '#~/utils/reveal'
 import { getCompilerOptionsByFilePath } from '#~/utils/ts'
 
 import type { ConfigGenerateContext, TemplateOptions } from './base'
@@ -181,20 +183,6 @@ const resolveOutputControls = (
 })
 
 const resolveWorkspacePath = (p: string) => resolve(WORKSPACE_ROOT, p)
-
-const pascalCase = (str: string) =>
-  str
-    // eslint-disable-next-line ts/no-unsafe-member-access,ts/no-unsafe-return,ts/no-unsafe-call
-    .replace(/[@|/-](\w)/g, (_, $1) => $1.toUpperCase())
-    // eslint-disable-next-line ts/no-unsafe-member-access,ts/no-unsafe-return,ts/no-unsafe-call
-    .replace(/(?:^|-)(\w)/g, (_, $1) => $1.toUpperCase())
-
-const reveal = (obj: string | Record<string, unknown>, keys: string[]) =>
-  keys.reduce((acc, key) => {
-    if (typeof acc === 'string') throw new Error('key not found in exports')
-    if (!(key in acc)) throw new Error(`key ${key} not found in exports`)
-    return acc[key] as string | Record<string, unknown>
-  }, obj)
 
 const resolveMinifyOptions = (minifyOptions: MinifyOptions): typeof MINIFY_OPTIONS =>
   typeof minifyOptions === 'string'
