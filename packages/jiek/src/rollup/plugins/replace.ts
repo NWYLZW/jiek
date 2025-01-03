@@ -109,7 +109,7 @@ export default definePlugin((options: ReplaceOptions = {}) => {
           .findAll(key)
           .forEach(node => {
             const { start, end } = node.range()
-            const newValue = typeof allValues[key] === 'function'
+            let newValue = typeof allValues[key] === 'function'
               ? allValues[key]({
                 ...ctx,
                 code,
@@ -127,11 +127,13 @@ export default definePlugin((options: ReplaceOptions = {}) => {
               })
               : allValues[key]
             if (([null, undefined, false] as unknown[]).includes(newValue)) return
-            ms.overwrite(
-              start.index,
-              end.index,
-              newValue as string
-            )
+            newValue = newValue!.toString()
+            newValue = newValue
+              .replace(/\$([a-z_\-]+)/gi, (_, [name]: [string, number]) => {
+                if (name == null) return _
+                return node.getMatch(name)?.text() ?? _
+              })
+            ms.overwrite(start.index, end.index, newValue)
           })
       })
     }

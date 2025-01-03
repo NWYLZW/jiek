@@ -6,7 +6,8 @@ export default defineConfig({
       mode: 'ast-grep'
     },
     replacements: {
-      'console.log($A)': ctx => ctx.mode === 'ast-grep' && `console.warn(${ctx.$`A`})`
+      'console.log($A)': ctx => ctx.mode === 'ast-grep' && `console.warn(${ctx.$`A`})`,
+      'console.info($A)': `console.error($A)`
     }
   }
 })
