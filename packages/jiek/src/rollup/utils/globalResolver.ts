@@ -1,4 +1,4 @@
-export default function (external: string) {
+export default function(external: string) {
   // a/b      => AB
   // a-b      => AB
   // a@b      => AB
@@ -9,5 +9,5 @@ export default function (external: string) {
     return external.slice(5)
   }
   return external
-    .replace(/[@|/-](\w)/g, (_, $1) => $1.toUpperCase())
+    .replace(/[@|/-](\w)/g, (_, $1: string) => $1.toUpperCase())
 }
