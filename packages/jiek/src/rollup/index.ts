@@ -1,4 +1,6 @@
 /* eslint-disable ts/strict-boolean-expressions */
+import '#~/polyfill'
+
 import fs from 'node:fs'
 import { dirname, extname, relative, resolve } from 'node:path'
 import process from 'node:process'
