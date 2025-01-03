@@ -1,8 +1,10 @@
+import process from 'node:process'
+
 function packageIsExist(name: string) {
   try {
     require.resolve(name)
     return true
-  } catch (e) {
+  } catch {
     return false
   }
 }
