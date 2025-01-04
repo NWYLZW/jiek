@@ -10,7 +10,7 @@ export function bump(originalVersion: string, bumper: BumperType) {
   if (preRelease) {
     const [preReleaseName, preReleaseVersionStr] = preRelease.split('.')
     if (preReleaseName === bumper && preReleaseVersionStr) {
-      preReleaseVersion = parseInt(preReleaseVersionStr)
+      preReleaseVersion = Number.parseInt(preReleaseVersionStr)
     }
   }
   switch (bumper) {
