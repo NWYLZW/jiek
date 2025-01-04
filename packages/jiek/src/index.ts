@@ -6,6 +6,7 @@ export interface ConfigExperimental {
 }
 
 export interface Config {
+  extends?: string
   experimental?: ConfigExperimental
 }
 

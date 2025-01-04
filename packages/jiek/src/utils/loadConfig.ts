@@ -4,8 +4,9 @@ import path from 'node:path'
 import process from 'node:process'
 
 import { program } from 'commander'
-import type { Config } from 'jiek'
 import { load } from 'js-yaml'
+
+import type { Config } from 'jiek'
 
 import { getWD } from './getWD'
 import { tsRegisterName } from './tsRegister'
@@ -30,8 +31,7 @@ function getConfigPath(root: string, dir?: string) {
     for (const filename of filenames) {
       if (
         fs.existsSync(filename)
-        && fs.lstatSync(filename)
-          .isFile()
+        && fs.lstatSync(filename).isFile()
       ) {
         return filename
       }
@@ -112,7 +112,15 @@ export function loadConfig(dirOrOptions?: string | LoadConfigOptions): Config {
     if (module.default == null) {
       throw new Error('config file is empty')
     }
-    return module.default
+    module = module.default
+  }
+  if ('extends' in module && module.extends != null) {
+    const extendConfigPath = path.resolve(path.dirname(configPath), module.extends)
+    const extendConfig = loadConfig(extendConfigPath)
+    module = {
+      ...extendConfig,
+      ...module
+    }
   }
   return module as Config
 }
