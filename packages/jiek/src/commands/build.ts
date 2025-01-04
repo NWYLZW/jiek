@@ -5,6 +5,7 @@ import process from 'node:process'
 import { MultiBar, Presets } from 'cli-progress'
 import { program } from 'commander'
 import { execaCommand } from 'execa'
+
 import type { Config } from 'jiek'
 
 import type { RollupBuildEvent } from '#~/bridge'
