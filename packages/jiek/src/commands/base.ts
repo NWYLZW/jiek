@@ -1,4 +1,5 @@
 import { program } from 'commander'
+
 import pkg from 'jiek/package.json'
 
 import { filtersDescription } from '#~/commands/descriptions'
