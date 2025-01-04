@@ -1,4 +1,4 @@
-export type BumperType = 'patch' | 'minor' | 'major' | (string & {})
+export type BumperType = 'patch' | 'minor' | 'major' | 'latest' | (string & {})
 
 export function bump(originalVersion: string, bumper: BumperType) {
   const [version, preRelease] = originalVersion.split('-')
@@ -18,6 +18,8 @@ export function bump(originalVersion: string, bumper: BumperType) {
       return `${major}.${minor + 1}.0`
     case 'major':
       return `${major + 1}.0.0`
+    case 'latest':
+      return `${major}.${minor}.${patch}`
     default:
       return /^\d+\.\d+\.\d+/.test(bumper)
         ? bumper
