@@ -183,4 +183,53 @@ describe('createAreaManagement', () => {
       'footer'
     ])
   })
+  test.concurrent('header and footer with multiple areas', async () => {
+    const { outputLines, updateAndReset, areaManagement } = createHelper()
+    const area0 = areaManagement.create({
+      header: 'header 0',
+      footer: 'footer 0'
+    })
+    const area1 = areaManagement.create({
+      header: 'header 1',
+      footer: 'footer 1'
+    })
+
+    area0.info('hello 0 0')
+    await updateAndReset()
+    area1.info('hello 1 0')
+    await updateAndReset()
+    expect(outputLines).to.deep.eq([
+      'header 0',
+      'hello 0 0',
+      'footer 0',
+      'header 1',
+      'hello 1 0',
+      'footer 1'
+    ])
+
+    area0.info('hello 0 1')
+    await updateAndReset()
+    expect(outputLines).to.deep.eq([
+      'header 0',
+      'hello 0 0',
+      'hello 0 1',
+      'footer 0',
+      'header 1',
+      'hello 1 0',
+      'footer 1'
+    ])
+
+    area1.info('hello 1 1')
+    await updateAndReset()
+    expect(outputLines).to.deep.eq([
+      'header 0',
+      'hello 0 0',
+      'hello 0 1',
+      'footer 0',
+      'header 1',
+      'hello 1 0',
+      'hello 1 1',
+      'footer 1'
+    ])
+  })
 })
