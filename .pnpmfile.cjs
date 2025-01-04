@@ -11,7 +11,11 @@ if (!active.includes('all')) {
   if (!fs.existsSync(lockfileDir)) fs.mkdirSync(lockfileDir)
 
   const tempDir = path.resolve(lockfileDir, '.tmp')
-  if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir)
+  if (!fs.existsSync(tempDir)) {
+    try {
+      fs.mkdirSync(tempDir)
+    } catch {}
+  }
 
   const lockfile = active.length === 0
     ? path.resolve(lockfileDir, 'pnpm-lock.base.yaml')
