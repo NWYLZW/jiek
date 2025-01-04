@@ -5,16 +5,17 @@ import fs from 'node:fs'
 import { dirname, extname, relative, resolve } from 'node:path'
 import process from 'node:process'
 
-import type { RecursiveRecord } from '@jiek/pkger/entrypoints'
-import { getAllLeafs } from '@jiek/pkger/entrypoints'
-import { dts } from '@jiek/rollup-plugin-dts'
-import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 import commonjs from '@rollup/plugin-commonjs'
 import inject from '@rollup/plugin-inject'
 import json from '@rollup/plugin-json'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import type { InputPluginOption, OutputOptions, OutputPlugin, OutputPluginOption, Plugin, RollupOptions } from 'rollup'
 import ts from 'typescript'
+
+import type { RecursiveRecord } from '@jiek/pkger/entrypoints'
+import { getAllLeafs } from '@jiek/pkger/entrypoints'
+import { dts } from '@jiek/rollup-plugin-dts'
+import { getWorkspaceDir } from '@jiek/utils/getWorkspaceDir'
 
 import type { RollupBuildEntryCtx, RollupBuildEventMap } from '#~/bridge'
 import { publish } from '#~/bridge'
@@ -29,12 +30,13 @@ import { reveal } from '#~/utils/reveal'
 import { getCompilerOptionsByFilePath } from '#~/utils/ts'
 
 import type { ConfigGenerateContext, TemplateOptions } from './base'
+import type { PackageJSON } from './utils/externalResolver'
+
 import createRequire, { CREATE_REQUIRE_VIRTUAL_MODULE_NAME } from './plugins/create-require'
 import progress from './plugins/progress'
 import replace from './plugins/replace'
 import skip from './plugins/skip'
 import withExternal from './plugins/with-external.ts'
-import type { PackageJSON } from './utils/externalResolver'
 import externalResolver from './utils/externalResolver'
 
 const {
