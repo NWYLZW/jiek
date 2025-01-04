@@ -3,16 +3,8 @@ import { defineConfig } from 'jiek'
 export default defineConfig({
   publish: {
     parallel: tag =>
-      tag === 'default' && {
-        'full': {
-          include: ['src']
-        },
-        'esm': {
-          exclude: ['*.cjs']
-        },
-        'cjs': {
-          exclude: ['*.js']
-        }
+      tag === 'latest' && {
+        debug: { include: ['src'] }
       }
   }
 })

@@ -1,23 +1,31 @@
 /* eslint-disable ts/strict-boolean-expressions */
-import * as childProcess from 'node:child_process'
+import '#~/polyfill'
+
+import { exec } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 
-import { type BumperType, TAGS, bump } from '@jiek/utils/bumper'
-import { type Command, program } from 'commander'
+import type { SingleBar } from 'cli-progress'
+import { MultiBar } from 'cli-progress'
+import type { Command } from 'commander'
+import { program } from 'commander'
 import detectIndent from 'detect-indent'
-import type { Config } from 'jiek'
 import type { JSONPath } from 'jsonc-parser'
 import { applyEdits, modify } from 'jsonc-parser'
 
+import type { BumperType } from '@jiek/utils/bumper'
+import { bump } from '@jiek/utils/bumper'
+import type { Config } from 'jiek'
+
+import { createAreaManagement } from '#~/commands/utils/createAreaManagement'
 import type { ProjectsGraph } from '#~/utils/filterSupport'
 import { getSelectedProjectsGraph } from '#~/utils/filterSupport'
+import { getInternalModuleName } from '#~/utils/getInternalModuleName'
 import { loadConfig } from '#~/utils/loadConfig'
 import type { ResolveExportsOptions } from '#~/utils/resolveExports'
 import { resolveExports } from '#~/utils/resolveExports'
 
-import { getInternalModuleName } from '#~/utils/getInternalModuleName'
 import { outdirDescription } from './descriptions'
 
 declare module 'jiek' {
@@ -38,6 +46,16 @@ declare module 'jiek' {
        * @default true
        */
       withSource?: boolean
+      parallel?: (tag: string) =>
+        | false
+        | void
+        | null
+        | Record<string, {
+          include?: string[]
+          overrideInclude?: string[]
+          exclude?: string[]
+          overrideExclude?: string[]
+        }>
     }
   }
 }
@@ -48,16 +66,14 @@ If you want to through the options to the \`pnpm publish\` command, you can pass
 `.trim()
 
 async function forEachSelectedProjectsGraphEntries(
-  callback: (dir: string, manifest: NonNullable<ProjectsGraph['value']>[string]) => void
+  callback: (dir: string, manifest: NonNullable<ProjectsGraph['value']>[string]) => void | Promise<void>
 ) {
   const { value = {} } = await getSelectedProjectsGraph() ?? {}
   const selectedProjectsGraphEntries = Object.entries(value)
   if (selectedProjectsGraphEntries.length === 0) {
     throw new Error('no packages selected')
   }
-  for (const [dir, manifest] of selectedProjectsGraphEntries) {
-    callback(dir, manifest)
-  }
+  await Promise.all(selectedProjectsGraphEntries.map(async ([dir, manifest]) => callback(dir, manifest)))
 }
 
 interface PublishOptions {
@@ -103,23 +119,94 @@ attachPublishOptions(
         [] as string[]
       )
 
-    await forEachSelectedProjectsGraphEntries(dir => {
-      const args = ['pnpm', 'publish', '--access', 'public', '--no-git-checks']
-      if (bumper && TAGS.includes(bumper)) {
-        args.push('--tag', bumper)
-      }
-      args.push(...passThroughOptions)
-      childProcess.execSync(args.join(' '), {
-        cwd: dir,
-        stdio: 'inherit',
-        env: {
-          ...process.env,
-          JIEK_PUBLISH_OUTDIR: JSON.stringify(outdir),
-          JIEK_PUBLISH_BUMPER: JSON.stringify(bumper),
-          JIEK_PUBLISH_SKIP_JS: JSON.stringify(skipJS)
-        }
-      })
+    const mb = new MultiBar({
+      hideCursor: true,
+      format: '{message}'
     })
+    const bars: Record<string, SingleBar | undefined> = {}
+    const outputLines: string[] = []
+    function render() {
+      let i: number
+      for (i = 0; i < outputLines.length; i++) {
+        let bar = bars[i]
+        if (!bar) {
+          bars[i] = bar = mb.create(0, 0, { message: '' })
+        }
+        bar.update({ message: outputLines[i] })
+      }
+      for (; i < Object.keys(bars).length; i++) {
+        mb.remove(bars[i]!)
+      }
+    }
+    const areaManagement = createAreaManagement({
+      maxSize: 5,
+      outputLines,
+      onAreaUpdate: render
+    })
+
+    await forEachSelectedProjectsGraphEntries(async (dir, { name }) => {
+      const relativePath = path.relative(process.cwd(), dir)
+      const config = loadConfig(dir)
+      const { parallel } = config.publish ?? {}
+
+      const args = ['pnpm', 'publish', '--dry-run']
+      args.push(...passThroughOptions)
+      const env = {
+        ...process.env,
+        JIEK_PUBLISH_OUTDIR: JSON.stringify(outdir),
+        JIEK_PUBLISH_BUMPER: JSON.stringify(bumper),
+        JIEK_PUBLISH_SKIP_JS: JSON.stringify(skipJS)
+      }
+      const tag = bumper === false || ['minor', 'major', 'patch'].includes(bumper)
+        ? 'latest'
+        : bumper
+
+      const parallelConfig = parallel?.(tag)
+
+      async function pubByPnpm(
+        type?: string,
+        attachArgs: string[] = [],
+        isReady: boolean | Promise<void> = false
+      ) {
+        const area = areaManagement.create({
+          header: `┌ publishing [${name}] ./${relativePath}${type ? ` @${type}` : ''}`,
+          footer: '└──────────────────'
+        })
+        const info = (message: string) =>
+          area.info(
+            message.trim().split('\n').map(s => `│ ${s}`).join('\n')
+          )
+        info('waiting for ready...')
+        isReady && await isReady
+        const child = exec(
+          [...args, ...attachArgs, '--tag', type ?? tag].join(' '),
+          { cwd: dir, windowsHide: true, env }
+        )
+        await new Promise<void>(resolve => {
+          child.stdout?.on('data', (data: string) => info(data))
+          child.stderr?.on('data', (data: string) => info(data))
+          child.once('exit', code => {
+            if (code === 0) {
+              resolve()
+            } else {
+              info(`pnpm publish exited with code ${code}`)
+              resolve()
+            }
+          })
+        })
+        await area.exit()
+      }
+      const buildEnd = Promise.withResolvers<void>()
+      await Promise.all([
+        pubByPnpm()
+          .then(() => buildEnd.resolve())
+          .catch(e => buildEnd.reject(e)),
+        ...Object.entries(parallelConfig ?? {}).map(async ([type]) => {
+          await pubByPnpm(type, ['--ignore-scripts'], buildEnd.promise)
+        })
+      ])
+    })
+    mb.stop()
   })
 
 async function prepublish({
