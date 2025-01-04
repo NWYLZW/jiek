@@ -178,16 +178,17 @@ export default async function(options?: {
       )
     test = tsESLintConfig?.testOverride
       ? tsESLintConfig.testOverride
-      : mergeWith(
-        getTest(),
-        tsESLintConfig?.test ?? {},
-        (objValue, srcValue) => {
-          if (Array.isArray(objValue)) {
-            // eslint-disable-next-line ts/no-unsafe-return
-            return objValue.concat(srcValue)
+      : (async () =>
+        mergeWith(
+          await getTest(),
+          await tsESLintConfig?.test ?? {},
+          (objValue, srcValue) => {
+            if (Array.isArray(objValue)) {
+              // eslint-disable-next-line ts/no-unsafe-return
+              return objValue.concat(srcValue)
+            }
           }
-        }
-      )
+        ))()
     for (const key in tsESLintConfig) {
       if (
         ![
