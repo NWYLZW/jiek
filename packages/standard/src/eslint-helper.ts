@@ -4,6 +4,12 @@ import type { FlatConfigComposer } from 'eslint-flat-config-utils'
 
 type Awaitable<T> = T | Promise<T>
 
+export interface LintBaseOptions {
+  workspace?: string | string[]
+}
+
+export const defineLintBaseOptions = (opts: LintBaseOptions) => opts
+
 export const defineLintBase = (opts: OptionsConfig & Omit<TypedFlatConfigItem, 'files'>) => opts
 
 export const defineExt = async (

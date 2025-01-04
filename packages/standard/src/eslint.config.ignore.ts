@@ -6,6 +6,7 @@ import config from '@antfu/eslint-config'
 import { mergeWith } from 'lodash-es'
 
 import { defineExt, defineLintBase } from '@jiek/standard/eslint-helper'
+import type { LintBaseOptions } from '@jiek/standard/eslint-helper'
 import store from '@jiek/standard/eslint.config.store'
 
 const require = createRequire(import.meta.url)
@@ -14,6 +15,7 @@ type UserConfig =
   & {
     tsconfig?: string
     base?: ReturnType<typeof defineLintBase>
+    baseOptions?: LintBaseOptions
     baseOverride?: ReturnType<typeof defineLintBase>
     test?: ReturnType<typeof defineExt>
     testOverride?: ReturnType<typeof defineExt>
@@ -98,8 +100,20 @@ export default async function(options?: {
   const exts: ReturnType<typeof defineExt>[] = []
   const tsESLintConfig = typeof root === 'string' ? resolveUserConfig(root) : undefined
 
-  const getBase = () =>
-    defineLintBase({
+  const getBase = () => {
+    const { workspace } = tsESLintConfig?.baseOptions ?? {}
+    const customGroupsForWorkspace = workspace != null
+      ? (
+        Array.isArray(workspace)
+          ? workspace
+          : [workspace]
+      ).flatMap((workspace) => [
+        `^${workspace}$`,
+        `^${workspace}/.*$`,
+        `^@${workspace}/.*$`
+      ])
+      : undefined
+    return defineLintBase({
       stylistic: false,
       typescript: {
         tsconfigPath: options?.tsconfig ?? tsconfigPath,
@@ -133,10 +147,10 @@ export default async function(options?: {
             ],
             customGroups: {
               value: {
-                workspace: ['^jiek', '^@jiek']
+                workspace: customGroupsForWorkspace
               },
               type: {
-                'workspace-type': ['^jiek', '^@jiek']
+                'workspace-type': customGroupsForWorkspace
               }
             }
           }],
@@ -144,6 +158,7 @@ export default async function(options?: {
         }
       }
     })
+  }
   const getTest = async () =>
     defineExt({
       files: [
@@ -194,6 +209,7 @@ export default async function(options?: {
         ![
           'tsconfig',
           'base',
+          'baseOptions',
           'baseOverride',
           'test',
           'testOverride'
