@@ -1,7 +1,7 @@
 import { program } from 'commander'
 import pkg from 'jiek/package.json'
 
-import { filterDescription } from '#~/commands/descriptions'
+import { filtersDescription } from '#~/commands/descriptions'
 import { IS_WORKSPACE } from '#~/commands/meta'
 import { type } from '#~/utils/filterSupport'
 
@@ -14,5 +14,5 @@ program
 
 if (type !== '' && IS_WORKSPACE) {
   program
-    .option('-f, --filter <filter>', filterDescription)
+    .option('-f, --filter <filter>', filtersDescription)
 }

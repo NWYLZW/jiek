@@ -4,7 +4,7 @@ Support glob pattern and array.
 .e.g. '.', './*', './sub/*', './a,./b'.
 `.trim()
 
-export const filterDescription = `
+export const filtersDescription = `
 Filter the packages from the workspace.
 Support fuzzy match and array.
 .e.g. 'core,utils'.
