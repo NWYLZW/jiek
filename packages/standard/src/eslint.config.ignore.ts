@@ -3,11 +3,10 @@ import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
 
 import config from '@antfu/eslint-config'
+import { mergeWith } from 'lodash-es'
 
 import { defineExt, defineLintBase } from '@jiek/standard/eslint-helper'
 import store from '@jiek/standard/eslint.config.store'
-
-import { mergeWith } from 'lodash-es'
 
 const require = createRequire(import.meta.url)
 
@@ -115,7 +114,32 @@ export default async function(options?: {
           'ts/strict-boolean-expressions': 'off',
 
           'import/no-mutable-exports': 'off',
-          'perfectionist/sort-imports': 'off',
+          'perfectionist/sort-imports': ['error', {
+            internalPattern: [
+              '^~/.*',
+              '^#.*'
+            ],
+            sortSideEffects: true,
+            groups: [
+              ['side-effect', 'side-effect-style'],
+              ['builtin-type', 'builtin'],
+              ['external-type', 'external'],
+              ['workspace-type', 'workspace'],
+              ['internal-type', 'internal'],
+              ['parent-type', 'sibling-type', 'index-type'],
+              ['parent', 'sibling', 'index'],
+              'object',
+              'unknown'
+            ],
+            customGroups: {
+              value: {
+                workspace: ['^jiek', '^@jiek']
+              },
+              type: {
+                'workspace-type': ['^jiek', '^@jiek']
+              }
+            }
+          }],
           'perfectionist/sort-named-imports': 'off'
         }
       }
