@@ -223,9 +223,8 @@ async function action(filtersOrEntries: string | undefined, options: BuildOption
   }
 
   const multiBars = new MultiBar({
-    clearOnComplete: false,
     hideCursor: true,
-    format: '- {bar} | {status} | {pkgName} | {input} | {message}'
+    format: '- {pkgName} | {status} | {input} | {message}'
   }, Presets.shades_classic)
 
   const { wd } = getWD()
@@ -319,12 +318,11 @@ async function action(filtersOrEntries: string | undefined, options: BuildOption
             const key = `${input}:${path}`
             // eslint-disable-next-line ts/strict-boolean-expressions
             if (bars[key]) return
-            bars[key] = multiBars.create(50, 0, {
+            bars[key] = multiBars.create(0, 0, {
               pkgName: manifest.name,
               input: input.padEnd(inputMaxLen + 5),
               status: 'waiting'.padEnd(10)
             }, {
-              barsize: 20,
               linewrap: true
             })
           })
@@ -342,22 +340,15 @@ async function action(filtersOrEntries: string | undefined, options: BuildOption
           // eslint-disable-next-line ts/strict-boolean-expressions
           if (!bar) return
           const time = times[`${input}:${path}`]
-          bar.update(
-            {
-              start: 0,
-              resolve: 20,
-              end: 50
-            }[event ?? 'start'] ?? 0,
-            {
-              input: (
-                time
-                  ? `${input}(x${time.toString().padStart(2, '0')})`
-                  : input
-              ).padEnd(inputMaxLen + 5),
-              status: event?.padEnd(10),
-              message: `${tags?.join(', ')}: ${message}`
-            }
-          )
+          bar.update(0, {
+            input: (
+              time
+                ? `${input}(x${time.toString().padStart(2, '0')})`
+                : input
+            ).padEnd(inputMaxLen + 5),
+            status: event?.padEnd(10),
+            message: `${tags?.join(', ')}: ${message}`
+          })
           break
         }
         case 'watchChange': {
