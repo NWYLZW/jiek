@@ -44,8 +44,7 @@
     "README.md",
     "bin",
     "bin-helper",
-    "dist",
-    "src"
+    "dist"
   ],
   "scripts": {
     "prepublish": "pnpm test && jb -nm && jk",
