@@ -52,6 +52,7 @@ export const createAreaManagement = (options: {
       }
       for (let i = 0; i < curLen; i++) {
         const isHeader = hasHeader && i === 0
+        const isFooter = hasFooter && i === curLen - 1
         const line = currentLogLines.shift()!
         const areaSize = areaSizeList[current]
         let insertIndex = i
@@ -67,6 +68,9 @@ export const createAreaManagement = (options: {
             1
           )
           insertIndex = maxSize - 1
+          if (isFooter) {
+            insertIndex = insertIndex - 1
+          }
         }
         if (isHeader) {
           outputLines[offset] = line
