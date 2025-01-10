@@ -273,5 +273,35 @@ describe('createAreaManagement', () => {
       'hello 1 1',
       'footer 1'
     ])
+
+    area1.info('hello 1 2')
+    await updateAndReset()
+    expect(outputLines).to.deep.eq([
+      'header 0',
+      'hello 0 2',
+      'hello 0 3',
+      'hello 0 4',
+      'footer 0',
+      'header 1',
+      'hello 1 0',
+      'hello 1 1',
+      'hello 1 2',
+      'footer 1'
+    ])
+
+    area1.info('hello 1 3')
+    await updateAndReset()
+    expect(outputLines).to.deep.eq([
+      'header 0',
+      'hello 0 2',
+      'hello 0 3',
+      'hello 0 4',
+      'footer 0',
+      'header 1',
+      'hello 1 1',
+      'hello 1 2',
+      'hello 1 3',
+      'footer 1'
+    ])
   })
 })
