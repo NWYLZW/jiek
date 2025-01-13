@@ -1,5 +1,6 @@
-import { program } from 'commander'
 import process from 'node:process'
+
+import { program } from 'commander'
 
 const { argv } = process
 const env: Record<string, string> = {}
