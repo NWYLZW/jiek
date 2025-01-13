@@ -87,7 +87,7 @@ interface PublishOptions {
 
 const attachPublishOptions = (command: Command) =>
   command
-    .option('-b, --bumper <bumper>', 'bump version', 'patch')
+    .option('-b, --bumper <bumper>', 'bump version')
     .option('-no-b, --no-bumper', 'no bump version')
     .option('-o, --outdir <OUTDIR>', outdirDescription, String, 'dist')
     .option('--skipJS', 'skip entries which end with ".js"')
@@ -100,7 +100,7 @@ attachPublishOptions(
 )
   .action(async ({
     outdir,
-    bumper,
+    bumper = 'patch',
     skipJS
   }: PublishOptions) => {
     let shouldPassThrough = false
@@ -149,7 +149,7 @@ attachPublishOptions(
       const config = loadConfig(dir)
       const { parallel } = config.publish ?? {}
 
-      const args = ['pnpm', 'publish', '--dry-run']
+      const args = ['pnpm', 'publish']
       args.push(...passThroughOptions)
       const env = {
         ...process.env,
