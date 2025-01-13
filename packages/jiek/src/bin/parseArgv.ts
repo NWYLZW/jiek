@@ -7,7 +7,7 @@ const env: Record<string, string> = {}
 let isPassThrough = false
 const newArgv = argv.filter((arg) => {
   if (isPassThrough) {
-    return true
+    return false
   }
   if (arg === '--') {
     isPassThrough = true
