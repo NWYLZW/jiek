@@ -83,6 +83,7 @@ interface PublishOptions {
    * Skip entries which end with '.js'.
    */
   skipJS: boolean
+  parallel: boolean
 }
 
 const attachPublishOptions = (command: Command) =>
@@ -98,10 +99,12 @@ attachPublishOptions(
     .description(description)
     .aliases(['pub', 'p'])
 )
+  .option('--no-parallel', 'Disable parallel publish')
   .action(async ({
     outdir,
     bumper = 'patch',
-    skipJS
+    skipJS,
+    parallel
   }: PublishOptions) => {
     let shouldPassThrough = false
 
@@ -138,16 +141,18 @@ attachPublishOptions(
         mb.remove(bars[i]!)
       }
     }
-    const areaManagement = createAreaManagement({
-      maxSize: 5,
-      outputLines,
-      onAreaUpdate: render
-    })
+    const areaManagement = parallel
+      ? createAreaManagement({
+        maxSize: 5,
+        outputLines,
+        onAreaUpdate: render
+      })
+      : undefined
 
     await forEachSelectedProjectsGraphEntries(async (dir, { name }) => {
       const relativePath = path.relative(process.cwd(), dir)
       const config = loadConfig(dir)
-      const { parallel } = config.publish ?? {}
+      const { parallel: genParallelConfig } = config.publish ?? {}
 
       const args = ['pnpm', 'publish']
       args.push(...passThroughOptions)
@@ -161,40 +166,50 @@ attachPublishOptions(
         ? 'latest'
         : bumper
 
-      const parallelConfig = parallel?.(tag)
+      const parallelConfig = parallel
+        ? genParallelConfig?.(tag)
+        : {}
 
       async function pubByPnpm(
         type?: string,
         attachArgs: string[] = [],
         isReady: boolean | Promise<void> = false
       ) {
-        const area = areaManagement.create({
-          header: `┌ publishing [${name}] ./${relativePath}${type ? ` @${type}` : ''}`,
+        const area = areaManagement?.create({
+          header: `┌ publishing [${name}${type ? `@${type}` : ''}] ./${relativePath}`,
           footer: '└──────────────────'
         })
         const info = (message: string) =>
-          area.info(
+          area?.info(
             message.trim().split('\n').map(s => `│ ${s}`).join('\n')
           )
-        info('waiting for ready...')
+        area && info('waiting for ready...')
         isReady && await isReady
         const child = exec(
           [...args, ...attachArgs, '--tag', type ?? tag].join(' '),
           { cwd: dir, windowsHide: true, env }
         )
-        await new Promise<void>(resolve => {
-          child.stdout?.on('data', (data: string) => info(data))
-          child.stderr?.on('data', (data: string) => info(data))
-          child.once('exit', code => {
-            if (code === 0) {
-              resolve()
-            } else {
-              info(`pnpm publish exited with code ${code}`)
-              resolve()
-            }
+        try {
+          if (area) {
+            child.stdout?.on('data', (data: string) => info(data))
+            child.stderr?.on('data', (data: string) => info(data))
+          } else {
+            child.stdout?.pipe(process.stdout)
+            child.stderr?.pipe(process.stderr)
+          }
+        } finally {
+          await new Promise<void>(resolve => {
+            child.once('exit', code => {
+              if (code === 0) {
+                resolve()
+              } else {
+                info(`pnpm publish exited with code ${code}`)
+                resolve()
+              }
+            })
           })
-        })
-        await area.exit()
+          await area?.exit()
+        }
       }
       const buildEnd = Promise.withResolvers<void>()
       await Promise.all([
