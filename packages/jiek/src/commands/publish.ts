@@ -19,7 +19,7 @@ import { bump } from '@jiek/utils/bumper'
 import type { Config } from 'jiek'
 
 import { createAreaManagement } from '#~/commands/utils/createAreaManagement'
-import type { ProjectsGraph } from '#~/utils/filterSupport'
+import type { Manifest, ProjectsGraph } from '#~/utils/filterSupport'
 import { getSelectedProjectsGraph } from '#~/utils/filterSupport'
 import { getInternalModuleName } from '#~/utils/getInternalModuleName'
 import { loadConfig } from '#~/utils/loadConfig'
@@ -66,14 +66,29 @@ If you want to through the options to the \`pnpm publish\` command, you can pass
 `.trim()
 
 async function forEachSelectedProjectsGraphEntries(
-  callback: (dir: string, manifest: NonNullable<ProjectsGraph['value']>[string]) => void | Promise<void>
+  callback: (
+    dir: string,
+    manifest: Manifest,
+    index: number,
+    entries: [string, Manifest][]
+  ) => void | Promise<void>,
+  selectedProjectsGraphEntriesCallback?: (entries: [string, Manifest][]) => void | Promise<void>
 ) {
   const { value = {} } = await getSelectedProjectsGraph() ?? {}
   const selectedProjectsGraphEntries = Object.entries(value)
   if (selectedProjectsGraphEntries.length === 0) {
     throw new Error('no packages selected')
   }
-  await Promise.all(selectedProjectsGraphEntries.map(async ([dir, manifest]) => callback(dir, manifest)))
+  await selectedProjectsGraphEntriesCallback?.(selectedProjectsGraphEntries)
+  const tasks = selectedProjectsGraphEntries.map(async ([dir, manifest], index, entries) =>
+    callback(
+      dir,
+      manifest,
+      index,
+      entries
+    )
+  )
+  await Promise.all(tasks)
 }
 
 interface PublishOptions {
