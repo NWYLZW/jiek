@@ -49,6 +49,7 @@ function getConfigPath(root: string, dir?: string) {
 interface LoadConfigOptions {
   dir?: string
   root?: string
+  configPath?: string
 }
 
 export function loadConfig(options?: LoadConfigOptions): Config
@@ -56,15 +57,15 @@ export function loadConfig(dir?: string): Config
 export function loadConfig(dirOrOptions?: string | LoadConfigOptions): Config {
   let dir: string | undefined
   let root: string
+  let configPath = program.getOptionValue('configPath') as string
   if (typeof dirOrOptions === 'object') {
     dir = dirOrOptions.dir
     root = dirOrOptions.root ?? getWD().wd
+    configPath = dirOrOptions.configPath ?? configPath
   } else {
     dir = dirOrOptions
     root = getWD().wd
   }
-
-  let configPath = program.getOptionValue('configPath') as string
 
   if (!configPath) {
     configPath = getConfigPath(root, dir)
@@ -116,7 +117,7 @@ export function loadConfig(dirOrOptions?: string | LoadConfigOptions): Config {
   }
   if ('extends' in module && module.extends != null) {
     const extendConfigPath = path.resolve(path.dirname(configPath), module.extends)
-    const extendConfig = loadConfig(extendConfigPath)
+    const extendConfig = loadConfig({ configPath: extendConfigPath })
     module = {
       ...extendConfig,
       ...module
