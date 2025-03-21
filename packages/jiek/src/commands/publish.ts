@@ -103,7 +103,7 @@ interface PublishOptions {
 
 const attachPublishOptions = (command: Command) =>
   command
-    .option('-b, --bumper <bumper>', 'bump version')
+    .option('-b, --bumper <bumper>', 'bump version', 'patch')
     .option('-no-b, --no-bumper', 'no bump version')
     .option('-o, --outdir <OUTDIR>', outdirDescription, String, 'dist')
     .option('--skipJS', 'skip entries which end with ".js"')
@@ -117,7 +117,7 @@ attachPublishOptions(
   .option('--no-parallel', 'Disable parallel publish')
   .action(async ({
     outdir,
-    bumper = 'patch',
+    bumper,
     skipJS,
     parallel
   }: PublishOptions) => {
