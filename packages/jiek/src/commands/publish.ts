@@ -251,9 +251,7 @@ async function prepublish({
   const outdir = outdirEnv
     ? JSON.parse(outdirEnv) as string
     : 'dist'
-  bumper = bumper ?? (
-    bumperEnv ? JSON.parse(bumperEnv) as string | boolean : false
-  )
+  bumper = bumperEnv ? JSON.parse(bumperEnv) as string | false : bumper
   skipJS = skipJS ?? (
     skipJSEnv ? JSON.parse(skipJSEnv) as boolean : undefined
   )
