@@ -1,20 +1,17 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import process from 'node:process'
-
 import { getRoot } from '#~/utils/getRoot'
 import { getWD } from '#~/utils/getWD'
 import { program } from 'commander'
 import { load } from 'js-yaml'
+import childe_process from 'node:child_process'
+import fs from 'node:fs'
+import path from 'node:path'
+import process from 'node:process'
 import { filterWorkspacePackagesFromDirectory } from 'workspace-sieve'
 
 export let type = ''
-
 try {
-  const { notWorkspace } = getWD()
-  if (!notWorkspace) {
-    type = 'pnpm'
-  }
+  childe_process.execSync('pnpm -v')
+  type = 'pnpm'
 } catch {
 }
 
