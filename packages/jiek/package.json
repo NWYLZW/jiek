@@ -53,7 +53,6 @@
   },
   "peerDependencies": {
     "@ast-grep/napi": "^0.32.3",
-    "@pnpm/filter-workspace-packages": "^7.2.13||^8.0.0||^9.0.0||^10.0.0||>=1000.0.0",
     "@rollup/plugin-terser": "^0.4.4",
     "esbuild-register": "^3.5.0",
     "postcss": "^8.4.47",
@@ -79,13 +78,12 @@
     "jsonc-parser": "^3.2.1",
     "koa": "^2.15.3",
     "magic-string": "^0.30.17",
-    "rollup": "^4.0.0"
+    "rollup": "^4.0.0",
+    "workspace-sieve": "^0.1.2"
   },
   "devDependencies": {
     "@ast-grep/napi": "^0.32.3",
     "@npm/types": "^1.0.2",
-    "@pnpm/filter-workspace-packages": "^7.2.13",
-    "@pnpm/workspace.pkgs-graph": "^2.0.15",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/cli-progress": "^3.11.5",
     "@types/inquirer": "^9.0.7",
