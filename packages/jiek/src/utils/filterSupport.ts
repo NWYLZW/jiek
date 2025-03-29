@@ -1,17 +1,16 @@
+import { getRoot } from '#~/utils/getRoot'
+import { getWD } from '#~/utils/getWD'
+import { program } from 'commander'
+import { load } from 'js-yaml'
+import childe_process from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
-
-import { program } from 'commander'
-import { load } from 'js-yaml'
-
-import { getRoot } from '#~/utils/getRoot'
-import { getWD } from '#~/utils/getWD'
+import { filterWorkspacePackagesFromDirectory } from 'workspace-sieve'
 
 export let type = ''
-
 try {
-  require.resolve('@pnpm/filter-workspace-packages')
+  childe_process.execSync('pnpm -v')
   type = 'pnpm'
 } catch { /* empty */ }
 
@@ -68,20 +67,15 @@ export async function getSelectedProjectsGraph(
       }
       filter = packageJSON.name
     }
-    const { filterPackagesFromDir } = await import('@pnpm/filter-workspace-packages')
-    const { selectedProjectsGraph } = await filterPackagesFromDir(wd, [{
-      filter: filter ?? '',
-      followProdDepsOnly: true
-    }], {
-      prefix: root,
-      workspaceDir: wd,
-      patterns: pnpmWorkspace.packages
+    const { matchedGraphics } = await filterWorkspacePackagesFromDirectory(wd, {
+      patterns: pnpmWorkspace.packages,
+      filter: [filter ?? '']
     })
     return {
       root,
-      value: Object.entries(selectedProjectsGraph)
+      value: Object.entries(matchedGraphics)
         .reduce((acc, [key, value]) => {
-          acc[key] = value.package.manifest
+          acc[value.dirPath] = value.manifest
           return acc
         }, {} as NonNullable<ProjectsGraph['value']>)
     }

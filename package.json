@@ -16,7 +16,6 @@
   },
   "devDependencies": {
     "@jiek/standard": "workspace:*",
-    "@pnpm/filter-workspace-packages": "^7.2.13",
     "@types/mock-fs": "^4.13.4",
     "@types/node": "^18.19.26",
     "esbuild-register": "^3.5.0",
