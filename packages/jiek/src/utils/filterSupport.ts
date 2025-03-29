@@ -12,8 +12,7 @@ export let type = ''
 try {
   childe_process.execSync('pnpm -v')
   type = 'pnpm'
-} catch {
-}
+} catch { /* empty */ }
 
 export interface Manifest {
   name?: string
