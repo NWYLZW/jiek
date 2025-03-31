@@ -68,3 +68,24 @@ export function getWD(): GetWDResult {
     }
   }
 }
+
+export function getCurrentManager(root: string) {
+  const locks = [...LOCK_FILES, 'pnpm-lock.yaml']
+  let lockFile: string = ''
+  for (const file of locks) {
+    if (fs.existsSync(path.join(root, file))) {
+      lockFile = file
+      break
+    }
+  }
+  if (asserts.isYarn(lockFile)) {
+    return 'yarn'
+  }
+  if (asserts.isNpm(lockFile)) {
+    return 'npm'
+  }
+  if (asserts.isPnpm(lockFile)) {
+    return 'pnpm'
+  }
+  throw new Error('Unreachable code')
+}
