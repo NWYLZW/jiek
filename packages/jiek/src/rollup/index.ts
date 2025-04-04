@@ -645,7 +645,10 @@ const generateConfigs = (
             // https://github.com/Swatinem/rollup-plugin-dts/issues/96
             noEmit: false
           },
-          tsconfig: dtsTSConfigPath
+          tsconfig: process.env.NODE_ENV === 'test'
+            // @ts-ignore
+            ? dtsTSConfigPath?.replace(process.env.PROJECT_ROOT, '~')
+            : dtsTSConfigPath
         }),
         progress({
           onEvent: (event, message) => void publishInEntry('progress', { event, message, tags: ['dts'] })
