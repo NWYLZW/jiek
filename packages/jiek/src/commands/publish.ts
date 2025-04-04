@@ -26,6 +26,7 @@ import { loadConfig } from '#~/utils/loadConfig'
 import type { ResolveExportsOptions } from '#~/utils/resolveExports'
 import { resolveExports } from '#~/utils/resolveExports'
 
+import { getCurrentManager, getWD } from '#~/utils/getWD'
 import { outdirDescription } from './descriptions'
 
 declare module 'jiek' {
@@ -123,6 +124,17 @@ attachPublishOptions(
   }: PublishOptions) => {
     let shouldPassThrough = false
 
+    const { type, wd } = getWD()
+    let publishShell = type
+    if (type === 'unknown') {
+      throw new Error("Can't determine package manager type for publish")
+    }
+
+    // convert lerna to package manager
+    if (type === 'lerna') {
+      publishShell = getCurrentManager(wd)
+    }
+
     const passThroughOptions = process.argv
       .reduce(
         (acc, value) => {
@@ -169,7 +181,7 @@ attachPublishOptions(
       const config = loadConfig(dir)
       const { parallel: genParallelConfig } = config.publish ?? {}
 
-      const args = ['pnpm', 'publish']
+      const args = [publishShell, 'publish']
       args.push(...passThroughOptions)
       const env = {
         ...process.env,
