@@ -16,7 +16,10 @@ export default defineConfig({
       include: ['**/tests/**/*.spec.ts']
     },
     env: {
-      NODE_ENV: 'test'
+      NODE_ENV: 'test',
+      PROJECT_ROOT: import.meta.url
+        .replace(/^(file:\/\/)/, '')
+        .replace(/\/vitest\.config\.js$/, '')
     }
   }
 })
