@@ -88,7 +88,7 @@ export async function getSelectedProjectsGraph(
     filter = packageJSON.name
   }
   const { matchedGraphics } = await filterWorkspacePackagesFromDirectory(wd, {
-    patterns: workspacePatterns,
+    patterns: ['.', ...(workspacePatterns ?? [])],
     filter: [filter ?? '']
   })
   return {
