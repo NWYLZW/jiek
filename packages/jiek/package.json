@@ -79,7 +79,7 @@
     "koa": "^2.15.3",
     "magic-string": "^0.30.17",
     "rollup": "^4.0.0",
-    "workspace-sieve": "^0.2.0"
+    "workspace-sieve": "0.3.0"
   },
   "devDependencies": {
     "@ast-grep/napi": "^0.32.3",

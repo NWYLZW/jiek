@@ -92,8 +92,8 @@ importers:
         specifier: ^4.0.0||^5.0.0
         version: 5.8.2
       workspace-sieve:
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: 0.3.0
+        version: 0.3.0
     devDependencies:
       '@ast-grep/napi':
         specifier: ^0.32.3
@@ -3859,8 +3859,8 @@ packages:
     resolution: {integrity: sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==, tarball: https://registry.npmjs.org/word-wrap/-/word-wrap-1.2.5.tgz}
     engines: {node: '>=0.10.0'}
 
-  workspace-sieve@0.2.0:
-    resolution: {integrity: sha512-3sMVWNh4/PQ1utrl4uWCbh8XImoAsEihVdd5D/1o24UQHcsx0Xb/+Cfv4LI6mwMXB9lsF9qZRozSOWytNErWTg==, tarball: https://registry.npmjs.org/workspace-sieve/-/workspace-sieve-0.2.0.tgz}
+  workspace-sieve@0.3.0:
+    resolution: {integrity: sha512-OzeR2x2NcYzKl1KogfHuav6+j1GkynNS/IsmILUqD4L2FygzpK1hFHz8AhpIU9+OrouhGvKW7faeOqZKD4cGfA==, tarball: https://registry.npmjs.org/workspace-sieve/-/workspace-sieve-0.3.0.tgz}
 
   wrap-ansi@6.2.0:
     resolution: {integrity: sha512-r6lPcBGxZXlIcymEu7InxDMhdW0KDxpLgoFLcguasxCaJ/SOIZwINatK9KY/tf+ZrlywOKU0UDj3ATXUBfxJXA==, tarball: https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-6.2.0.tgz}
@@ -7870,7 +7870,7 @@ snapshots:
 
   word-wrap@1.2.5: {}
 
-  workspace-sieve@0.2.0:
+  workspace-sieve@0.3.0:
     dependencies:
       tinyglobby: 0.2.12
 
